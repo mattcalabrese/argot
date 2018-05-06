@@ -1,0 +1,19 @@
+#===============================================================================
+#    Copyright (c) 2016, 2017 Matt Calabrese
+#
+#   Use, modification and distribution is subject to the Boost Software
+#   License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+#   http://www.boost.org/LICENSE_1_0.txt)
+#===============================================================================
+
+import os ;
+
+path-constant BOOST_ROOT : [ os.environ BOOST_ROOT ] ;
+
+use-project /boost : $(BOOST_ROOT) ;
+
+project call
+    : requirements <include>./include <implicit-dependency>/boost//headers
+    : usage-requirements <include>./include
+    : build-dir bin.v2
+    ;

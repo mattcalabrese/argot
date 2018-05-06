@@ -1,0 +1,228 @@
+#==============================================================================
+#    Copyright (c) 2016, 2017, 2018 Matt Calabrese
+#
+#   Use, modification and distribution is subject to the Boost Software
+#   License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+#   http://www.boost.org/LICENSE_1_0.txt)
+#==============================================================================
+
+import testing ;
+
+run generate_visit.cpp ;
+run generate_unparse.cpp ;
+
+# Implementation detail helpers
+# run test_auto_function.cpp /boost//unit_test_framework ;
+run test_holder.cpp ;
+run test_cast_value_list_elements.cpp /boost//unit_test_framework ;
+
+# Gen basics
+compile test_gen_is_modeled.cpp ;
+
+# Gen preprocessor parsing
+# run test_gen_detail_expected.cpp /boost//filesystem /boost//thread /boost//wave /boost//unit_test_framework ;
+
+# Logical concept operators
+compile test_gen_not.cpp ;
+compile test_gen_and.cpp ;
+compile test_gen_or.cpp ;
+
+# Top-level helpers
+compile test_declval.cpp ;
+
+# Foundational support concepts
+compile test_concepts_invocable_with.cpp ;
+compile test_concepts_parameter_type.cpp ;
+compile test_concepts_reference.cpp ;
+compile test_concepts_same_type.cpp ;
+compile test_concepts_sinkable.cpp ;
+
+# Refined support concepts
+compile test_concepts_transformation_with.cpp ;
+
+# Implementation details (type list operations)
+compile test_concatenate.cpp ;
+#compile test_size.cpp ;
+compile test_permute.cpp ;
+
+# TupleLike
+# compile test_tuple_traits_result_of_get.cpp ;
+run test_tuple_traits_get.cpp ;
+
+# TODO(mattcalabrese) Test union-like and variant-like concepts here
+
+# ArgumentReceivers useful for testing
+run test_receiver_return_single_argument_value.cpp ;
+run test_receiver_return_argument_values.cpp ;
+run test_receiver_return_argument_references.cpp ;
+
+# Monoidal ArgumentProvider (unit)
+run test_prov_nothing.cpp ;
+
+# Foundational monadic ArgumentProviders (return)
+run test_prov_value_of.cpp ;
+run test_prov_reference_to.cpp ;
+
+# Basic exceptional ArgumentProviders
+run test_prov_unreachable.cpp ;
+# run test_prov_abort.cpp ;
+# run test_prov_quick_exit.cpp ;
+# run test_prov_exit.cpp ;
+# run test_prov_terminate.cpp ;
+# run test_prov_throw.cpp ;
+# run test_prov_rethrow.cpp ;
+
+# Basic branching ArgumentProviders
+run test_prov_bool_.cpp ;
+
+# Foundational ArgumentReceivers for Higher-Order provision
+run test_receiver_nested_receiver.cpp ;
+
+# Higher-order branching ArgumentProviders
+run test_prov_conditional.cpp ;
+
+# Monoidal ArgumentProvider (append)
+run test_receiver_with_leading_arguments.cpp ;
+run test_receiver_with_trailing_provider.cpp ;
+run test_prov_group.cpp ;
+
+# Monadic ArgumentProviders (join)
+run test_prov_squash.cpp ;
+
+# Monadic ArgumentProviders (map)
+run test_prov_lift_call.cpp ;
+run test_prov_lift_transform.cpp ;
+
+# Monadic ArgumentProviders (bind)
+run test_prov_bind_call.cpp ;
+run test_prov_bind_transform.cpp ;
+
+# Basic nonbranching ArgumentProviders
+run test_prov_eat.cpp ;
+run test_prov_unpack_integer_sequence.cpp ;
+run test_prov_integer_sequence.cpp ;
+
+# TODO(mattcalabrese) Test all of the switch-related concepts
+
+# CaseLabels
+run test_case_.cpp ;
+run test_case_range.cpp ;
+
+# CaseLabel-based SwitchBodies
+run test_case_as_is.cpp ;
+run test_unreachable_case.cpp ;
+run test_case_provided.cpp ;
+run test_case_as_constant.cpp ;
+# run test_case_combine_labels.cpp ;
+
+# Default-based SwitchBodies
+# run test_default_as_is.cpp ;
+# run test_default_unreachable.cpp ;
+# run test_default_provided.cpp ;
+
+# Composite Switching and Switch Provision
+run test_empty_switch_body.cpp ;
+run test_switch_body_combine.cpp ;
+run test_prov_switch_.cpp ;
+
+# Basic Switch-based provision
+# run test_prov_value_in_range.cpp ;
+# run test_prov_value_in_set.cpp ;
+
+# Branching ArgumentProviders with default support
+# run test_prov_dynamic_cast_.cpp /boost//unit_test_framework ;
+# run test_prov_any_cast_.cpp /boost//unit_test_framework ;
+
+# Nonbranching TupleLike ArgumentProviders
+run test_prov_tuple_indices.cpp ;
+run test_prov_unpack.cpp ;
+
+# Branching TupleLike ArgumentProviders
+run test_prov_tuple_index.cpp ;
+run test_prov_access_tuple.cpp ;
+
+# Nonbranching UnionLike ArgumentProviders
+run test_prov_union_indices.cpp ;
+
+# Branching UnionLike ArgumentProviders
+run test_prov_union_index.cpp ;
+run test_prov_access_union.cpp ;
+
+# Nonbranching VariantLike ArgumentProviders
+run test_prov_variant_indices.cpp ;
+
+# Branching VariantLike ArgumentProviders
+run test_prov_variant_index.cpp ;
+run test_prov_access_variant.cpp ;
+run test_prov_index_of.cpp ;
+run test_prov_alternative_of.cpp ;
+
+# Expand
+run test_prov_expand_tuple.cpp ;
+run test_prov_expand_variant.cpp ;
+run test_prov_expand_higher_order_argument_provider.cpp ;
+run test_prov_expand_expandable_argument_provider.cpp ;
+
+# Expansion Operator
+run test_prov_expansion_operator_tuple.cpp ;
+run test_prov_expansion_operator_variant.cpp ;
+run test_prov_expansion_operator_higher_order_argument_provider.cpp ;
+run test_prov_expansion_operator_expandable_argument_provider.cpp ;
+run test_prov_deep_expansion_operator.cpp ; # ++
+
+# ReturnValueReducers
+run test_reducer_same_type_or_fail.cpp ;
+run test_reducer_to_variant.cpp /boost//unit_test_framework ;
+run test_reducer_to_variant_branch.cpp /boost//unit_test_framework ;
+run test_reducer_to_heterogeneous_variant.cpp /boost//unit_test_framework ;
+# run test_reducer_graphviz_dot.cpp /boost//unit_test_framework ;
+
+# High-level concepts
+compile test_concepts_can_default_to_reference_to.cpp ;
+compile test_concepts_can_default_to_value_of.cpp ;
+compile test_concepts_argot_invocable_with_before_reduction.cpp ;
+
+# Call
+run test_call_basic.cpp /boost//unit_test_framework ;
+run test_call_branch.cpp /boost//unit_test_framework ;
+
+# Callable Object
+run test_as_callable_object_basic.cpp /boost//unit_test_framework ;
+
+# TODO(mattcalabrese) Test call with explicit reducers attached
+
+# Call-like function objects
+# run test_call_object_base.cpp /boost//unit_test_framework ;
+# run test_as_call_object.cpp /boost//unit_test_framework ;
+
+# Future (boost)
+run test_fut_traits_boost_future.cpp /boost//unit_test_framework /boost//thread ;
+run test_fut_traits_boost_shared_future.cpp /boost//unit_test_framework /boost//thread ;
+
+# Future (stlab)
+run test_fut_traits_stlab_future.cpp /boost//unit_test_framework /boost//thread ;
+
+# Future-Related Concurrent Argument Provision (when_ready)
+# run test_conc_when_ready_stlab_future.cpp ;
+# run test_conc_when_ready_boost_future.cpp ;
+
+# Future-Related Concurrent Argument Provision (when_any)
+# run test_conc_when_any_stlab_future.cpp ;
+# run test_conc_when_any_boost_future.cpp ;
+
+# Concurrent Expand
+# run test_conc_expand_tuple.cpp ;
+# run test_conc_expand_variant.cpp ;
+# run test_conc_expand_future.cpp ;
+# run test_conc_expand_higher_order_concurrent_argument_provider.cpp ;
+# run test_conc_expand_expandable_concurrent_argument_provider.cpp ;
+
+# Concurrent Expansion Operator
+# run test_conc_expansion_operator_tuple.cpp ;
+# run test_conc_expansion_operator_variant.cpp ;
+# run test_conc_expansion_operator_future.cpp ;
+# run test_conc_expansion_operator_higher_order_concurrent_argument_provider.cpp ;
+# run test_conc_expansion_operator_expandable_concurrent_argument_provider.cpp ;
+
+# Async call
+run test_async_call_basic.cpp /boost//unit_test_framework ;

@@ -1,0 +1,30 @@
+#==============================================================================
+#    Copyright (c) 2017 Matt Calabrese
+#
+#   Use, modification and distribution is subject to the Boost Software
+#   License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+#   http://www.boost.org/LICENSE_1_0.txt)
+#==============================================================================
+
+actions preprocess_switch_provision
+{
+  $(>[2]) --config-file wave.cfg -DARGOT_PREPROCESSING_MODE -DARGOT_MAX_PREPROCESSED_SWITCH_CASES=64 -o- -L0 -S$(BOOST_ROOT) $(>[1])
+}
+
+actions preprocess_concepts
+{
+  $(>[2]) --config-file wave.cfg -DARGOT_GENERATE_PREPROCESSED_CONCEPTS -o- -L0 -S$(BOOST_ROOT) $(>[1])
+}
+
+#TODO(mattcalabrese) Use notfile.
+# make preprocessed_switch_provision_specializations
+#  : ../include/argot/prov/switch_/detail/generate_switch_provision.hpp
+#    /boost/libs/wave/tool//wave
+#  : preprocess_switch_provision 
+#  ;
+
+make preprocessed_concept_specializations
+  : ../include/argot/concepts.hpp
+    /boost/libs/wave/tool//wave
+  : preprocess_concepts
+  ;
