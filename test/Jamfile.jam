@@ -128,7 +128,7 @@ run test_switch_body_combine.cpp ;
 run test_prov_switch_.cpp ;
 
 # Basic Switch-based provision
-# run test_prov_value_in_range.cpp ;
+run test_prov_value_in_range.cpp ;
 # run test_prov_value_in_set.cpp ;
 
 # Branching ArgumentProviders with default support

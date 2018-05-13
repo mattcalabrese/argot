@@ -5,6 +5,8 @@
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
+#include <argot/concepts/same_type.hpp>
+#include <argot/gen/concept_ensure.hpp>
 #include <argot/detail/constexpr_test.hpp>
 #include <argot/prov/value_in_range.hpp>
 #include <argot/prov_traits/provide.hpp>
@@ -19,8 +21,9 @@ namespace prov = argot::prov;
 namespace prov_traits = argot::prov_traits;
 namespace receiver = argot::receiver;
 
+using argot::SameType;
 using prov::value_in_range;
-using prov::value_in_range_t;
+using prov::value_in_range_fn;
 using prov::result_of_value_in_range;
 using prov::result_of_value_in_range_t;
 
@@ -39,7 +42,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
   ARGOT_CONCEPT_ENSURE
   ( SameType
     < object_type
-    , value_in_range_t< int_type, begin, end > const
+    , value_in_range_fn< int_type, begin, end > const
     >
   );
 
@@ -51,6 +54,32 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
 
   // -3
   {
+    // lvalue provision
+    {
+      decltype( auto ) provision_result
+        = prov_traits::provide
+          ( provider_neg_3
+          , receiver::return_single_argument_value()
+          );
+
+      using provision_result_type = decltype( provision_result );
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < provision_result_type
+        , std::variant
+          < std::integral_constant< short, -3 >
+          , std::integral_constant< short, -2 >
+          , std::integral_constant< short, -1 >
+          , std::integral_constant< short, 0 >
+          , std::integral_constant< short, 1 >
+          >
+        >
+      );
+
+      ARGOT_TEST_EQ( provision_result.index(), 0 );
+    }
+
     // rvalue provision
     {
       decltype( auto ) provision_result
@@ -77,61 +106,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
       ARGOT_TEST_EQ( provision_result.index(), 0 );
     }
 
-    // lvalue provision
-    {
-      decltype( auto ) provision_result
-        = prov_traits::provide
-          ( provider_neg_3
-          , receiver::return_single_argument_value()
-          );
-
-      using provision_result_type = decltype( provision_result );
-
-      ARGOT_CONCEPT_ENSURE
-      ( SameType
-        < provision_result_type
-        , std::variant
-          < std::integral_constant< short, -3 >
-          , std::integral_constant< short, -2 >
-          , std::integral_constant< short, -1 >
-          , std::integral_constant< short, 0 >
-          , std::integral_constant< short, 1 >
-          >
-        >
-      );
-
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
-    }
   }
 
   // -2
   {
-    // rvalue provision
-    {
-      decltype( auto ) provision_result
-        = prov_traits::provide
-          ( std::move( provider_neg_2 )
-          , receiver::return_single_argument_value()
-          );
-
-      using provision_result_type = decltype( provision_result );
-
-      ARGOT_CONCEPT_ENSURE
-      ( SameType
-        < provision_result_type
-        , std::variant
-          < std::integral_constant< short, -3 >
-          , std::integral_constant< short, -2 >
-          , std::integral_constant< short, -1 >
-          , std::integral_constant< short, 0 >
-          , std::integral_constant< short, 1 >
-          >
-        >
-      );
-
-      ARGOT_TEST_EQ( provision_result.index(), 1 );
-    }
-
     // lvalue provision
     {
       decltype( auto ) provision_result
@@ -157,15 +135,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
 
       ARGOT_TEST_EQ( provision_result.index(), 1 );
     }
-  }
 
-  // -1
-  {
     // rvalue provision
     {
       decltype( auto ) provision_result
         = prov_traits::provide
-          ( std::move( provider_neg_1 )
+          ( std::move( provider_neg_2 )
           , receiver::return_single_argument_value()
           );
 
@@ -184,9 +159,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 2 );
+      ARGOT_TEST_EQ( provision_result.index(), 1 );
     }
+  }
 
+  // -1
+  {
     // lvalue provision
     {
       decltype( auto ) provision_result
@@ -212,15 +190,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
 
       ARGOT_TEST_EQ( provision_result.index(), 2 );
     }
-  }
 
-  // 0
-  {
     // rvalue provision
     {
       decltype( auto ) provision_result
         = prov_traits::provide
-          ( std::move( provider_0 )
+          ( std::move( provider_neg_1 )
           , receiver::return_single_argument_value()
           );
 
@@ -239,9 +214,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 3 );
+      ARGOT_TEST_EQ( provision_result.index(), 2 );
     }
+  }
 
+  // 0
+  {
     // lvalue provision
     {
       decltype( auto ) provision_result
@@ -267,15 +245,41 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
 
       ARGOT_TEST_EQ( provision_result.index(), 3 );
     }
-  }
 
-  // 1
-  {
     // rvalue provision
     {
       decltype( auto ) provision_result
         = prov_traits::provide
-          ( std::move( provider_1 )
+          ( std::move( provider_0 )
+          , receiver::return_single_argument_value()
+          );
+
+      using provision_result_type = decltype( provision_result );
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < provision_result_type
+        , std::variant
+          < std::integral_constant< short, -3 >
+          , std::integral_constant< short, -2 >
+          , std::integral_constant< short, -1 >
+          , std::integral_constant< short, 0 >
+          , std::integral_constant< short, 1 >
+          >
+        >
+      );
+
+      ARGOT_TEST_EQ( provision_result.index(), 3 );
+    }
+  }
+
+  // 1
+  {
+    // lvalue provision
+    {
+      decltype( auto ) provision_result
+        = prov_traits::provide
+          ( provider_1
           , receiver::return_single_argument_value()
           );
 
@@ -297,11 +301,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
       ARGOT_TEST_EQ( provision_result.index(), 4 );
     }
 
-    // lvalue provision
+    // rvalue provision
     {
       decltype( auto ) provision_result
         = prov_traits::provide
-          ( provider_1
+          ( std::move( provider_1 )
           , receiver::return_single_argument_value()
           );
 
