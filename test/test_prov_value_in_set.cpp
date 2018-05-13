@@ -5,88 +5,328 @@
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#include <argot/call.hpp>
+#include <argot/concepts/same_type.hpp>
+#include <argot/gen/concept_ensure.hpp>
+#include <argot/detail/constexpr_test.hpp>
 #include <argot/prov/value_in_set.hpp>
+#include <argot/prov_traits/provide.hpp>
+#include <argot/receiver/return_single_argument_value.hpp>
 
 #include <cstddef>
 #include <type_traits>
 
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
+namespace {
 
-struct integral_const_fun_t
+namespace prov = argot::prov;
+namespace prov_traits = argot::prov_traits;
+namespace receiver = argot::receiver;
+
+using argot::SameType;
+using prov::value_in_set;
+using prov::value_in_set_fn;
+
+// TODO(mattcalabrese) Test non-dynamic and test defaults
+ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
 {
-  std::size_t operator()( std::integral_constant< int, 2 > ) const
-  {
-    return 2;
-  }
+  using int_type = short;
 
-  std::size_t operator()( std::integral_constant< int, 5 > ) const
-  {
-    return 5;
-  }
+  using object_type
+    = decltype( value_in_set< int_type, -3, -2, -1, 0, 1 > );
 
-  std::size_t operator()( std::integral_constant< int, 7 > ) const
-  {
-    return 7;
-  }
-} constexpr integral_const_fun{};
+  auto constexpr object = value_in_set< int_type, -3, -2, -1, 0, 1 >;
 
-// TODO(mattcalabrese) Test conversion of value types
-
-// TODO(mattcalabrese) Make sure this does not branch
-/*
-BOOST_AUTO_TEST_CASE( test_compile_time )
-{
-  using argot::call;
-  namespace prov = argot::prov;
-
-  BOOST_TEST
-  ( call( integral_const_fun
-        , prov::value_in_set< 2, 5, 7 >
-          ( std::integral_constant< std::size_t, 2 >() )
-        ) == 2u
+  ARGOT_CONCEPT_ENSURE
+  ( SameType
+    < object_type
+    , value_in_set_fn< int_type, -3, -2, -1, 0, 1 > const
+    >
   );
 
-  BOOST_TEST
-  ( call( integral_const_fun
-        , prov::value_in_set< 2, 5, 7 >
-          ( std::integral_constant< std::size_t, 5 >() )
-        ) == 5u
-  );
+  auto provider_neg_3 = object( int_type{ -3 } );
+  auto provider_neg_2 = object( int_type{ -2 } );
+  auto provider_neg_1 = object( int_type{ -1 } );
+  auto provider_0 = object( int_type{ 0 } );
+  auto provider_1 = object( int_type{ 1 } );
 
-  BOOST_TEST
-  ( call( integral_const_fun
-        , prov::value_in_set< 2, 5, 7 >
-          ( std::integral_constant< std::size_t, 7 >() )
-        ) == 7u
-  );
+  // -3
+  {
+    // lvalue provision
+    {
+      decltype( auto ) provision_result
+        = prov_traits::provide
+          ( provider_neg_3
+          , receiver::return_single_argument_value()
+          );
+
+      using provision_result_type = decltype( provision_result );
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < provision_result_type
+        , std::variant
+          < std::integral_constant< short, -3 >
+          , std::integral_constant< short, -2 >
+          , std::integral_constant< short, -1 >
+          , std::integral_constant< short, 0 >
+          , std::integral_constant< short, 1 >
+          >
+        >
+      );
+
+      ARGOT_TEST_EQ( provision_result.index(), 0 );
+    }
+
+    // rvalue provision
+    {
+      decltype( auto ) provision_result
+        = prov_traits::provide
+          ( std::move( provider_neg_3 )
+          , receiver::return_single_argument_value()
+          );
+
+      using provision_result_type = decltype( provision_result );
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < provision_result_type
+        , std::variant
+          < std::integral_constant< short, -3 >
+          , std::integral_constant< short, -2 >
+          , std::integral_constant< short, -1 >
+          , std::integral_constant< short, 0 >
+          , std::integral_constant< short, 1 >
+          >
+        >
+      );
+
+      ARGOT_TEST_EQ( provision_result.index(), 0 );
+    }
+
+  }
+
+  // -2
+  {
+    // lvalue provision
+    {
+      decltype( auto ) provision_result
+        = prov_traits::provide
+          ( provider_neg_2
+          , receiver::return_single_argument_value()
+          );
+
+      using provision_result_type = decltype( provision_result );
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < provision_result_type
+        , std::variant
+          < std::integral_constant< short, -3 >
+          , std::integral_constant< short, -2 >
+          , std::integral_constant< short, -1 >
+          , std::integral_constant< short, 0 >
+          , std::integral_constant< short, 1 >
+          >
+        >
+      );
+
+      ARGOT_TEST_EQ( provision_result.index(), 1 );
+    }
+
+    // rvalue provision
+    {
+      decltype( auto ) provision_result
+        = prov_traits::provide
+          ( std::move( provider_neg_2 )
+          , receiver::return_single_argument_value()
+          );
+
+      using provision_result_type = decltype( provision_result );
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < provision_result_type
+        , std::variant
+          < std::integral_constant< short, -3 >
+          , std::integral_constant< short, -2 >
+          , std::integral_constant< short, -1 >
+          , std::integral_constant< short, 0 >
+          , std::integral_constant< short, 1 >
+          >
+        >
+      );
+
+      ARGOT_TEST_EQ( provision_result.index(), 1 );
+    }
+  }
+
+  // -1
+  {
+    // lvalue provision
+    {
+      decltype( auto ) provision_result
+        = prov_traits::provide
+          ( provider_neg_1
+          , receiver::return_single_argument_value()
+          );
+
+      using provision_result_type = decltype( provision_result );
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < provision_result_type
+        , std::variant
+          < std::integral_constant< short, -3 >
+          , std::integral_constant< short, -2 >
+          , std::integral_constant< short, -1 >
+          , std::integral_constant< short, 0 >
+          , std::integral_constant< short, 1 >
+          >
+        >
+      );
+
+      ARGOT_TEST_EQ( provision_result.index(), 2 );
+    }
+
+    // rvalue provision
+    {
+      decltype( auto ) provision_result
+        = prov_traits::provide
+          ( std::move( provider_neg_1 )
+          , receiver::return_single_argument_value()
+          );
+
+      using provision_result_type = decltype( provision_result );
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < provision_result_type
+        , std::variant
+          < std::integral_constant< short, -3 >
+          , std::integral_constant< short, -2 >
+          , std::integral_constant< short, -1 >
+          , std::integral_constant< short, 0 >
+          , std::integral_constant< short, 1 >
+          >
+        >
+      );
+
+      ARGOT_TEST_EQ( provision_result.index(), 2 );
+    }
+  }
+
+  // 0
+  {
+    // lvalue provision
+    {
+      decltype( auto ) provision_result
+        = prov_traits::provide
+          ( provider_0
+          , receiver::return_single_argument_value()
+          );
+
+      using provision_result_type = decltype( provision_result );
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < provision_result_type
+        , std::variant
+          < std::integral_constant< short, -3 >
+          , std::integral_constant< short, -2 >
+          , std::integral_constant< short, -1 >
+          , std::integral_constant< short, 0 >
+          , std::integral_constant< short, 1 >
+          >
+        >
+      );
+
+      ARGOT_TEST_EQ( provision_result.index(), 3 );
+    }
+
+    // rvalue provision
+    {
+      decltype( auto ) provision_result
+        = prov_traits::provide
+          ( std::move( provider_0 )
+          , receiver::return_single_argument_value()
+          );
+
+      using provision_result_type = decltype( provision_result );
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < provision_result_type
+        , std::variant
+          < std::integral_constant< short, -3 >
+          , std::integral_constant< short, -2 >
+          , std::integral_constant< short, -1 >
+          , std::integral_constant< short, 0 >
+          , std::integral_constant< short, 1 >
+          >
+        >
+      );
+
+      ARGOT_TEST_EQ( provision_result.index(), 3 );
+    }
+  }
+
+  // 1
+  {
+    // lvalue provision
+    {
+      decltype( auto ) provision_result
+        = prov_traits::provide
+          ( provider_1
+          , receiver::return_single_argument_value()
+          );
+
+      using provision_result_type = decltype( provision_result );
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < provision_result_type
+        , std::variant
+          < std::integral_constant< short, -3 >
+          , std::integral_constant< short, -2 >
+          , std::integral_constant< short, -1 >
+          , std::integral_constant< short, 0 >
+          , std::integral_constant< short, 1 >
+          >
+        >
+      );
+
+      ARGOT_TEST_EQ( provision_result.index(), 4 );
+    }
+
+    // rvalue provision
+    {
+      decltype( auto ) provision_result
+        = prov_traits::provide
+          ( std::move( provider_1 )
+          , receiver::return_single_argument_value()
+          );
+
+      using provision_result_type = decltype( provision_result );
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < provision_result_type
+        , std::variant
+          < std::integral_constant< short, -3 >
+          , std::integral_constant< short, -2 >
+          , std::integral_constant< short, -1 >
+          , std::integral_constant< short, 0 >
+          , std::integral_constant< short, 1 >
+          >
+        >
+      );
+
+      ARGOT_TEST_EQ( provision_result.index(), 4 );
+    }
+  }
 
   return 0;
 }
-*/
 
-BOOST_AUTO_TEST_CASE( test_run_time )
-{
-  using argot::call;
-  namespace prov = argot::prov;
-  BOOST_TEST
-  ( call( integral_const_fun
-        , prov::value_in_set< 2, 5, 7 >( std::size_t{ 2 } )
-        ) == 2u
-  );
+ARGOT_EXECUTE_TESTS();
 
-  BOOST_TEST
-  ( call( integral_const_fun
-        , prov::value_in_set< 2, 5, 7 >( std::size_t{ 5 } )
-        ) == 5u
-  );
-
-  BOOST_TEST
-  ( call( integral_const_fun
-        , prov::value_in_set< 2, 5, 7 >( std::size_t{ 7 } )
-        ) == 7u
-  );
-
-  return 0;
-}
+}  // namespace

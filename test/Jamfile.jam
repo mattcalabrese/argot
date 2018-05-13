@@ -129,7 +129,7 @@ run test_prov_switch_.cpp ;
 
 # Basic Switch-based provision
 run test_prov_value_in_range.cpp ;
-# run test_prov_value_in_set.cpp ;
+run test_prov_value_in_set.cpp ;
 
 # Branching ArgumentProviders with default support
 # run test_prov_dynamic_cast_.cpp /boost//unit_test_framework ;
