@@ -72,7 +72,7 @@ run test_prov_boost_assert.cpp ;
 # run test_prov_exit.cpp ;
 # run test_prov_terminate.cpp ;
 run test_prov_throw_.cpp ;
-# run test_prov_rethrow.cpp ;
+run test_prov_rethrow.cpp ;
 
 # Basic branching ArgumentProviders
 run test_prov_bool_.cpp ;
