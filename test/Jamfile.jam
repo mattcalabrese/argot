@@ -65,6 +65,8 @@ run test_prov_reference_to.cpp ;
 
 # Basic exceptional ArgumentProviders
 run test_prov_unreachable.cpp ;
+run test_prov_assert_.cpp ;
+run test_prov_boost_assert.cpp ;
 # run test_prov_abort.cpp ;
 # run test_prov_quick_exit.cpp ;
 # run test_prov_exit.cpp ;
