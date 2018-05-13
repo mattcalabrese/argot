@@ -61,7 +61,7 @@ struct throwing_function
   >
   [[noreturn]] impossible operator()( P&&... args ) const
   {
-    throw ExceptionType( ARGOT_FORWARD( P )( args ) );
+    throw ExceptionType( ARGOT_FORWARD( P )( args )... );
   }
 };
 
@@ -70,7 +70,7 @@ struct throwing_function
 template< class ExceptionType >
 struct throw_fn
 {
-  ARGOT_CONCEPT_ASSERT( Exception< ExceptionType > )
+  ARGOT_CONCEPT_ASSERT( Exception< ExceptionType > );
 
   template
   < class... P
@@ -98,7 +98,7 @@ ARGOT_REQUIRES( Exception< ExceptionType > )
 < throw_fn< ExceptionType > > constexpr throw_{};
 
 template< class ExceptionType, class... P >
-using result_of_throw
+using result_of_throw_
   = basic_result_of< throw_fn< ExceptionType > const&, P... >;
 
 template< class ExceptionType, class... P >

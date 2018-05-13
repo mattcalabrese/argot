@@ -9,10 +9,11 @@
 #define ARGOT_CONCEPTS_CONSTRUCTIBLE_HPP_
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
-#include <argot/gen/auto_concept.hpp>
-#include <argot/concepts/true.hpp>
+#include <argot/gen/explicit_concept.hpp>
 
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
+
+#include <argot/detail/detection.hpp>
 
 #include <type_traits>
 
@@ -32,14 +33,20 @@ s/constructible.h
 ARGOT_CONCEPTS_DETAIL_CREATE_LINE_DIRECTIVE( __LINE__ )
 
 template< class T, class... P >
-ARGOT_AUTO_CONCEPT( Constructible )
-( True
-  < std::is_constructible_v< T, P... > >  // TODO(mattcalabrese) Define directly.
+ARGOT_EXPLICIT_CONCEPT( Constructible )
+(
 );
 
 #include <argot/concepts/detail/preprocess_header_end.hpp>
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
+
+template< class T, class... P >
+struct make_concept_map
+< Constructible< T, P... >
+, call_detail::fast_enable_if_t< std::is_constructible_v< T, P... > >
+> {};
+
 
 }  // namespace argot
 

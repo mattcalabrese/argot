@@ -5,8 +5,8 @@
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#ifndef ARGOT_CONCEPTS_CONSTRUCTIBLE_WITH_EACH_HPP_
-#define ARGOT_CONCEPTS_CONSTRUCTIBLE_WITH_EACH_HPP_
+#ifndef ARGOT_CONCEPTS_CONSTRUCTIBLE_WITH_KINDS_HPP_
+#define ARGOT_CONCEPTS_CONSTRUCTIBLE_WITH_KINDS_HPP_
 
 #include <argot/concepts/argument_list_kinds.hpp>
 #include <argot/concepts/constructible_with_each.hpp>
@@ -26,7 +26,7 @@ struct constructible_with_kinds_impl_impl {};
 
 template< class T, class... Kinds >
 struct constructible_with_kinds_impl_impl
-< Constructible
+< T
 , receiver_traits::argument_list_kinds_t< Kinds... >
 >
 {
@@ -57,4 +57,4 @@ using ConstructibleWithKinds
 
 }  // namespace argot
 
-#endif  // ARGOT_CONCEPTS_CONSTRUCTIBLE_WITH_EACH_HPP_
+#endif  // ARGOT_CONCEPTS_CONSTRUCTIBLE_WITH_KINDS_HPP_
