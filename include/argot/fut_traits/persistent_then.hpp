@@ -23,6 +23,8 @@
 #include <argot/packager_traits/package.hpp>
 #include <argot/remove_cvref.hpp>
 
+#include <boost/config.hpp>
+
 #include <type_traits>
 
 namespace argot::fut_traits {
@@ -32,12 +34,21 @@ struct persistent_then_fn
 {
   ARGOT_CONCEPT_ASSERT( FuturePackager< FPackager > );
 
+// GCC can't add const to a reference type via an alias.
+#if defined( BOOST_GCC )
+  template< class T >
+  using const_t = std::add_const_t< T >;
+#else // Otherwise, use the simple definition
+  template< class T >
+  using const_t = T const&;
+#endif // defined( BOOST_GCC )
+
   template
   < class Fut, class Exec, class Fun
   , ARGOT_REQUIRES
     ( PersistentThenable< Fut, FPackager, remove_cvref_t< Exec > > )
     ( InvocableWith< std::decay_t< Fun&& >, value_type_t< Fut >&& > )
-    ( InvocableWith< std::decay_t< Fun&& >, value_type_t< Fut > const& > )
+    ( InvocableWith< std::decay_t< Fun&& >, const_t< value_type_t< Fut > >& > )
     ( Sinkable< Exec&& > )
     ( DecaySinkable< Fun&& > )
     ()

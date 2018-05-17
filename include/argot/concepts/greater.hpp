@@ -45,7 +45,7 @@ ARGOT_EXPLICIT_CONCEPT( Greater )
 template< auto V, auto W >
 struct make_concept_map
 < Greater< V, W >
-, ARGOT_REQUIRES( True< ( V > W ) > )
+, ARGOT_REQUIRES( True< ( V > W ) > )<>
 > {};
 
 }  // namespace argot

@@ -45,7 +45,7 @@ ARGOT_EXPLICIT_CONCEPT( LessEqual )
 template< auto V, auto W >
 struct make_concept_map
 < LessEqual< V, W >
-, ARGOT_REQUIRES( True< ( V <= W ) > )
+, ARGOT_REQUIRES( True< ( V <= W ) > )<>
 > {};
 
 }  // namespace argot

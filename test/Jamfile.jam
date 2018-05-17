@@ -49,7 +49,17 @@ compile test_permute.cpp ;
 # compile test_tuple_traits_result_of_get.cpp ;
 run test_tuple_traits_get.cpp ;
 
-# TODO(mattcalabrese) Test union-like and variant-like concepts here
+# union_
+compile test_union_nullary.cpp ;
+run test_union_unary.cpp ;
+run test_union_binary.cpp ;
+
+# UnionLike
+run test_union_concept_map_union_.cpp ;
+# TODO(mattcalabrese) Test std::variant and boost::variant and discriminated_union
+
+# VariantLike
+# TODO(mattcalabrese) Test std::variant and boost::variant and discriminated_union
 
 # ArgumentReceivers useful for testing
 run test_receiver_return_single_argument_value.cpp ;

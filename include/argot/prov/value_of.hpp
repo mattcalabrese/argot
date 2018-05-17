@@ -12,16 +12,20 @@
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/argument_receiver_of.hpp>
 #include <argot/concepts/persistent_argument_provider.hpp>
+#include <argot/concepts/instantiation_of.hpp>
 #include <argot/detail/argument_pack.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
+#include <argot/gen/is_modeled.hpp>
 #include <argot/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/detail/provide_receiver.hpp>
 #include <argot/prov/nothing.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/remove_cvref.hpp>
+
+#include <boost/config.hpp>
 
 namespace argot {
 namespace prov {
@@ -36,11 +40,22 @@ struct value_of_fn
     ARGOT_NO_UNIQUE_ADDRESS elements_type elements;
   };
 
+// GCC has a bug that prevents us from specializing our variable template.
+#if defined( BOOST_GCC )
+
+  template< class T >
+  static bool constexpr is_unary_value_of_v
+    = ARGOT_IS_MODELED( InstantiationOf< impl, T > );
+
+#else // Otherwise, no workaround is necessary.
+
   template< class T >
   static bool constexpr is_unary_value_of_v = false;
 
   template< class P >
   static bool constexpr is_unary_value_of_v< impl< P > > = true;
+
+#endif // defined( BOOST_GCC )
 
   template< class H, class... T >
   static constexpr H const& head_value( impl< H, T... > const& v ) noexcept

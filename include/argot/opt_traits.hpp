@@ -1,17 +1,17 @@
-#ifndef ARGOT_PREPROCESSING_MODE
 /*==============================================================================
   Copyright (c) 2018 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#endif
 
-using BOOST_PP_CAT( alternative_type, BOOST_PP_ITERATION() )
-  = BOOST_PP_CAT( T, BOOST_PP_ITERATION() );
+#ifndef ARGOT_OPT_TRAITS_HPP_
+#define ARGOT_OPT_TRAITS_HPP_
 
-ARGOT_NO_UNIQUE_ADDRESS
-call_detail::holder< BOOST_PP_CAT( T, BOOST_PP_ITERATION() ) >
-BOOST_PP_CAT( alternative, BOOST_PP_ITERATION() );
+#include <argot/opt_traits/element_type.hpp>
+#include <argot/opt_traits/get.hpp>
+#include <argot/opt_traits/has_value.hpp>
+#include <argot/opt_traits/nil.hpp>
+#include <argot/opt_traits/nil_element_type.hpp>
 
-#endif  // ARGOT_PREPROCESSING_MODE
+#endif  // ARGOT_OPT_TRAITS_HPP_

@@ -8,10 +8,12 @@
 #ifndef ARGOT_DETAIL_HOLDER_HPP_
 #define ARGOT_DETAIL_HOLDER_HPP_
 
+#include <argot/concepts/constructible.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/give_qualifiers_to.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/forward.hpp>
+#include <argot/gen/requires.hpp>
 #include <argot/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/remove_cvref.hpp>
@@ -27,7 +29,7 @@ namespace call_detail {
 template< class T > struct state_impl;
 template< class T > struct access_impl;
 
-struct make_holder_type_tag{};
+struct make_holder_type_tag {};
 
 template< class T >
 struct holder_type;
@@ -35,6 +37,7 @@ struct holder_type;
 template< class T >
 struct holder_impl
 {
+  // TODO(mattcalabrese) Optimize the disjunction.
   using type
     = typename argot_detail::conditional
       < std::is_const_v< T > || std::is_reference_v< T > >
@@ -47,6 +50,7 @@ using holder = typename holder_impl< T >::type;
 template< class T >
 struct holder_type;
 
+// TODO(mattcalabrese) Conversion operator to underlying type.
 template< class T >
 struct holder_type< T const >
 {
@@ -58,10 +62,10 @@ struct holder_type< T const >
 
   holder_type() = default;
 
-  template< class LazyT = T, class Source >
-  constexpr holder_type( make_holder_type_tag, Source&& source )
-    noexcept( std::is_nothrow_constructible_v< LazyT, Source > )
-    : v( ARGOT_FORWARD( Source )( source ) ) {}
+  template< class LazyT = T, class... P >
+  constexpr holder_type( make_holder_type_tag, P&&... args )
+    noexcept( std::is_nothrow_constructible_v< LazyT, P&&... > )
+    : v( ARGOT_FORWARD( P )( args )... ) {}
 
   template< class LazyT = T, class Source >
   constexpr void reset( Source&& source )
@@ -73,6 +77,8 @@ struct holder_type< T const >
   ARGOT_NO_UNIQUE_ADDRESS T v;
 };
 
+// TODO(mattcalabrese) Trivial default-constructor
+// TODO(mattcalabrese) Conversion operator to reference
 template< class T >
 struct holder_type< T& >
 {
@@ -90,6 +96,8 @@ struct holder_type< T& >
   T* v;
 };
 
+// TODO(mattcalabrese) Trivial default-constructor
+// TODO(mattcalabrese) Conversion operator to reference
 template< class T >
 struct holder_type< T&& >
 {
@@ -139,6 +147,98 @@ struct make_holder_type_t
 
 template< class T >
 inline make_holder_type_t< T > constexpr make_holder{};
+
+template< class T >
+struct emplace_holder_fn
+{
+  template< class... P
+          , ARGOT_REQUIRES( Constructible< T, P&&... > )()
+          >
+  constexpr T operator ()( P&&... args ) const
+  {
+    return T( ARGOT_FORWARD( P )( args )... );
+  }
+};
+
+template<>
+struct emplace_holder_fn< void >
+{
+  template< class P >
+  constexpr void_ operator ()( P&& arg ) const noexcept
+  {
+    return void_();
+  }
+};
+
+template<>
+struct emplace_holder_fn< void const >
+{
+  template< class P >
+  constexpr void_ operator ()( P&& arg ) const noexcept
+  {
+    return void_();
+  }
+};
+
+
+template<>
+struct emplace_holder_fn< void volatile >
+{
+  template< class P >
+  constexpr void_ operator ()( P&& arg ) const noexcept
+  {
+    return void_();
+  }
+};
+
+template<>
+struct emplace_holder_fn< void volatile const >
+{
+  template< class P >
+  constexpr void_ operator ()( P&& arg ) const noexcept
+  {
+    return void_();
+  }
+};
+
+template< class T >
+struct emplace_holder_fn< T const >
+{
+  // TODO(mattcalabrese) Constrain.
+  // TODO(mattcalabrese) noexcept.
+  template< class... P
+          , ARGOT_REQUIRES( Constructible< T, P&&... > )()
+          >
+  constexpr holder< T const > operator ()( P&&... args ) const
+  noexcept( std::is_nothrow_constructible_v< T, P&&... > )
+  {
+    return holder_type< T const >
+    ( make_holder_type_tag()
+    , ARGOT_FORWARD( P )( args )...
+    );
+  }
+};
+
+template< class T >
+struct emplace_holder_fn< T& >
+{
+  constexpr holder< T& > operator ()( T& arg ) const noexcept
+  {
+    return holder_type< T& >( make_holder_type_tag(), arg );
+  }
+};
+
+template< class T >
+struct emplace_holder_fn< T&& >
+{
+  constexpr holder< T&& > operator ()( T&& arg ) const noexcept
+  {
+    return holder< T&& >( make_holder_type_tag(), ARGOT_MOVE( arg ) );
+  }
+};
+
+template< class T >
+inline emplace_holder_fn< T > constexpr emplace_holder{};
 
 template< class T >
 struct access_impl

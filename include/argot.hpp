@@ -43,6 +43,7 @@
 #include <argot/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/operators.hpp>
+#include <argot/opt_traits.hpp>
 #include <argot/packager.hpp>
 #include <argot/packager_traits.hpp>
 #include <argot/prov.hpp>
@@ -56,7 +57,7 @@
 #include <argot/tag.hpp>
 #include <argot/tuple_traits.hpp>
 #include <argot/type_list.hpp>
-#include <argot/union.hpp>
+#include <argot/union_.hpp>
 #include <argot/union_traits.hpp>
 #include <argot/unreachable_function.hpp>
 #include <argot/value_list.hpp>

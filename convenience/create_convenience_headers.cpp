@@ -142,6 +142,7 @@ int main()
   create_convenience_header( include_root, path( "argot/fut_traits" ) );
   create_convenience_header( include_root, path( "argot/gen" ) );
   create_convenience_header( include_root, path( "argot/packager" ) );
+  create_convenience_header( include_root, path( "argot/opt_traits" ) );
   create_convenience_header( include_root, path( "argot/packager_traits" ) );
 
   create_convenience_header( include_root
@@ -157,7 +158,6 @@ int main()
   create_convenience_header( include_root, path( "argot/reducer_traits" ) );
   create_convenience_header( include_root, path( "argot/switch_traits" ) );
   create_convenience_header( include_root, path( "argot/tuple_traits" ) );
-  create_convenience_header( include_root, path( "argot/union" ) );
   create_convenience_header( include_root, path( "argot/union_traits" ) );
   create_convenience_header( include_root, path( "argot/variant_traits" ) );
   create_convenience_header( include_root, path( "argot/visit" ) );

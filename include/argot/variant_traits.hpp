@@ -13,7 +13,6 @@
 #include <argot/variant_traits/index_constant.hpp>
 #include <argot/variant_traits/index_of.hpp>
 #include <argot/variant_traits/index_type.hpp>
-#include <argot/variant_traits/is_valid_index.hpp>
 #include <argot/variant_traits/natural_get.hpp>
 #include <argot/variant_traits/num_alternatives.hpp>
 

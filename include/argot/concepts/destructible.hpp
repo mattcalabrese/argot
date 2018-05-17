@@ -10,7 +10,9 @@
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/true.hpp>
-#include <argot/gen/auto_concept.hpp>
+#include <argot/gen/explicit_concept.hpp>
+#include <argot/gen/make_concept_map.hpp>
+#include <argot/gen/requires.hpp>
 
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
@@ -32,14 +34,19 @@ s/destructible.h
 ARGOT_CONCEPTS_DETAIL_CREATE_LINE_DIRECTIVE( __LINE__ )
 
 template< class T >
-ARGOT_AUTO_CONCEPT( Destructible )
+ARGOT_EXPLICIT_CONCEPT( Destructible )
 (
-  True< std::is_destructible_v< T > >  // TODO(mattcalabrese) Define directly.
 );
 
 #include <argot/concepts/detail/preprocess_header_end.hpp>
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
+
+template< class T >
+struct make_concept_map
+< Destructible< T >
+, ARGOT_REQUIRES( True< std::is_destructible_v< T > > )<>
+> {};
 
 }  // namespace argot
 

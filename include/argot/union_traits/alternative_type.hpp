@@ -17,17 +17,17 @@
 
 namespace argot::union_traits {
 
-template< class Union, auto Index >
+template< class Un, auto Index >
 using alternative_type_t
-  = ARGOT_REQUIRES( UnionLike< Union > )
-                  ( UnionIndex< Union, Index > )
-    < typename access_raw_concept_map< UnionLike< T > >
+  = ARGOT_REQUIRES( UnionLike< Un > )
+                  ( UnionIndex< Un, Index > )
+    < typename access_raw_concept_map< UnionLike< Un > >
       ::template alternative_type_t< Index >
     >;
 
-template< class Union, auto Index >
+template< class Un, auto Index >
 using alternative_type
-  = call_detail::lazy_expand_access< alternative_type_t, Union, Index >;
+  = call_detail::lazy_expand_access< alternative_type_t, Un, Index >;
 
 }  // namespace (argot::union_traits)
 

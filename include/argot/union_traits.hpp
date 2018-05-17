@@ -12,7 +12,6 @@
 #include <argot/union_traits/get.hpp>
 #include <argot/union_traits/index_constant.hpp>
 #include <argot/union_traits/index_type.hpp>
-#include <argot/union_traits/is_valid_index.hpp>
 #include <argot/union_traits/natural_get.hpp>
 #include <argot/union_traits/num_alternatives.hpp>
 

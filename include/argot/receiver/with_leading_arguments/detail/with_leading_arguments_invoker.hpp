@@ -98,6 +98,10 @@ using possibilities_t
       >
     >;
 
+// GCC workaround
+template<class T>
+using ident = T;
+
 template< class OLeadingPossibilities, class OTrailingPossibilities
         , class... OP
         >
@@ -108,41 +112,14 @@ constexpr auto make_receive_branch_invoker
   return [ &args... ]
   ( auto as_rvalue
   , auto&& rec, auto leading, auto trailing, auto&&... trailing_args
-  ) -> receiver_traits::result_of_receive_branch_t
-       < decltype( rec )
-       , leading_possibilities_t
-         < OLeadingPossibilities
-         , qualified_argument_types_t< decltype( as_rvalue )::value, OP... >
-         , decltype( leading ), decltype( trailing )
-         , receiver_traits::argument_types_t< decltype( trailing_args )... >
-         >
-       , trailing_possibilities_t
-         < OTrailingPossibilities
-         , qualified_argument_types_t< decltype( as_rvalue )::value, OP... >
-         , decltype( leading ), decltype( trailing )
-         , receiver_traits::argument_types_t< decltype( trailing_args )... >
-         >
-       , forward_if_t< decltype( as_rvalue )::value, OP >...
-       , decltype( trailing_args )...
-       >
-       /*-> receiver_traits::result_of_unbound_receive_branch_t
-       < decltype( r )
-       , possibilities_t
-         < OLeadingPossibilities
-         , OTrailingPossibilities
-         , receiver_traits::argument_types_t
-           < forward_if_t< decltype( as_rvalue )::value, OP >... >
-         , decltype( leading )
-         , decltype( trailing )
-         , receiver_traits::argument_types_t< decltype( trailing_args )... >
-         >
-       >*/
+  ) -> decltype( auto )
   {
     using qualified_ops
       = qualified_argument_types_t< decltype( as_rvalue )::value, OP... >;
 
     using local_argument_types
-      = receiver_traits::argument_types_t< decltype( trailing_args )... >;
+      = receiver_traits::argument_types_t
+        < ident< decltype( trailing_args ) >... >;
 
     return receiver_traits::receive_branch
     ( ARGOT_MOVE( rec )
