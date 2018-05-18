@@ -172,6 +172,9 @@ run test_prov_expansion_operator_higher_order_argument_provider.cpp ;
 run test_prov_expansion_operator_expandable_argument_provider.cpp ;
 run test_prov_deep_expansion_operator.cpp ; # ++
 
+# OptionalLike ArgumentProviders
+run test_prov_element_or_provision.cpp ;
+
 # ReturnValueReducers
 run test_reducer_same_type_or_fail.cpp ;
 run test_reducer_to_variant.cpp /boost//unit_test_framework ;

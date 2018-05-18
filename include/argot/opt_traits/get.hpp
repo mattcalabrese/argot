@@ -26,12 +26,12 @@ struct get_fn
                           ( Not< VolatileObject< remove_cvref_t< Opt > > > )
                           ()
           >
-  constexpr bool operator ()( Opt&& opt ) const
+  constexpr decltype( auto ) operator ()( Opt&& opt ) const
   {
-    return access_raw_concept_map< OptionalLike< Opt > >
+    return access_raw_concept_map< OptionalLike< remove_cvref_t< Opt > > >
     ::get( ARGOT_FORWARD( Opt )( opt ) );
   }
-};
+} inline constexpr get{};
 
 template< class Opt >
 using result_of_get_t = basic_result_of_t< get_fn const&, Opt >;
