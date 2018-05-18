@@ -173,6 +173,7 @@ run test_prov_expansion_operator_expandable_argument_provider.cpp ;
 run test_prov_deep_expansion_operator.cpp ; # ++
 
 # OptionalLike ArgumentProviders
+run test_prov_element_or_nothing.cpp ;
 run test_prov_element_or_provision.cpp ;
 
 # ReturnValueReducers
