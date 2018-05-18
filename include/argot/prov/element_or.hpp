@@ -12,13 +12,17 @@
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/argument_receiver_of.hpp>
 #include <argot/concepts/optional_like.hpp>
+#include <argot/concepts/reference.hpp>
 #include <argot/concepts/persistent_argument_provider.hpp>
 #include <argot/concepts/reference.hpp>
-#include <argot/declval.hpp>
+#include <argot/concepts/volatile_object.hpp>
 #include <argot/forward.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
+#include <argot/gen/not.hpp>
 #include <argot/move.hpp>
+#include <argot/opt_traits/get.hpp>
+#include <argot/opt_traits/has_value.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/receiver_traits/receive_branch.hpp>
@@ -34,10 +38,11 @@ struct element_or_fn
   template< class Opt, class Otherwise >
   struct impl
   {
+    ARGOT_CONCEPT_ASSERT( OptionalLike< remove_cvref_t< Opt > > );
+    ARGOT_CONCEPT_ASSERT( Not< VolatileObject< remove_cvref_t< Opt > > > );
     ARGOT_CONCEPT_ASSERT( Reference< Opt > );
     ARGOT_CONCEPT_ASSERT( Reference< Otherwise > );
 
-    // TODDO(mattcalabrese) Use holder?
     std::remove_reference_t< Opt >* opt;
     std::remove_reference_t< Otherwise >* otherwise;
   };
@@ -48,9 +53,7 @@ struct element_or_fn
   constexpr auto operator ()( Opt&& opt, Otherwise&& otherwise ) const
   {
     return impl< Opt&&, Otherwise&& >
-    { std::addressof( ARGOT_FORWARD( Opt )( opt ) )
-    , std::addressof( ARGOT_FORWARD( Otherwise )( otherwise ) )
-    };
+    { std::addressof( opt ), std::addressof( otherwise ) };
   }
 } inline constexpr element_or{};
 
@@ -64,7 +67,6 @@ using result_of_element_or_t
 
 }  // namespace argot(::prov)
 
-// TODO(mattcalabrese) Use traits
 template< class Opt, class Otherwise >
 struct make_concept_map
 < ArgumentProvider< prov::element_or_fn::impl< Opt, Otherwise > > >
@@ -74,70 +76,73 @@ struct make_concept_map
   , ARGOT_REQUIRES
     ( ArgumentReceiverOf
       < Receiver
-      , receiver_traits::argument_types_t< decltype( *ARGOT_DECLVAL( Opt& ) )&& >  // TODO(mattcalabrese) Use traits
+      , receiver_traits::argument_types_t
+        < opt_traits::result_of_get_t< Opt&& > >
       , receiver_traits::argument_types_t< Otherwise&& >
       >
     )()
   >
   static constexpr decltype( auto )
-  provide( prov::element_or_fn::impl< Opt > self
+  provide( prov::element_or_fn::impl< Opt, Otherwise > self
          , Receiver&& receiver
          )
   {
-    return   self.has_value()  // TODO(mattcalabrese) Use traits
+    return   opt_traits::has_value( *self.opt )
            ? receiver_traits::receive_branch
              ( ARGOT_MOVE( receiver )
-             , receiver_traits::argument_list_kinds_t
-               < receiver_traits::argument_types_t<> >{}
              , receiver_traits::argument_list_kinds()
-             , **self.opt  // TODO(mattcalabrese) Use traits
+             , receiver_traits::argument_list_kinds_t
+               < receiver_traits::argument_types_t< Otherwise&& > >{}
+             , opt_traits::get( ARGOT_FORWARD( Opt )( *self.opt ) )
              )
            : receiver_traits::receive_branch
              ( ARGOT_MOVE( receiver )
-             , receiver_traits::argument_list_kinds()
              , receiver_traits::argument_list_kinds_t
                < receiver_traits::argument_types_t
-                 < decltype( *ARGOT_DECLVAL( Opt& ) ) >  // TODO(mattcalabrese) Use traits
+                 < opt_traits::result_of_get_t< Opt&& > >
                >{}
+             , receiver_traits::argument_list_kinds()
+             , ARGOT_FORWARD( Otherwise )( *self.otherwise )
              );
   }
 };
 
-// TODO(mattcalabrese) Use traits
-template< class Opt >
+template< class Opt, class Otherwise >
 struct make_concept_map
-< PersistentArgumentProvider< prov::element_or_fn::impl< Opt > > >
+< PersistentArgumentProvider< prov::element_or_fn::impl< Opt, Otherwise > > >
 {
   template
   < class Receiver
   , ARGOT_REQUIRES
     ( ArgumentReceiverOf
       < Receiver
-      , receiver_traits::argument_types_t< decltype( *ARGOT_DECLVAL( Opt ) )&& >  // TODO(mattcalabrese) Use traits
-      , Otherwise const&
+      , receiver_traits::argument_types_t
+        < opt_traits::result_of_get_t< Opt const& > >
+      , receiver_traits::argument_types_t< Otherwise const& >
       >
     )()
   >
   static constexpr decltype( auto )
-  provide( prov::element_or_fn::impl< Opt > self
+  provide( prov::element_or_fn::impl< Opt, Otherwise > self
          , Receiver&& receiver
          )
   {
-    return   self.has_value()  // TODO(mattcalabrese) Use traits
+    return   opt_traits::has_value( *self.opt )
            ? receiver_traits::receive_branch
              ( ARGOT_MOVE( receiver )
              , receiver_traits::argument_list_kinds()
              , receiver_traits::argument_list_kinds_t
-               < receiver_traits::argument_types_t
-                 < decltype( *ARGOT_DECLVAL( Opt ) ) >  // TODO(mattcalabrese) Use traits
-               >{}
+               < receiver_traits::argument_types_t< Otherwise const& > >{}
+             , opt_traits::get( *self.opt )
              )
            : receiver_traits::receive_branch
              ( ARGOT_MOVE( receiver )
              , receiver_traits::argument_list_kinds_t
-               < receiver_traits::argument_types_t<> >{}
+               < receiver_traits::argument_types_t
+                 < opt_traits::result_of_get_t< Opt const& > >
+               >{}
              , receiver_traits::argument_list_kinds()
-             , *ARGOT_FORWARD( Opt )( *self.opt )  // TODO(mattcalabrese) Use traits
+             , *self.otherwise
              );
   }
 };
