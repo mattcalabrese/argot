@@ -37,8 +37,15 @@ ARGOT_CONCEPT_ENSURE
 
 ARGOT_CONCEPT_ENSURE( TriviallyDefaultConstructible< int[5] > );
 
+// NOTE: Needs trivial destructor because of std trait defect.
 ARGOT_CONCEPT_ENSURE
-( TriviallyDefaultConstructible< argot_test::trivial_default_constructor > );
+( TriviallyDefaultConstructible
+  < argot_test::combined_regularity_archetype_t
+    < argot_test::trivial_default_constructor_profile
+    , argot_test::trivial_destructor_profile
+    >
+  >
+);
 
 ARGOT_CONCEPT_ENSURE
 ( Not

@@ -8,4 +8,4 @@
 #endif // ARGOT_PREPROCESSING_MODE
 
 using BOOST_PP_CAT( alternative_type, BOOST_PP_ITERATION() )
-  = BOOST_PP_CAT( T, BOOST_PP_ITERATION() );
+  = void_to_regular_void_t< BOOST_PP_CAT( T, BOOST_PP_ITERATION() ) >;

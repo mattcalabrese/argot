@@ -81,19 +81,16 @@ using combined_regularity_archetype_t
 #define ARGOT_TEST_DETAIL_DEFINE_ARCHETYPE_OF( kind )                          \
 using kind = regularity_archetype< kind ## _profile >
 
-// NOTE: Trivial constructor requires destructor due to standard trait defects.
 ARGOT_TEST_DETAIL_DEFINE_ARCHETYPE_OF( no_default_constructor );
 ARGOT_TEST_DETAIL_DEFINE_ARCHETYPE_OF( trivial_default_constructor );
 ARGOT_TEST_DETAIL_DEFINE_ARCHETYPE_OF( nothrow_default_constructor );
 ARGOT_TEST_DETAIL_DEFINE_ARCHETYPE_OF( exceptional_default_constructor );
 
-// NOTE: Trivial constructor requires destructor due to standard trait defects.
 ARGOT_TEST_DETAIL_DEFINE_ARCHETYPE_OF( no_move_constructor );
 ARGOT_TEST_DETAIL_DEFINE_ARCHETYPE_OF( trivial_move_constructor );
 ARGOT_TEST_DETAIL_DEFINE_ARCHETYPE_OF( nothrow_move_constructor );
 ARGOT_TEST_DETAIL_DEFINE_ARCHETYPE_OF( exceptional_move_constructor );
 
-// NOTE: Trivial constructor requires destructor due to standard trait defects.
 ARGOT_TEST_DETAIL_DEFINE_ARCHETYPE_OF( no_copy_constructor );
 ARGOT_TEST_DETAIL_DEFINE_ARCHETYPE_OF( trivial_copy_constructor );
 ARGOT_TEST_DETAIL_DEFINE_ARCHETYPE_OF( nothrow_copy_constructor );

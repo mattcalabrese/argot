@@ -102,6 +102,8 @@ struct void_
   {
     return false;
   }
+
+  friend constexpr void swap( void_, void_ ) noexcept {}
 };
 
 template< class T >

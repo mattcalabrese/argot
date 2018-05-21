@@ -5,7 +5,7 @@
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#include <argot/union_.hpp>
+#include <argot/discriminated_union.hpp>
 
 #include <argot/concepts/constructible.hpp>
 #include <argot/concepts/same_type.hpp>
@@ -20,31 +20,32 @@
 #include <argot/union_traits/index_type.hpp>
 #include <argot/union_traits/num_alternatives.hpp>
 
+#include "regularity_archetypes.hpp"
+#include "regularity_facilities.hpp"
+#include "regularity_testing.hpp"
+
 #include <cstddef>
 #include <initializer_list>
 #include <memory>
 #include <type_traits>
 #include <utility>
 
-#include "regularity_archetypes.hpp"
-#include "regularity_facilities.hpp"
-#include "regularity_testing.hpp"
-
 // TODO(mattcalabrese) Test "odd" types (references, void).
+// TODO(mattcalabrese) Test copy, assign, and triviality.
 
 namespace {
 
 namespace union_traits = argot::union_traits;
+namespace variant_traits = argot::variant_traits;
 
 using argot::Constructible;
 using argot::Not;
 using argot::SameType;
-using argot::SameValue;
-using argot::UnionLike;
 
-using argot::union_;
+using argot::discriminated_union;
 using argot::in_place_index_with_result;
 
+using argot_test::combine_regularity_profiles_t;
 using argot_test::syntactic_regularity_profile_of_t;
 
 template< int I >
@@ -150,20 +151,20 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_union_binary_construct_constexpr )
   {
     using alt0_t = trivial_constructor_trivial_destructor< 0 >;
     using alt1_t = trivial_constructor_trivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
-    ARGOT_CONCEPT_ENSURE( Constructible< union_t > );
+    ARGOT_CONCEPT_ENSURE( Constructible< discriminated_union_t > );
 
     {
       int zero = 0;
       int const one = 1;
       int two = 2;
 
-      union_t un( std::in_place_index< 0 >, zero, one, std::move( two )
+      discriminated_union_t un( std::in_place_index< 0 >, zero, one, std::move( two )
                 , int_v< 0 >
                 );
 
-      union_t const& const_un = un;
+      discriminated_union_t const& const_un = un;
 
       auto const& res_const_lvalue = union_traits::get< 0 >( const_un );
 
@@ -191,11 +192,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_union_binary_construct_constexpr )
       int const one = 1;
       int two = 2;
 
-      union_t un( std::in_place_index< 1 >, zero, one, std::move( two )
+      discriminated_union_t un( std::in_place_index< 1 >, zero, one, std::move( two )
                 , int_v< 1 >
                 );
 
-      union_t const& const_un = un;
+      discriminated_union_t const& const_un = un;
 
       auto const& res_const_lvalue = union_traits::get< 1 >( const_un );
 
@@ -222,20 +223,20 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_union_binary_construct_constexpr )
   {
     using alt0_t = nontrivial_constructor_trivial_destructor< 0 >;
     using alt1_t = nontrivial_constructor_trivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
-    ARGOT_CONCEPT_ENSURE( Constructible< union_t > );
+    ARGOT_CONCEPT_ENSURE( Constructible< discriminated_union_t > );
 
     {
       int zero = 0;
       int const one = 1;
       int two = 2;
 
-      union_t un( std::in_place_index< 0 >, zero, one, std::move( two )
+      discriminated_union_t un( std::in_place_index< 0 >, zero, one, std::move( two )
                 , int_v< 0 >
                 );
 
-      union_t const& const_un = un;
+      discriminated_union_t const& const_un = un;
 
       auto const& res_const_lvalue = union_traits::get< 0 >( const_un );
 
@@ -263,11 +264,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_union_binary_construct_constexpr )
       int const one = 1;
       int two = 2;
 
-      union_t un( std::in_place_index< 1 >, zero, one, std::move( two )
+      discriminated_union_t un( std::in_place_index< 1 >, zero, one, std::move( two )
                 , int_v< 1 >
                 );
 
-      union_t const& const_un = un;
+      discriminated_union_t const& const_un = un;
 
       auto const& res_const_lvalue = union_traits::get< 1 >( const_un );
 
@@ -299,9 +300,9 @@ ARGOT_REGISTER_TEST( test_union_binary_construct_not_constexpr )
   {
     using alt0_t = trivial_constructor_nontrivial_destructor< 0 >;
     using alt1_t = trivial_constructor_nontrivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
-    ARGOT_CONCEPT_ENSURE( Constructible< union_t > );
+    ARGOT_CONCEPT_ENSURE( Constructible< discriminated_union_t > );
 
     {
       bool destroyed = false;
@@ -310,12 +311,12 @@ ARGOT_REGISTER_TEST( test_union_binary_construct_not_constexpr )
       int two = 2;
 
       {
-        union_t un
+        discriminated_union_t un
         ( std::in_place_index< 0 >, destroyed, zero, one, std::move( two )
         , int_v< 0 >
         );
 
-        union_t const& const_un = un;
+        discriminated_union_t const& const_un = un;
 
         auto const& res_const_lvalue = union_traits::get< 0 >( const_un );
 
@@ -338,7 +339,7 @@ ARGOT_REGISTER_TEST( test_union_binary_construct_not_constexpr )
         ARGOT_TEST_EQ( union_traits::get< 0 >( un ).value, 3 );
       }
 
-      ARGOT_TEST_FALSE( destroyed );
+      ARGOT_TEST_TRUE( destroyed );
     }
 
     {
@@ -348,12 +349,12 @@ ARGOT_REGISTER_TEST( test_union_binary_construct_not_constexpr )
       int two = 2;
 
       {
-        union_t un
+        discriminated_union_t un
         ( std::in_place_index< 1 >, destroyed, zero, one, std::move( two )
         , int_v< 1 >
         );
 
-        union_t const& const_un = un;
+        discriminated_union_t const& const_un = un;
 
         auto const& res_const_lvalue = union_traits::get< 1 >( const_un );
 
@@ -376,16 +377,16 @@ ARGOT_REGISTER_TEST( test_union_binary_construct_not_constexpr )
         ARGOT_TEST_EQ( union_traits::get< 1 >( un ).value, 3 );
       }
 
-      ARGOT_TEST_FALSE( destroyed );
+      ARGOT_TEST_TRUE( destroyed );
     }
   }
 
   {
     using alt0_t = nontrivial_constructor_nontrivial_destructor< 0 >;
     using alt1_t = nontrivial_constructor_nontrivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
-    ARGOT_CONCEPT_ENSURE( Constructible< union_t > );
+    ARGOT_CONCEPT_ENSURE( Constructible< discriminated_union_t > );
 
     {
       bool destroyed = false;
@@ -394,12 +395,12 @@ ARGOT_REGISTER_TEST( test_union_binary_construct_not_constexpr )
       int two = 2;
 
       {
-        union_t un
+        discriminated_union_t un
         ( std::in_place_index< 0 >, destroyed, zero, one, std::move( two )
         , int_v< 0 >
         );
 
-        union_t const& const_un = un;
+        discriminated_union_t const& const_un = un;
 
         auto const& res_const_lvalue = union_traits::get< 0 >( const_un );
 
@@ -422,7 +423,7 @@ ARGOT_REGISTER_TEST( test_union_binary_construct_not_constexpr )
         ARGOT_TEST_EQ( union_traits::get< 0 >( un ).value, 3 );
       }
 
-      ARGOT_TEST_FALSE( destroyed );
+      ARGOT_TEST_TRUE( destroyed );
     }
 
     {
@@ -432,12 +433,12 @@ ARGOT_REGISTER_TEST( test_union_binary_construct_not_constexpr )
       int two = 2;
 
       {
-        union_t un
+        discriminated_union_t un
         ( std::in_place_index< 1 >, destroyed, zero, one, std::move( two )
         , int_v< 1 >
         );
 
-        union_t const& const_un = un;
+        discriminated_union_t const& const_un = un;
 
         auto const& res_const_lvalue = union_traits::get< 1 >( const_un );
 
@@ -460,7 +461,7 @@ ARGOT_REGISTER_TEST( test_union_binary_construct_not_constexpr )
         ARGOT_TEST_EQ( union_traits::get< 1 >( un ).value, 3 );
       }
 
-      ARGOT_TEST_FALSE( destroyed );
+      ARGOT_TEST_TRUE( destroyed );
     }
   }
 
@@ -472,14 +473,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_union_binary_construct_constexpr_ilist )
   {
     using alt0_t = trivial_constructor_trivial_destructor< 0 >;
     using alt1_t = trivial_constructor_trivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
     {
       int zero = 0;
       int const one = 1;
       int two = 2;
 
-      union_t un
+      discriminated_union_t un
       ( std::in_place_index< 0 >, { 3, 4, 5 }, zero, one, std::move( two )
       , int_v< 0 >
       );
@@ -492,7 +493,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_union_binary_construct_constexpr_ilist )
       int const one = 1;
       int two = 2;
 
-      union_t un
+      discriminated_union_t un
       ( std::in_place_index< 1 >, { 3, 4, 5 }, zero, one, std::move( two )
       , int_v< 1 >
       );
@@ -504,14 +505,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_union_binary_construct_constexpr_ilist )
   {
     using alt0_t = nontrivial_constructor_trivial_destructor< 0 >;
     using alt1_t = nontrivial_constructor_trivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
     {
       int zero = 0;
       int const one = 1;
       int two = 2;
 
-      union_t un
+      discriminated_union_t un
       ( std::in_place_index< 0 >, { 3, 4, 5 }, zero, one, std::move( two )
       , int_v< 0 >
       );
@@ -524,7 +525,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_union_binary_construct_constexpr_ilist )
       int const one = 1;
       int two = 2;
 
-      union_t un
+      discriminated_union_t un
       ( std::in_place_index< 1 >, { 3, 4, 5 }, zero, one, std::move( two )
       , int_v< 1 >
       );
@@ -541,72 +542,80 @@ ARGOT_REGISTER_TEST( test_union_binary_construct_not_constexpr_ilist )
   {
     using alt0_t = trivial_constructor_nontrivial_destructor< 0 >;
     using alt1_t = trivial_constructor_nontrivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
     {
       bool destroyed = false;
 
       {
-        union_t un
+        discriminated_union_t un
         ( std::in_place_index< 0 >, { 3, 4, 5 }, destroyed
         , int_v< 0 >
         );
 
         ARGOT_TEST_EQ( union_traits::get< 0 >( un ).value, 12 );
+
+        ARGOT_TEST_FALSE( destroyed );
       }
 
-      ARGOT_TEST_FALSE( destroyed );
+      ARGOT_TEST_TRUE( destroyed );
     }
 
     {
       bool destroyed = false;
 
       {
-        union_t un
+        discriminated_union_t un
         ( std::in_place_index< 1 >, { 3, 4, 5 }, destroyed
         , int_v< 1 >
         );
 
         ARGOT_TEST_EQ( union_traits::get< 1 >( un ).value, 12 );
+
+        ARGOT_TEST_FALSE( destroyed );
       }
 
-      ARGOT_TEST_FALSE( destroyed );
+      ARGOT_TEST_TRUE( destroyed );
     }
   }
 
   {
     using alt0_t = nontrivial_constructor_nontrivial_destructor< 0 >;
     using alt1_t = nontrivial_constructor_nontrivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
     {
       bool destroyed = false;
 
       {
-        union_t un
+        discriminated_union_t un
         ( std::in_place_index< 0 >, { 3, 4, 5 }, destroyed
         , int_v< 0 >
         );
 
         ARGOT_TEST_EQ( union_traits::get< 0 >( un ).value, 12 );
+
+        ARGOT_TEST_FALSE( destroyed );
       }
 
-      ARGOT_TEST_FALSE( destroyed );
+      ARGOT_TEST_TRUE( destroyed );
     }
 
     {
       bool destroyed = false;
 
       {
-        union_t un
+        discriminated_union_t un
         ( std::in_place_index< 1 >, { 3, 4, 5 }, destroyed
         , int_v< 1 >
         );
 
         ARGOT_TEST_EQ( union_traits::get< 1 >( un ).value, 12 );
+
+        ARGOT_TEST_FALSE( destroyed );
       }
 
-      ARGOT_TEST_FALSE( destroyed );
+      ARGOT_TEST_TRUE( destroyed );
     }
   }
 
@@ -618,14 +627,14 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace )
   {
     using alt0_t = trivial_constructor_trivial_destructor< 0 >;
     using alt1_t = trivial_constructor_trivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
     {
       int zero = 0;
       int const one = 1;
       int two = 2;
 
-      union_t un;
+      discriminated_union_t un;
 
       decltype( auto ) res = un.emplace< 0 >( zero, one, std::move( two )
                                             , int_v< 0 >
@@ -642,7 +651,7 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace )
       int const one = 1;
       int two = 2;
 
-      union_t un;
+      discriminated_union_t un;
 
       decltype( auto ) res = un.emplace< 1 >( zero, one, std::move( two )
                                             , int_v< 1 >
@@ -658,14 +667,14 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace )
   {
     using alt0_t = nontrivial_constructor_trivial_destructor< 0 >;
     using alt1_t = nontrivial_constructor_trivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
     {
       int zero = 0;
       int const one = 1;
       int two = 2;
 
-      union_t un;
+      discriminated_union_t un;
 
       decltype( auto ) res = un.emplace< 0 >( zero, one, std::move( two )
                                             , int_v< 0 >
@@ -682,7 +691,7 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace )
       int const one = 1;
       int two = 2;
 
-      union_t un;
+      discriminated_union_t un;
 
       decltype( auto ) res = un.emplace< 1 >( zero, one, std::move( two )
                                             , int_v< 1 >
@@ -698,7 +707,7 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace )
   {
     using alt0_t = trivial_constructor_nontrivial_destructor< 0 >;
     using alt1_t = trivial_constructor_nontrivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
     {
       bool destroyed = false;
@@ -707,7 +716,7 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace )
       int two = 2;
 
       {
-        union_t un;
+        discriminated_union_t un;
 
         decltype( auto ) res
           = un.emplace< 0 >( destroyed, zero, one, std::move( two )
@@ -718,9 +727,11 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace )
 
         ARGOT_TEST_EQ( &union_traits::get< 0 >( un ), &res );
         ARGOT_TEST_EQ( union_traits::get< 0 >( un ).value, 3 );
+
+        ARGOT_TEST_FALSE( destroyed );
       }
 
-      ARGOT_TEST_FALSE( destroyed );
+      ARGOT_TEST_TRUE( destroyed );
     }
 
     {
@@ -730,7 +741,7 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace )
       int two = 2;
 
       {
-        union_t un;
+        discriminated_union_t un;
 
         decltype( auto ) res
           = un.emplace< 1 >( destroyed, zero, one, std::move( two )
@@ -741,16 +752,18 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace )
 
         ARGOT_TEST_EQ( &union_traits::get< 1 >( un ), &res );
         ARGOT_TEST_EQ( union_traits::get< 1 >( un ).value, 3 );
+
+        ARGOT_TEST_FALSE( destroyed );
       }
 
-      ARGOT_TEST_FALSE( destroyed );
+      ARGOT_TEST_TRUE( destroyed );
     }
   }
 
   {
     using alt0_t = nontrivial_constructor_nontrivial_destructor< 0 >;
     using alt1_t = nontrivial_constructor_nontrivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
     {
       bool destroyed = false;
@@ -759,7 +772,7 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace )
       int two = 2;
 
       {
-        union_t un;
+        discriminated_union_t un;
 
         decltype( auto ) res
           = un.emplace< 0 >( destroyed, zero, one, std::move( two )
@@ -770,9 +783,11 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace )
 
         ARGOT_TEST_EQ( &union_traits::get< 0 >( un ), &res );
         ARGOT_TEST_EQ( union_traits::get< 0 >( un ).value, 3 );
+
+        ARGOT_TEST_FALSE( destroyed );
       }
 
-      ARGOT_TEST_FALSE( destroyed );
+      ARGOT_TEST_TRUE( destroyed );
     }
 
     {
@@ -782,7 +797,7 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace )
       int two = 2;
 
       {
-        union_t un;
+        discriminated_union_t un;
 
         decltype( auto ) res
           = un.emplace< 1 >( destroyed, zero, one, std::move( two )
@@ -793,9 +808,11 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace )
 
         ARGOT_TEST_EQ( &union_traits::get< 1 >( un ), &res );
         ARGOT_TEST_EQ( union_traits::get< 1 >( un ).value, 3 );
+
+        ARGOT_TEST_FALSE( destroyed );
       }
 
-      ARGOT_TEST_FALSE( destroyed );
+      ARGOT_TEST_TRUE( destroyed );
     }
   }
 
@@ -807,14 +824,14 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace_ilist )
   {
     using alt0_t = trivial_constructor_trivial_destructor< 0 >;
     using alt1_t = trivial_constructor_trivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
     {
       int zero = 0;
       int const one = 1;
       int two = 2;
 
-      union_t un;
+      discriminated_union_t un;
 
       decltype( auto ) res
         = un.emplace< 0 >( { 3, 4, 5 }, zero, one, std::move( two )
@@ -832,7 +849,7 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace_ilist )
       int const one = 1;
       int two = 2;
 
-      union_t un;
+      discriminated_union_t un;
 
       decltype( auto ) res
         = un.emplace< 1 >( { 3, 4, 5 }, zero, one, std::move( two )
@@ -849,14 +866,14 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace_ilist )
   {
     using alt0_t = nontrivial_constructor_trivial_destructor< 0 >;
     using alt1_t = nontrivial_constructor_trivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
     {
       int zero = 0;
       int const one = 1;
       int two = 2;
 
-      union_t un;
+      discriminated_union_t un;
 
       decltype( auto ) res
         = un.emplace< 0 >( { 3, 4, 5 }, zero, one, std::move( two )
@@ -874,7 +891,7 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace_ilist )
       int const one = 1;
       int two = 2;
 
-      union_t un;
+      discriminated_union_t un;
 
       decltype( auto ) res
         = un.emplace< 1 >( { 3, 4, 5 }, zero, one, std::move( two )
@@ -891,13 +908,13 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace_ilist )
   {
     using alt0_t = trivial_constructor_nontrivial_destructor< 0 >;
     using alt1_t = trivial_constructor_nontrivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
     {
       bool destroyed = false;
 
       {
-        union_t un;
+        discriminated_union_t un;
 
         decltype( auto ) res = un.emplace< 0 >( { 3, 4, 5 }, destroyed
                                               , int_v< 0 >
@@ -907,16 +924,18 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace_ilist )
 
         ARGOT_TEST_EQ( &union_traits::get< 0 >( un ), &res );
         ARGOT_TEST_EQ( union_traits::get< 0 >( un ).value, 12 );
+
+        ARGOT_TEST_FALSE( destroyed );
       }
 
-      ARGOT_TEST_FALSE( destroyed );
+      ARGOT_TEST_TRUE( destroyed );
     }
 
     {
       bool destroyed = false;
 
       {
-        union_t un;
+        discriminated_union_t un;
 
         decltype( auto ) res = un.emplace< 1 >( { 3, 4, 5 }, destroyed
                                               , int_v< 1 >
@@ -926,22 +945,24 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace_ilist )
 
         ARGOT_TEST_EQ( &union_traits::get< 1 >( un ), &res );
         ARGOT_TEST_EQ( union_traits::get< 1 >( un ).value, 12 );
+
+        ARGOT_TEST_FALSE( destroyed );
       }
 
-      ARGOT_TEST_FALSE( destroyed );
+      ARGOT_TEST_TRUE( destroyed );
     }
   }
 
   {
     using alt0_t = nontrivial_constructor_nontrivial_destructor< 0 >;
     using alt1_t = nontrivial_constructor_nontrivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
     {
       bool destroyed = false;
 
       {
-        union_t un;
+        discriminated_union_t un;
 
         decltype( auto ) res = un.emplace< 0 >( { 3, 4, 5 }, destroyed
                                               , int_v< 0 >
@@ -951,16 +972,18 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace_ilist )
 
         ARGOT_TEST_EQ( &union_traits::get< 0 >( un ), &res );
         ARGOT_TEST_EQ( union_traits::get< 0 >( un ).value, 12 );
+
+        ARGOT_TEST_FALSE( destroyed );
       }
 
-      ARGOT_TEST_FALSE( destroyed );
+      ARGOT_TEST_TRUE( destroyed );
     }
 
     {
       bool destroyed = false;
 
       {
-        union_t un;
+        discriminated_union_t un;
 
         decltype( auto ) res = un.emplace< 1 >( { 3, 4, 5 }, destroyed
                                               , int_v< 1 >
@@ -970,9 +993,11 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace_ilist )
 
         ARGOT_TEST_EQ( &union_traits::get< 1 >( un ), &res );
         ARGOT_TEST_EQ( union_traits::get< 1 >( un ).value, 12 );
+
+        ARGOT_TEST_FALSE( destroyed );
       }
 
-      ARGOT_TEST_FALSE( destroyed );
+      ARGOT_TEST_TRUE( destroyed );
     }
   }
 
@@ -984,14 +1009,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_union_destroy_constexpr )
   {
     using alt0_t = trivial_constructor_trivial_destructor< 0 >;
     using alt1_t = trivial_constructor_trivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
     {
       int zero = 0;
       int const one = 1;
       int two = 2;
 
-      union_t un
+      discriminated_union_t un
       ( std::in_place_index< 0 >, zero, one, std::move( two )
       , int_v< 0 >
       );
@@ -1004,7 +1029,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_union_destroy_constexpr )
       int const one = 1;
       int two = 2;
 
-      union_t un
+      discriminated_union_t un
       ( std::in_place_index< 1 >, zero, one, std::move( two )
       , int_v< 1 >
       );
@@ -1016,14 +1041,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_union_destroy_constexpr )
   {
     using alt0_t = nontrivial_constructor_trivial_destructor< 0 >;
     using alt1_t = nontrivial_constructor_trivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
     {
       int zero = 0;
       int const one = 1;
       int two = 2;
 
-      union_t un
+      discriminated_union_t un
       ( std::in_place_index< 0 >, zero, one, std::move( two )
       , int_v< 0 >
       );
@@ -1036,7 +1061,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_union_destroy_constexpr )
       int const one = 1;
       int two = 2;
 
-      union_t un
+      discriminated_union_t un
       ( std::in_place_index< 1 >, zero, one, std::move( two )
       , int_v< 1 >
       );
@@ -1053,7 +1078,7 @@ ARGOT_REGISTER_TEST( test_union_destroy_not_constexpr )
   {
     using alt0_t = trivial_constructor_nontrivial_destructor< 0 >;
     using alt1_t = trivial_constructor_nontrivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
     {
       bool destroyed = false;
@@ -1061,7 +1086,7 @@ ARGOT_REGISTER_TEST( test_union_destroy_not_constexpr )
       int const one = 1;
       int two = 2;
 
-      union_t un
+      discriminated_union_t un
       ( std::in_place_index< 0 >, destroyed, zero, one, std::move( two )
       , int_v< 0 >
       );
@@ -1079,7 +1104,7 @@ ARGOT_REGISTER_TEST( test_union_destroy_not_constexpr )
       int const one = 1;
       int two = 2;
 
-      union_t un
+      discriminated_union_t un
       ( std::in_place_index< 1 >, destroyed, zero, one, std::move( two )
       , int_v< 1 >
       );
@@ -1095,7 +1120,7 @@ ARGOT_REGISTER_TEST( test_union_destroy_not_constexpr )
   {
     using alt0_t = nontrivial_constructor_nontrivial_destructor< 0 >;
     using alt1_t = nontrivial_constructor_nontrivial_destructor< 1 >;
-    using union_t = union_< alt0_t, alt1_t >;
+    using discriminated_union_t = discriminated_union< alt0_t, alt1_t >;
 
     {
       bool destroyed = false;
@@ -1103,7 +1128,7 @@ ARGOT_REGISTER_TEST( test_union_destroy_not_constexpr )
       int const one = 1;
       int two = 2;
 
-      union_t un
+      discriminated_union_t un
       ( std::in_place_index< 0 >, destroyed, zero, one, std::move( two )
       , int_v< 0 >
       );
@@ -1121,7 +1146,7 @@ ARGOT_REGISTER_TEST( test_union_destroy_not_constexpr )
       int const one = 1;
       int two = 2;
 
-      union_t un
+      discriminated_union_t un
       ( std::in_place_index< 1 >, destroyed, zero, one, std::move( two )
       , int_v< 1 >
       );
@@ -1139,49 +1164,166 @@ ARGOT_REGISTER_TEST( test_union_destroy_not_constexpr )
 
 template< class AlternativeProfile, class ExpectedUnionProfile >
 constexpr ::argot::call_detail::constexpr_block_result_t
-test_homogeneous_union_of_archetype_regularity()
+test_homogeneous_discriminated_union_of_archetype_regularity()
 {
-  using arch = argot_test::regularity_archetype< AlternativeProfile >;
-  using un = union_< arch, arch >;
+  {
+    using arch = argot_test::regularity_archetype< AlternativeProfile >;
+    using un = discriminated_union< arch, arch >;
 
-  ARGOT_CONCEPT_ENSURE
-  ( SameType
-    < syntactic_regularity_profile_of_t< un >
-    , ExpectedUnionProfile
-    >
-  );
+    ARGOT_CONCEPT_ENSURE
+    ( SameType
+      < syntactic_regularity_profile_of_t< un >
+      , ExpectedUnionProfile
+      >
+    );
 
-  ARGOT_TEST_SUCCESS
-  ( argot_test::test_regularity< un, ExpectedUnionProfile >
-    ( []{ return un( in_place_index_with_result< 0 >, arch::make, 0 ); }
-    , []{ return un( in_place_index_with_result< 0 >, arch::make, 1 ); }
-    , []{ return un( in_place_index_with_result< 0 >, arch::make, 3 ); }
-    , []{ return un( in_place_index_with_result< 0 >, arch::make, 5 ); }
-    )
-  );
+    ARGOT_TEST_SUCCESS
+    ( argot_test::test_regularity< un, ExpectedUnionProfile >
+      ( []{ return un( in_place_index_with_result< 0 >, arch::make, 0 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 1 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 2 ); }
+      , []{ return un( in_place_index_with_result< 1 >, arch::make, 0 ); }
+      , []{ return un( in_place_index_with_result< 1 >, arch::make, 1 ); }
+      , []{ return un( in_place_index_with_result< 1 >, arch::make, 2 ); }
+      )
+    );
+  }
+
+  {
+    using prof
+      = combine_regularity_profiles_t
+        < AlternativeProfile
+        , argot_test::nothrow_equality_profile
+        >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < ExpectedUnionProfile
+        , argot_test::nothrow_equality_profile
+        , argot_test::nothrow_inequality_profile
+        >;
+
+    using arch = argot_test::regularity_archetype< prof >;
+    using un = discriminated_union< arch, arch >;
+
+    ARGOT_CONCEPT_ENSURE
+    ( SameType
+      < syntactic_regularity_profile_of_t< un >
+      , expected_prof
+      >
+    );
+
+    ARGOT_TEST_SUCCESS
+    ( argot_test::test_regularity< un, expected_prof >
+      ( []{ return un( in_place_index_with_result< 0 >, arch::make, 0 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 1 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 2 ); }
+      , []{ return un( in_place_index_with_result< 1 >, arch::make, 0 ); }
+      , []{ return un( in_place_index_with_result< 1 >, arch::make, 1 ); }
+      , []{ return un( in_place_index_with_result< 1 >, arch::make, 2 ); }
+      )
+    );
+  }
+
+  {
+    using prof
+      = combine_regularity_profiles_t
+        < AlternativeProfile
+        , argot_test::exceptional_equality_profile
+        , argot_test::nothrow_inequality_profile
+        >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < ExpectedUnionProfile
+        , argot_test::exceptional_equality_profile
+        , argot_test::nothrow_inequality_profile
+        >;
+
+    using arch = argot_test::regularity_archetype< prof >;
+    using un = discriminated_union< arch, arch >;
+
+    ARGOT_CONCEPT_ENSURE
+    ( SameType
+      < syntactic_regularity_profile_of_t< un >
+      , expected_prof
+      >
+    );
+
+    ARGOT_TEST_SUCCESS
+    ( argot_test::test_regularity< un, expected_prof >
+      ( []{ return un( in_place_index_with_result< 0 >, arch::make, 0 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 1 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 2 ); }
+      , []{ return un( in_place_index_with_result< 1 >, arch::make, 0 ); }
+      , []{ return un( in_place_index_with_result< 1 >, arch::make, 1 ); }
+      , []{ return un( in_place_index_with_result< 1 >, arch::make, 2 ); }
+      )
+    );
+  }
+
+  {
+    using prof
+      = combine_regularity_profiles_t
+        < AlternativeProfile
+        , argot_test::nothrow_equality_profile
+        , argot_test::exceptional_less_than_profile
+        , argot_test::nothrow_greater_than_profile
+        >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < ExpectedUnionProfile
+        , argot_test::nothrow_equality_profile
+        , argot_test::nothrow_inequality_profile
+        , argot_test::exceptional_less_than_profile
+        , argot_test::exceptional_less_equal_profile
+        , argot_test::exceptional_greater_equal_profile
+        , argot_test::nothrow_greater_than_profile
+        >;
+
+    using arch = argot_test::regularity_archetype< prof >;
+    using un = discriminated_union< arch, arch >;
+
+    ARGOT_CONCEPT_ENSURE
+    ( SameType
+      < syntactic_regularity_profile_of_t< un >
+      , expected_prof
+      >
+    );
+
+    ARGOT_TEST_SUCCESS
+    ( argot_test::test_regularity< un, expected_prof >
+      ( []{ return un( in_place_index_with_result< 0 >, arch::make, 0 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 1 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 2 ); }
+      , []{ return un( in_place_index_with_result< 1 >, arch::make, 0 ); }
+      , []{ return un( in_place_index_with_result< 1 >, arch::make, 1 ); }
+      , []{ return un( in_place_index_with_result< 1 >, arch::make, 2 ); }
+      )
+    );
+  }
 
   return 0;
 }
 
 ARGOT_REGISTER_TEST( test_union_regularity_homogeneous )
 {
-  using argot_test::combine_regularity_profiles_t;
-
   ARGOT_TEST_SUCCESS
-  ( test_homogeneous_union_of_archetype_regularity
+  ( test_homogeneous_discriminated_union_of_archetype_regularity
     < combine_regularity_profiles_t
         < argot_test::no_default_constructor_profile
         , argot_test::exceptional_destructor_profile
         >
     , combine_regularity_profiles_t
         < argot_test::nothrow_default_constructor_profile
-        , argot_test::nothrow_destructor_profile
+        , argot_test::exceptional_destructor_profile
         >
     >()
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_homogeneous_union_of_archetype_regularity
+  ( test_homogeneous_discriminated_union_of_archetype_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_copy_constructor_profile
@@ -1191,13 +1333,16 @@ ARGOT_REGISTER_TEST( test_union_regularity_homogeneous )
       < argot_test::nothrow_default_constructor_profile
       , argot_test::trivial_move_constructor_profile
       , argot_test::trivial_copy_constructor_profile
+      , argot_test::nothrow_move_assign_profile
+      , argot_test::nothrow_copy_assign_profile
       , argot_test::trivial_destructor_profile
+      , argot_test::nothrow_swap_profile
       >
     >()
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_homogeneous_union_of_archetype_regularity
+  ( test_homogeneous_discriminated_union_of_archetype_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_copy_assign_profile
@@ -1207,13 +1352,13 @@ ARGOT_REGISTER_TEST( test_union_regularity_homogeneous )
       < argot_test::nothrow_default_constructor_profile
       , argot_test::trivial_move_assign_profile
       , argot_test::trivial_copy_assign_profile
-      , argot_test::nothrow_destructor_profile
+      , argot_test::exceptional_destructor_profile
       >
     >()
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_homogeneous_union_of_archetype_regularity
+  ( test_homogeneous_discriminated_union_of_archetype_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_copy_constructor_profile
@@ -1233,7 +1378,7 @@ ARGOT_REGISTER_TEST( test_union_regularity_homogeneous )
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_homogeneous_union_of_archetype_regularity
+  ( test_homogeneous_discriminated_union_of_archetype_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_destructor_profile
@@ -1246,23 +1391,7 @@ ARGOT_REGISTER_TEST( test_union_regularity_homogeneous )
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_homogeneous_union_of_archetype_regularity
-    < combine_regularity_profiles_t
-      < argot_test::no_default_constructor_profile
-      , argot_test::trivial_copy_constructor_profile
-      , argot_test::trivial_destructor_profile
-      >
-    , combine_regularity_profiles_t
-      < argot_test::nothrow_default_constructor_profile
-      , argot_test::trivial_move_constructor_profile
-      , argot_test::trivial_copy_constructor_profile
-      , argot_test::trivial_destructor_profile
-      >
-    >()
-  );
-
-  ARGOT_TEST_SUCCESS
-  ( test_homogeneous_union_of_archetype_regularity
+  ( test_homogeneous_discriminated_union_of_archetype_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_copy_assign_profile
@@ -1278,7 +1407,7 @@ ARGOT_REGISTER_TEST( test_union_regularity_homogeneous )
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_homogeneous_union_of_archetype_regularity
+  ( test_homogeneous_discriminated_union_of_archetype_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_copy_constructor_profile
@@ -1300,17 +1429,18 @@ ARGOT_REGISTER_TEST( test_union_regularity_homogeneous )
   return 0;
 }
 
+// TODO(mattcalabrese) Test comparison operations.
 template< class Alternative0Profile, class Alternative1Profile
         , class ExpectedUnionProfile
         >
 constexpr ::argot::call_detail::constexpr_block_result_t
-test_heterogeneous_union_of_archetypes_regularity()
+test_heterogeneous_discriminated_union_of_archetypes_regularity()
 {
   using arch0 = argot_test::regularity_archetype< Alternative0Profile >;
   using arch1 = argot_test::regularity_archetype< Alternative1Profile >;
 
   {
-    using un = union_< arch0, arch1 >;
+    using un = discriminated_union< arch0, arch1 >;
 
     ARGOT_CONCEPT_ENSURE
     ( SameType
@@ -1323,18 +1453,16 @@ test_heterogeneous_union_of_archetypes_regularity()
     ( argot_test::test_regularity< un, ExpectedUnionProfile >
       ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
       , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
-      , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
-      , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
       , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
       , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
-      , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
-      , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+      , []{ return un( in_place_index_with_result< 1 >, arch1::make, 2 ); }
       )
     );
   }
 
   {
-    using un = union_< arch1, arch0 >;
+    using un = discriminated_union< arch1, arch0 >;
 
     ARGOT_CONCEPT_ENSURE
     ( SameType
@@ -1347,12 +1475,10 @@ test_heterogeneous_union_of_archetypes_regularity()
     ( argot_test::test_regularity< un, ExpectedUnionProfile >
       ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
       , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
-      , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
-      , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch1::make, 2 ); }
       , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
       , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
-      , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
-      , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+      , []{ return un( in_place_index_with_result< 1 >, arch0::make, 2 ); }
       )
     );
   }
@@ -1365,7 +1491,7 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
   using argot_test::combine_regularity_profiles_t;
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::exceptional_destructor_profile
@@ -1377,13 +1503,13 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
       >
     , combine_regularity_profiles_t
       < argot_test::nothrow_default_constructor_profile
-      , argot_test::nothrow_destructor_profile
+      , argot_test::exceptional_destructor_profile
       >
     >()
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::exceptional_destructor_profile
@@ -1395,13 +1521,13 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
       >
     , combine_regularity_profiles_t
       < argot_test::nothrow_default_constructor_profile
-      , argot_test::nothrow_destructor_profile
+      , argot_test::exceptional_destructor_profile
       >
     >()
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::exceptional_destructor_profile
@@ -1414,13 +1540,13 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
       >
     , combine_regularity_profiles_t
       < argot_test::nothrow_default_constructor_profile
-      , argot_test::nothrow_destructor_profile
+      , argot_test::exceptional_destructor_profile
       >
     >()
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::exceptional_destructor_profile
@@ -1431,13 +1557,13 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
       >
     , combine_regularity_profiles_t
       < argot_test::nothrow_default_constructor_profile
-      , argot_test::nothrow_destructor_profile
+      , argot_test::exceptional_destructor_profile
       >
     >()
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::exceptional_destructor_profile
@@ -1449,13 +1575,13 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
       >
     , combine_regularity_profiles_t
       < argot_test::nothrow_default_constructor_profile
-      , argot_test::nothrow_destructor_profile
+      , argot_test::exceptional_destructor_profile
       >
     >()
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::exceptional_destructor_profile
@@ -1467,55 +1593,16 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
       >
     , combine_regularity_profiles_t
       < argot_test::nothrow_default_constructor_profile
-      , argot_test::nothrow_destructor_profile
+      , argot_test::exceptional_destructor_profile
       >
     >()
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::exceptional_destructor_profile
-      >
-    , combine_regularity_profiles_t
-      < argot_test::no_default_constructor_profile
-      , argot_test::trivial_copy_constructor_profile
-      , argot_test::trivial_copy_assign_profile
-      , argot_test::trivial_destructor_profile
-      >
-    , combine_regularity_profiles_t
-      < argot_test::nothrow_default_constructor_profile
-      , argot_test::nothrow_destructor_profile
-      >
-    >()
-  );
-
-  ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
-    < combine_regularity_profiles_t
-      < argot_test::no_default_constructor_profile
-      , argot_test::trivial_copy_constructor_profile
-      , argot_test::exceptional_destructor_profile
-      >
-    , combine_regularity_profiles_t
-      < argot_test::no_default_constructor_profile
-      , argot_test::trivial_copy_assign_profile
-      , argot_test::exceptional_destructor_profile
-      >
-    , combine_regularity_profiles_t
-      < argot_test::nothrow_default_constructor_profile
-      , argot_test::nothrow_destructor_profile
-      >
-    >()
-  );
-
-  ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
-    < combine_regularity_profiles_t
-      < argot_test::no_default_constructor_profile
-      , argot_test::trivial_copy_constructor_profile
-      , argot_test::trivial_destructor_profile
       >
     , combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
@@ -1525,52 +1612,32 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
       >
     , combine_regularity_profiles_t
       < argot_test::nothrow_default_constructor_profile
-      , argot_test::trivial_move_constructor_profile
-      , argot_test::trivial_copy_constructor_profile
-      , argot_test::trivial_destructor_profile
+      , argot_test::exceptional_destructor_profile
       >
     >()
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_copy_constructor_profile
-      , argot_test::trivial_destructor_profile
-      >
-    , combine_regularity_profiles_t
-      < argot_test::no_default_constructor_profile
-      , argot_test::trivial_destructor_profile
-      >
-    , combine_regularity_profiles_t
-      < argot_test::nothrow_default_constructor_profile
-      , argot_test::trivial_destructor_profile
-      >
-    >()
-  );
-
-  ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
-    < combine_regularity_profiles_t
-      < argot_test::no_default_constructor_profile
-      , argot_test::trivial_copy_constructor_profile
-      , argot_test::trivial_destructor_profile
+      , argot_test::exceptional_destructor_profile
       >
     , combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_copy_assign_profile
-      , argot_test::trivial_destructor_profile
+      , argot_test::exceptional_destructor_profile
       >
     , combine_regularity_profiles_t
       < argot_test::nothrow_default_constructor_profile
-      , argot_test::trivial_destructor_profile
+      , argot_test::exceptional_destructor_profile
       >
     >()
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_copy_constructor_profile
@@ -1586,13 +1653,78 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
       < argot_test::nothrow_default_constructor_profile
       , argot_test::trivial_move_constructor_profile
       , argot_test::trivial_copy_constructor_profile
+      , argot_test::nothrow_move_assign_profile
+      , argot_test::nothrow_copy_assign_profile
+      , argot_test::trivial_destructor_profile
+      , argot_test::nothrow_swap_profile
+      >
+    >()
+  );
+
+  ARGOT_TEST_SUCCESS
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
+    < combine_regularity_profiles_t
+      < argot_test::no_default_constructor_profile
+      , argot_test::trivial_copy_constructor_profile
+      , argot_test::trivial_destructor_profile
+      >
+    , combine_regularity_profiles_t
+      < argot_test::no_default_constructor_profile
+      , argot_test::trivial_destructor_profile
+      >
+    , combine_regularity_profiles_t
+      < argot_test::nothrow_default_constructor_profile
       , argot_test::trivial_destructor_profile
       >
     >()
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
+    < combine_regularity_profiles_t
+      < argot_test::no_default_constructor_profile
+      , argot_test::trivial_copy_constructor_profile
+      , argot_test::trivial_destructor_profile
+      >
+    , combine_regularity_profiles_t
+      < argot_test::no_default_constructor_profile
+      , argot_test::trivial_copy_assign_profile
+      , argot_test::trivial_destructor_profile
+      >
+    , combine_regularity_profiles_t
+      < argot_test::nothrow_default_constructor_profile
+      , argot_test::trivial_destructor_profile
+      >
+    >()
+  );
+
+  ARGOT_TEST_SUCCESS
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
+    < combine_regularity_profiles_t
+      < argot_test::no_default_constructor_profile
+      , argot_test::trivial_copy_constructor_profile
+      , argot_test::trivial_destructor_profile
+      >
+    , combine_regularity_profiles_t
+      < argot_test::no_default_constructor_profile
+      , argot_test::trivial_copy_constructor_profile
+      , argot_test::trivial_copy_assign_profile
+      , argot_test::trivial_destructor_profile
+      >
+    , combine_regularity_profiles_t
+      < argot_test::nothrow_default_constructor_profile
+      , argot_test::trivial_move_constructor_profile
+      , argot_test::trivial_copy_constructor_profile
+      , argot_test::nothrow_move_assign_profile
+      , argot_test::nothrow_copy_assign_profile
+      , argot_test::trivial_destructor_profile
+      , argot_test::nothrow_swap_profile
+      >
+    >()
+  );
+
+  ARGOT_TEST_SUCCESS
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_copy_constructor_profile
@@ -1608,13 +1740,13 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
       < argot_test::nothrow_default_constructor_profile
       , argot_test::trivial_move_assign_profile
       , argot_test::trivial_copy_assign_profile
-      , argot_test::nothrow_destructor_profile
+      , argot_test::exceptional_destructor_profile
       >
     >()
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_copy_constructor_profile
@@ -1633,70 +1765,7 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
-    < combine_regularity_profiles_t
-      < argot_test::no_default_constructor_profile
-      , argot_test::trivial_copy_constructor_profile
-      , argot_test::trivial_copy_assign_profile
-      , argot_test::trivial_destructor_profile
-      >
-    , combine_regularity_profiles_t
-      < argot_test::no_default_constructor_profile
-      , argot_test::trivial_copy_constructor_profile
-      , argot_test::trivial_destructor_profile
-      >
-    , combine_regularity_profiles_t
-      < argot_test::nothrow_default_constructor_profile
-      , argot_test::trivial_move_constructor_profile
-      , argot_test::trivial_copy_constructor_profile
-      , argot_test::trivial_destructor_profile
-      >
-    >()
-  );
-
-  ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
-    < combine_regularity_profiles_t
-      < argot_test::no_default_constructor_profile
-      , argot_test::trivial_copy_constructor_profile
-      , argot_test::trivial_copy_assign_profile
-      , argot_test::trivial_destructor_profile
-      >
-    , combine_regularity_profiles_t
-      < argot_test::no_default_constructor_profile
-      , argot_test::trivial_copy_assign_profile
-      , argot_test::trivial_destructor_profile
-      >
-    , combine_regularity_profiles_t
-      < argot_test::nothrow_default_constructor_profile
-      , argot_test::trivial_move_assign_profile
-      , argot_test::trivial_copy_assign_profile
-      , argot_test::trivial_destructor_profile
-      >
-    >()
-  );
-
-  ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
-    < combine_regularity_profiles_t
-      < argot_test::no_default_constructor_profile
-      , argot_test::trivial_copy_constructor_profile
-      , argot_test::trivial_copy_assign_profile
-      , argot_test::trivial_destructor_profile
-      >
-    , combine_regularity_profiles_t
-      < argot_test::no_default_constructor_profile
-      , argot_test::trivial_destructor_profile
-      >
-    , combine_regularity_profiles_t
-      < argot_test::nothrow_default_constructor_profile
-      , argot_test::trivial_destructor_profile
-      >
-    >()
-  );
-
-  ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_copy_constructor_profile
@@ -1712,13 +1781,16 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
       < argot_test::nothrow_default_constructor_profile
       , argot_test::trivial_move_constructor_profile
       , argot_test::trivial_copy_constructor_profile
+      , argot_test::nothrow_move_assign_profile
+      , argot_test::nothrow_copy_assign_profile
       , argot_test::trivial_destructor_profile
+      , argot_test::nothrow_swap_profile
       >
     >()
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_copy_constructor_profile
@@ -1740,7 +1812,73 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
+    < combine_regularity_profiles_t
+      < argot_test::no_default_constructor_profile
+      , argot_test::trivial_copy_constructor_profile
+      , argot_test::trivial_copy_assign_profile
+      , argot_test::trivial_destructor_profile
+      >
+    , combine_regularity_profiles_t
+      < argot_test::no_default_constructor_profile
+      , argot_test::trivial_destructor_profile
+      >
+    , combine_regularity_profiles_t
+      < argot_test::nothrow_default_constructor_profile
+      , argot_test::trivial_destructor_profile
+      >
+    >()
+  );
+
+  ARGOT_TEST_SUCCESS
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
+    < combine_regularity_profiles_t
+      < argot_test::no_default_constructor_profile
+      , argot_test::trivial_copy_constructor_profile
+      , argot_test::trivial_copy_assign_profile
+      , argot_test::trivial_destructor_profile
+      >
+    , combine_regularity_profiles_t
+      < argot_test::no_default_constructor_profile
+      , argot_test::trivial_copy_constructor_profile
+      , argot_test::trivial_destructor_profile
+      >
+    , combine_regularity_profiles_t
+      < argot_test::nothrow_default_constructor_profile
+      , argot_test::trivial_move_constructor_profile
+      , argot_test::trivial_copy_constructor_profile
+      , argot_test::nothrow_move_assign_profile
+      , argot_test::nothrow_copy_assign_profile
+      , argot_test::trivial_destructor_profile
+      , argot_test::nothrow_swap_profile
+      >
+    >()
+  );
+
+  ARGOT_TEST_SUCCESS
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
+    < combine_regularity_profiles_t
+      < argot_test::no_default_constructor_profile
+      , argot_test::trivial_copy_constructor_profile
+      , argot_test::trivial_copy_assign_profile
+      , argot_test::trivial_destructor_profile
+      >
+    , combine_regularity_profiles_t
+      < argot_test::no_default_constructor_profile
+      , argot_test::trivial_copy_assign_profile
+      , argot_test::trivial_destructor_profile
+      >
+    , combine_regularity_profiles_t
+      < argot_test::nothrow_default_constructor_profile
+      , argot_test::trivial_move_assign_profile
+      , argot_test::trivial_copy_assign_profile
+      , argot_test::trivial_destructor_profile
+      >
+    >()
+  );
+
+  ARGOT_TEST_SUCCESS
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_destructor_profile
@@ -1758,7 +1896,7 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_destructor_profile
@@ -1776,7 +1914,7 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_destructor_profile
@@ -1795,7 +1933,7 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_copy_constructor_profile
@@ -1814,7 +1952,7 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_copy_constructor_profile
@@ -1830,13 +1968,16 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
       < argot_test::nothrow_default_constructor_profile
       , argot_test::trivial_move_constructor_profile
       , argot_test::trivial_copy_constructor_profile
+      , argot_test::nothrow_move_assign_profile
+      , argot_test::nothrow_copy_assign_profile
       , argot_test::trivial_destructor_profile
+      , argot_test::nothrow_swap_profile
       >
     >()
   );
 
   ARGOT_TEST_SUCCESS
-  ( test_heterogeneous_union_of_archetypes_regularity
+  ( test_heterogeneous_discriminated_union_of_archetypes_regularity
     < combine_regularity_profiles_t
       < argot_test::no_default_constructor_profile
       , argot_test::trivial_copy_assign_profile
@@ -1859,6 +2000,8 @@ ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
 
   return 0;
 }
+
+// TODO(mattcalabrese) Test copies and moves that can throw.
 
 ARGOT_EXECUTE_TESTS();
 

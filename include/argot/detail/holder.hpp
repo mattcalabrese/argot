@@ -8,8 +8,11 @@
 #ifndef ARGOT_DETAIL_HOLDER_HPP_
 #define ARGOT_DETAIL_HOLDER_HPP_
 
+#include <argot/concepts/assignable.hpp>
 #include <argot/concepts/constructible.hpp>
+#include <argot/concepts/convertible.hpp>
 #include <argot/concepts/invocable_with.hpp>
+#include <argot/concepts/rvalue_reference.hpp>
 #include <argot/concepts/same_type.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
@@ -17,6 +20,7 @@
 #include <argot/detail/sink.hpp>
 #include <argot/forward.hpp>
 #include <argot/gen/requires.hpp>
+#include <argot/identity.hpp>
 #include <argot/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/remove_cvref.hpp>
@@ -31,6 +35,7 @@ namespace call_detail {
 
 template< class T > struct state_impl;
 template< class T > struct access_impl;
+template< class T > struct assign_holder_fn;
 
 struct make_holder_type_tag {};
 
@@ -39,6 +44,7 @@ struct make_holder_type_with_result_tag {};
 template< class T >
 struct holder_type;
 
+// TODO(mattcalabrese) Properly handle cv-qualified void.
 template< class T >
 struct holder_impl
 {
@@ -61,6 +67,7 @@ struct holder_type< T const >
 {
   friend access_impl< holder_type >;
   friend state_impl< holder_type >;
+  friend assign_holder_fn< T const >;
   static_assert( std::is_object_v< T > );
 
   using state_type = T const;
@@ -118,6 +125,7 @@ struct holder_type< T& >
 {
   friend access_impl< holder_type >;
   friend state_impl< holder_type >;
+  friend assign_holder_fn< T& >;
   static_assert( std::is_object_v< T > );
 
   using state_type = T*;
@@ -143,6 +151,7 @@ struct holder_type< T&& >
 {
   friend access_impl< holder_type >;
   friend state_impl< holder_type >;
+  friend assign_holder_fn< T&& >;
   static_assert( std::is_object_v< T > );
 
   using state_type = T*;
@@ -193,6 +202,110 @@ struct make_holder_type_t
 
 template< class T >
 inline make_holder_type_t< T > constexpr make_holder{};
+
+template< class T >
+struct assign_holder_fn
+{
+  // TODO(mattcalabrese) noexcept
+  template< class Rhs
+          , ARGOT_REQUIRES( Assignable< T, Rhs&& > )()
+          >
+  constexpr T& operator ()( T& lhs, Rhs&& rhs ) const
+  {
+    lhs = ARGOT_FORWARD( Rhs )( rhs );
+    return lhs;
+  }
+};
+
+template<>
+struct assign_holder_fn< void >
+{
+  constexpr
+  holder< void >& operator ()( holder< void >& lhs, void_ /*rhs*/ ) const
+  noexcept
+  {
+    return lhs;
+  }
+};
+
+template<>
+struct assign_holder_fn< void const >
+{
+  constexpr holder< void const >&
+  operator ()( holder< void const >& lhs, void_ /*rhs*/ ) const noexcept
+  {
+    return lhs;
+  }
+};
+
+template<>
+struct assign_holder_fn< void volatile >
+{
+  constexpr holder< void volatile >&
+  operator ()( holder< void volatile >& lhs, void_ /*rhs*/ ) const noexcept
+  {
+    return lhs;
+  }
+};
+
+template<>
+struct assign_holder_fn< void const volatile >
+{
+  constexpr holder< void const volatile >&
+  operator ()( holder< void const volatile >& lhs, void_ /*rhs*/ ) const
+  noexcept
+  {
+    return lhs;
+  }
+};
+
+template< class T >
+struct assign_holder_fn< T const >
+{
+  // TODO(mattcalabrese) noexcept
+  template< class Rhs
+          , ARGOT_REQUIRES( Assignable< T, Rhs&& > )()
+          >
+  constexpr T const& operator ()( holder< T const >& lhs, Rhs&& rhs ) const
+  {
+    lhs.v = ARGOT_FORWARD( Rhs )( rhs );
+    return lhs.v;
+  }
+};
+
+template< class T >
+struct assign_holder_fn< T& >
+{
+  template< class Rhs
+          , ARGOT_REQUIRES( Convertible< Rhs&, T& > )()
+          >
+  constexpr T& operator ()( holder< T& >& lhs, Rhs& rhs ) const noexcept
+  {
+    T& reference = rhs;
+    lhs.v = std::addressof( reference );
+    return *lhs.v;
+  }
+};
+
+template< class T >
+struct assign_holder_fn< T&& >
+{
+  template< class Rhs
+          , ARGOT_REQUIRES
+            ( RvalueReference< Rhs&& > )
+            ( Convertible< Rhs&&, T&& > )
+            ()
+          >
+  constexpr T& operator ()( holder< T&& >& lhs, Rhs&& rhs ) const noexcept
+  {
+    T&& reference = ARGOT_FORWARD( Rhs )( rhs );
+    lhs.v = std::addressof( reference );
+    return *lhs.v;
+  }
+};
+
+template< class T >
+constexpr assign_holder_fn< T > assign_holder{};
 
 template< class T >
 struct emplace_holder_fn
@@ -510,9 +623,16 @@ struct access_holder_t
   }
 } inline constexpr access_holder{};
 
+template< bool Condition >
+constexpr typename argot_detail::conditional< Condition >::template apply
+< access_holder_t
+, identity_t
+>
+access_holder_if{};
+
 // Requires: T is a valid instantiation of holder_type
 template< class T >
-decltype( auto ) holder_state( T&& object ) noexcept
+constexpr decltype( auto ) holder_state( T&& object ) noexcept
 {
   return state_impl< remove_cvref_t< T > >::run( ARGOT_FORWARD( T )( object ) );
 }
@@ -535,127 +655,139 @@ noexcept
   return ( holder_state )( left ) != ( holder_state )( right );
 }
 
-
-// TODO(mattcalabrese) Change these to instead define standard order.
-struct holder_compare_reference
-{
-  template< class T >
-  static constexpr
-  bool less( holder_type< T > const& lhs, holder_type< T > const& rhs )
-  noexcept
-  {
-    return std::less< std::remove_reference_t< T >* >()
-    ( ( holder_state )( lhs ), ( holder_state )( rhs ) );
-  }
-
-  template< class T >
-  static constexpr
-  bool greater( holder_type< T > const& lhs, holder_type< T > const& rhs )
-  noexcept
-  {
-    return less( rhs, lhs );
-  }
-
-  template< class T >
-  static constexpr
-  bool less_equal( holder_type< T > const& lhs, holder_type< T > const& rhs )
-  noexcept
-  {
-    return !less( rhs, lhs );
-  }
-
-  template< class T >
-  static constexpr
-  bool greater_equal( holder_type< T > const& lhs, holder_type< T > const& rhs )
-  noexcept
-  {
-    return !less( lhs, rhs );
-  }
-};
-
-template< class T >
-struct holder_compare{};
-
-template< class T >
-struct holder_compare< T& > : holder_compare_reference{};
-
-template< class T >
-struct holder_compare< T&& > : holder_compare_reference{};
-
 template< class U >
-struct holder_compare< U const >
+struct holder_compare
 {
+  // TODO(mattcalabrese) Don't deduce T.
+  // TODO(mattcalabrese) Always yield bool?
   template< class T >
   static constexpr
-  auto less( holder_type< T > const& lhs, holder_type< T > const& rhs )
-  noexcept( noexcept( ( holder_state )( lhs ) < ( holder_state )( rhs ) ) )
-    -> decltype( ( holder_state )( lhs ) < ( holder_state )( rhs ) )
+  auto equal( T const& lhs, T const& rhs ) noexcept( noexcept( lhs == rhs ) )
+    -> decltype( lhs == rhs )
   {
-    return ( holder_state )( lhs ) < ( holder_state )( rhs );
+    return lhs == rhs;
   }
 
   template< class T >
   static constexpr
-  auto greater( holder_type< T > const& lhs, holder_type< T > const& rhs )
-  noexcept( noexcept( ( holder_state )( lhs ) > ( holder_state )( rhs ) ) )
-    -> decltype( ( holder_state )( lhs ) > ( holder_state )( rhs ) )
+  auto not_equal( T const& lhs, T const& rhs )
+  noexcept( noexcept( lhs != rhs ) )
+    -> decltype( lhs != rhs )
   {
-    return ( holder_state )( lhs ) > ( holder_state )( rhs );
+    return lhs != rhs;
   }
 
   template< class T >
   static constexpr
-  auto less_equal( holder_type< T > const& lhs, holder_type< T > const& rhs )
-  noexcept( noexcept( ( holder_state )( lhs ) <= ( holder_state )( rhs ) ) )
-    -> decltype( ( holder_state )( lhs ) <= ( holder_state )( rhs ) )
+  auto less( T const& lhs, T const& rhs ) noexcept( noexcept( lhs < rhs ) )
+    -> decltype( lhs < rhs )
   {
-    return ( holder_state )( lhs ) <= ( holder_state )( rhs );
+    return lhs < rhs;
   }
 
   template< class T >
   static constexpr
-  auto less( holder_type< T > const& lhs, holder_type< T > const& rhs )
-  noexcept( noexcept( ( holder_state )( lhs ) >= ( holder_state )( rhs ) ) )
-    -> decltype( ( holder_state )( lhs ) >= ( holder_state )( rhs ) )
+  auto greater( T const& lhs, T const& rhs ) noexcept( noexcept( lhs > rhs ) )
+    -> decltype( lhs > rhs )
   {
-    return ( holder_state )( lhs ) >= ( holder_state )( rhs );
+    return lhs > rhs;
+  }
+
+  template< class T >
+  static constexpr auto less_equal( T const& lhs, T const& rhs )
+  noexcept( noexcept( lhs <= rhs ) )
+    -> decltype( lhs <= rhs )
+  {
+    return lhs <= rhs;
+  }
+
+  template< class T >
+  static constexpr auto greater_equal( T const& lhs, T const& rhs )
+  noexcept( noexcept( lhs >= rhs ) )
+    -> decltype( lhs >= rhs )
+  {
+    return lhs >= rhs;
   }
 };
 
 template< class T >
 constexpr auto operator <
 ( const holder_type< T >& lhs, const holder_type< T >& rhs )
-noexcept( noexcept( holder_compare< T >::less( lhs, rhs ) ) )
--> decltype( holder_compare< T >::less( lhs, rhs ) )
+noexcept
+( noexcept
+  ( holder_compare< T >::less( ( holder_state )( lhs )
+                             , ( holder_state )( rhs )
+                             )
+  )
+)
+-> decltype( holder_compare< T >::less( ( holder_state )( lhs )
+                                      , ( holder_state )( rhs )
+                                      )
+           )
 {
-  return holder_compare< T >::less( lhs, rhs );
+  return holder_compare< T >::less( ( holder_state )( lhs )
+                                  , ( holder_state )( rhs )
+                                  );
 }
 
 template< class T >
 constexpr auto operator <=
 ( const holder_type< T >& lhs, const holder_type< T >& rhs )
-noexcept( noexcept( holder_compare< T >::less_equal( lhs, rhs ) ) )
--> decltype( holder_compare< T >::less_equal( lhs, rhs ) )
+noexcept
+( noexcept
+  ( holder_compare< T >::less_equal( ( holder_state )( lhs )
+                                   , ( holder_state )( rhs )
+                                   )
+  )
+)
+-> decltype( holder_compare< T >::less_equal( ( holder_state )( lhs )
+                                            , ( holder_state )( rhs )
+                                            )
+           )
 {
-  return holder_compare< T >::less_equal( lhs, rhs );
+  return holder_compare< T >::less_equal( ( holder_state )( lhs )
+                                        , ( holder_state )( rhs )
+                                        );
 }
 
 template< class T >
 constexpr auto operator >=
 ( const holder_type< T >& lhs, const holder_type< T >& rhs )
-noexcept( noexcept( holder_compare< T >::greater_equal( lhs, rhs ) ) )
--> decltype( holder_compare< T >::greater_equal( lhs, rhs ) )
+noexcept
+( noexcept
+  ( holder_compare< T >::greater_equal( ( holder_state )( lhs )
+                                      , ( holder_state )( rhs )
+                                      )
+  )
+)
+-> decltype( holder_compare< T >::greater_equal( ( holder_state )( lhs )
+                                               , ( holder_state )( rhs )
+                                               )
+           )
 {
-  return holder_compare< T >::greater_equal( lhs, rhs );
+  return holder_compare< T >::greater_equal( ( holder_state )( lhs )
+                                           , ( holder_state )( rhs )
+                                           );
 }
 
 template< class T >
 constexpr auto operator >
 ( const holder_type< T >& lhs, const holder_type< T >& rhs )
-noexcept( noexcept( holder_compare< T >::greater( lhs, rhs ) ) )
--> decltype( holder_compare< T >::greater( lhs, rhs ) )
+noexcept
+( noexcept
+  ( holder_compare< T >::greater( ( holder_state )( lhs )
+                                , ( holder_state )( rhs )
+                                )
+  )
+)
+-> decltype( holder_compare< T >::greater( ( holder_state )( lhs )
+                                         , ( holder_state )( rhs )
+                                         )
+           )
 {
-  return holder_compare< T >::greater( lhs, rhs );
+  return holder_compare< T >::greater( ( holder_state )( lhs )
+                                     , ( holder_state )( rhs )
+                                     );
 }
 
 // TODO(mattcalabrese) Make swap and hash

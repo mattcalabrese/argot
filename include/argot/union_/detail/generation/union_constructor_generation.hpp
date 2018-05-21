@@ -23,25 +23,8 @@ explicit constexpr union_base
 , Fun&& fun, P&&... args
 ) noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
   : ARGOT_DETAIL_UNION_CURR_ALTERNATIVE
-    ( call_detail::emplace_holder_with_result
-      < ARGOT_DETAIL_UNION_CURR_ALTERNATIVE_TYPE >
+    ( argot::void_to_regular_void_invoke
       ( ARGOT_FORWARD( Fun )( fun ), ARGOT_FORWARD( P )( args )... )
-    ) {}
-
-// TODO(mattcalabrese) handle reference types and const.
-// TODO(mattcalabrese) put this in a base constructor for better error messages
-template< class... P >
-explicit constexpr union_base
-( std::in_place_index_t< ARGOT_DETAIL_UNION_CURR_ALTERNATIVE_INDEX >
-    const /*in_place_index*/
-, P&&... args
-)
-noexcept
-( std::is_nothrow_constructible_v
-  < ARGOT_DETAIL_UNION_CURR_ALTERNATIVE_TYPE, P&&... >
-) : ARGOT_DETAIL_UNION_CURR_ALTERNATIVE
-    ( call_detail::emplace_holder< ARGOT_DETAIL_UNION_CURR_ALTERNATIVE_TYPE >
-      ( ARGOT_FORWARD( P )( args )... )
     ) {}
 
 #undef ARGOT_DETAIL_UNION_CURR_ALTERNATIVE

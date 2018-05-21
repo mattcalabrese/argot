@@ -67,6 +67,7 @@ struct invoker_by_value
 };
 
 template< class Inv  /*TODO(mattcalabrese) Constrain*/ >
+constexpr
 decltype( auto ) invocable_to_basic_callable_by_reference( Inv&& invocable )
 {
   using raw_type = remove_cvref_t< Inv >;
@@ -81,7 +82,7 @@ decltype( auto ) invocable_to_basic_callable_by_reference( Inv&& invocable )
 }
 
 template< class Inv  /*TODO(mattcalabrese) Constrain*/ >
-auto invocable_to_basic_callable_by_value( Inv&& invocable )
+constexpr auto invocable_to_basic_callable_by_value( Inv&& invocable )
 {
   if constexpr( std::is_member_pointer_v< remove_cvref_t< Inv > > )
     return invoker_by_value< std::decay_t< Inv > >

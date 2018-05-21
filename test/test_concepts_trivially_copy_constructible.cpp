@@ -24,8 +24,15 @@ ARGOT_CONCEPT_ENSURE( TriviallyCopyConstructible< int volatile const > );
 
 ARGOT_CONCEPT_ENSURE( Not< TriviallyCopyConstructible< int[5] > > );
 
+// NOTE: Needs trivial destructor because of std trait defect.
 ARGOT_CONCEPT_ENSURE
-( TriviallyCopyConstructible< argot_test::trivial_copy_constructor > );
+( TriviallyCopyConstructible
+  < argot_test::combined_regularity_archetype_t
+    < argot_test::trivial_copy_constructor_profile
+    , argot_test::trivial_destructor_profile
+    >
+  >
+);
 
 ARGOT_CONCEPT_ENSURE
 ( Not< TriviallyCopyConstructible< argot_test::nothrow_copy_constructor > > );

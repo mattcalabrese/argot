@@ -14,6 +14,7 @@
 #include <argot/no_unique_address.hpp>
 #include <argot/union_/detail/config.hpp>
 #include <argot/union_/detail/union_backend_fwd.hpp>
+#include <argot/void_.hpp>
 
 #include <boost/preprocessor/arithmetic/dec.hpp>
 #include <boost/preprocessor/cat.hpp>
@@ -28,6 +29,12 @@
 #include <utility>
 
 namespace argot::detail_union {
+
+// Make the include appear directly so that rebuilds still take place when
+// dependencies change.
+#if 0
+#include <argot/union_/detail/generation/union_generation.hpp>
+#endif
 
 #define BOOST_PP_ITERATION_PARAMS_1                                            \
 ( 3, ( 1, ARGOT_MAX_PREPROCESSED_UNION_ALTERNATIVES                            \

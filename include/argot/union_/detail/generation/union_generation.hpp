@@ -7,8 +7,13 @@
 ==============================================================================*/
 #endif // ARGOT_PREPROCESSING_MODE
 
-#define ARGOT_DETAIL_UNION_MEMBER( z, n, text )                                \
-ARGOT_NO_UNIQUE_ADDRESS call_detail::holder< T ## n > alternative ## n;
+// Make the includes appear directly so that rebuilds still take place when
+// dependencies change.
+#if 0
+#include <argot/union_/detail/generation/union_constructor_generation.hpp>
+#include <argot/union_/detail/generation/union_member_generation.hpp>
+#include <argot/union_/detail/generation/union_member_typedef_generation.hpp>
+#endif
 
 #define ARGOT_DETAIL_UNION_CURR_NUM_ALTERNATIVES                               \
 BOOST_PP_ITERATION()
@@ -26,87 +31,23 @@ struct union_impl_preprocessed< ARGOT_DETAIL_UNION_CURR_IMPL_INDEX >
     = typename raw_struct< T... >
       ::BOOST_PP_CAT( alternative_type, ARGOT_DETAIL_UNION_CURR_IMPL_INDEX );
 
-  template< class... T, class P >
-  static constexpr auto& assign( union_< T... >& self, P&& arg )
-  {
-    // TODO(mattcalabrese) Branch on whether or not it is a holder_type
-    BOOST_PP_CAT( self.alternatives.alternative
-                , ARGOT_DETAIL_UNION_CURR_IMPL_INDEX
-                )
-      = ARGOT_FORWARD( P )( arg );
-
-    return call_detail::access_holder
-    ( BOOST_PP_CAT( self.alternatives.alternative
-                  , ARGOT_DETAIL_UNION_CURR_IMPL_INDEX
-                  )
-    );
-  }
-
-  // TODO(mattcalabrese) noexcept
-  template< class... T, class... P >
-  static constexpr auto& emplace( union_< T... >& self, P&&... args )/*
-  noexcept
-  ( std::is_nothrow_constructible_v  // TODO(mattcalabrese) change to emplace
-    < alternative_type_t< T... >
-    , P&&...
-    >
-  )*/
-  {
-    // TODO(mattcalabrese) std::launder
-    return call_detail::access_holder
-    ( *::new( static_cast< void* >( &self ) )
-      call_detail::holder< alternative_type_t< T... > >
-      ( call_detail::emplace_holder< alternative_type_t< T... > >
-        ( ARGOT_FORWARD( P )( args )... )
-      )
-    );
-  }
-
-  template< class... T >
-  static constexpr void destroy( union_< T... >& self )
-  noexcept
-  ( std::is_nothrow_destructible_v
-    < call_detail::holder< alternative_type_t< T... > > >
-  )
-  {
-    if constexpr
-    ( !std::is_trivially_destructible_v
-      < call_detail::holder< alternative_type_t< T... > > >
-    )
-      std::destroy_at
-      ( //std::launder // TODO(mattcalabrese) launder
-        ( std::addressof
-          ( BOOST_PP_CAT( self.alternatives.alternative
-                        , ARGOT_DETAIL_UNION_CURR_IMPL_INDEX
-                        )
-          )
-        )
-      );
-  }
-
   template< class Self >
   static constexpr auto&& get( Self&& self ) noexcept
   {
-    // TODO(mattcalabrese) Get alternative type in a simpler manner?
-    using qual_holder
+    using qualified_alt
       = call_detail::give_qualifiers_to_t
         < Self&&
-        , call_detail::holder
-          < typename access_raw_concept_map
-            < UnionLike< remove_cvref_t< Self > > >
-            ::template alternative_type_t< ARGOT_DETAIL_UNION_CURR_IMPL_INDEX >
-          >
+        , typename access_raw_concept_map< UnionLike< remove_cvref_t< Self > > >
+          ::template alternative_type_t< ARGOT_DETAIL_UNION_CURR_IMPL_INDEX >
         >;
 
-    return call_detail::access_holder
-    ( static_cast< qual_holder >
-      ( * //std::launder // TODO(mattcalabrese) launder
-        ( std::addressof
-          ( self.alternatives
-            .BOOST_PP_CAT( alternative, ARGOT_DETAIL_UNION_CURR_IMPL_INDEX )
-          )
-        )
-      )
+    return static_cast< qualified_alt >
+    ( * //std::launder // TODO(mattcalabrese) Uncomment when launder exists.
+       ( std::addressof
+         ( self.alternatives
+           .BOOST_PP_CAT( alternative, ARGOT_DETAIL_UNION_CURR_IMPL_INDEX )
+         )
+       )
     );
   }
 };
@@ -169,7 +110,6 @@ struct union_base
 < BOOST_PP_ENUM_PARAMS( ARGOT_DETAIL_UNION_CURR_NUM_ALTERNATIVES, T ) >
 {
   constexpr union_base() noexcept {}
-  ~union_base() = default;
 
 #define BOOST_PP_ITERATION_PARAMS_2                                            \
 ( 3, ( 0, ARGOT_DETAIL_UNION_CURR_NUM_ALTERNATIVES - 1                         \
@@ -233,7 +173,6 @@ struct union_base
 < BOOST_PP_ENUM_PARAMS( ARGOT_DETAIL_UNION_CURR_NUM_ALTERNATIVES, T ) >
 {
   union_base() = default;
-  ~union_base() = default;
 
 #define BOOST_PP_ITERATION_PARAMS_2                                            \
 ( 3, ( 0, ARGOT_DETAIL_UNION_CURR_NUM_ALTERNATIVES - 1                         \
@@ -256,4 +195,3 @@ struct union_base
 } // namespace argot::detail_union(::has_default_has_destructor)
 
 #undef ARGOT_DETAIL_UNION_CURR_NUM_ALTERNATIVES
-#undef ARGOT_DETAIL_UNION_MEMBER

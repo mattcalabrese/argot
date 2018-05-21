@@ -23,6 +23,7 @@
 #include <argot/convert_future.hpp>
 #include <argot/declval.hpp>
 #include <argot/default_.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/empty_switch_body.hpp>
 #include <argot/executor.hpp>
 #include <argot/executor_traits.hpp>

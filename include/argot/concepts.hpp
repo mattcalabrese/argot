@@ -26,6 +26,7 @@
 #include <argot/concepts/argument_receiver_of_lifted_persistent_call.hpp>
 #include <argot/concepts/argument_type.hpp>
 #include <argot/concepts/argument_types.hpp>
+#include <argot/concepts/assignable.hpp>
 #include <argot/concepts/basic_callable_with.hpp>
 #include <argot/concepts/bool_or_constant.hpp>
 #include <argot/concepts/can_default_to_reference_to.hpp>
@@ -33,6 +34,7 @@
 #include <argot/concepts/case_labels.hpp>
 #include <argot/concepts/class.hpp>
 #include <argot/concepts/class_type.hpp>
+#include <argot/concepts/comparable.hpp>
 #include <argot/concepts/composable.hpp>
 #include <argot/concepts/composable_with_persistent_provision.hpp>
 #include <argot/concepts/composable_with_provision.hpp>
@@ -55,6 +57,7 @@
 #include <argot/concepts/default_for_type.hpp>
 #include <argot/concepts/destructible.hpp>
 #include <argot/concepts/equality_comparable.hpp>
+#include <argot/concepts/equatable.hpp>
 #include <argot/concepts/exception.hpp>
 #include <argot/concepts/exceptional_argument_provider.hpp>
 #include <argot/concepts/exceptional_persistent_argument_provider.hpp>

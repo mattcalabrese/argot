@@ -260,16 +260,8 @@ using syntactic_regularity_profile_of_t
 using no_default_constructor_profile
   = regularity_profile<>;
 
-// NOTE: Requires destructor due to standard trait defects.
 using trivial_default_constructor_profile
-  = regularity_profile
-    < default_constructible::trivial
-    , move_constructible::no
-    , copy_constructible::no
-    , move_assignable::no
-    , copy_assignable::no
-    , destructible::trivial
-    >;
+  = regularity_profile< default_constructible::trivial >;
 
 using nothrow_default_constructor_profile
   = regularity_profile< default_constructible::noexcept_ >;
@@ -280,15 +272,10 @@ using exceptional_default_constructor_profile
 using no_move_constructor_profile
   = regularity_profile<>;
 
-// NOTE: Requires destructor due to standard trait defects.
 using trivial_move_constructor_profile
   = regularity_profile
     < default_constructible::no
     , move_constructible::trivial
-    , copy_constructible::no
-    , move_assignable::no
-    , copy_assignable::no
-    , destructible::trivial
     >;
 
 using nothrow_move_constructor_profile
@@ -306,15 +293,11 @@ using exceptional_move_constructor_profile
 using no_copy_constructor_profile
   = regularity_profile<>;
 
-// NOTE: Requires destructor due to standard trait defects.
 using trivial_copy_constructor_profile
   = regularity_profile
     < default_constructible::no
     , move_constructible::no
     , copy_constructible::trivial
-    , move_assignable::no
-    , copy_assignable::no
-    , destructible::trivial
     >;
 
 using nothrow_copy_constructor_profile

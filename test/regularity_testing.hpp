@@ -218,30 +218,15 @@ test_equivalence_class( GeneratorRange const& equivalence_class )
                 != move_assignable::no
               )
               {
-                // List initialization
-                {
-                  // TODO(mattcalabrese) default-init when constexpr
-                  T object = T{};
-                  object = std::move( generator() );
-                  T const& const_object = object;
+                // TODO(mattcalabrese) Also test default-init when constexpr
+                T object = T();
+                object = std::move( generator() );
+                T const& const_object = object;
 
-                  ARGOT_TEST_SUCCESS
-                  ( ( attempt_equality_check< T, RegularityProfile > )
-                    ( const_object, const_value )
-                  );
-                }
-
-                // Non-list initialization
-                {
-                  T object = T();
-                  object = std::move( generator() );
-                  T const& const_object = object;
-
-                  ARGOT_TEST_SUCCESS
-                  ( ( attempt_equality_check< T, RegularityProfile > )
-                    ( const_object, const_value )
-                  );
-                }
+                ARGOT_TEST_SUCCESS
+                ( ( attempt_equality_check< T, RegularityProfile > )
+                  ( const_object, const_value )
+                );
               }
 
               if constexpr
@@ -249,31 +234,15 @@ test_equivalence_class( GeneratorRange const& equivalence_class )
                 != copy_assignable::no
               )
               {
-                // List initialization
-                {
-                  // TODO(mattcalabrese) default-init when constexpr
-                  T object = T{};
-                  object = const_value;
-                  T const& const_object = object;
+                // TODO(mattcalabrese) Also test default-init when constexpr
+                T object = T();
+                object = const_value;
+                T const& const_object = object;
 
-                  ARGOT_TEST_SUCCESS
-                  ( ( attempt_equality_check< T, RegularityProfile > )
-                    ( const_object, const_value )
-                  );
-                }
-
-                // Non-list initialization
-                {
-                  // TODO(mattcalabrese) default-init when constexpr
-                  T object = T();
-                  object = const_value;
-                  T const& const_object = object;
-
-                  ARGOT_TEST_SUCCESS
-                  ( ( attempt_equality_check< T, RegularityProfile > )
-                    ( const_object, const_value )
-                  );
-                }
+                ARGOT_TEST_SUCCESS
+                ( ( attempt_equality_check< T, RegularityProfile > )
+                  ( const_object, const_value )
+                );
               }
             }
 

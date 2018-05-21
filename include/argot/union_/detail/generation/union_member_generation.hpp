@@ -8,5 +8,5 @@
 #endif // ARGOT_PREPROCESSING_MODE
 
 ARGOT_NO_UNIQUE_ADDRESS
-call_detail::holder< BOOST_PP_CAT( T, BOOST_PP_ITERATION() ) >
+void_to_regular_void_t< BOOST_PP_CAT( T, BOOST_PP_ITERATION() ) >
 BOOST_PP_CAT( alternative, BOOST_PP_ITERATION() );

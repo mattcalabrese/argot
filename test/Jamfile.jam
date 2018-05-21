@@ -74,6 +74,11 @@ run test_union_binary.cpp ;
 run test_union_concept_map_union_.cpp ;
 # TODO(mattcalabrese) Test std::variant and boost::variant and discriminated_union
 
+# discriminated_union
+compile test_discriminated_union_nullary.cpp ;
+run test_discriminated_union_unary.cpp ;
+run test_discriminated_union_binary.cpp ;
+
 # VariantLike
 # TODO(mattcalabrese) Test std::variant and boost::variant and discriminated_union
 

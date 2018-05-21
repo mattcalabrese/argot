@@ -23,19 +23,19 @@ template< class T
 constexpr void constexpr_swap( T& lhs, T& rhs )
   noexcept( std::is_nothrow_swappable_v< T > )
 {
-  if constexpr( std::is_scalar_v< T > )
-  {
-    T const temp = lhs;
-    lhs = rhs;
-    rhs = temp;
-  }
+  if constexpr( std::is_array_v< T > )
+    for( std::decay_t< T > lhs_it = lhs, rhs_it = rhs
+       ; lhs_it != lhs + sizeof( T ) / sizeof( lhs[ 0 ] )
+       ; ++lhs_it, ++rhs_it
+       )
+      ( constexpr_swap )( *lhs_it, *rhs_it );
   else
-    if constexpr( std::is_array_v< T > )
-      for( std::decay_t< T > lhs_it = lhs, rhs_it = rhs
-         ; lhs_it != lhs + sizeof( T ) / sizeof( lhs[ 0 ] )
-         ; ++lhs_it, ++rhs_it
-         )
-        ( constexpr_swap )( *lhs_it, *rhs_it );
+    if constexpr( std::is_scalar_v< T > )
+    {
+      T const temp = lhs;
+      lhs = rhs;
+      rhs = temp;
+    }
     else
     {
       using std::swap;
