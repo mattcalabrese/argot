@@ -26,6 +26,22 @@ struct union_impl_preprocessed< ARGOT_DETAIL_UNION_CURR_IMPL_INDEX >
     = typename raw_struct< T... >
       ::BOOST_PP_CAT( alternative_type, ARGOT_DETAIL_UNION_CURR_IMPL_INDEX );
 
+  template< class... T, class P >
+  static constexpr auto& assign( union_< T... >& self, P&& arg )
+  {
+    // TODO(mattcalabrese) Branch on whether or not it is a holder_type
+    BOOST_PP_CAT( self.alternatives.alternative
+                , ARGOT_DETAIL_UNION_CURR_IMPL_INDEX
+                )
+      = ARGOT_FORWARD( P )( arg );
+
+    return call_detail::access_holder
+    ( BOOST_PP_CAT( self.alternatives.alternative
+                  , ARGOT_DETAIL_UNION_CURR_IMPL_INDEX
+                  )
+    );
+  }
+
   // TODO(mattcalabrese) noexcept
   template< class... T, class... P >
   static constexpr auto& emplace( union_< T... >& self, P&&... args )/*
@@ -37,10 +53,12 @@ struct union_impl_preprocessed< ARGOT_DETAIL_UNION_CURR_IMPL_INDEX >
   )*/
   {
     // TODO(mattcalabrese) std::launder
-    return *::new( static_cast< void* >( &self ) )
-    alternative_type_t< T... >
-    ( call_detail::emplace_holder< alternative_type_t< T... > >
-      ( ARGOT_FORWARD( P )( args )... )
+    return call_detail::access_holder
+    ( *::new( static_cast< void* >( &self ) )
+      call_detail::holder< alternative_type_t< T... > >
+      ( call_detail::emplace_holder< alternative_type_t< T... > >
+        ( ARGOT_FORWARD( P )( args )... )
+      )
     );
   }
 

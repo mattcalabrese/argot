@@ -142,6 +142,45 @@ class union_
     ::emplace( *this, ilist, ARGOT_FORWARD( P )( args )... );
   }
 
+  // TODO(mattcalabrese)
+  //   Branch to Assignable for better errors when non-const/non-ref/non-void
+  // TODO(mattcalabrese) noexcept
+  template
+  < std::size_t I, class P
+  , ARGOT_REQUIRES
+    ( UnionIndex< union_, I > )/*
+    ( BasicCallableWith
+      < call_detail::emplace_holder_fn< alternative_type_t< I > > const&
+      , P&&
+      >
+    )*/
+    ()
+  >
+  constexpr auto& assign( P&& arg )
+  {
+    return detail_union::union_impl_preprocessed< I >
+    ::assign( *this, ARGOT_FORWARD( P )( arg ) );
+  }
+
+  // TODO(mattcalabrese)
+  //   Branch to Assignable for better errors when non-const/non-ref/non-void
+  // TODO(mattcalabrese) noexcept
+  template
+  < std::size_t I, class U
+  , ARGOT_REQUIRES
+    ( UnionIndex< union_, I > )/*
+    ( BasicCallableWith
+      < call_detail::emplace_holder_fn< alternative_type_t< I > > const&
+      , std::initializer_list< U >&, P&&...
+      >
+    )*/
+    ()
+  >
+  constexpr auto& assign( std::initializer_list< U > ilist )
+  {
+    return detail_union::union_impl_preprocessed< I >::assign( *this, ilist );
+  }
+
   // TODO(mattcalabrese) Branch on const so there is a better error.
   // TODO(mattcalabrese) Make sure this is constexpr if trivially destructible.
   template

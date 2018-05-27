@@ -68,6 +68,14 @@ struct holder_type< T const >
     : v( ARGOT_FORWARD( P )( args )... ) {}
 
   template< class LazyT = T, class Source >
+  constexpr holder_type& operator =( Source&& source )
+    noexcept( std::is_nothrow_assignable_v< LazyT, Source&& > )
+  {
+    v = ARGOT_FORWARD( Source )( source );
+    return *this;
+  }
+
+  template< class LazyT = T, class Source >
   constexpr void reset( Source&& source )
     noexcept( std::is_nothrow_assignable_v< LazyT, Source > )
   {
@@ -91,6 +99,12 @@ struct holder_type< T& >
   constexpr explicit holder_type( make_holder_type_tag, T& v ) noexcept
     : v( std::addressof( v ) ) {}
 
+  constexpr holder_type& operator =( T& other ) noexcept
+  {
+    v = std::addressof( other );
+    return *this;
+  }
+
   constexpr void reset( T& other ) noexcept { v = std::addressof( other ); }
  private:
   T* v;
@@ -112,6 +126,12 @@ struct holder_type< T&& >
 
   holder_type( holder_type&& ) = default;
   holder_type& operator =( holder_type&& ) = default;
+
+  constexpr holder_type& operator =( T&& other ) noexcept
+  {
+    v = std::addressof( other );
+    return *this;
+  }
 
   constexpr void reset( T&& other ) noexcept { v = std::addressof( other ); }
  private:

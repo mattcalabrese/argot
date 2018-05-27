@@ -646,6 +646,130 @@ ARGOT_REGISTER_TEST( test_union_destroy_not_constexpr )
   return 0;
 }
 
+ARGOT_REGISTER_CONSTEXPR_TEST( test_union_reference )
+{
+  {
+    using alt_t = int const&;
+    using union_t = union_< alt_t >;
+
+    {
+      int const five = 5;
+      int const ten = 10;
+
+      union_t un( std::in_place_index< 0 >, five );
+
+      ARGOT_TEST_EQ( union_traits::get< 0 >( un ), 5 );
+      ARGOT_TEST_EQ( &union_traits::get< 0 >( un ), &five );
+
+      un = union_t( std::in_place_index< 0 >, ten );
+
+      ARGOT_TEST_EQ( union_traits::get< 0 >( un ), 10 );
+      ARGOT_TEST_EQ( &union_traits::get< 0 >( un ), &ten );
+
+      un.destroy< 0 >();
+    }
+  }
+
+  return 0;
+}
+
+ARGOT_REGISTER_TEST( test_union_reference_emplace )
+{
+  {
+    using alt_t = int const&;
+    using union_t = union_< alt_t >;
+
+    {
+      int const five = 5;
+
+      union_t un;
+      decltype( auto ) emplace_result = un.emplace< 0 >( five );
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType< decltype( emplace_result ), int const& > );
+
+      ARGOT_TEST_EQ( union_traits::get< 0 >( un ), 5 );
+      ARGOT_TEST_EQ( &emplace_result, &five );
+      ARGOT_TEST_EQ( &union_traits::get< 0 >( un ), &five );
+    }
+  }
+
+  return 0;
+}
+
+ARGOT_REGISTER_CONSTEXPR_TEST( test_union_const )
+{
+  {
+    using alt_t = int const;
+    using union_t = union_< alt_t >;
+
+    {
+      union_t un( std::in_place_index< 0 >, 5 );
+      decltype( auto ) assign_result = un.assign< 0 >( 5 );
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType< decltype( assign_result ), int const& > );
+
+      ARGOT_TEST_EQ( union_traits::get< 0 >( un ), 5 );
+
+      un = union_t( std::in_place_index< 0 >, 10 );
+
+      ARGOT_TEST_EQ( union_traits::get< 0 >( un ), 10 );
+    }
+  }
+
+  return 0;
+}
+
+ARGOT_REGISTER_CONSTEXPR_TEST( test_union_unary_assign_constexpr )
+{
+  {
+    using alt_t = trivial_constructor_trivial_destructor< 0 >;
+    using union_t = union_< alt_t >;
+
+    {
+      int zero = 0;
+      int const one = 1;
+      int two = 2;
+
+      union_t un{};
+
+      decltype( auto ) res
+        = un.assign< 0 >( alt_t( zero, one, std::move( two ) ) );
+
+      ARGOT_CONCEPT_ENSURE( SameType< decltype( res ), alt_t& > );
+
+      ARGOT_TEST_EQ( &union_traits::get< 0 >( un ), &res );
+      ARGOT_TEST_EQ( union_traits::get< 0 >( un ).value, 3 );
+    }
+  }
+
+  {
+    using alt_t = nontrivial_constructor_trivial_destructor< 0 >;
+    using union_t = union_< alt_t >;
+
+    {
+      int zero = 0;
+      int const one = 1;
+      int two = 2;
+
+      union_t un{};
+
+      decltype( auto ) res
+        = un.assign< 0 >( alt_t( zero, one, std::move( two ) ) );
+
+      ARGOT_CONCEPT_ENSURE( SameType< decltype( res ), alt_t& > );
+
+      ARGOT_TEST_EQ( &union_traits::get< 0 >( un ), &res );
+      ARGOT_TEST_EQ( union_traits::get< 0 >( un ).value, 3 );
+    }
+  }
+
+  return 0;
+}
+
+// TODO(mattcalabrese) test initializer_list for assign.
+
 ARGOT_EXECUTE_TESTS();
 
 }  // namespace

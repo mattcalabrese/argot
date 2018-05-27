@@ -96,14 +96,6 @@ using union_impl
     , union_impl_variadic< Index >
     >;
 
-template< class T >
-inline constexpr bool const& is_logically_trivial_v
-  = std::is_trivial_v< T > ? std::true_type::value : std::false_type::value;
-
-template< class... T >
-inline constexpr bool const& is_logically_trivial_v< union_< T... > >
-  = std::true_type::value;
-
 }  // namespace argot(::detail_union)
 }  // namespace argot
 
