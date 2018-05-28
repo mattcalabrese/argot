@@ -15,6 +15,7 @@ run generate_unparse.cpp ;
 # run test_auto_function.cpp /boost//unit_test_framework ;
 run test_holder.cpp ;
 run test_cast_value_list_elements.cpp /boost//unit_test_framework ;
+run test_detail_regular_bases.cpp ;
 
 # Gen basics
 compile test_gen_is_modeled.cpp ;
