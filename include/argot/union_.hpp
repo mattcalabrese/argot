@@ -40,13 +40,6 @@ namespace argot {
 template< class... T >
 class union_;
 
-template<>
-class union_<>
-{
- public:
-  explicit union_() = delete;
-};
-
 // Note:
 //   The default definition is used only up to the preprocessed maximum and also
 //   does not handle the "sizeof...( T ) == 0" case.

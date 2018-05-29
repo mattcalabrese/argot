@@ -51,7 +51,7 @@ compile test_permute.cpp ;
 run test_tuple_traits_get.cpp ;
 
 # union_
-compile test_union_nullary.cpp ;
+run test_union_nullary.cpp ;
 run test_union_unary.cpp ;
 run test_union_binary.cpp ;
 

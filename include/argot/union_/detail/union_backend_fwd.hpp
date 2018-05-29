@@ -29,6 +29,9 @@ struct union_impl_variadic;
 template< class... T >
 struct raw_struct;
 
+template<>
+struct raw_struct<> {};
+
 namespace no_default_no_destructor {
 
 template< class... T >
@@ -54,6 +57,9 @@ namespace has_default_has_destructor {
 
 template< class... T >
 struct union_base;
+
+template<>
+struct union_base<> {};
 
 }  // argot::detail_union(::has_default_has_destructor)
 

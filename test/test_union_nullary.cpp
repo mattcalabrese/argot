@@ -7,30 +7,39 @@
 
 #include <argot/union_.hpp>
 
-#include <argot/concepts/constructible.hpp>
-#include <argot/gen/concept_ensure.hpp>
-#include <argot/gen/not.hpp>
+#include <argot/detail/constexpr_test.hpp>
 
-#include <cstddef>
+#include <utility>
 
 namespace {
 
 namespace union_traits = argot::union_traits;
 
-using argot::Constructible;
-using argot::Not;
-
 using argot::union_;
 
-using union_t = union_<>;
+ARGOT_REGISTER_CONSTEXPR_TEST( test_union_nullary_construct_constexpr )
+{
+  using union_t = union_<>;
 
-template< std::size_t >
-inline constexpr bool always_true_c = true;
+  union_t nullary_union;
+  union_t const& nullary_union_const = nullary_union;
 
-// This will fail to compile if union_t is an incomplete type.
-// TODO(mattcalabrese) Create a better check to be sure the type is complete.
-static_assert( always_true_c< sizeof( union_t ) > );
+  // Copy
+  {
+    union_t other_union = nullary_union_const;
+    other_union = nullary_union_const;
+    (void)other_union;
+  }
 
-ARGOT_CONCEPT_ENSURE( Not< Constructible< union_t > > );
+  // Move
+  {
+    union_t other_union = std::move( nullary_union );
+    nullary_union = std::move( other_union );
+  }
+
+  return 0;
+}
+
+ARGOT_EXECUTE_TESTS();
 
 }  // namespace
