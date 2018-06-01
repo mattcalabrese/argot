@@ -18,12 +18,16 @@ using argot::detail_regular_bases::may_exist;
 using argot::detail_regular_bases::equality_comparable;
 using argot::detail_regular_bases::less_than_comparable;
 using argot::detail_regular_bases::swappable;
+using argot::detail_regular_bases::hashable;
+using argot::detail_regular_bases::std_hash_base;
 
 using argot::detail_regular_bases::has_proper_equality_operator_v;
 using argot::detail_regular_bases::has_proper_less_than_operator_v;
+using argot::detail_regular_bases::has_enabled_hash_v;
 
 using argot::detail_regular_bases::is_nothrow_equality_comparable_v;
 using argot::detail_regular_bases::is_nothrow_less_than_comparable_v;
+using argot::detail_regular_bases::is_nothrow_hashable_v;
 
 using argot::detail_regular_bases::regular_core_access;
 
@@ -72,6 +76,10 @@ struct throwing_swap
   throwing_swap( throwing_swap&& );
   throwing_swap& operator=( throwing_swap&& );
 };
+
+struct throwing_hash {};
+struct dubious_hash {};
+struct invalid_hash {};
 
 template< may_be_noexcept MayBeNoexcept, may_exist MayExist, class... Deps >
 struct int_eq_
@@ -156,6 +164,32 @@ struct int_swap_
   friend regular_core_access;
 };
 
+template< may_be_noexcept MayBeNoexcept, may_exist MayExist, class... Deps >
+struct int_hash_
+  : hashable< int_hash_< MayBeNoexcept, MayExist, Deps... >
+            , MayBeNoexcept, MayExist, Deps...
+            >
+{
+  using base_t
+    = hashable< int_hash_< MayBeNoexcept, MayExist, Deps... >
+              , MayBeNoexcept, MayExist, Deps...
+              >;
+
+  using base_t::hashable_v;
+  using base_t::nothrow_hashable_v;
+
+  constexpr explicit int_hash_( int value ) : value( value ) {}
+
+  int value;
+ private:
+  constexpr std::size_t detail_argot_hash() const noexcept
+  {
+    return value;
+  }
+
+  friend regular_core_access;
+};
+
 template< class... Deps >
 using int_eq = int_eq_< may_be_noexcept::no, may_exist::yes, Deps... >;
 
@@ -166,6 +200,9 @@ template< class... Deps >
 using int_swap = int_swap_< may_be_noexcept::no, may_exist::yes, Deps... >;
 
 template< class... Deps >
+using int_hash = int_hash_< may_be_noexcept::no, may_exist::yes, Deps... >;
+
+template< class... Deps >
 using no_int_eq = int_eq_< may_be_noexcept::no, may_exist::no, Deps... >;
 
 template< class... Deps >
@@ -173,6 +210,9 @@ using no_int_less = int_less_< may_be_noexcept::no, may_exist::no, Deps... >;
 
 template< class... Deps >
 using no_int_swap = int_swap_< may_be_noexcept::no, may_exist::no, Deps... >;
+
+template< class... Deps >
+using no_int_hash = int_hash_< may_be_noexcept::no, may_exist::no, Deps... >;
 
 template< class... Deps >
 using int_eq_nothrow = int_eq_< may_be_noexcept::yes, may_exist::yes, Deps... >;
@@ -186,6 +226,10 @@ using int_swap_nothrow
   = int_swap_< may_be_noexcept::yes, may_exist::yes, Deps... >;
 
 template< class... Deps >
+using int_hash_nothrow
+  = int_hash_< may_be_noexcept::yes, may_exist::yes, Deps... >;
+
+template< class... Deps >
 using no_int_eq_nothrow
   = int_eq_< may_be_noexcept::yes, may_exist::no, Deps... >;
 
@@ -196,6 +240,42 @@ using no_int_less_nothrow
 template< class... Deps >
 using no_int_swap_nothrow
   = int_swap_< may_be_noexcept::yes, may_exist::no, Deps... >;
+
+template< class... Deps >
+using no_int_hash_nothrow
+  = int_hash_< may_be_noexcept::yes, may_exist::no, Deps... >;
+
+} // namespace
+
+namespace std {
+
+template<>
+struct hash< throwing_hash >
+{
+  using argument_type = throwing_hash;
+  using result_type = std::size_t;
+
+  constexpr std::size_t operator ()( throwing_hash const& ) const;
+};
+
+template<>
+struct hash< dubious_hash >
+{
+  using argument_type = throwing_hash;
+  using result_type = std::size_t;
+
+  constexpr hash() {}
+
+  constexpr std::size_t operator ()( dubious_hash const& ) const noexcept;
+};
+
+template< may_be_noexcept MayBeNoexcept, may_exist MayExist, class... Deps >
+struct hash< int_hash_< MayBeNoexcept, MayExist, Deps... > >
+  : ::std_hash_base< int_hash_< MayBeNoexcept, MayExist, Deps... > > {};
+
+} // namespace std
+
+namespace {
 
 ARGOT_REGISTER_CONSTEXPR_TEST( test_equality_comparable )
 {
@@ -885,6 +965,126 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_swap_nothrow_invalid_deps )
   return 0;
 }
 
+ARGOT_REGISTER_CONSTEXPR_TEST( test_hashable )
+{
+  using this_t = int_hash<>;
+
+  this_t const int_4( 4 );
+
+  ARGOT_TEST_EQ( std::hash< this_t >()( int_4 ), 4 );
+
+  ARGOT_TEST_FALSE( noexcept( std::hash< this_t >()( int_4 ) ) );
+
+  ARGOT_TEST_TRUE( this_t::hashable_v );
+  ARGOT_TEST_FALSE( this_t::nothrow_hashable_v );
+
+  return 0;
+}
+
+ARGOT_REGISTER_CONSTEXPR_TEST( test_hashable_valid_deps )
+{
+  using this_t = int_hash< int, float, char >;
+
+  this_t const int_4( 4 );
+
+  ARGOT_TEST_EQ( std::hash< this_t >()( int_4 ), 4 );
+
+  ARGOT_TEST_FALSE( noexcept( std::hash< this_t >()( int_4 ) ) );
+
+  ARGOT_TEST_TRUE( this_t::hashable_v );
+  ARGOT_TEST_FALSE( this_t::nothrow_hashable_v );
+
+  return 0;
+}
+
+ARGOT_REGISTER_CONSTEXPR_TEST( test_hashable_invalid_deps )
+{
+  using this_t = int_hash< int, invalid_hash, char >;
+
+  ARGOT_TEST_FALSE( has_enabled_hash_v< this_t > );
+
+  ARGOT_TEST_FALSE( this_t::hashable_v );
+  ARGOT_TEST_FALSE( this_t::nothrow_hashable_v );
+
+  return 0;
+}
+
+ARGOT_REGISTER_CONSTEXPR_TEST( test_hashable_nothrow )
+{
+  using this_t = int_hash_nothrow<>;
+
+  this_t const int_4( 4 );
+
+  ARGOT_TEST_EQ( std::hash< this_t >()( int_4 ), 4 );
+
+  ARGOT_TEST_TRUE( noexcept( std::hash< this_t >()( int_4 ) ) );
+
+  ARGOT_TEST_TRUE( this_t::hashable_v );
+  ARGOT_TEST_TRUE( this_t::nothrow_hashable_v );
+
+  return 0;
+}
+
+ARGOT_REGISTER_CONSTEXPR_TEST( test_hashable_nothrow_valid_deps )
+{
+  using this_t = int_hash_nothrow< int, float, char >;
+
+  this_t const int_4( 4 );
+
+  ARGOT_TEST_EQ( std::hash< this_t >()( int_4 ), 4 );
+
+  ARGOT_TEST_TRUE( noexcept( std::hash< this_t >()( int_4 ) ) );
+
+  ARGOT_TEST_TRUE( this_t::hashable_v );
+  ARGOT_TEST_TRUE( this_t::nothrow_hashable_v );
+
+  return 0;
+}
+
+ARGOT_REGISTER_CONSTEXPR_TEST( test_hashable_nothrow_throwing_deps )
+{
+  using this_t = int_hash_nothrow< int, throwing_hash, char >;
+
+  this_t const int_4( 4 );
+
+  ARGOT_TEST_EQ( std::hash< this_t >()( int_4 ), 4 );
+
+  ARGOT_TEST_FALSE( noexcept( std::hash< this_t >()( int_4 ) ) );
+
+  ARGOT_TEST_TRUE( this_t::hashable_v );
+  ARGOT_TEST_FALSE( this_t::nothrow_hashable_v );
+
+  return 0;
+}
+
+ARGOT_REGISTER_CONSTEXPR_TEST( test_hashable_nothrow_dubious_deps )
+{
+  using this_t = int_hash_nothrow< int, dubious_hash, char >;
+
+  this_t const int_4( 4 );
+
+  ARGOT_TEST_EQ( std::hash< this_t >()( int_4 ), 4 );
+
+  ARGOT_TEST_FALSE( noexcept( std::hash< this_t >()( int_4 ) ) );
+
+  ARGOT_TEST_TRUE( this_t::hashable_v );
+  ARGOT_TEST_FALSE( this_t::nothrow_hashable_v );
+
+  return 0;
+}
+
+ARGOT_REGISTER_CONSTEXPR_TEST( test_hashable_nothrow_invalid_deps )
+{
+  using this_t = int_hash_nothrow< int, invalid_hash, char >;
+
+  ARGOT_TEST_FALSE( has_enabled_hash_v< this_t > );
+
+  ARGOT_TEST_FALSE( this_t::hashable_v );
+  ARGOT_TEST_FALSE( this_t::nothrow_hashable_v );
+
+  return 0;
+}
+
 ARGOT_REGISTER_CONSTEXPR_TEST( test_no_equality_comparable )
 {
   using this_t = no_int_eq<>;
@@ -1137,6 +1337,90 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_no_swap_nothrow_invalid_deps )
 
   ARGOT_TEST_FALSE( this_t::swappable_v );
   ARGOT_TEST_FALSE( this_t::nothrow_swappable_v );
+
+  return 0;
+}
+
+ARGOT_REGISTER_CONSTEXPR_TEST( test_no_hashable )
+{
+  using this_t = no_int_hash<>;
+
+  ARGOT_TEST_FALSE( this_t::hashable_v );
+  ARGOT_TEST_FALSE( this_t::nothrow_hashable_v );
+
+  return 0;
+}
+
+ARGOT_REGISTER_CONSTEXPR_TEST( test_no_hashable_valid_deps )
+{
+  using this_t = no_int_hash< int, float, char >;
+
+  ARGOT_TEST_FALSE( this_t::hashable_v );
+  ARGOT_TEST_FALSE( this_t::nothrow_hashable_v );
+
+  return 0;
+}
+
+ARGOT_REGISTER_CONSTEXPR_TEST( test_no_hashable_invalid_deps )
+{
+  using this_t = no_int_hash< int, invalid_eq, char >;
+
+  ARGOT_TEST_FALSE( has_enabled_hash_v< this_t > );
+
+  ARGOT_TEST_FALSE( this_t::hashable_v );
+  ARGOT_TEST_FALSE( this_t::nothrow_hashable_v );
+
+  return 0;
+}
+
+ARGOT_REGISTER_CONSTEXPR_TEST( test_no_hashable_nothrow )
+{
+  using this_t = no_int_hash_nothrow<>;
+
+  ARGOT_TEST_FALSE( this_t::hashable_v );
+  ARGOT_TEST_FALSE( this_t::nothrow_hashable_v );
+
+  return 0;
+}
+
+ARGOT_REGISTER_CONSTEXPR_TEST( test_no_hashable_nothrow_valid_deps )
+{
+  using this_t = no_int_hash_nothrow< int, float, char >;
+
+  ARGOT_TEST_FALSE( this_t::hashable_v );
+  ARGOT_TEST_FALSE( this_t::nothrow_hashable_v );
+
+  return 0;
+}
+
+ARGOT_REGISTER_CONSTEXPR_TEST( test_no_hashable_nothrow_throwing_deps )
+{
+  using this_t = no_int_hash_nothrow< int, throwing_hash, char >;
+
+  ARGOT_TEST_FALSE( this_t::hashable_v );
+  ARGOT_TEST_FALSE( this_t::nothrow_hashable_v );
+
+  return 0;
+}
+
+ARGOT_REGISTER_CONSTEXPR_TEST( test_no_hashable_nothrow_dubious_deps )
+{
+  using this_t = no_int_hash_nothrow< int, dubious_hash, char >;
+
+  ARGOT_TEST_FALSE( this_t::hashable_v );
+  ARGOT_TEST_FALSE( this_t::nothrow_hashable_v );
+
+  return 0;
+}
+
+ARGOT_REGISTER_CONSTEXPR_TEST( test_no_hashable_nothrow_invalid_deps )
+{
+  using this_t = no_int_hash_nothrow< int, invalid_hash, char >;
+
+  ARGOT_TEST_FALSE( has_enabled_hash_v< this_t > );
+
+  ARGOT_TEST_FALSE( this_t::hashable_v );
+  ARGOT_TEST_FALSE( this_t::nothrow_hashable_v );
 
   return 0;
 }
