@@ -14,7 +14,6 @@
 #include <argot/concepts/executor.hpp>
 #include <argot/concepts/net_executor.hpp>
 #include <argot/concepts/sinkable.hpp>
-#include <argot/concepts/post_to_executor.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/forward.hpp>
 #include <argot/gen/concept_assert.hpp>

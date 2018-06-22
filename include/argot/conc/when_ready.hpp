@@ -16,6 +16,7 @@
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/forward.hpp>
+#include <argot/fut/augment.hpp>
 #include <argot/fut_traits/destructive_then.hpp>
 #include <argot/fut_traits/value_type.hpp>
 #include <argot/gen/concept_assert.hpp>

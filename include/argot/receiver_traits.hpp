@@ -11,7 +11,6 @@
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/receiver_traits/branch_to_provision.hpp>
-#include <argot/receiver_traits/partitioned_argument_list_kinds.hpp>
 #include <argot/receiver_traits/partitioned_provider_types.hpp>
 #include <argot/receiver_traits/provider_types.hpp>
 #include <argot/receiver_traits/receive.hpp>

@@ -10,6 +10,7 @@
 
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/future_packager.hpp>
+#include <argot/detail/constexpr_invoke.hpp>
 #include <argot/forward.hpp>
 #include <argot/fut_traits/config.hpp>
 #include <argot/gen/make_concept_map.hpp>

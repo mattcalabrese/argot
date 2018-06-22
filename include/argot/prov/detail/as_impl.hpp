@@ -11,6 +11,7 @@
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/argument_receiver_of.hpp>
+#include <argot/concepts/persistent_argument_provider.hpp>
 #include <argot/concepts/convertible.hpp>
 #include <argot/concepts/reference.hpp>
 #include <argot/concepts/unqualified_object.hpp>

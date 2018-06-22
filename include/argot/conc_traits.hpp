@@ -8,6 +8,7 @@
 #ifndef ARGOT_CONC_TRAITS_HPP_
 #define ARGOT_CONC_TRAITS_HPP_
 
+#include <argot/conc_traits/argument_list_kinds_of.hpp>
 #include <argot/conc_traits/argument_list_kinds_of_destructive.hpp>
 #include <argot/conc_traits/argument_list_kinds_of_persistent.hpp>
 #include <argot/conc_traits/as_future.hpp>

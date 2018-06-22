@@ -12,7 +12,9 @@
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/persistent_argument_provider.hpp>
 #include <argot/concepts/reference.hpp>
+#include <argot/concepts/sinkable.hpp>
 #include <argot/concepts/tuple_like.hpp>
+#include <argot/detail/sink.hpp>
 #include <argot/forward.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>

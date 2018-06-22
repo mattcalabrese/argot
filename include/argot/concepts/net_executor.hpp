@@ -8,7 +8,7 @@
 #ifndef ARGOT_CONCEPTS_NET_EXECUTOR_HPP_
 #define ARGOT_CONCEPTS_NET_EXECUTOR_HPP_
 
-#include <argot/concepts/nothrow_copy_constructible.hpp>
+#include <argot/concepts/copy_constructible.hpp>
 #include <argot/concepts/destructible.hpp>
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/same_type.hpp>
@@ -44,7 +44,7 @@ ARGOT_EXPLICIT_CONCEPT( NetExecutor )
 ( UnqualifiedObject< NetExec >
 , CopyConstructible< NetExec >
 , Destructible< NetExec >
-, EqualityComparable< NetExec >
+//, EqualityComparable< NetExec >
 );
 
 #include <argot/concepts/detail/preprocess_header_end.hpp>

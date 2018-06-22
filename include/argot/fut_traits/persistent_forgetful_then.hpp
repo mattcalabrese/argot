@@ -46,13 +46,12 @@ struct persistent_forgetful_then_fn
   >
   constexpr void operator ()( Fut const& self, Exec&& exec, Fun&& fun ) const
   {
-    access_raw_concept_map< PersistentFuture< Fut > >::forgetful_then
+    access_raw_concept_map
+    < PersistentForgetfulThenable< Fut, remove_cvref_t< Exec > > >
+    ::forgetful_then
     ( self
-    , detail_destructive_forgetful_then::continuation
-      < remove_cvref_t< Exec >, std::decay_t< Fun >, value_type_t< Fut > >
-      { call_detail::forward_and_sink< Exec >( exec )
-      , call_detail::forward_and_decay_sink< Fun >( fun )
-      }
+    , call_detail::forward_and_sink< Exec >( exec )
+    , call_detail::forward_and_decay_sink< Fun >( fun )
     );
   }
 } inline constexpr persistent_forgetful_then{};

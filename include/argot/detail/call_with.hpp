@@ -19,6 +19,7 @@ namespace call_detail {
 template< class Fun, class ArgTypes >
 struct result_of_call_with {};
 
+// TODO(mattcalabrese) Use result of constexpr invoke
 template< class Fun, class... P >
 struct result_of_call_with< Fun, receiver_traits::argument_types_t< P... > >
   : std::invoke_result< Fun&&, P&&... >{};

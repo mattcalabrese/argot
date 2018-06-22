@@ -10,29 +10,7 @@
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/reference.hpp>
-#include <argot/concepts/same_type.hpp>
-#include <argot/concepts/tuple_like.hpp>
-#include <argot/concepts/unqualified_object.hpp>
-#include <argot/concepts/variant_like.hpp>
-#include <argot/gen/and.hpp>
-#include <argot/gen/concept_assert.hpp>
 #include <argot/gen/explicit_concept.hpp>
-#include <argot/gen/is_modeled.hpp>
-#include <argot/gen/make_concept_map.hpp>
-#include <argot/gen/or.hpp>
-#include <argot/gen/requires.hpp>
-
-#ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
-
-#include <argot/detail/conditional.hpp>
-#include <argot/detail/sink.hpp>
-#include <argot/move.hpp>
-#include <argot/no_unique_address.hpp>
-#include <argot/prov/alternative_of.hpp>
-#include <argot/prov/unpack.hpp>
-#include <argot/remove_cvref.hpp>
-
-#endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
 namespace argot {
 
@@ -62,14 +40,31 @@ ARGOT_EXPLICIT_CONCEPT( Expandable )
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
 #include <argot/concepts/argument_provider.hpp>
+#include <argot/concepts/expandable/detail/default_to_expand_arguments_to.hpp>
 #include <argot/concepts/higher_order_argument_provider.hpp>
 #include <argot/concepts/persistent_argument_provider.hpp>
 #include <argot/concepts/expandable_argument_provider.hpp>
 #include <argot/concepts/persistent_expandable_argument_provider.hpp>
+#include <argot/concepts/same_type.hpp>
 #include <argot/concepts/sinkable.hpp>
+#include <argot/concepts/tuple_like.hpp>
+#include <argot/concepts/unqualified_object.hpp>
+#include <argot/concepts/variant_like.hpp>
+#include <argot/detail/conditional.hpp>
+#include <argot/detail/sink.hpp>
+#include <argot/gen/and.hpp>
+#include <argot/gen/concept_assert.hpp>
+#include <argot/gen/is_modeled.hpp>
+#include <argot/gen/make_concept_map.hpp>
+#include <argot/gen/or.hpp>
+#include <argot/gen/requires.hpp>
+#include <argot/move.hpp>
+#include <argot/no_unique_address.hpp>
+#include <argot/prov/alternative_of.hpp>
+#include <argot/prov/unpack.hpp>
 #include <argot/prov/value_of.hpp>
 #include <argot/prov_traits/destructive_provide.hpp>
-#include <argot/concepts/expandable/detail/default_to_expand_arguments_to.hpp>
+#include <argot/remove_cvref.hpp>
 
 #endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 

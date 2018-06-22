@@ -9,6 +9,8 @@
 #define ARGOT_REDUCER_GRAPHVIZ_DOT_HPP_
 
 #include <argot/detail/xml_sanitize.hpp>
+#include <argot/reducer_traits/return_types.hpp>
+#include <argot/remove_cvref.hpp>
 
 #include <boost/core/demangle.hpp>
 

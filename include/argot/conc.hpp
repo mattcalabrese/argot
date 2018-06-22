@@ -23,7 +23,6 @@
 #include <argot/conc/reference_to.hpp>
 #include <argot/conc/unpack_by_value.hpp>
 #include <argot/conc/value_of.hpp>
-#include <argot/conc/when_any.hpp>
 #include <argot/conc/when_ready.hpp>
 
 #endif  // ARGOT_CONC_HPP_

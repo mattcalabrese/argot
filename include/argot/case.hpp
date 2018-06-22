@@ -11,6 +11,5 @@
 #include <argot/case/case_.hpp>
 #include <argot/case/case_range.hpp>
 #include <argot/case/case_set.hpp>
-#include <argot/case/disjoint_case_set.hpp>
 
 #endif  // ARGOT_CASE_HPP_

@@ -16,6 +16,8 @@
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/move.hpp>
+#include <argot/receiver/nested_receiver.hpp>
+#include <argot/receiver/receiver_reference.hpp>
 #include <argot/switch_traits/destructive_provide_isolated_default.hpp>
 #include <argot/switch_traits/leading_argument_list_kinds_of_default_destructive.hpp>
 #include <argot/switch_traits/trailing_argument_list_kinds_of_default_destructive.hpp>

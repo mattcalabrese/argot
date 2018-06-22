@@ -21,14 +21,14 @@
 namespace argot::conc_traits {
 
 // TODO(mattcalabrese) Require sinkable executor
-struct destructive_forgetful_then_provide_t
+struct destructive_forgetful_then_provide_fn
 {
   template
   < class ConcProvider, class Exec, class Receiver
   , ARGOT_REQUIRES
     ( ConcurrentArgumentProviderTo< ConcProvider, Receiver > )
     ( Executor< remove_cvref_t< Exec > > )
-    ( ForgetfulThenProvidable< ConcProvider, Executor > )
+    ( ForgetfulThenProvidable< ConcProvider, Exec > )
     ()
   >
   constexpr void
@@ -46,14 +46,14 @@ struct destructive_forgetful_then_provide_t
 template< class ConcProvider, class Exec, class Receiver >
 using result_of_destructive_forgetful_then_provide
   = basic_result_of
-    < destructive_forgetful_then_provide_t const&
+    < destructive_forgetful_then_provide_fn const&
     , ConcProvider, Exec, Receiver
     >;
 
 template< class ConcProvider, class Exec, class Receiver >
 using result_of_destructive_forgetful_then_provide_t
   = basic_result_of_t
-    < destructive_forgetful_then_provide_t const&
+    < destructive_forgetful_then_provide_fn const&
     , ConcProvider, Exec, Receiver
     >;
 

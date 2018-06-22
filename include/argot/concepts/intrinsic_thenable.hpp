@@ -55,12 +55,12 @@ ARGOT_EXPLICIT_CONCEPT( IntrinsicThenable )
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
 #ifdef ARGOT_HAS_BOOST_FUTURE_WITH_CONTINUATION
-#include <argot/concepts/intrinsic_thenable/boost_future.hpp>
-#include <argot/concepts/intrinsic_thenable/boost_shared_future.hpp>
+#include <argot/concepts/intrinsic_thenable/detail/boost_future.hpp>
+#include <argot/concepts/intrinsic_thenable/detail/boost_shared_future.hpp>
 #endif
 
 #ifdef ARGOT_HAS_STLAB_FUTURE
-#include <argot/concepts/intrinsic_thenable/stlab_future.hpp>
+#include <argot/concepts/intrinsic_thenable/detail/stlab_future.hpp>
 #endif
 
 #endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS

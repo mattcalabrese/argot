@@ -9,6 +9,7 @@
 #define ARGOT_SWITCH_TRAITS_CASE_VALUES_FOR_TYPE_HPP_
 
 #include <argot/concepts/argument_provider.hpp>
+#include <argot/concepts/switch_body_for_type.hpp>
 #include <argot/detail/detection.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>

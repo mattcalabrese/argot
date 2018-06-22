@@ -13,7 +13,7 @@
 #define ARGOT_RECEIVER_GRAPHVIZ_DETAIL_PROPERTY_DECL( kind_, name_ )           \
 struct name_                                                                   \
 {                                                                              \
-  using kind = ::boost::kind+ ## _property_tag;                                \
+  using kind = ::boost::kind_ ## _property_tag;                                \
   static char const* name() { return #name_; }                                 \
 }
 

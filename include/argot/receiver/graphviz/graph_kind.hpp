@@ -8,6 +8,8 @@
 #ifndef ARGOT_RECEIVER_GRAPHVIZ_GRAPH_KIND_HPP_
 #define ARGOT_RECEIVER_GRAPHVIZ_GRAPH_KIND_HPP_
 
+#include <graphviz/cgraph.h>
+
 #include <boost/graph/graph_traits.hpp>
 
 #include <type_traits>
@@ -27,14 +29,14 @@ struct graph_kind_traits_impl
   using is_valid = std::false_type;
 };
 
-template< graph_kind kind >
+template<>
 struct graph_kind_traits_impl< graph_kind::directed >
 {
   using is_valid = std::true_type;
 
   using directed_category = boost::directed_tag;
 
-  using edge_parallel_category = allow_parallel_edge_tag;
+  using edge_parallel_category = boost::allow_parallel_edge_tag;
 
   // TODO(mattcalabrese) construct instead of returning the constant.
   static Agdesc_t description()
@@ -43,14 +45,14 @@ struct graph_kind_traits_impl< graph_kind::directed >
   }
 };
 
-template< graph_kind kind >
+template<>
 struct graph_kind_traits_impl< graph_kind::strict_directed >
 {
   using is_valid = std::true_type;
 
   using directed_category = boost::directed_tag;
 
-  using edge_parallel_category = disallow_parallel_edge_tag;
+  using edge_parallel_category = boost::disallow_parallel_edge_tag;
 
   // TODO(mattcalabrese) construct instead of returning the constant.
   static Agdesc_t description()
@@ -59,14 +61,14 @@ struct graph_kind_traits_impl< graph_kind::strict_directed >
   }
 };
 
-template< graph_kind kind >
+template<>
 struct graph_kind_traits_impl< graph_kind::undirected >
 {
   using is_valid = std::true_type;
 
   using directed_category = boost::undirected_tag;
 
-  using edge_parallel_category = allow_parallel_edge_tag;
+  using edge_parallel_category = boost::allow_parallel_edge_tag;
 
   // TODO(mattcalabrese) construct instead of returning the constant.
   static Agdesc_t description()
@@ -75,14 +77,14 @@ struct graph_kind_traits_impl< graph_kind::undirected >
   }
 };
 
-template< graph_kind kind >
+template<>
 struct graph_kind_traits_impl< graph_kind::strict_undirected >
 {
   using is_valid = std::true_type;
 
   using directed_category = boost::undirected_tag;
 
-  using edge_parallel_category = disallow_parallel_edge_tag;
+  using edge_parallel_category = boost::disallow_parallel_edge_tag;
 
   // TODO(mattcalabrese) construct instead of returning the constant.
   static Agdesc_t description()
@@ -94,7 +96,8 @@ struct graph_kind_traits_impl< graph_kind::strict_undirected >
 }  // namespace argot::receiver::graphviz::graph_kind_detail
 
 template< graph_kind kind >
-struct is_valid_graph_kind : graph_kind_detail< kind >::is_valid{};
+struct is_valid_graph_kind
+  : graph_kind_detail::graph_kind_traits_impl< kind >::is_valid{};
 
 template< graph_kind kind >
 inline

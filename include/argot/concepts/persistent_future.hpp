@@ -9,6 +9,7 @@
 #define ARGOT_CONCEPTS_PERSISTENT_FUTURE_HPP_
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
+#include <argot/concepts/future.hpp>
 #include <argot/concepts/invocable_object_with.hpp>
 #include <argot/concepts/move_constructible.hpp>
 #include <argot/concepts/reference.hpp>
@@ -50,11 +51,11 @@ ARGOT_EXPLICIT_CONCEPT( PersistentFuture )
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
 #ifdef ARGOT_HAS_BOOST_FUTURE_WITH_CONTINUATION
-#include <argot/concepts/persistent_future/boost_shared_future.hpp>
+#include <argot/concepts/persistent_future/detail/boost_shared_future.hpp>
 #endif
 
 #ifdef ARGOT_HAS_STLAB_FUTURE
-#include <argot/concepts/persistent_future/stlab_future.hpp>
+#include <argot/concepts/persistent_future/detail/stlab_future.hpp>
 #endif
 
 #endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS

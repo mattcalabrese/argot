@@ -21,7 +21,7 @@ class vertex_descriptor_
 {
   static_assert( is_valid_graph_kind_v< Kind >, "Invalid graph_kind value." );
  public:
-  vertex_desciptor() = default;
+  vertex_descriptor_() = default;
 
   explicit vertex_descriptor_( Agnode_t* const node ) : node( node ) {}
 

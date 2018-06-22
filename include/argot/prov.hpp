@@ -23,8 +23,6 @@
 #include <argot/prov/conditional.hpp>
 #include <argot/prov/default_to_reference_to.hpp>
 #include <argot/prov/default_to_value_of.hpp>
-#include <argot/prov/dynamic.hpp>
-#include <argot/prov/dynamic_cast_.hpp>
 #include <argot/prov/eat.hpp>
 #include <argot/prov/element_or.hpp>
 #include <argot/prov/element_or_nothing.hpp>
@@ -49,7 +47,6 @@
 #include <argot/prov/throw_.hpp>
 #include <argot/prov/tuple_index.hpp>
 #include <argot/prov/tuple_indices.hpp>
-#include <argot/prov/union_alternative_type.hpp>
 #include <argot/prov/union_index.hpp>
 #include <argot/prov/union_indices.hpp>
 #include <argot/prov/unpack.hpp>

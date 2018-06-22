@@ -12,6 +12,7 @@
 #include <argot/concepts/basic_callable_with.hpp>
 #include <argot/concepts/return_value_reducer.hpp>
 #include <argot/concepts/persistent_return_value_reducer_of.hpp>
+#include <argot/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/transparent_requirement.hpp>
 #include <argot/gen/make_concept_map.hpp>

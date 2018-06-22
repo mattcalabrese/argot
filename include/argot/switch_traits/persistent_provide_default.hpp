@@ -10,12 +10,15 @@
 
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/argument_receiver_of.hpp>
+#include <argot/concepts/argument_receiver_of_kinds.hpp>
 #include <argot/concepts/exceptional_persistent_switch_body_default_for_type.hpp>
 #include <argot/concepts/persistent_switch_body_default_for_type.hpp>
 #include <argot/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/move.hpp>
+#include <argot/receiver/nested_receiver.hpp>
+#include <argot/receiver/receiver_reference.hpp>
 #include <argot/switch_traits/argument_list_kinds_of_body_persistent.hpp>
 #include <argot/switch_traits/leading_argument_list_kinds_of_default_persistent.hpp>
 #include <argot/switch_traits/persistent_provide_isolated_default.hpp>

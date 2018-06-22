@@ -8,6 +8,7 @@
 #ifndef ARGOT_CONC_LIFT_RESULT_HPP_
 #define ARGOT_CONC_LIFT_RESULT_HPP_
 
+#include <argot/conc/lift.hpp>
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/invocable_with.hpp>
 #include <argot/concepts/sinkable.hpp>

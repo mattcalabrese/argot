@@ -8,7 +8,7 @@
 #ifndef ARGOT_CONC_TRAITS_ARGUMENT_LIST_KINDS_OF_DESTRUCTIVE_HPP_
 #define ARGOT_CONC_TRAITS_ARGUMENT_LIST_KINDS_OF_DESTRUCTIVE_HPP_
 
-#include <argot/impossible.hpp>
+#include <argot/conc_traits/as_future.hpp>
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/concepts/future_packager.hpp>
@@ -21,6 +21,8 @@
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
+#include <argot/impossible.hpp>
+#include <argot/prov_traits/argument_list_kinds_of.hpp>
 #include <argot/receiver/return_argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
@@ -28,8 +30,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace argot {
-namespace conc_traits {
+namespace argot::conc_traits {
 
 #if 0
 
@@ -126,8 +127,24 @@ struct make_concept_map
 
 #else
 
+template< class ConcProvider >
+using argument_list_kinds_of_destructive_t
+  = ARGOT_REQUIRES( ConcurrentArgumentProvider< ConcProvider > )
+    < prov_traits::argument_list_kinds_of_t
+      < result_of_as_future_t< ConcProvider&& > >
+    >;
+
+template< class ConcProvider >
+using argument_list_kinds_of_destructive
+  = call_detail::lazy_expand
+    < argument_list_kinds_of_destructive_t, ConcProvider >;
+
+template< class ConcProvider >
+argument_list_kinds_of_destructive_t< ConcProvider > constexpr
+argument_list_kinds_of_destructive_v{};
+
 #endif
 
-}  // namespace argot
+} // namespace (argot::conc_traits)
 
 #endif  // ARGOT_CONC_TRAITS_ARGUMENT_LIST_KINDS_OF_DESTRUCTIVE_HPP_

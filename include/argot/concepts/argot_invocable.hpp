@@ -14,18 +14,39 @@
 #include <argot/gen/auto_concept.hpp>
 #include <argot/gen/transparent_requirement.hpp>
 
-namespace argot {
-namespace argot_invocable_detail {
+#if !defined( ARGOT_GENERATE_PREPROCESSED_CONCEPTS )
 
-template< class Invocable, class... P >
-struct all_return_types_are_the_same_requirement
+#include <argot/detail/call_with.hpp>
+#include <argot/prov/default_to_reference_to.hpp>
+#include <argot/prov_traits/argument_list_kinds_of_destructive.hpp>
+#include <argot/receiver_traits/argument_list_kinds.hpp>
+
+#endif // !defined( ARGOT_GENERATE_PREPROCESSED_CONCEPTS )
+
+namespace argot {
+namespace detail_argot_invocable {
+
+template< class Invocable, class Kinds >
+struct all_return_types_are_the_same_requirement_impl;
+
+template< class Invocable, class... ArgLists >
+struct all_return_types_are_the_same_requirement_impl
+< Invocable, receiver_traits::argument_list_kinds_t< ArgLists... > >
 {
   template< template< class... > class Reqs >
   using expand_requirements
-    = SameType< /*invocation results*/ >;
+    = SameType< call_detail::result_of_call_with_t< Invocable, ArgLists >... >;
 };
 
-}  // namespace argot(::argot_invocable_detail)
+template< class Invocable, class... P >
+struct all_return_types_are_the_same_requirement
+  : all_return_types_are_the_same_requirement_impl
+    < Invocable
+    , prov_traits::argument_list_kinds_of_destructive_t
+      < prov::result_of_default_to_reference_to_t< P... > >
+    > {};
+
+}  // namespace argot(::detail_argot_invocable)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME() s/argot_invocable.h
 
@@ -41,7 +62,10 @@ template< class Invocable, class... P >
 ARGOT_AUTO_CONCEPT( ArgotInvocable )
 (
   ArgotInvocableBeforeReduction< Invocable, P... >
-/*, check that all return types are the same*/
+, TransparentRequirement
+  < detail_argot_invocable::all_return_types_are_the_same_requirement
+    < Invocable, P... >
+  >
 );
 
 #include <argot/concepts/detail/preprocess_header_end.hpp>

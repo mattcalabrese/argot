@@ -49,7 +49,7 @@ struct lift_call_fn
           >
   [[nodiscard]]
   constexpr auto operator()( Invocable&& invocable
-                           , ConcProv&&... conc_provs
+                           , ConcProvs&&... conc_provs
                            ) const
   {
     return conc::bless_result

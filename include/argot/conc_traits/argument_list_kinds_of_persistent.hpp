@@ -8,7 +8,7 @@
 #ifndef ARGOT_CONC_TRAITS_ARGUMENT_LIST_KINDS_OF_PERSISTENT_HPP_
 #define ARGOT_CONC_TRAITS_ARGUMENT_LIST_KINDS_OF_PERSISTENT_HPP_
 
-#include <argot/conc_traits/argument_list_kinds_of_destructive.hpp>
+#include <argot/conc_traits/as_future.hpp>
 #include <argot/concepts/persistent_concurrent_argument_provider.hpp>
 #include <argot/concepts/persistent_then_providable.hpp>
 #include <argot/declval.hpp>
@@ -19,6 +19,7 @@
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/impossible.hpp>
+#include <argot/prov_traits/argument_list_kinds_of.hpp>
 #include <argot/receiver/return_argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 
@@ -26,6 +27,9 @@
 #include <utility>
 
 namespace argot::conc_traits {
+
+#if 0
+
 namespace argument_list_kinds_of_persistent_detail {
 
 template< class Provider >
@@ -93,6 +97,27 @@ using argument_list_kinds_of_persistent
 template< class Provider >
 argument_list_kinds_of_persistent_t< Provider > constexpr
 argument_list_kinds_of_persistent_v{};
+
+#else
+
+
+template< class ConcProvider >
+using argument_list_kinds_of_persistent_t
+  = ARGOT_REQUIRES( PersistentConcurrentArgumentProvider< ConcProvider > )
+    < prov_traits::argument_list_kinds_of_t
+      < result_of_as_future_t< ConcProvider const& > >
+    >;
+
+template< class ConcProvider >
+using argument_list_kinds_of_persistent
+  = call_detail::lazy_expand
+    < argument_list_kinds_of_persistent_t, ConcProvider >;
+
+template< class ConcProvider >
+argument_list_kinds_of_persistent_t< ConcProvider > constexpr
+argument_list_kinds_of_persistent_v{};
+
+#endif
 
 }  // namespace (argot::conc_traits)
 

@@ -20,7 +20,7 @@ template< class Variant, auto Index >
 using alternative_type_t
   = ARGOT_REQUIRES( VariantLike< Variant > )
                   ( VariantIndex< Variant, Index > )
-    < typename union_traits::alternative_type_t< Index > >;
+    < typename union_traits::alternative_type_t< Variant, Index > >;
 
 template< class Variant, auto Index >
 using alternative_type

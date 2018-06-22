@@ -56,10 +56,10 @@ struct run_fn
 } inline constexpr run{};
 
 template< class Fun >
-using result_of_run = basic_result_of< fun_fn const&, Fun >;
+using result_of_run = basic_result_of< run_fn const&, Fun >;
 
 template< class Fun >
-using result_of_run_t = basic_result_of_t< fun_fn const&, Fun >;
+using result_of_run_t = basic_result_of_t< run_fn const&, Fun >;
 
 }  // namespace argot(::prov)
 
@@ -87,7 +87,7 @@ struct make_concept_map< ArgumentProvider< prov::run_fn::impl< Fun > > >
   }
 };
 
-template<>
+template< class Fun >
 struct make_concept_map
 < PersistentArgumentProvider< prov::run_fn::impl< Fun > >
 , ARGOT_REQUIRES( PersistentInvocableObjectWith< Fun > )<>

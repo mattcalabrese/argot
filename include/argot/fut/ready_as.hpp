@@ -8,6 +8,8 @@
 #ifndef ARGOT_FUT_READY_AS_HPP_
 #define ARGOT_FUT_READY_AS_HPP_
 
+#if 0
+
 namespace argot {
 namespace fut {
 namespace ready_detail {
@@ -100,5 +102,7 @@ struct make_concept_map
 };
 
 } // namespace argot
+
+#endif
 
 #endif  // ARGOT_FUT_READY_AS_HPP_

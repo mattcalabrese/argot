@@ -9,8 +9,7 @@
 #define ARGOT_CONCEPTS_PERSISTENT_CONCURRENT_ARGUMENT_PROVIDER_HPP_
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
-#include <argot/concepts/move_constructible.hpp>
-#include <argot/concepts/object.hpp>
+#include <argot/concepts/concurrent_argument_provider.hpp>
 #include <argot/gen/explicit_concept.hpp>
 
 namespace argot {

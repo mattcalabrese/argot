@@ -72,7 +72,7 @@ struct composable_wih_provision_requirements
 }  // namespace argot(::persistent_composable_with_persistent_provision_detail)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
-s/composable_with_provision.h
+s/persistent_composable_with_persistent_provision.h
 
 #ifdef ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 #include ARGOT_CONCEPTS_DETAIL_PREPROCESSED_HEADER

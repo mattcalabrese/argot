@@ -45,7 +45,7 @@ struct make_concept_map< ArgumentProvider< prov::quick_exit_fn::impl > >
 
   template< class Receiver, ARGOT_REQUIRES( ArgumentReceiver< Receiver > )() >
   [[noreturn]] static impossible provide
-  ( prov::prov::quick_exit_fn::impl self, Receiver&& /*receiver*/ ) noexcept
+  ( prov::quick_exit_fn::impl self, Receiver&& /*receiver*/ ) noexcept
   {
     std::quick_exit( self.quick_exit_value );
   }
@@ -60,7 +60,7 @@ struct make_concept_map
 
   template< class Receiver, ARGOT_REQUIRES( ArgumentReceiver< Receiver > )() >
   [[noreturn]] static impossible provide
-  ( prov::prov::quick_exit_fn::impl self, Receiver&& /*receiver*/ ) noexcept
+  ( prov::quick_exit_fn::impl self, Receiver&& /*receiver*/ ) noexcept
   {
     std::quick_exit( self.quick_exit_value );
   }

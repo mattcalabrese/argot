@@ -8,6 +8,8 @@
 #ifndef ARGOT_CONCEPTS_FUT_FUTURE_HPP_
 #define ARGOT_CONCEPTS_FUT_FUTURE_HPP_
 
+#if 0
+
 #include <argot/concepts/future.hpp>
 #include <argot/concepts/invocable_object_with.hpp>
 #include <argot/concepts/move_constructible.hpp>
@@ -317,5 +319,7 @@ struct make_concept_map< Future< fut::destructive_future< T > > >
 };
 
 } // namespace argot
+
+#endif
 
 #endif  // ARGOT_CONCEPTS_FUT_FUTURE_HPP_

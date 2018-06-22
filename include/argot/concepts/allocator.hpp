@@ -9,6 +9,7 @@
 #define ARGOT_CONCEPTS_ALLOCATOR_HPP_
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
+#include <argot/concepts/class.hpp>
 #include <argot/concepts/move_constructible.hpp>
 #include <argot/concepts/object.hpp>
 #include <argot/gen/explicit_concept.hpp>

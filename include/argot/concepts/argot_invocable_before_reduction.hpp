@@ -8,18 +8,18 @@
 #ifndef ARGOT_CONCEPTS_ARGOT_INVOCABLE_BEFORE_REDUCTION_HPP_
 #define ARGOT_CONCEPTS_ARGOT_INVOCABLE_BEFORE_REDUCTION_HPP_
 
+#include <argot/concepts/can_default_to_reference_to.hpp>
+#include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
+#include <argot/concepts/invocable_with_kinds.hpp>
+#include <argot/gen/auto_concept.hpp>
+#include <argot/gen/transparent_requirement.hpp>
+
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
 #include <argot/prov/default_to_reference_to.hpp>
 #include <argot/prov_traits/argument_list_kinds_of_destructive.hpp>
 
 #endif
-
-#include <argot/concepts/can_default_to_reference_to.hpp>
-#include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
-#include <argot/concepts/invocable_with_kinds.hpp>
-#include <argot/gen/auto_concept.hpp>
-#include <argot/gen/transparent_requirement.hpp>
 
 namespace argot {
 namespace argot_invocable_before_reduction_detail {

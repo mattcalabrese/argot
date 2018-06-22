@@ -9,7 +9,7 @@
 
 #include <argot/prov/switch_.hpp>
 
-#include <argot/case_.hpp>
+#include <argot/case/case_.hpp>
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/same_type.hpp>
 #include <argot/concepts/switch_body.hpp>

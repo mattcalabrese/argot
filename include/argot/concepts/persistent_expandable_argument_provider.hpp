@@ -9,17 +9,8 @@
 #define ARGOT_CONCEPTS_PERSISTENT_EXPANDABLE_ARGUMENT_PROVIDER_HPP_
 
 #include <argot/concepts/expandable_argument_provider.hpp>
-#include <argot/concepts/expandable.hpp>
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/gen/explicit_concept.hpp>
-#include <argot/gen/make_concept_map.hpp>
-
-#ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
-
-#include <argot/detail/detection.hpp>
-#include <argot/concepts/persistent_expandable_argument_provider/detail/is_persistent_expandable_argument_provider.hpp>
-
-#endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
 namespace argot {
 namespace persistent_expandable_argument_provider_detail {
@@ -53,6 +44,19 @@ ARGOT_EXPLICIT_CONCEPT( PersistentExpandableArgumentProvider )
 #include <argot/concepts/detail/preprocess_header_end.hpp>
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
+
+} // namespace argot
+
+
+#ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
+
+#include <argot/detail/detection.hpp>
+#include <argot/concepts/persistent_expandable_argument_provider/detail/is_persistent_expandable_argument_provider.hpp>
+#include <argot/gen/make_concept_map.hpp>
+
+#endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS
+
+namespace argot {
 
 // TODO(mattcalabrese) Perform each ArgumentProvider check separately in SFINAE
 template< class Provider >

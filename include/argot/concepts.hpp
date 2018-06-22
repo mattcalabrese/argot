@@ -37,6 +37,7 @@
 #include <argot/concepts/composable_with_persistent_provision.hpp>
 #include <argot/concepts/composable_with_provision.hpp>
 #include <argot/concepts/concurrent_argument_provider.hpp>
+#include <argot/concepts/concurrent_argument_provider_to.hpp>
 #include <argot/concepts/concurrent_can_default_to_value_of.hpp>
 #include <argot/concepts/concurrent_expandable.hpp>
 #include <argot/concepts/constructible.hpp>
@@ -52,6 +53,7 @@
 #include <argot/concepts/default_constructible.hpp>
 #include <argot/concepts/default_for_type.hpp>
 #include <argot/concepts/destructible.hpp>
+#include <argot/concepts/equality_comparable.hpp>
 #include <argot/concepts/exception.hpp>
 #include <argot/concepts/exceptional_argument_provider.hpp>
 #include <argot/concepts/exceptional_persistent_argument_provider.hpp>
@@ -63,9 +65,9 @@
 #include <argot/concepts/executor.hpp>
 #include <argot/concepts/expandable.hpp>
 #include <argot/concepts/expandable_argument_provider.hpp>
-#include <argot/concepts/expandable_concurrent_argument_provider.hpp>
 #include <argot/concepts/explicitly_convertible.hpp>
 #include <argot/concepts/false.hpp>
+#include <argot/concepts/forgetful_then_providable.hpp>
 #include <argot/concepts/forgetful_thenable.hpp>
 #include <argot/concepts/future.hpp>
 #include <argot/concepts/future_packager.hpp>
@@ -96,6 +98,7 @@
 #include <argot/concepts/lvalue_reference.hpp>
 #include <argot/concepts/move_constructible.hpp>
 #include <argot/concepts/net_executor.hpp>
+#include <argot/concepts/nothrow_copy_constructible.hpp>
 #include <argot/concepts/object.hpp>
 #include <argot/concepts/optional_like.hpp>
 #include <argot/concepts/parameter_type.hpp>
@@ -103,15 +106,15 @@
 #include <argot/concepts/persistent_argument_provider_generator_with.hpp>
 #include <argot/concepts/persistent_argument_provider_generator_with_each.hpp>
 #include <argot/concepts/persistent_argument_provider_generator_with_kinds.hpp>
-#include <argot/concepts/persistent_argument_provider_of_expandables.hpp>
 #include <argot/concepts/persistent_argument_provider_to.hpp>
 #include <argot/concepts/persistent_composable.hpp>
 #include <argot/concepts/persistent_composable_with_persistent_provision.hpp>
 #include <argot/concepts/persistent_concurrent_argument_provider.hpp>
+#include <argot/concepts/persistent_concurrent_argument_provider_to.hpp>
 #include <argot/concepts/persistent_default_for_type.hpp>
 #include <argot/concepts/persistent_exceptional_default.hpp>
 #include <argot/concepts/persistent_expandable_argument_provider.hpp>
-#include <argot/concepts/persistent_expandable_concurrent_argument_provider.hpp>
+#include <argot/concepts/persistent_forgetful_then_providable.hpp>
 #include <argot/concepts/persistent_forgetful_thenable.hpp>
 #include <argot/concepts/persistent_future.hpp>
 #include <argot/concepts/persistent_invocable_object_with.hpp>
@@ -122,13 +125,10 @@
 #include <argot/concepts/persistent_switch_body_case.hpp>
 #include <argot/concepts/persistent_switch_body_default_for_type.hpp>
 #include <argot/concepts/persistent_switch_body_for_type.hpp>
-#include <argot/concepts/persistent_then.hpp>
+#include <argot/concepts/persistent_then_providable.hpp>
 #include <argot/concepts/persistent_thenable.hpp>
 #include <argot/concepts/potentially_invocable.hpp>
 #include <argot/concepts/potentially_invocable_object.hpp>
-#include <argot/concepts/provisional_default.hpp>
-#include <argot/concepts/provisional_default_for_type.hpp>
-#include <argot/concepts/provisional_default_for_type_to.hpp>
 #include <argot/concepts/reference.hpp>
 #include <argot/concepts/return_type.hpp>
 #include <argot/concepts/return_value_reducer.hpp>
@@ -148,9 +148,8 @@
 #include <argot/concepts/switch_condition.hpp>
 #include <argot/concepts/switch_condition_or_constant.hpp>
 #include <argot/concepts/switchable.hpp>
-#include <argot/concepts/then.hpp>
+#include <argot/concepts/then_providable.hpp>
 #include <argot/concepts/thenable.hpp>
-#include <argot/concepts/throwable.hpp>
 #include <argot/concepts/transformation_with.hpp>
 #include <argot/concepts/true.hpp>
 #include <argot/concepts/tuple_index.hpp>
@@ -164,7 +163,6 @@
 #include <argot/concepts/valid.hpp>
 #include <argot/concepts/variant_index.hpp>
 #include <argot/concepts/variant_like.hpp>
-#include <argot/concepts/void.hpp>
 #include <argot/concepts/volatile_object.hpp>
 
 #endif  // ARGOT_CONCEPTS_HPP_

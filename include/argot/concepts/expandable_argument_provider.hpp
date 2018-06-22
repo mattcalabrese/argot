@@ -5,21 +5,13 @@
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#ifndef ARGOT_CONCEPTS_ARGUMENT_PROVIDER_OF_EXPANDABLES_HPP_
-#define ARGOT_CONCEPTS_ARGUMENT_PROVIDER_OF_EXPANDABLES_HPP_
+#ifndef ARGOT_CONCEPTS_EXPANDABLE_ARGUMENT_PROVIDER_HPP_
+#define ARGOT_CONCEPTS_EXPANDABLE_ARGUMENT_PROVIDER_HPP_
 
 #include <argot/concepts/argument_provider.hpp>
-#include <argot/concepts/expandable.hpp>
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/gen/explicit_concept.hpp>
 #include <argot/gen/make_concept_map.hpp>
-
-#ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
-
-#include <argot/detail/detection.hpp>
-#include <argot/concepts/expandable_argument_provider/detail/is_expandable_argument_provider.hpp>
-
-#endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
 namespace argot {
 namespace expandable_argument_provider_detail {
@@ -54,6 +46,15 @@ ARGOT_EXPLICIT_CONCEPT( ExpandableArgumentProvider )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
+} // namespace argot
+
+#ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
+
+#include <argot/detail/detection.hpp>
+#include <argot/concepts/expandable_argument_provider/detail/is_expandable_argument_provider.hpp>
+
+namespace argot {
+
 // TODO(mattcalabrese) Perform each ArgumentProvider check separately in SFINAE
 template< class Provider >
 struct make_concept_map
@@ -66,4 +67,6 @@ struct make_concept_map
 
 }  // namespace argot
 
-#endif  // ARGOT_CONCEPTS_ARGUMENT_PROVIDER_OF_EXPANDABLES_HPP_
+#endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS
+
+#endif  // ARGOT_CONCEPTS_EXPANDABLE_ARGUMENT_PROVIDER_HPP_

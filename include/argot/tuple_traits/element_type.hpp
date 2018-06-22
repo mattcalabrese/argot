@@ -21,7 +21,7 @@ template< class Tup, auto Index >
 using element_type_t
   = ARGOT_REQUIRES( TupleLike< Tup > )
                   ( TupleIndex< Tup, Index > )
-    < typename access_raw_concept_map< TupleLike< T > >
+    < typename access_raw_concept_map< TupleLike< Tup > >
       ::template element_type_t< Index >
     >;
 

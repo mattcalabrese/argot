@@ -10,6 +10,7 @@
 
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/argument_provider.hpp>
+#include <argot/concepts/concurrent_argument_provider.hpp>
 #include <argot/concepts/future.hpp>
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/sink.hpp>

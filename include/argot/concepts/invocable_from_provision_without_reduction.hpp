@@ -8,6 +8,8 @@
 #ifndef ARGOT_CONCEPTS_INVOCABLE_FROM_PROVISION_WITHOUT_REDUCTION_HPP_
 #define ARGOT_CONCEPTS_INVOCABLE_FROM_PROVISION_WITHOUT_REDUCTION_HPP_
 
+#if 0
+
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/invocable_with_kinds.hpp>
@@ -66,5 +68,7 @@ ARGOT_AUTO_CONCEPT( InvocableFromProvisionWithoutReduction )
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
 }  // namespace argot
+
+#endif
 
 #endif  // ARGOT_CONCEPTS_INVOCABLE_FROM_PROVISION_WITHOUT_REDUCTION_HPP_

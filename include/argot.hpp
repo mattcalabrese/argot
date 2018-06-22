@@ -14,10 +14,8 @@
 #include <argot/call.hpp>
 #include <argot/call_object_base.hpp>
 #include <argot/case.hpp>
-#include <argot/case_.hpp>
 #include <argot/compose.hpp>
 #include <argot/conc.hpp>
-#include <argot/conc_call.hpp>
 #include <argot/conc_traits.hpp>
 #include <argot/concepts.hpp>
 #include <argot/config.hpp>
@@ -63,7 +61,6 @@
 #include <argot/value_list.hpp>
 #include <argot/value_zipper.hpp>
 #include <argot/variant_traits.hpp>
-#include <argot/visit.hpp>
 #include <argot/void_.hpp>
 #include <argot/zipper.hpp>
 

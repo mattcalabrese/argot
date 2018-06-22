@@ -23,7 +23,7 @@
 namespace argot::conc_traits {
 
 template< class FPackager >
-struct persistent_then_provide_t
+struct persistent_then_provide_fn
 {
   ARGOT_CONCEPT_ASSERT( FuturePackager< FPackager > );
 
@@ -33,7 +33,7 @@ struct persistent_then_provide_t
   , ARGOT_REQUIRES
     ( PersistentConcurrentArgumentProviderTo< ConcProvider, Receiver > )
     ( Executor< remove_cvref_t< Exec > > )
-    ( PersistentThenProvidable< ConcProvider, FPackager, Executor > )
+    ( PersistentThenProvidable< ConcProvider, FPackager, Exec > )
     ()
   >
   constexpr decltype( auto )
@@ -51,18 +51,22 @@ struct persistent_then_provide_t
 
 template< class FPackager >
 ARGOT_REQUIRES( FuturePackager< FPackager > )
-< persistent_then_provide< FPackager > > constexpr
+< persistent_then_provide_fn< FPackager > > constexpr
 persistent_then_provide{};
 
 template< class FPackager, class ConcProvider, class Exec, class Receiver >
 using result_of_persistent_then_provide
   = basic_result_of
-    < persistent_then_provide_t const&, ConcProvider, Exec, Receiver >;
+    < persistent_then_provide_fn< FPackager > const&
+    , ConcProvider, Exec, Receiver
+    >;
 
 template< class FPackager, class ConcProvider, class Exec, class Receiver >
 using result_of_persistent_then_provide_t
   = basic_result_of_t
-    < persistent_then_provide_t const&, ConcProvider, Exec, Receiver >;
+    < persistent_then_provide_fn< FPackager > const&
+    , ConcProvider, Exec, Receiver
+    >;
 
 }  // namespace (argot::conc_traits)
 

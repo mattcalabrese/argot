@@ -8,16 +8,17 @@
 #ifndef ARGOT_CONVERT_FUTURE_HPP_
 #define ARGOT_CONVERT_FUTURE_HPP_
 
-#include <argot/concepts/decay_sinkable.hpp>
-#include <argot/concepts/invocable_with.hpp>
-#include <argot/concepts/future.hpp>
-#include <argot/concepts/persistent_future.hpp>
+#include <argot/concepts/future_packager.hpp>
+#include <argot/concepts/thenable.hpp>
+#include <argot/concepts/persistent_thenable.hpp>
 #include <argot/detail/conditional.hpp>
-#include <argot/detail/sink.hpp>
+#include <argot/executor/immediate.hpp>
+#include <argot/forward.hpp>
+#include <argot/fut_traits/then.hpp>
 #include <argot/fut_traits/value_type.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
+#include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
 #include <argot/remove_cvref.hpp>
 
 #include <type_traits>
@@ -25,17 +26,21 @@
 namespace argot {
 namespace detail_convert_future {
 
-template< class FutParam >
-using persistent_future_concept_impl
-  = PersistentFuture
-    < std::remove_const_t< std::remove_reference_t< FutParam > > >;
+template< class FutParam, class FPackager >
+using persistent_thenable_concept_impl
+  = PersistentThenable
+    < std::remove_const_t< FutParam >
+    , FPackager
+    , executor::immediate_t
+    >;
 
-template< class FutParam >
-using persistent_future_concept
-  = argot_detail::conditional< std::is_lvalue_reference_v< Fut > >
-    ::template half_meta_apply
-    < persistent_future_concept_impl, Future< Fut >
-    , Fut
+template< class FutParam, class FPackager >
+using thenable_concept
+  = typename argot_detail::conditional< std::is_lvalue_reference_v< FutParam > >
+    ::template meta_apply
+    < persistent_thenable_concept_impl
+    , Thenable
+    , std::remove_reference_t< FutParam >, FPackager, executor::immediate_t
     >;
 
 }  // namespace argot(::detail_convert_future)
@@ -46,22 +51,12 @@ struct convert_future_fn
   ARGOT_CONCEPT_ASSERT( FuturePackager< FPackager > );
 
   template
-  < class Fut, class Fun
+  < class Fut
   , ARGOT_REQUIRES
-    ( detail_convert_future::persistent_future_concept< Fut > )
-    ( DecaySinkable< Fun&& > )
-    ( InvocableWith
-      < std::decay_t< Fun&& >, value_type_t< remove_cvref_t< Fut > >&& >
-    )
-    ( InvocableWith
-      < std::decay_t< Fun&& >, value_type_t< remove_cvref_t< Fut > > const& >
-    )
-    ()
+    ( detail_convert_future::thenable_concept< Fut, FPackager > )()
   >
-  constexpr void operator ()( Fut&& self, Exec&& exec, Fun&& fun ) const
+  constexpr void operator ()( Fut&& self ) const
   {
-    using fut_concept = detail_convert_future::persistent_future_concept< Fut >;
-
     return fut_traits::then< FPackager >
     ( ARGOT_FORWARD( Fut )( self )
     , executor::immediate
@@ -71,7 +66,13 @@ struct convert_future_fn
       }
     );
   }
-} inline constexpr convert_future{};
+};
+
+template< class FPackager >
+ARGOT_REQUIRES( FuturePackager< FPackager > )
+< convert_future_fn< FPackager > >
+constexpr convert_future{};
+
 
 } // namespace argot
 

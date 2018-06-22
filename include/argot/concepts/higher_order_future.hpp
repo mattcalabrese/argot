@@ -36,7 +36,7 @@ struct higher_order_future_requirements
 // TODO(mattcalabrese) Implement this purely via the concepts
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
-s/future.h
+s/higher_order_future.h
 
 #ifdef ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 #include ARGOT_CONCEPTS_DETAIL_PREPROCESSED_HEADER

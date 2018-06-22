@@ -30,13 +30,15 @@ struct key_type_impl;
 template< graph_kind GraphKind >
 struct key_type_impl< GraphKind, boost::edge_property_tag >
 {
-  using type = typename graph_traits< graph_< GraphKind > >::edge_descriptor;
+  using type
+    = typename boost::graph_traits< graph_< GraphKind > >::edge_descriptor;
 };
 
 template< graph_kind GraphKind >
 struct key_type_impl< GraphKind, boost::vertex_property_tag >
 {
-  using type = typename graph_traits< graph_< GraphKind > >::vertex_descriptor;
+  using type
+    = typename boost::graph_traits< graph_< GraphKind > >::vertex_descriptor;
 };
 
 template< graph_kind GraphKind, class GraphvizPropertyTag >

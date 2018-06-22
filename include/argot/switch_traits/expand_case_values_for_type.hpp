@@ -30,7 +30,7 @@ using expand_case_values_for_type_t
   = ARGOT_REQUIRES( SwitchBodyForType< Body, ValueType > )
     < typename access_raw_concept_map< SwitchBody< Body > >
       ::template expand_case_values_t
-      < case_values_for_type_detail::expand_case_values_for_type_impl
+      < expand_case_values_for_type_detail::expand_case_values_for_type_impl
         < Template, ValueType >::template apply
       >
     >;

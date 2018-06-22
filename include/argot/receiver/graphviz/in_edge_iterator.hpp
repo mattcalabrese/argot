@@ -21,7 +21,7 @@ namespace graphviz {
 
 template< graph_kind Kind >
 class in_edge_iterator_
-  : public iterator_facade
+  : public boost::iterator_facade
     < in_edge_iterator_< Kind >
     , edge_descriptor_< Kind >
     , boost::forward_traversal_tag
@@ -30,7 +30,7 @@ class in_edge_iterator_
     >
 {
   static_assert( is_valid_graph_kind_v< Kind >, "Invalid graph_kind value." );
-   iterator_core_access;
+  friend boost::iterator_core_access;
  public:
   // TODO(mattcalabrese) Possibly make this private.
   explicit in_edge_iterator_( Agedge_t* const edge = nullptr

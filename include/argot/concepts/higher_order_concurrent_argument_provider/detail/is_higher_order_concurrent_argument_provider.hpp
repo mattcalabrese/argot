@@ -52,7 +52,7 @@ using is_higher_order_concurrent_argument_provider_result
   = prov_traits::result_of_provide_t
     < fut_traits::value_type_t
       < remove_cvref_t< conc_traits::result_of_as_future< T > > >
-    , is_higher_order_concurrent_argument_provider_impl_t >
+    , is_higher_order_concurrent_argument_provider_impl_t
     >;
 
 template< class T >

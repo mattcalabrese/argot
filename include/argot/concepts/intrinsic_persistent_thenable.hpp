@@ -11,8 +11,7 @@
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/invocable_object_with.hpp>
 #include <argot/concepts/move_constructible.hpp>
-#include <argot/concepts/future.hpp>
-#include <argot/concepts/reference.hpp>
+#include <argot/concepts/persistent_future.hpp>
 #include <argot/concepts/thenable.hpp>
 #include <argot/gen/explicit_concept.hpp>
 #include <argot/gen/concept_assert.hpp>
@@ -53,11 +52,11 @@ ARGOT_EXPLICIT_CONCEPT( IntrinsicPersistentThenable )
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
 #ifdef ARGOT_HAS_BOOST_FUTURE_WITH_CONTINUATION
-#include <argot/concepts/intrinsic_persistent_thenable/boost_shared_future.hpp>
+#include <argot/concepts/intrinsic_persistent_thenable/detail/boost_shared_future.hpp>
 #endif
 
 #ifdef ARGOT_HAS_STLAB_FUTURE
-#include <argot/concepts/intrinsic_persistent_thenable/stlab_future.hpp>
+#include <argot/concepts/intrinsic_persistent_thenable/detail/stlab_future.hpp>
 #endif
 
 #endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS

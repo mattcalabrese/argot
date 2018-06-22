@@ -21,7 +21,7 @@ using element_type_t
     < typename access_raw_concept_map< OptionalLike< Opt > >::element_type_t >;
 
 template< class Opt >
-using element_type = call_detail::lazy_expand< element_type, Opt >;
+using element_type = call_detail::lazy_expand< element_type_t, Opt >;
 
 }  // namespace (argot::opt_traits)
 

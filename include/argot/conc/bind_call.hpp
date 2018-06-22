@@ -36,7 +36,7 @@ struct bind_call_fn
   // TODO(mattcalabrese) Constrain the invocable
   template< class Invocable, class... ConcProvs
           , ARGOT_REQUIRES
-            ( ConcurrentArgumentProvider< remove_cvref_t< ConcProvs > > )
+            ( ConcurrentArgumentProvider< remove_cvref_t< ConcProvs > >... )
             //( BindableCall
             //  < std::decay_t< Invocable >
             //  , fut_traits::value_type_t
@@ -49,7 +49,7 @@ struct bind_call_fn
           >
   [[nodiscard]]
   constexpr auto operator()( Invocable&& invocable
-                           , ConcProv&&... conc_provs
+                           , ConcProvs&&... conc_provs
                            ) const
   {
     return conc::bless_result

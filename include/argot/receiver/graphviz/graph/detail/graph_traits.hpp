@@ -12,9 +12,7 @@
 
 #include <boost/graph/graph_traits.hpp>
 
-namespace argot {
-namespace receiver {
-namespace graphviz {
+namespace argot::receiver::graphviz {
 
 template< graph_kind Kind >
 class graph_;
@@ -26,23 +24,21 @@ struct traversal_category
   , public virtual boost::adjacency_graph_tag
   , public virtual boost::vertex_list_graph_tag {};
 
-}  // namespace argot::receiver::graphviz::graph_traits_detail
-}  // namespace argot::receiver::graphviz
-}  // namespace argot::receiver
-}  // namespace argot
+}  // namespace argot::receiver::graphviz(::graph_traits_detail)
+}  // namespace (argot::receiver::graphviz)
 
+//#include <argot/receiver/graphviz/adjacency_iterator.hpp>
 #include <argot/receiver/graphviz/edge_descriptor.hpp>
-#include <argot/receiver/graphviz/vertex_descriptor.hpp>
 #include <argot/receiver/graphviz/edge_iterator.hpp>
 #include <argot/receiver/graphviz/in_edge_iterator.hpp>
 #include <argot/receiver/graphviz/out_edge_iterator.hpp>
+#include <argot/receiver/graphviz/vertex_descriptor.hpp>
 #include <argot/receiver/graphviz/vertex_iterator.hpp>
 
-namespace boost
-{
+namespace boost {
 
 template< argot::receiver::graphviz::graph_kind Kind >
-struct graph_traits< argot::receiver::graphviz::graph< Kind > >
+struct graph_traits< argot::receiver::graphviz::graph_< Kind > >
 {
   static_assert( argot::receiver::graphviz::is_valid_graph_kind_v< Kind >
                , "Invalid graph_kind value."
@@ -71,8 +67,11 @@ struct graph_traits< argot::receiver::graphviz::graph< Kind > >
 
   using degree_size_type = int;
 
+#if 0
+
   using adjacency_iterator
     = argot::receiver::graphviz::adjacency_iterator_< Kind >;
+#endif
 
   using out_edge_iterator
     = argot::receiver::graphviz::out_edge_iterator_< Kind >;

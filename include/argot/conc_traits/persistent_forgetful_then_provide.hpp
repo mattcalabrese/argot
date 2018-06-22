@@ -28,7 +28,7 @@ struct persistent_forgetful_then_provide_t
   , ARGOT_REQUIRES
     ( ConcurrentArgumentProviderTo< ConcProvider, Receiver > )
     ( Executor< remove_cvref_t< Exec > > )
-    ( ForgetfulThenProvidable< ConcProvider, Executor > )
+    ( ForgetfulThenProvidable< ConcProvider, Exec > )
     ()
   >
   constexpr void

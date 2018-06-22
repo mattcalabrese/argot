@@ -10,6 +10,7 @@
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/persistent_switch_body_case.hpp>
+#include <argot/concepts/same_type.hpp>
 #include <argot/gen/auto_concept.hpp>
 #include <argot/gen/transparent_requirement.hpp>
 

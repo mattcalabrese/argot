@@ -15,7 +15,7 @@ namespace receiver {
 namespace graphviz {
 namespace graph_property {
 
-#define ARGOT_RECEIVER_GRAPHVIZ_GRAPH_PROPERTY_DECL( name_ )          \
+#define ARGOT_RECEIVER_GRAPHVIZ_GRAPH_PROPERTY_DECL( name_ )                   \
 ARGOT_RECEIVER_GRAPHVIZ_DETAIL_PROPERTY_DECL( graph, name_ )
 
 ARGOT_RECEIVER_GRAPHVIZ_GRAPH_PROPERTY_DECL( Damping );

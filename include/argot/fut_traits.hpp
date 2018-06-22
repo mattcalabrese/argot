@@ -10,7 +10,6 @@
 
 #include <argot/fut_traits/config.hpp>
 #include <argot/fut_traits/destructive_forgetful_then.hpp>
-#include <argot/fut_traits/destructive_get.hpp>
 #include <argot/fut_traits/destructive_then.hpp>
 #include <argot/fut_traits/forgetful_then.hpp>
 #include <argot/fut_traits/persistent_forgetful_then.hpp>

@@ -18,7 +18,6 @@
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/move.hpp>
-#include <argot/reducer_traits/is_argument_reducer.hpp>
 #include <argot/remove_cvref.hpp>
 
 #include <memory>
@@ -26,7 +25,7 @@
 #include <utility>
 
 namespace argot {
-namespace call_object_base_detail {
+namespace detail_call_object_base {
 
 template< class Fun, class... P >
 using result_of_run_t
@@ -43,7 +42,7 @@ struct call_fun_t
   using cv_fun = std::remove_reference_t< Fun >;
 
   template< class... P >
-  constexpr result_of_run_t operator ()( P&&... args ) &&
+  constexpr result_of_run_t< Fun, P&&... > operator ()( P&&... args ) &&
   {
     return cv_fun::run
     ( ARGOT_FORWARD( Fun )( *fun ), ARGOT_FORWARD( P )( args )... );
@@ -58,41 +57,46 @@ constexpr call_fun_t< Fun&& > make_call_fun( Fun&& fun ) noexcept
   return { std::addressof( fun ) };
 }
 
-}  // namespace argot::call_object_base_detail
+}  // namespace argot::detail_call_object_base
 
 template< class Fun >
 struct call_object_base
 {
-  // TODO(mattcalabrese) class type
-  ARGOT_CONCEPT_ASSERT( UnqualifiedObject< Fun > );
+
+  ARGOT_CONCEPT_ASSERT( PotentiallyInvocableObject< Fun > );
 
   template< class Reducer >
   struct with_reducer_t
   {
+    ARGOT_CONCEPT_ASSERT( ReturnValueReducer< Reducer > );
+
     using bound_call_t = call_t::with_reducer< Reducer >;
 
-    // TODO(mattcalabrese) Check callability
-    template< class... P >
-    constexpr
-    std::invoke_result_t
-    < bound_call_t const&, call_fun_t< Fun const& >&&, P&&... >
-    operator ()( P&&... args ) const&
+    // TODO(mattcalabrese) Make this only exist if the Reducer is persistent.
+    template< class... P
+            , ARGOT_REQUIRES
+              ( ArgotInvocableWithPersistentReduction
+                < Reducer, Fun const&, P&&... >
+              )()
+            >
+    constexpr decltype( auto )
+    operator()( P&&... args ) const&
     {
-      return bound_call
-      ( call_object_base_detail::make_call_fun( fun )
+      return ARGOT_MOVE( bound_call )
+      ( detail_call_object_base::make_call_fun( fun )
       , ARGOT_FORWARD( P )( args )...
       );
     }
 
-    // TODO(mattcalabrese) Check callability
-    template< class... P >
-    constexpr
-    std::invoke_result_t
-    < bound_call_t&&, call_fun_t< Fun&& >&&, P&&... >
-    operator ()( P&&... args ) &&
+    template< class... P
+            , ARGOT_REQUIRES
+              ( ArgotInvocableWithReduction< Reducer, Fun&&, P&&... > )()
+            >
+    constexpr decltype( auto )
+    operator()( P&&... args ) &&
     {
       return ARGOT_MOVE( bound_call )
-      ( call_object_base_detail::make_call_fun( ARGOT_MOVE( fun ) )
+      ( detail_call_object_base::make_call_fun( ARGOT_MOVE( fun ) )
       , ARGOT_FORWARD( P )( args )...
       );
     }
@@ -101,51 +105,66 @@ struct call_object_base
     Fun fun;
   };
 
-  // TODO(mattcalabrese) Check callability
+   // TODO(mattcalabrese) Constrain
   template< class... P >
-  constexpr result_of_call_t< Fun const&, P... >
-  operator ()( P&&... args ) const&
+  constexpr result_of_call_t
+  < detail_call_object_base::call_fun_t< Fun const& >, P&&... >
+  operator()( P&&... args ) const&
   {
-    return call( call_object_base_detail::make_call_fun( fun )
-               , ARGOT_FORWARD( P )( args )...
-               );
+    return argot::call
+    ( detail_call_object_base::make_call_fun
+      ( static_cast< Fun const& >( *this ) )
+    , ARGOT_FORWARD( P )( args )...
+    );
   }
 
-  // TODO(mattcalabrese) Check callability
+   // TODO(mattcalabrese) Constrain
   template< class... P >
-  constexpr result_of_call_t< Fun, P... > operator ()( P&&... args ) &&
+  constexpr result_of_call_t
+  < detail_call_object_base::call_fun_t< Fun&& >, P&&... >
+  operator()( P&&... args ) &&
   {
-    return call( call_object_base_detail::make_call_fun( ARGOT_MOVE( fun ) )
-               , ARGOT_FORWARD( P )( args )...
-               );
+    return argot::call
+    ( detail_call_object_base::make_call_fun
+      ( detail_call_object_base::make_call_fun
+        ( static_cast< Fun&& >( ARGOT_MOVE( *this ) ) )
+      )
+    , ARGOT_FORWARD( P )( args )...
+    );
   }
 
-  // TODO(mattcalabrese) Check that Fun is a child type here.
-  template< class Reducer >
-  constexpr
-  ARGOT_REQUIRES( ReturnValueReducer< remove_cvref_t< Reducer > > )
-                ( Sinkable< Reducer&& > )
-                ( Sinkable< Fun const& > )
-  < with_reducer_t< remove_cvref_t< Reducer > > >
-  operator []( Reducer&& reducer ) const&
+  template< class Reducer
+          , ARGOT_REQUIRES( ReturnValueReducer< std::decay_t< Reducer > > )
+                          ( Sinkable< Reducer&& > )
+                          ( Sinkable< Fun const& > )
+                          ()
+          >
+  constexpr auto operator []( Reducer&& reducer ) const&
   {
-    return { call[ ARGOT_FORWARD( Reducer )( reducer ) ]
-           , static_cast< Fun const& >( *this )
-           };
+    return with_reducer_t< std::decay_t< Reducer > >
+    { argot::call[ ARGOT_FORWARD( Reducer )( reducer ) ]
+    , detail_call_object_base::make_call_fun
+      ( detail_call_object_base::make_call_fun
+        ( static_cast< Fun const& >( *this ) )
+      )
+    };
   }
 
-  // TODO(mattcalabrese) Check that Fun is a child type here.
-  template< class Reducer >
-  constexpr
-  ARGOT_REQUIRES( ReturnValueReducer< remove_cvref_t< Reducer > > )
-                ( Sinkable< Reducer&& > )
-                ( Sinkable< Fun&& > )
-  < with_reducer_t< remove_cvref_t< Reducer > > >
-  operator []( Reducer&& reducer ) &&
+  template< class Reducer
+          , ARGOT_REQUIRES( ReturnValueReducer< std::decay_t< Reducer > > )
+                          ( Sinkable< Reducer&& > )
+                          ( Sinkable< Fun&& > )
+                          ()
+          >
+  constexpr auto operator []( Reducer&& reducer ) &&
   {
-    return { call[ ARGOT_FORWARD( Reducer )( reducer ) ]
-           , ARGOT_FORWARD( Fun )( *this )
-           };
+    return with_reducer_t< std::decay_t< Reducer > >
+    { argot::call[ ARGOT_FORWARD( Reducer )( reducer ) ]
+    , detail_call_object_base::make_call_fun
+      ( detail_call_object_base::make_call_fun
+        ( static_cast< Fun&& >( ARGOT_MOVE( *this ) ) )
+      )
+    };
   }
 };
 

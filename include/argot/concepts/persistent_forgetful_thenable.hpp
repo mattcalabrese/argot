@@ -87,11 +87,11 @@ struct make_concept_map
 }  // namespace argot
 
 #ifdef ARGOT_HAS_BOOST_FUTURE_WITH_CONTINUATION
-#include <argot/concepts/persistent_forgetful_thenable/boost_shared_future.hpp>
+#include <argot/concepts/persistent_forgetful_thenable/detail/boost_shared_future.hpp>
 #endif
 
 #ifdef ARGOT_HAS_STLAB_FUTURE
-#include <argot/concepts/persistent_forgetful_thenable/stlab_future.hpp>
+#include <argot/concepts/persistent_forgetful_thenable/detail/stlab_future.hpp>
 #endif
 
 #endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS

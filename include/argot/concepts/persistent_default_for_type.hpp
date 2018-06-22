@@ -5,8 +5,8 @@
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#ifndef ARGOT_CONCEPTS_DEFAULT_FOR_TYPE_HPP_
-#define ARGOT_CONCEPTS_DEFAULT_FOR_TYPE_HPP_
+#ifndef ARGOT_CONCEPTS_PERSISTENT_DEFAULT_FOR_TYPE_HPP_
+#define ARGOT_CONCEPTS_PERSISTENT_DEFAULT_FOR_TYPE_HPP_
 
 #include <argot/concepts/default_for_type.hpp>
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
@@ -39,4 +39,4 @@ ARGOT_AUTO_CONCEPT( PersistentDefaultForType )
 
 }  // namespace argot
 
-#endif  // ARGOT_CONCEPTS_DEFAULT_FOR_TYPE_HPP_
+#endif  // ARGOT_CONCEPTS_PERSISTENT_DEFAULT_FOR_TYPE_HPP_

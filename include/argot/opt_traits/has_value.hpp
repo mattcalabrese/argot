@@ -12,6 +12,7 @@
 #include <argot/concepts/optional_like.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
+#include <argot/remove_cvref.hpp>
 
 namespace argot::opt_traits {
 

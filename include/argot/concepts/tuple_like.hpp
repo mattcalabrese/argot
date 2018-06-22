@@ -11,14 +11,15 @@
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/unqualified_object.hpp>
 #include <argot/concepts/valid.hpp>
-#include <argot/declval.hpp>
-#include <argot/detail/detection.hpp>
-#include <argot/forward.hpp>
 #include <argot/gen/explicit_concept.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
+
+#include <argot/declval.hpp>
+#include <argot/detail/detection.hpp>
+#include <argot/forward.hpp>
 
 #include <cstddef>
 #include <tuple>

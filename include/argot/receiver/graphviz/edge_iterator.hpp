@@ -15,22 +15,20 @@
 
 #include <graphviz/cgraph.h>
 
-namespace argot {
-namespace receiver {
-namespace graphviz {
+namespace argot::receiver::graphviz {
 
 template< graph_kind Kind >
 class edge_iterator_
-  : public iterator_facade
+  : public boost::iterator_facade
     < edge_iterator_< Kind >
     , edge_descriptor_< Kind >
-    , boost::bidirectional_traversal_tag
+    , boost::forward_traversal_tag
     , edge_descriptor_< Kind >&
     , int
     >
 {
   static_assert( is_valid_graph_kind_v< Kind >, "Invalid graph_kind value." );
-   iterator_core_access;
+  friend boost::iterator_core_access;
  public:
   // TODO(mattcalabrese) Possibly make this private.
   explicit edge_iterator_( Agedge_t* const edge = nullptr
@@ -50,7 +48,6 @@ class edge_iterator_
   }
 
   void increment() { edge = agnxtedge( graph, edge, node ); }
-  void decrement() { edge = agprvedge( graph, edge, node ); }
 
   Agedge_t* edge;
   Agnode_t* node;
@@ -69,8 +66,6 @@ using undirected_edge_iterator
 using strict_undirected_edge_iterator
   = edge_iterator_< graph_kind::strict_undirected >;
 
-}  // namespace argot::receiver::graphviz
-}  // namespace argot::receiver
-}  // namespace argot
+}  // namespace (argot::receiver::graphviz)
 
 #endif  // ARGOT_RECEIVER_GRAPHVIZ_EDGE_ITERATOR_HPP_

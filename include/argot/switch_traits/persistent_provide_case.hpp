@@ -17,6 +17,8 @@
 #include <argot/gen/requires.hpp>
 #include <argot/move.hpp>
 #include <argot/prov_traits/provide.hpp>
+#include <argot/receiver/nested_receiver.hpp>
+#include <argot/receiver/receiver_reference.hpp>
 #include <argot/switch_traits/argument_list_kinds_of_body_persistent.hpp>
 #include <argot/switch_traits/leading_argument_list_kinds_of_case_persistent.hpp>
 #include <argot/switch_traits/persistent_provide_isolated_case.hpp>

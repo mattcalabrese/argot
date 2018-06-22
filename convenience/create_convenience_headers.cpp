@@ -160,7 +160,6 @@ int main()
   create_convenience_header( include_root, path( "argot/tuple_traits" ) );
   create_convenience_header( include_root, path( "argot/union_traits" ) );
   create_convenience_header( include_root, path( "argot/variant_traits" ) );
-  create_convenience_header( include_root, path( "argot/visit" ) );
 
   create_convenience_header( include_root, path( "argot" ) );
 }

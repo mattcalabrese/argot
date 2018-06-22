@@ -47,11 +47,14 @@ class graph_
 
   graph_& operator =( graph_ const& other )
   {
-    return *this = graph_( other );
+    if( this != &other )
+      *this = graph_( other );
+
+    return *this;
   }
 
   // TODO(mattcalabrese) Change this to return expected
-  static boost::optional< graph >
+  static boost::optional< graph_ >
   construct( std::string name, kind const graph_kind /*, options*/ )
   {
     boost::optional< Agdesc_t > const graph_descriptor
@@ -60,8 +63,9 @@ class graph_
     // If we got a valid descriptor.
     if( graph_descriptor )
     {
+      // NOTE: graphviz is not const-correct
       unique_ptr_type underlying_graph_init
-      ( ::agopen( name.c_str(), graph_descriptor
+      ( ::agopen( const_cast< char* >( name.c_str() ), *graph_descriptor
                 , nullptr /*TODO(mattcalabrese) use*/
                 )
       );
@@ -75,7 +79,7 @@ class graph_
     }
   }
 
-  Agraph_t* raw() const { return underlying_graph.get(); }
+  Agraph_t* raw() { return underlying_graph.get(); }
   Agraph_t const* raw() const { return underlying_graph.get(); }
  private:
   struct deleter
@@ -101,14 +105,16 @@ using strict_undirected_graph = graph_< graph_kind::strict_undirected >;
 
 template< graph_kind Kind >
 std::pair
-< typename graph_traits< graph_< Kind > >::out_edge_iterator
-, typename graph_traits< graph_< Kind > >::out_edge_iterator
+< typename boost::graph_traits< graph_< Kind > >::out_edge_iterator
+, typename boost::graph_traits< graph_< Kind > >::out_edge_iterator
 >
-out_edges( typename graph_traits< graph_< Kind > >::vertex_descriptor vertex
-         , graph_< Kind > const& graph
-         )
+out_edges
+( typename boost::graph_traits< graph_< Kind > >::vertex_descriptor vertex
+, graph_< Kind > const& graph
+)
 {
-  using iterator = typename graph_traits< graph_< Kind > >::out_edge_iterator;
+  using iterator
+    = typename boost::graph_traits< graph_< Kind > >::out_edge_iterator;
 
   // The graphviz cgraph library is not const-correct.
   Agraph_t* const raw_graph = const_cast< Agraph_t* >( graph.raw() );
@@ -125,7 +131,8 @@ source( typename boost::graph_traits< graph_< Kind > >::edge_descriptor edge
       , graph_< Kind > const& graph
       )
 {
-  return ::agtail( edge.raw() );
+  // NOTE: Not qualified because it's a macro
+  return agtail( edge.raw() );
 }
 
 template< graph_kind Kind >
@@ -134,14 +141,16 @@ target( typename boost::graph_traits< graph_< Kind > >::edge_descriptor edge
       , graph_< Kind > const& graph
       )
 {
-  return ::aghead( edge.raw() );
+  // NOTE: Not qualified because it's a macro
+  return aghead( edge.raw() );
 }
 
 template< graph_kind Kind >
 typename boost::graph_traits< graph_< Kind > >::degree_size_type
-out_degree( typename graph_traits< graph_< Kind > >::vertex_descriptor vertex
-          , graph_< Kind > const& graph
-          )
+out_degree
+( typename boost::graph_traits< graph_< Kind > >::vertex_descriptor vertex
+, graph_< Kind > const& graph
+)
 {
   // The graphviz cgraph library is not const-correct.
   Agraph_t* const raw_graph = const_cast< Agraph_t* >( graph.raw() );
@@ -151,14 +160,16 @@ out_degree( typename graph_traits< graph_< Kind > >::vertex_descriptor vertex
 
 template< graph_kind Kind >
 std::pair
-< typename graph_traits< graph_< Kind > >::in_edge_iterator
-, typename graph_traits< graph_< Kind > >::in_edge_iterator
+< typename boost::graph_traits< graph_< Kind > >::in_edge_iterator
+, typename boost::graph_traits< graph_< Kind > >::in_edge_iterator
 >
-in_edges( typename graph_traits< graph_< Kind > >::vertex_descriptor vertex
-        , graph_< Kind > const& graph
-        )
+in_edges
+( typename boost::graph_traits< graph_< Kind > >::vertex_descriptor vertex
+, graph_< Kind > const& graph
+)
 {
-  using iterator = typename graph_traits< graph_< Kind > >::in_edge_iterator;
+  using iterator
+    = typename boost::graph_traits< graph_< Kind > >::in_edge_iterator;
 
   // The graphviz cgraph library is not const-correct.
   Agraph_t* const raw_graph = const_cast< Agraph_t* >( graph.raw() );
@@ -171,36 +182,41 @@ in_edges( typename graph_traits< graph_< Kind > >::vertex_descriptor vertex
 
 template< graph_kind Kind >
 typename boost::graph_traits< graph_< Kind > >::degree_size_type
-in_degree( typename graph_traits< graph_< Kind > >::vertex_descriptor vertex
-         , graph_< Kind > const& graph
-         )
+in_degree
+( typename boost::graph_traits< graph_< Kind > >::vertex_descriptor vertex
+, graph_< Kind > const& graph
+)
 {
   // The graphviz cgraph library is not const-correct.
   Agraph_t* const raw_graph = const_cast< Agraph_t* >( graph.raw() );
 
-  return ::agdegree( graph.raw(), vertex.raw(), TRUE, FALSE );
+  return ::agdegree( raw_graph, vertex.raw(), TRUE, FALSE );
 }
 
 template< graph_kind Kind >
 typename boost::graph_traits< graph_< Kind > >::degree_size_type
-degree( typename graph_traits< graph_< Kind > >::vertex_descriptor vertex
+degree( typename boost::graph_traits< graph_< Kind > >::vertex_descriptor vertex
       , graph_< Kind > const& graph
       )
 {
+  // The graphviz cgraph library is not const-correct.
+  Agraph_t* const raw_graph = const_cast< Agraph_t* >( graph.raw() );
+
   return ::agdegree( raw_graph, vertex.raw(), TRUE, TRUE );
 }
 
 template< graph_kind Kind >
 std::pair
-< typename graph_traits< graph_< Kind > >::adjacency_iterator
-, typename graph_traits< graph_< Kind > >::adjacency_iterator
+< typename boost::graph_traits< graph_< Kind > >::adjacency_iterator
+, typename boost::graph_traits< graph_< Kind > >::adjacency_iterator
 >
 adjacent_vertices
-( typename graph_traits< graph_< Kind > >::vertex_descriptor vertex
+( typename boost::graph_traits< graph_< Kind > >::vertex_descriptor vertex
 , graph_< Kind > const& graph
 )
 {
-  using iterator = typename graph_traits< graph_< Kind > >::adjacency_iterator;
+  using iterator
+    = typename boost::graph_traits< graph_< Kind > >::adjacency_iterator;
   auto out_edges_range = out_edges( vertex, graph );
 
   // The graphviz cgraph library is not const-correct.
@@ -214,12 +230,13 @@ adjacent_vertices
 
 template< graph_kind Kind >
 std::pair
-< typename graph_traits< graph_< Kind > >::vertex_iterator
-, typename graph_traits< graph_< Kind > >::vertex_iterator
+< typename boost::graph_traits< graph_< Kind > >::vertex_iterator
+, typename boost::graph_traits< graph_< Kind > >::vertex_iterator
 >
 vertices( graph_< Kind > const& graph )
 {
-  using iterator = typename graph_traits< graph_< Kind > >::vertex_iterator;
+  using iterator
+    = typename boost::graph_traits< graph_< Kind > >::vertex_iterator;
 
   // The graphviz cgraph library is not const-correct.
   Agraph_t* const raw_graph = const_cast< Agraph_t* >( graph.raw() );
@@ -232,9 +249,10 @@ vertices( graph_< Kind > const& graph )
 
 template< graph_kind Kind >
 typename boost::graph_traits< graph_< Kind > >::vertex_size_type
-num_vertices( typename graph_traits< graph_< Kind > >::vertex_descriptor vertex
-            , graph_< Kind > const& graph
-            )
+num_vertices
+( typename boost::graph_traits< graph_< Kind > >::vertex_descriptor vertex
+, graph_< Kind > const& graph
+)
 {
   // The graphviz cgraph library is not const-correct.
   Agraph_t* const raw_graph = const_cast< Agraph_t* >( graph.raw() );
@@ -304,7 +322,7 @@ void clear_vertex
 )
 {
   std::conditional_t
-  < Kind == graph_kind::undirected || Kind == graph-kind::strict_undirected
+  < Kind == graph_kind::undirected || Kind == graph_kind::strict_undirected
   , graph_detail::clear_vertex_undirected
   , graph_detail::clear_vertex_directed
   >::run( vertex, graph );
@@ -385,7 +403,7 @@ add_edge
   return std::conditional_t
   < Kind == graph_kind::directed || Kind == graph_kind::undirected
   , graph_detail::add_edge_impl
-  , graph_detail::add_edge_impl_strict
+  , graph_detail::add_edge_strict_impl
   >::run( source, target, graph );
 }
 
@@ -400,7 +418,7 @@ void remove_edge
     = ::agedge( graph.raw(), source.raw(), target.raw(), nullptr, FALSE );
 
   if( possibly_existing_edge != nullptr )
-    ::::agdeledge( graph.raw(), possibly_existing_edge );
+    ::agdeledge( graph.raw(), possibly_existing_edge );
 }
 
 template< graph_kind Kind >
@@ -409,7 +427,7 @@ void remove_edge
 , graph_< Kind >& graph
 )
 {
-  ::::agdeledge( graph.raw(), edge_it.raw() );
+  ::agdeledge( graph.raw(), edge_it.raw() );
 }
 
 template< graph_kind Kind >
@@ -418,7 +436,7 @@ void remove_edge
 , graph_< Kind >& graph
 )
 {
-  ::::agdeledge( graph.raw(), edge.raw() );
+  ::agdeledge( graph.raw(), edge.raw() );
 }
 
 template< class Predicate, graph_kind Kind >

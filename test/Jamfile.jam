@@ -6,6 +6,8 @@
 #   http://www.boost.org/LICENSE_1_0.txt)
 #==============================================================================
 
+import path ;
+import regex ;
 import testing ;
 
 run generate_visit.cpp ;
@@ -37,6 +39,7 @@ compile test_concepts_parameter_type.cpp ;
 compile test_concepts_reference.cpp ;
 compile test_concepts_same_type.cpp ;
 compile test_concepts_sinkable.cpp ;
+compile test_concepts_volatile_object.cpp ;
 
 # Refined support concepts
 compile test_concepts_transformation_with.cpp ;
@@ -142,10 +145,6 @@ run test_prov_switch_.cpp ;
 run test_prov_value_in_range.cpp ;
 run test_prov_value_in_set.cpp ;
 
-# Branching ArgumentProviders with default support
-# run test_prov_dynamic_cast_.cpp /boost//unit_test_framework ;
-# run test_prov_any_cast_.cpp /boost//unit_test_framework ;
-
 # Nonbranching TupleLike ArgumentProviders
 run test_prov_tuple_indices.cpp ;
 run test_prov_unpack.cpp ;
@@ -244,3 +243,27 @@ run test_fut_traits_stlab_future.cpp /boost//unit_test_framework /boost//thread 
 
 # Async call
 run test_async_call_basic.cpp /boost//unit_test_framework ;
+
+################################################################################
+## Test that each header file can be compiled into its own translation unit   ##
+## and can be included multiple times in the same translation unit.           ##
+################################################################################
+
+# TODO(mattcalabrese) Figure out why *all* concept headers fail here.
+headers = [ glob-tree-ex $(ARGOT_INCLUDE) : *.hpp : detail concepts ] ;
+
+for local file in $(headers)
+{
+    compile test_header.cpp
+        : <define>ARGOT_HEADER_TO_TEST=$(file)
+          <dependency>$(file)
+        : [ regex.replace [ path.relative-to $(ARGOT_INCLUDE) $(file) ] "/" "_" ] 
+        ;
+}
+
+################################################################################
+## Test that the master convenience header can be included in multiple        ##
+## translation units without multiple definition errors.                      ##
+################################################################################
+
+link test_all_translation_unit1.cpp test_all_translation_unit2.cpp  /boost//thread ;

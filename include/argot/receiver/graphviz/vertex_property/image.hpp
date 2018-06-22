@@ -12,7 +12,7 @@
 
 namespace argot::receiver::graphviz::vertex_property {
 
-ARGOT_RECEIVER_GRAPHVIZ_DETAIL_PROPERTY_DECL( vertex, id );
+ARGOT_RECEIVER_GRAPHVIZ_DETAIL_PROPERTY_DECL( vertex, image );
 
 }  // (namespace argot::receiver::graphviz::vertex_property)
 

@@ -6,5 +6,5 @@
 ==============================================================================*/
 # line 27 "../../concepts/invocable_object_with_each.hpp"
 template< class Invocable, class... ArgumentListKinds >
-struct InvocableObjectWithEach { static bool constexpr argot_gen_detail_is_auto_concept_v = true; template< class ArgotDetailSelf > using argot_gen_detail_is_modeled_impl = ::argot::auto_concept_detail::is_modeled_impl< ArgotDetailSelf >; using requirements = typename ::argot::requires_detail::requires_impl< UnqualifiedObject< Invocable > , InvocableWithEach< Invocable&&, P... > >::type; struct assertion : requirements::assertion {}; };
+struct InvocableObjectWithEach { static bool constexpr argot_gen_detail_is_auto_concept_v = true; template< class ArgotDetailSelf > using argot_gen_detail_is_modeled_impl = ::argot::auto_concept_detail::is_modeled_impl< ArgotDetailSelf >; using requirements = typename ::argot::requires_detail::requires_impl< UnqualifiedObject< Invocable > , InvocableWithEach< Invocable&&, ArgumentListKinds... > >::type; struct assertion : requirements::assertion {}; };
 # undef ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME

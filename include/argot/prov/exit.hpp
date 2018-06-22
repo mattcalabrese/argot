@@ -45,7 +45,7 @@ struct make_concept_map< ArgumentProvider< prov::exit_fn::impl > >
 
   template< class Receiver, ARGOT_REQUIRES( ArgumentReceiver< Receiver > )() >
   [[noreturn]] static impossible provide
-  ( prov::prov::exit_fn::impl self, Receiver&& /*receiver*/ ) noexcept
+  ( prov::exit_fn::impl self, Receiver&& /*receiver*/ ) noexcept
   {
     std::exit( self.exit_value );
   }
@@ -59,7 +59,7 @@ struct make_concept_map< PersistentArgumentProvider< prov::exit_fn::impl > >
 
   template< class Receiver, ARGOT_REQUIRES( ArgumentReceiver< Receiver > )() >
   [[noreturn]] static impossible provide
-  ( prov::prov::exit_fn::impl self, Receiver&& /*receiver*/ ) noexcept
+  ( prov::exit_fn::impl self, Receiver&& /*receiver*/ ) noexcept
   {
     std::exit( self.exit_value );
   }

@@ -8,8 +8,11 @@
 #ifndef ARGOT_VALUE_ZIPPER_HPP_
 #define ARGOT_VALUE_ZIPPER_HPP_
 
+#include <argot/value_list.hpp>
+
 #include <cstddef>
 #include <type_traits>
+#include <utility>
 
 namespace argot {
 

@@ -12,9 +12,7 @@
 
 #include <graphviz/cgraph.h>
 
-namespace argot {
-namespace receiver {
-namespace graphviz {
+namespace argot::receiver::graphviz {
 
 template< graph_kind Kind >
 class edge_descriptor_
@@ -42,8 +40,6 @@ using undirected_edge_descriptor
 using strict_undirected_edge_descriptor
   = edge_descriptor_< graph_kind::strict_undirected >;
 
-}  // namespace argot::receiver::graphviz
-}  // namespace argot::receiver
-}  // namespace argot
+}  // namespace (argot::receiver::graphviz)
 
 #endif  // ARGOT_RECEIVER_GRAPHVIZ_EDGE_DESCRIPTOR_HPP_

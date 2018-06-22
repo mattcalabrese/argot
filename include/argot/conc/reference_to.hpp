@@ -16,7 +16,7 @@ namespace argot::conc {
 inline constexpr auto reference_to = conc::conc_generator( prov::reference_to );
 
 using reference_to_fn
-  = conc::result_of_conc_generator_t< prov::reference_to_t >;
+  = conc::result_of_conc_generator_t< prov::reference_to_fn const& >;
 
 } // namespace (argot::conc)
 

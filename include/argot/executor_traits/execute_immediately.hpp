@@ -13,6 +13,7 @@
 #include <argot/concepts/immediate_executor.hpp>
 #include <argot/concepts/invocable_object_with.hpp>
 #include <argot/concepts/move_constructible.hpp>
+#include <argot/detail/invoker.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>

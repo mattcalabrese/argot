@@ -21,7 +21,7 @@ namespace graphviz {
 
 template< graph_kind Kind >
 class vertex_iterator_
-  : public iterator_facade
+  : public boost::iterator_facade
     < vertex_iterator_< Kind >
     , vertex_descriptor_< Kind >
     , boost::forward_traversal_tag
@@ -30,7 +30,7 @@ class vertex_iterator_
     >
 {
   static_assert( is_valid_graph_kind_v< Kind >, "Invalid graph_kind value." );
-   iterator_core_access;
+  friend boost::iterator_core_access;
  public:
   // TODO(mattcalabrese) Possibly make this private.
   explicit vertex_iterator_( Agnode_t* const node = nullptr

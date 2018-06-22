@@ -50,12 +50,12 @@ ARGOT_EXPLICIT_CONCEPT( Future )
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
 #ifdef ARGOT_HAS_BOOST_FUTURE_WITH_CONTINUATION
-#include <argot/concepts/future/boost_future.hpp>
-#include <argot/concepts/future/boost_shared_future.hpp>
+#include <argot/concepts/future/detail/boost_future.hpp>
+#include <argot/concepts/future/detail/boost_shared_future.hpp>
 #endif
 
 #ifdef ARGOT_HAS_STLAB_FUTURE
-#include <argot/concepts/future/stlab_future.hpp>
+#include <argot/concepts/future/detail/stlab_future.hpp>
 #endif
 
 #endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS

@@ -8,14 +8,12 @@
 #ifndef ARGOT_RECEIVER_HPP_
 #define ARGOT_RECEIVER_HPP_
 
-#include <argot/receiver/forgetful_reduced_conc_invoke.hpp>
 #include <argot/receiver/forward_result_to.hpp>
 #include <argot/receiver/forward_transformed_arguments.hpp>
 #include <argot/receiver/graphviz_dot.hpp>
 #include <argot/receiver/nested_receiver.hpp>
 #include <argot/receiver/provide_arguments_to.hpp>
 #include <argot/receiver/receiver_reference.hpp>
-#include <argot/receiver/reduced_async_invoke.hpp>
 #include <argot/receiver/reduced_invoke.hpp>
 #include <argot/receiver/return_argument_list_kinds.hpp>
 #include <argot/receiver/return_argument_references.hpp>

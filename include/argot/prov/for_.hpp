@@ -8,6 +8,10 @@
 #ifndef ARGOT_PROV_FOR_HPP_
 #define ARGOT_PROV_FOR_HPP_
 
+#include <argot/concepts/argument_provider.hpp>
+#include <argot/concepts/argument_type.hpp>
+#include <argot/concepts/invocable_with.hpp>
+#include <argot/concepts/same_type.hpp>
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/gen/transparent_requirement.hpp>

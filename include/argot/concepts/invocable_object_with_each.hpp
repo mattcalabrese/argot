@@ -29,7 +29,7 @@ ARGOT_CONCEPTS_DETAIL_CREATE_LINE_DIRECTIVE( __LINE__ )
 template< class Invocable, class... ArgumentListKinds >
 ARGOT_AUTO_CONCEPT( InvocableObjectWithEach )
 ( UnqualifiedObject< Invocable >
-, InvocableWithEach< Invocable&&, P... >
+, InvocableWithEach< Invocable&&, ArgumentListKinds... >
 );
 
 #include <argot/concepts/detail/preprocess_header_end.hpp>

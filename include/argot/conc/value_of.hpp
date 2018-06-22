@@ -15,7 +15,8 @@ namespace argot::conc {
 
 inline constexpr auto value_of = conc::conc_generator( prov::value_of );
 
-using value_of_fn = conc::result_of_conc_generator_t< prov::value_of_fn >;
+using value_of_fn
+  = conc::result_of_conc_generator_t< prov::value_of_fn const& >;
 
 } // namespace (argot::conc)
 
