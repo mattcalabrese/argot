@@ -9,12 +9,13 @@
 #define ARGOT_CONCEPTS_DESTRUCTIBLE_HPP_
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
-#include <argot/concepts/true.hpp>
+#include <argot/concepts/object.hpp>
 #include <argot/gen/explicit_concept.hpp>
 #include <argot/gen/make_concept_map.hpp>
-#include <argot/gen/requires.hpp>
 
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
+
+#include <argot/detail/detection.hpp>
 
 #include <type_traits>
 
@@ -36,6 +37,7 @@ ARGOT_CONCEPTS_DETAIL_CREATE_LINE_DIRECTIVE( __LINE__ )
 template< class T >
 ARGOT_EXPLICIT_CONCEPT( Destructible )
 (
+  Object< T >
 );
 
 #include <argot/concepts/detail/preprocess_header_end.hpp>
@@ -45,7 +47,9 @@ ARGOT_EXPLICIT_CONCEPT( Destructible )
 template< class T >
 struct make_concept_map
 < Destructible< T >
-, ARGOT_REQUIRES( True< std::is_destructible_v< T > > )<>
+, typename call_detail::detached_fast_enable_if
+  < std::is_destructible_v< T > >::_::template and_
+  < std::is_object_v< T > >::void_
 > {};
 
 }  // namespace argot

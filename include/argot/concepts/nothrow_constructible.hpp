@@ -1,20 +1,19 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2018 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#ifndef ARGOT_CONCEPTS_DEFAULT_CONSTRUCTIBLE_HPP_
-#define ARGOT_CONCEPTS_DEFAULT_CONSTRUCTIBLE_HPP_
+#ifndef ARGOT_CONCEPTS_NOTHROW_CONSTRUCTIBLE_HPP_
+#define ARGOT_CONCEPTS_NOTHROW_CONSTRUCTIBLE_HPP_
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
-#include <argot/concepts/object.hpp>
 #include <argot/gen/explicit_concept.hpp>
-#include <argot/gen/make_concept_map.hpp>
 
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
+#include <argot/concepts/constructible.hpp>
 #include <argot/detail/detection.hpp>
 
 #include <type_traits>
@@ -24,7 +23,7 @@
 namespace argot {
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
-s/default_constructible.h
+s/nothrow_constructible.h
 
 #ifdef ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 #include ARGOT_CONCEPTS_DETAIL_PREPROCESSED_HEADER
@@ -34,23 +33,25 @@ s/default_constructible.h
 
 ARGOT_CONCEPTS_DETAIL_CREATE_LINE_DIRECTIVE( __LINE__ )
 
-template< class T >
-ARGOT_EXPLICIT_CONCEPT( DefaultConstructible )
+template< class T, class... P >
+ARGOT_EXPLICIT_CONCEPT( NothrowConstructible )
 (
-  Object< T >
+  Constructible< T, P... >
 );
 
 #include <argot/concepts/detail/preprocess_header_end.hpp>
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-template< class T >
+template< class T, class... P >
 struct make_concept_map
-< DefaultConstructible< T >
-, call_detail::fast_enable_if_t< std::is_default_constructible_v< T > >
+< NothrowConstructible< T, P... >
+, typename call_detail::detached_fast_enable_if
+  < std::is_nothrow_constructible_v< T, P... > >::_::template and_
+  < std::is_object_v< T > >::void_
 > {};
+
 
 }  // namespace argot
 
-
-#endif  // ARGOT_CONCEPTS_DEFAULT_CONSTRUCTIBLE_HPP_
+#endif  // ARGOT_CONCEPTS_NOTHROW_CONSTRUCTIBLE_HPP_
