@@ -21,9 +21,10 @@ struct throwing_default_constructor { throwing_default_constructor() {} };
 struct no_default_constructor { no_default_constructor() = delete; };
 
 ARGOT_CONCEPT_ENSURE( NothrowDefaultConstructible< int > );
-ARGOT_CONCEPT_ENSURE( NothrowDefaultConstructible< int const > );
+ARGOT_CONCEPT_ENSURE( Not< NothrowDefaultConstructible< int const > > );
 ARGOT_CONCEPT_ENSURE( NothrowDefaultConstructible< int volatile > );
-ARGOT_CONCEPT_ENSURE( NothrowDefaultConstructible< int volatile const > );
+ARGOT_CONCEPT_ENSURE
+( Not< NothrowDefaultConstructible< int volatile const > > );
 
 ARGOT_CONCEPT_ENSURE( NothrowDefaultConstructible< int[5] > );
 

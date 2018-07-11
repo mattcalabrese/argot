@@ -44,11 +44,22 @@ ARGOT_EXPLICIT_CONCEPT( TriviallyDefaultConstructible )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
+namespace detail_trivially_default_constructible {
+
+template< class T >
+union one_member_union
+{
+  T member;
+};
+
+} // namespace argot(::detail_trivially_default_constructible)
+
 template< class T >
 struct make_concept_map
 < TriviallyDefaultConstructible< T >
-, call_detail::fast_enable_if_t
-  < std::is_trivially_default_constructible_v< T > >
+, typename call_detail::detached_fast_enable_if
+  < std::is_trivially_default_constructible_v< T > >::_::template and_
+  < sizeof( ::new T ) == sizeof( T* ) >::void_
 > {};
 
 }  // namespace argot

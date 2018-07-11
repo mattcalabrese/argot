@@ -47,10 +47,9 @@ ARGOT_EXPLICIT_CONCEPT( DefaultConstructible )
 template< class T >
 struct make_concept_map
 < DefaultConstructible< T >
-, call_detail::fast_enable_if_t< std::is_default_constructible_v< T > >
+, call_detail::fast_enable_if_t< sizeof( ::new T ) == sizeof( T* ) >
 > {};
 
 }  // namespace argot
-
 
 #endif  // ARGOT_CONCEPTS_DEFAULT_CONSTRUCTIBLE_HPP_

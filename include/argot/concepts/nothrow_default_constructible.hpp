@@ -17,6 +17,7 @@
 #include <argot/detail/detection.hpp>
 #include <argot/gen/make_concept_map.hpp>
 
+#include <new>
 #include <type_traits>
 
 #endif // ARGOT_GENERATE_PREPROCESSED_CONCEPTS
@@ -47,7 +48,7 @@ ARGOT_EXPLICIT_CONCEPT( NothrowDefaultConstructible )
 template< class T >
 struct make_concept_map
 < NothrowDefaultConstructible< T >
-, call_detail::fast_enable_if_t< std::is_nothrow_default_constructible_v< T > >
+, call_detail::fast_enable_if_t< noexcept( ::new( std::nothrow ) T ) >
 > {};
 
 }  // namespace argot

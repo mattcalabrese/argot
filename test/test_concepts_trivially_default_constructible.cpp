@@ -19,11 +19,24 @@ struct trivial_default_constructor {};
 struct nothrow_default_constructor{ nothrow_default_constructor() noexcept {} };
 struct throwing_default_constructor { throwing_default_constructor() {} };
 struct no_default_constructor { no_default_constructor() = delete; };
+struct int_member { int member; };
+struct default_initializer { int member = 5; };
 
 ARGOT_CONCEPT_ENSURE( TriviallyDefaultConstructible< int > );
-ARGOT_CONCEPT_ENSURE( TriviallyDefaultConstructible< int const > );
+ARGOT_CONCEPT_ENSURE( Not< TriviallyDefaultConstructible< int const > > );
 ARGOT_CONCEPT_ENSURE( TriviallyDefaultConstructible< int volatile > );
-ARGOT_CONCEPT_ENSURE( TriviallyDefaultConstructible< int volatile const > );
+ARGOT_CONCEPT_ENSURE
+( Not< TriviallyDefaultConstructible< int volatile const > > );
+
+ARGOT_CONCEPT_ENSURE( TriviallyDefaultConstructible< int_member > );
+ARGOT_CONCEPT_ENSURE
+( Not< TriviallyDefaultConstructible< int_member const > > );
+
+ARGOT_CONCEPT_ENSURE
+( Not< TriviallyDefaultConstructible< default_initializer > > );
+
+ARGOT_CONCEPT_ENSURE
+( Not< TriviallyDefaultConstructible< default_initializer const > > );
 
 ARGOT_CONCEPT_ENSURE( TriviallyDefaultConstructible< int[5] > );
 
