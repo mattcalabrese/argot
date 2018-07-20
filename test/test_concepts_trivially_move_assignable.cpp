@@ -10,38 +10,12 @@
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/gen/not.hpp>
 
+#include "regularity_archetypes.hpp"
+
 namespace {
 
 using argot::Not;
 using argot::TriviallyMoveAssignable;
-
-struct trivial_move_assign {
-  trivial_move_assign( trivial_move_assign const& ) = delete;
-  trivial_move_assign& operator=( trivial_move_assign&& ) = default;
-  trivial_move_assign& operator=( trivial_move_assign const& )
-    = delete;
-};
-
-struct nothrow_move_assign
-{
-  nothrow_move_assign( nothrow_move_assign const& ) = delete;
-  nothrow_move_assign& operator=( nothrow_move_assign&& ) noexcept;
-  nothrow_move_assign& operator=( nothrow_move_assign const& ) = delete;
-};
-
-struct throwing_move_assign
-{
-  throwing_move_assign( throwing_move_assign const& ) = delete;
-  throwing_move_assign& operator=( throwing_move_assign&& );
-  throwing_move_assign& operator=( throwing_move_assign const& ) = delete;
-};
-
-struct no_move_assign
-{
-  no_move_assign( no_move_assign const& ) = delete;
-  no_move_assign& operator=( no_move_assign&& ) = delete;
-  no_move_assign& operator=( no_move_assign const& ) = default;
-};
 
 ARGOT_CONCEPT_ENSURE( TriviallyMoveAssignable< int > );
 ARGOT_CONCEPT_ENSURE( Not< TriviallyMoveAssignable< int const > > );
@@ -50,11 +24,17 @@ ARGOT_CONCEPT_ENSURE( Not< TriviallyMoveAssignable< int volatile const > > );
 
 ARGOT_CONCEPT_ENSURE( Not< TriviallyMoveAssignable< int[5] > > );
 
-ARGOT_CONCEPT_ENSURE( TriviallyMoveAssignable< trivial_move_assign > );
-ARGOT_CONCEPT_ENSURE( Not< TriviallyMoveAssignable< nothrow_move_assign > > );
-ARGOT_CONCEPT_ENSURE( Not< TriviallyMoveAssignable< throwing_move_assign > > );
+ARGOT_CONCEPT_ENSURE
+( TriviallyMoveAssignable< argot_test::trivial_move_assign > );
 
-ARGOT_CONCEPT_ENSURE( Not< TriviallyMoveAssignable< no_move_assign > > );
+ARGOT_CONCEPT_ENSURE
+( Not< TriviallyMoveAssignable< argot_test::nothrow_move_assign > > );
+
+ARGOT_CONCEPT_ENSURE
+( Not< TriviallyMoveAssignable< argot_test::exceptional_move_assign > > );
+
+ARGOT_CONCEPT_ENSURE
+( Not< TriviallyMoveAssignable< argot_test::no_move_assign > > );
 
 ARGOT_CONCEPT_ENSURE( Not< TriviallyMoveAssignable< int& > > );
 ARGOT_CONCEPT_ENSURE( Not< TriviallyMoveAssignable< int&& > > );

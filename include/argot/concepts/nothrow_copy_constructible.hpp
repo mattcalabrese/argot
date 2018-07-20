@@ -14,9 +14,11 @@
 
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
+#include <argot/declval.hpp>
 #include <argot/detail/detection.hpp>
 #include <argot/gen/make_concept_map.hpp>
 
+#include <new>
 #include <type_traits>
 
 #endif // ARGOT_GENERATE_PREPROCESSED_CONCEPTS
@@ -47,9 +49,8 @@ ARGOT_EXPLICIT_CONCEPT( NothrowCopyConstructible )
 template< class T >
 struct make_concept_map
 < NothrowCopyConstructible< T >
-, typename call_detail::detached_fast_enable_if
-  < std::is_nothrow_copy_constructible_v< T > >::_::template and_
-  < std::is_object_v< T > >::void_
+, call_detail::fast_enable_if_t
+  < noexcept( ::new( std::nothrow ) T( ARGOT_DECLVAL( T const& ) ) ) >
 > {};
 
 }  // namespace argot

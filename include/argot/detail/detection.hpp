@@ -64,6 +64,8 @@ struct detached_fast_enable_if
   using apply = Result;
 
   using void_ = void;
+
+  using int_ = int;
 };
 
 template<>

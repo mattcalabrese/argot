@@ -10,38 +10,12 @@
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/gen/not.hpp>
 
+#include "regularity_archetypes.hpp"
+
 namespace {
 
 using argot::Not;
 using argot::NothrowCopyAssignable;
-
-struct trivial_copy_assign {
-  trivial_copy_assign( trivial_copy_assign const& ) = delete;
-  trivial_copy_assign& operator=( trivial_copy_assign&& ) = delete;
-  trivial_copy_assign& operator=( trivial_copy_assign const& )
-    = default;
-};
-
-struct nothrow_copy_assign
-{
-  nothrow_copy_assign( nothrow_copy_assign const& ) = delete;
-  nothrow_copy_assign& operator=( nothrow_copy_assign&& ) = delete;
-  nothrow_copy_assign& operator=( nothrow_copy_assign const& ) noexcept;
-};
-
-struct throwing_copy_assign
-{
-  throwing_copy_assign( throwing_copy_assign const& ) = delete;
-  throwing_copy_assign& operator=( throwing_copy_assign&& ) = delete;
-  throwing_copy_assign& operator=( throwing_copy_assign const& );
-};
-
-struct no_copy_assign
-{
-  no_copy_assign( no_copy_assign const& ) = delete;
-  no_copy_assign& operator=( no_copy_assign&& ) = default;
-  no_copy_assign& operator=( no_copy_assign const& ) = delete;
-};
 
 ARGOT_CONCEPT_ENSURE( NothrowCopyAssignable< int > );
 ARGOT_CONCEPT_ENSURE( Not< NothrowCopyAssignable< int const > > );
@@ -50,11 +24,17 @@ ARGOT_CONCEPT_ENSURE( Not< NothrowCopyAssignable< int volatile const > > );
 
 ARGOT_CONCEPT_ENSURE( Not< NothrowCopyAssignable< int[5] > > );
 
-ARGOT_CONCEPT_ENSURE( NothrowCopyAssignable< trivial_copy_assign > );
-ARGOT_CONCEPT_ENSURE( NothrowCopyAssignable< nothrow_copy_assign > );
-ARGOT_CONCEPT_ENSURE( Not< NothrowCopyAssignable< throwing_copy_assign > > );
+ARGOT_CONCEPT_ENSURE
+( NothrowCopyAssignable< argot_test::trivial_copy_assign > );
 
-ARGOT_CONCEPT_ENSURE( Not< NothrowCopyAssignable< no_copy_assign > > );
+ARGOT_CONCEPT_ENSURE
+( NothrowCopyAssignable< argot_test::nothrow_copy_assign > );
+
+ARGOT_CONCEPT_ENSURE
+( Not< NothrowCopyAssignable< argot_test::exceptional_copy_assign > > );
+
+ARGOT_CONCEPT_ENSURE
+( Not< NothrowCopyAssignable< argot_test::no_copy_assign > > );
 
 ARGOT_CONCEPT_ENSURE( Not< NothrowCopyAssignable< int& > > );
 ARGOT_CONCEPT_ENSURE( Not< NothrowCopyAssignable< int&& > > );

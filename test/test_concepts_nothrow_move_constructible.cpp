@@ -10,27 +10,12 @@
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/gen/not.hpp>
 
+#include "regularity_archetypes.hpp"
+
 namespace {
 
 using argot::Not;
 using argot::NothrowMoveConstructible;
-
-struct trivial_move_constructor {};
-
-struct nothrow_move_constructor
-{
-  nothrow_move_constructor( nothrow_move_constructor&& ) noexcept {}
-};
-
-struct throwing_move_constructor
-{
-  throwing_move_constructor( throwing_move_constructor&& ) {}
-};
-
-struct no_move_constructor
-{
-  no_move_constructor( no_move_constructor&& ) = delete;
-};
 
 ARGOT_CONCEPT_ENSURE( NothrowMoveConstructible< int > );
 ARGOT_CONCEPT_ENSURE( NothrowMoveConstructible< int const > );
@@ -39,12 +24,17 @@ ARGOT_CONCEPT_ENSURE( NothrowMoveConstructible< int volatile const > );
 
 ARGOT_CONCEPT_ENSURE( Not< NothrowMoveConstructible< int[5] > > );
 
-ARGOT_CONCEPT_ENSURE( NothrowMoveConstructible< trivial_move_constructor > );
-ARGOT_CONCEPT_ENSURE( NothrowMoveConstructible< nothrow_move_constructor > );
 ARGOT_CONCEPT_ENSURE
-( Not< NothrowMoveConstructible< throwing_move_constructor > > );
+( NothrowMoveConstructible< argot_test::trivial_move_constructor > );
 
-ARGOT_CONCEPT_ENSURE( Not< NothrowMoveConstructible< no_move_constructor > > );
+ARGOT_CONCEPT_ENSURE
+( NothrowMoveConstructible< argot_test::nothrow_move_constructor > );
+
+ARGOT_CONCEPT_ENSURE
+( Not< NothrowMoveConstructible< argot_test::exceptional_move_constructor > > );
+
+ARGOT_CONCEPT_ENSURE
+( Not< NothrowMoveConstructible< argot_test::no_move_constructor > > );
 
 ARGOT_CONCEPT_ENSURE( Not< NothrowMoveConstructible< int& > > );
 ARGOT_CONCEPT_ENSURE( Not< NothrowMoveConstructible< int&& > > );

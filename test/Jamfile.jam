@@ -10,6 +10,12 @@ import path ;
 import regex ;
 import testing ;
 
+project argot_test
+    : requirements <include>./include <implicit-dependency>/call
+    : usage-requirements <include>./include
+    : build-dir bin.v2
+    ;
+
 run generate_visit.cpp ;
 run generate_unparse.cpp ;
 
@@ -33,27 +39,11 @@ compile test_gen_or.cpp ;
 # Top-level helpers
 compile test_declval.cpp ;
 
-# Special-member-function concepts (non-mutating)
-compile test_concepts_default_constructible.cpp ;
-compile test_concepts_nothrow_default_constructible.cpp ;
-compile test_concepts_trivially_default_constructible.cpp ;
-compile test_concepts_move_constructible.cpp ;
-compile test_concepts_nothrow_move_constructible.cpp ;
-compile test_concepts_trivially_move_constructible.cpp ;
-compile test_concepts_copy_constructible.cpp ;
-compile test_concepts_nothrow_copy_constructible.cpp ;
-compile test_concepts_trivially_copy_constructible.cpp ;
-compile test_concepts_destructible.cpp ;
-compile test_concepts_nothrow_destructible.cpp ;
-compile test_concepts_trivially_destructible.cpp ;
+# Tests that the regularity testing suite works
+run test_regularity_testing.cpp ;
 
-# Special-member-function concepts (mutating)
-compile test_concepts_move_assignable.cpp ;
-compile test_concepts_nothrow_move_assignable.cpp ;
-compile test_concepts_trivially_move_assignable.cpp ;
-compile test_concepts_copy_assignable.cpp ;
-compile test_concepts_nothrow_copy_assignable.cpp ;
-compile test_concepts_trivially_copy_assignable.cpp ;
+# Regularity concepts (special-member-functions, swap, and hash)
+compile test_concepts_regularity.cpp ;
 
 # Foundational support concepts
 compile test_concepts_invocable_with.cpp ;

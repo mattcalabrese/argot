@@ -44,16 +44,7 @@ ARGOT_EXPLICIT_CONCEPT( TriviallyDefaultConstructible )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-namespace detail_trivially_default_constructible {
-
-template< class T >
-union one_member_union
-{
-  T member;
-};
-
-} // namespace argot(::detail_trivially_default_constructible)
-
+// TODO(mattcalabrese) Workaround standard traits that require destructible here
 template< class T >
 struct make_concept_map
 < TriviallyDefaultConstructible< T >

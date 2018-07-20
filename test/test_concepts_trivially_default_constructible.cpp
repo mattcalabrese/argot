@@ -10,17 +10,12 @@
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/gen/not.hpp>
 
+#include "regularity_archetypes.hpp"
+
 namespace {
 
 using argot::Not;
 using argot::TriviallyDefaultConstructible;
-
-struct trivial_default_constructor {};
-struct nothrow_default_constructor{ nothrow_default_constructor() noexcept {} };
-struct throwing_default_constructor { throwing_default_constructor() {} };
-struct no_default_constructor { no_default_constructor() = delete; };
-struct int_member { int member; };
-struct default_initializer { int member = 5; };
 
 ARGOT_CONCEPT_ENSURE( TriviallyDefaultConstructible< int > );
 ARGOT_CONCEPT_ENSURE( Not< TriviallyDefaultConstructible< int const > > );
@@ -28,29 +23,37 @@ ARGOT_CONCEPT_ENSURE( TriviallyDefaultConstructible< int volatile > );
 ARGOT_CONCEPT_ENSURE
 ( Not< TriviallyDefaultConstructible< int volatile const > > );
 
-ARGOT_CONCEPT_ENSURE( TriviallyDefaultConstructible< int_member > );
+ARGOT_CONCEPT_ENSURE( TriviallyDefaultConstructible< argot_test::int_member > );
 ARGOT_CONCEPT_ENSURE
-( Not< TriviallyDefaultConstructible< int_member const > > );
+( Not< TriviallyDefaultConstructible< argot_test::int_member const > > );
 
 ARGOT_CONCEPT_ENSURE
-( Not< TriviallyDefaultConstructible< default_initializer > > );
+( Not< TriviallyDefaultConstructible< argot_test::default_initializer > > );
 
 ARGOT_CONCEPT_ENSURE
-( Not< TriviallyDefaultConstructible< default_initializer const > > );
+( Not
+  < TriviallyDefaultConstructible< argot_test::default_initializer const > >
+);
 
 ARGOT_CONCEPT_ENSURE( TriviallyDefaultConstructible< int[5] > );
 
 ARGOT_CONCEPT_ENSURE
-( TriviallyDefaultConstructible< trivial_default_constructor > );
+( TriviallyDefaultConstructible< argot_test::trivial_default_constructor > );
 
 ARGOT_CONCEPT_ENSURE
-( Not< TriviallyDefaultConstructible< nothrow_default_constructor > > );
+( Not
+  < TriviallyDefaultConstructible< argot_test::nothrow_default_constructor > >
+);
 
 ARGOT_CONCEPT_ENSURE
-( Not< TriviallyDefaultConstructible< throwing_default_constructor > > );
+( Not
+  < TriviallyDefaultConstructible
+    < argot_test::exceptional_default_constructor >
+  >
+);
 
 ARGOT_CONCEPT_ENSURE
-( Not< TriviallyDefaultConstructible< no_default_constructor > > );
+( Not< TriviallyDefaultConstructible< argot_test::no_default_constructor > > );
 
 ARGOT_CONCEPT_ENSURE( Not< TriviallyDefaultConstructible< int& > > );
 

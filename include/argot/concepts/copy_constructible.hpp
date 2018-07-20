@@ -14,6 +14,7 @@
 
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
+#include <argot/declval.hpp>
 #include <argot/detail/detection.hpp>
 #include <argot/gen/make_concept_map.hpp>
 
@@ -47,9 +48,8 @@ ARGOT_EXPLICIT_CONCEPT( CopyConstructible )
 template< class T >
 struct make_concept_map
 < CopyConstructible< T >
-, typename call_detail::detached_fast_enable_if
-  < std::is_copy_constructible_v< T > >::_::template and_
-  < std::is_object_v< T > >::void_
+, call_detail::fast_enable_if_t
+  < sizeof( ::new T( ARGOT_DECLVAL( T const& ) ) ) == sizeof( T* ) >
 > {};
 
 

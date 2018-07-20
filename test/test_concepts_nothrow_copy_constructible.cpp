@@ -10,40 +10,12 @@
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/gen/not.hpp>
 
+#include "regularity_archetypes.hpp"
+
 namespace {
 
 using argot::Not;
 using argot::NothrowCopyConstructible;
-
-struct trivial_copy_constructor {
-  trivial_copy_constructor( trivial_copy_constructor&& ) = delete;
-  trivial_copy_constructor( trivial_copy_constructor const& ) = default;
-  trivial_copy_constructor& operator=( trivial_copy_constructor const& )
-    = delete;
-};
-
-struct nothrow_copy_constructor
-{
-  nothrow_copy_constructor( nothrow_copy_constructor&& ) = delete;
-  nothrow_copy_constructor( nothrow_copy_constructor const& ) noexcept {}
-  nothrow_copy_constructor& operator=( nothrow_copy_constructor const& )
-    = delete;
-};
-
-struct throwing_copy_constructor
-{
-  throwing_copy_constructor( throwing_copy_constructor&& ) = delete;
-  throwing_copy_constructor( throwing_copy_constructor const& ) {}
-  throwing_copy_constructor& operator=( throwing_copy_constructor const& )
-    = delete;
-};
-
-struct no_copy_constructor
-{
-  no_copy_constructor( no_copy_constructor&& ) = default;
-  no_copy_constructor( no_copy_constructor const& ) = delete;
-  no_copy_constructor& operator=( no_copy_constructor const& ) = default;
-};
 
 ARGOT_CONCEPT_ENSURE( NothrowCopyConstructible< int > );
 ARGOT_CONCEPT_ENSURE( NothrowCopyConstructible< int const > );
@@ -52,13 +24,17 @@ ARGOT_CONCEPT_ENSURE( NothrowCopyConstructible< int volatile const > );
 
 ARGOT_CONCEPT_ENSURE( Not< NothrowCopyConstructible< int[5] > > );
 
-ARGOT_CONCEPT_ENSURE( NothrowCopyConstructible< trivial_copy_constructor > );
-ARGOT_CONCEPT_ENSURE( NothrowCopyConstructible< nothrow_copy_constructor > );
+ARGOT_CONCEPT_ENSURE
+( NothrowCopyConstructible< argot_test::trivial_copy_constructor > );
 
 ARGOT_CONCEPT_ENSURE
-( Not< NothrowCopyConstructible< throwing_copy_constructor > > );
+( NothrowCopyConstructible< argot_test::nothrow_copy_constructor > );
 
-ARGOT_CONCEPT_ENSURE( Not< NothrowCopyConstructible< no_copy_constructor > > );
+ARGOT_CONCEPT_ENSURE
+( Not< NothrowCopyConstructible< argot_test::exceptional_copy_constructor > > );
+
+ARGOT_CONCEPT_ENSURE
+( Not< NothrowCopyConstructible< argot_test::no_copy_constructor > > );
 
 ARGOT_CONCEPT_ENSURE( Not< NothrowCopyConstructible< int& > > );
 ARGOT_CONCEPT_ENSURE( Not< NothrowCopyConstructible< int&& > > );

@@ -10,15 +10,12 @@
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/gen/not.hpp>
 
+#include "regularity_archetypes.hpp"
+
 namespace {
 
 using argot::Not;
 using argot::Destructible;
-
-struct trivial_destructor {};
-struct nothrow_destructor{ ~nothrow_destructor() noexcept; };
-struct throwing_destructor { ~throwing_destructor() noexcept( false ); };
-struct no_destructor { ~no_destructor() = delete; };
 
 ARGOT_CONCEPT_ENSURE( Destructible< int > );
 ARGOT_CONCEPT_ENSURE( Destructible< int const > );
@@ -27,11 +24,10 @@ ARGOT_CONCEPT_ENSURE( Destructible< int volatile const > );
 
 ARGOT_CONCEPT_ENSURE( Destructible< int[5] > );
 
-ARGOT_CONCEPT_ENSURE( Destructible< trivial_destructor > );
-ARGOT_CONCEPT_ENSURE( Destructible< nothrow_destructor > );
-ARGOT_CONCEPT_ENSURE( Destructible< throwing_destructor > );
-
-ARGOT_CONCEPT_ENSURE( Not< Destructible< no_destructor > > );
+ARGOT_CONCEPT_ENSURE( Destructible< argot_test::trivial_destructor > );
+ARGOT_CONCEPT_ENSURE( Destructible< argot_test::nothrow_destructor > );
+ARGOT_CONCEPT_ENSURE( Destructible< argot_test::exceptional_destructor > );
+ARGOT_CONCEPT_ENSURE( Not< Destructible< argot_test::no_destructor > > );
 
 ARGOT_CONCEPT_ENSURE( Not< Destructible< int& > > );
 

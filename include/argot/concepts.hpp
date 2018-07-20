@@ -74,6 +74,9 @@
 #include <argot/concepts/future_packager.hpp>
 #include <argot/concepts/greater.hpp>
 #include <argot/concepts/greater_equal.hpp>
+#include <argot/concepts/greater_equal_comparable.hpp>
+#include <argot/concepts/greater_than_comparable.hpp>
+#include <argot/concepts/hashable.hpp>
 #include <argot/concepts/higher_order_argument_provider.hpp>
 #include <argot/concepts/higher_order_concurrent_argument_provider.hpp>
 #include <argot/concepts/higher_order_expandable.hpp>
@@ -81,6 +84,7 @@
 #include <argot/concepts/higher_order_persistent_argument_provider.hpp>
 #include <argot/concepts/homogeneous_return_value_reducer.hpp>
 #include <argot/concepts/immediate_executor.hpp>
+#include <argot/concepts/inequality_comparable.hpp>
 #include <argot/concepts/instantiation_of.hpp>
 #include <argot/concepts/intrinsic_persistent_thenable.hpp>
 #include <argot/concepts/intrinsic_thenable.hpp>
@@ -94,6 +98,8 @@
 #include <argot/concepts/invoker.hpp>
 #include <argot/concepts/less.hpp>
 #include <argot/concepts/less_equal.hpp>
+#include <argot/concepts/less_equal_comparable.hpp>
+#include <argot/concepts/less_than_comparable.hpp>
 #include <argot/concepts/liftable_call.hpp>
 #include <argot/concepts/liftable_persistent_call.hpp>
 #include <argot/concepts/lvalue_reference.hpp>
@@ -105,8 +111,16 @@
 #include <argot/concepts/nothrow_copy_constructible.hpp>
 #include <argot/concepts/nothrow_default_constructible.hpp>
 #include <argot/concepts/nothrow_destructible.hpp>
+#include <argot/concepts/nothrow_equality_comparable.hpp>
+#include <argot/concepts/nothrow_greater_equal_comparable.hpp>
+#include <argot/concepts/nothrow_greater_than_comparable.hpp>
+#include <argot/concepts/nothrow_hashable.hpp>
+#include <argot/concepts/nothrow_inequality_comparable.hpp>
+#include <argot/concepts/nothrow_less_equal_comparable.hpp>
+#include <argot/concepts/nothrow_less_than_comparable.hpp>
 #include <argot/concepts/nothrow_move_assignable.hpp>
 #include <argot/concepts/nothrow_move_constructible.hpp>
+#include <argot/concepts/nothrow_swappable.hpp>
 #include <argot/concepts/object.hpp>
 #include <argot/concepts/optional_like.hpp>
 #include <argot/concepts/parameter_type.hpp>
@@ -148,6 +162,7 @@
 #include <argot/concepts/sinkable.hpp>
 #include <argot/concepts/std_integral_constant.hpp>
 #include <argot/concepts/stlab_executor.hpp>
+#include <argot/concepts/swappable.hpp>
 #include <argot/concepts/switch_body.hpp>
 #include <argot/concepts/switch_body_case.hpp>
 #include <argot/concepts/switch_body_default.hpp>
