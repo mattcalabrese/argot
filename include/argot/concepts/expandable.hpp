@@ -44,7 +44,6 @@ ARGOT_EXPLICIT_CONCEPT( Expandable )
 #include <argot/concepts/higher_order_argument_provider.hpp>
 #include <argot/concepts/persistent_argument_provider.hpp>
 #include <argot/concepts/expandable_argument_provider.hpp>
-#include <argot/concepts/persistent_expandable_argument_provider.hpp>
 #include <argot/concepts/same_type.hpp>
 #include <argot/concepts/sinkable.hpp>
 #include <argot/concepts/tuple_like.hpp>
@@ -204,36 +203,8 @@ struct make_concept_map
   }
 };
 
-template< class Provider >
-struct make_concept_map
-< PersistentArgumentProvider
-  < detail_expand_concept_map::higher_order_impl< Provider > >
-, ARGOT_REQUIRES( PersistentExpandableArgumentProvider< Provider > )<>
->
-{
-  template
-  < class Receiver
-  /*, ARGOT_REQUIRES
-    ( ArgumentReceiverOfKinds
-      < Receiver
-      , detail_expand_arguments_to::expanded_argument_types_t< Provider >
-      >
-    )
-    ()*/ // TODO(mattcalabrese) Fix this requirement
-  >
-  static constexpr decltype( auto )
-  provide( detail_expand_concept_map::higher_order_impl< Provider > const& self
-         , Receiver&& rec
-         )
-  {
-    return prov_traits::persistent_provide
-    ( self.provider
-    , detail_expandable::default_to_expand_arguments_to
-      ( receiver::receiver_reference( ARGOT_MOVE( rec ) ) )
-    );
-  }
-};
-
 }  // namespace argot
+
+#include <argot/concepts/persistent_expandable_argument_provider.hpp>
 
 #endif  // ARGOT_CONCEPTS_EXPANDABLE_HPP_

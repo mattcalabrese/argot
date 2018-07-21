@@ -261,8 +261,7 @@ run test_async_call_basic.cpp /boost//unit_test_framework ;
 ## and can be included multiple times in the same translation unit.           ##
 ################################################################################
 
-# TODO(mattcalabrese) Figure out why *all* concept headers fail here.
-headers = [ glob-tree-ex $(ARGOT_INCLUDE) : *.hpp : detail concepts ] ;
+headers = [ glob-tree-ex $(ARGOT_INCLUDE) : *.hpp : detail ] ;
 
 for local file in $(headers)
 {

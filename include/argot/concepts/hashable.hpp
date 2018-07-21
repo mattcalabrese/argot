@@ -15,6 +15,7 @@
 
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
+#include <argot/declval.hpp>
 #include <argot/detail/detection.hpp>
 
 #include <cstddef>

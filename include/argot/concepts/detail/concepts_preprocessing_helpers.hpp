@@ -32,7 +32,7 @@ BOOST_PP_STRINGIZE                                                             \
 #define ARGOT_CONCEPTS_DETAIL_OUTPUT_HEADER                                    \
 BOOST_PP_STRINGIZE                                                             \
 ( BOOST_PP_CAT                                                                 \
-  ( BOOST_PP_CAT( ../preproces                                                 \
+  ( BOOST_PP_CAT( preproces                                                    \
                 , ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()              \
                 )                                                              \
   , pp                                                                         \
@@ -54,7 +54,7 @@ ARGOT_DETAIL_HASH line line_num ARGOT_CONCEPTS_DETAIL_INPUT_HEADER
 
 #define ARGOT_CONCEPTS_DETAIL_PREPROCESSED_HEADER                              \
 BOOST_PP_CAT                                                                   \
-( BOOST_PP_CAT( <argot/concepts/preproces                                      \
+( BOOST_PP_CAT( <argot/concepts/detail/preproces                               \
               , ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                \
               )                                                                \
 , pp>                                                                          \
