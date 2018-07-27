@@ -59,12 +59,6 @@
 
 #include "regularity_facilities.hpp"
 
-// NOTE: This include appears in a #if 0 block just so that rebuilds take place
-//       whenever the <argot_test/regularity_archetype_maker.hpp> file changes.
-#if 0
-#include <argot_test/regularity_archetype_maker.hpp>
-#endif
-
 namespace argot_test {
 
 struct int_member { int member; };
@@ -79,6 +73,10 @@ struct regularity_archetype_base;
 
 template< class RegularityProfile >
 struct regularity_archetype;
+
+template< class... RegProfiles >
+using combined_regularity_archetype_t
+  = regularity_archetype< combine_regularity_profiles_t< RegProfiles... > >;
 
 #define ARGOT_TEST_DETAIL_DEFINE_ARCHETYPE_OF( kind )                          \
 using kind = regularity_archetype< kind ## _profile >
@@ -1217,6 +1215,7 @@ template
 , less_equal_comparable LessEqualComparableValue
 , greater_equal_comparable GreaterEqualComparableValue
 , greater_comparable GreaterComparableValue
+, swappable SwappableValue
 , hashable HashableValue
 >
 void swap
@@ -1234,7 +1233,7 @@ void swap
     , LessEqualComparableValue
     , GreaterEqualComparableValue
     , GreaterComparableValue
-    , swappable::no
+    , SwappableValue
     , HashableValue
     >
   >&
@@ -1252,7 +1251,7 @@ void swap
     , LessEqualComparableValue
     , GreaterEqualComparableValue
     , GreaterComparableValue
-    , swappable::no
+    , SwappableValue
     , HashableValue
     >
   >&
@@ -1437,7 +1436,7 @@ struct hash
 
   constexpr std::size_t operator ()( argument_type const& self ) const noexcept
   {
-    return hash< int >()( self.member );
+    return self.member;
   }
 };
 
@@ -1501,13 +1500,18 @@ struct hash
 
   constexpr std::size_t operator ()( argument_type const& self ) const
   {
-    return hash< int >()( self.member );
+    return self.member;
   }
 };
 
 } // namespace std
 
 namespace argot_test {
+namespace detail_regularity_archetype {
+
+struct make {};
+
+} // namespace argot_test(::detail_regularity_archetype)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Begin generation of regularity_archetype specializations                   //
@@ -1697,6 +1701,12 @@ BOOST_PP_CAT                                                                   \
 ( BOOST_PP_CAT( ARGOT_TEST_SPECIFY_SPECIAL_MEMBER_, member )                   \
 , BOOST_PP_CAT( _, BOOST_PP_CAT( ARGOT_TEST_REGULARITY_PROFILE_, member )() )  \
 )
+
+// NOTE: This include appears in a #if 0 block just so that rebuilds take place
+//       whenever the <argot_test/regularity_archetype_maker.hpp> file changes.
+#if 0
+#include <argot_test/regularity_archetype_maker.hpp>
+#endif
 
 #define BOOST_PP_ITERATION_PARAMS_1                                            \
 ( 3, ( 0,   4 /*number of destructor kinds*/                                   \

@@ -9,7 +9,10 @@
 #define ARGOT_DETAIL_HOLDER_HPP_
 
 #include <argot/concepts/constructible.hpp>
+#include <argot/concepts/invocable_with.hpp>
+#include <argot/concepts/same_type.hpp>
 #include <argot/detail/conditional.hpp>
+#include <argot/detail/constexpr_invoke.hpp>
 #include <argot/detail/give_qualifiers_to.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/forward.hpp>
@@ -30,6 +33,8 @@ template< class T > struct state_impl;
 template< class T > struct access_impl;
 
 struct make_holder_type_tag {};
+
+struct make_holder_type_with_result_tag {};
 
 template< class T >
 struct holder_type;
@@ -66,6 +71,27 @@ struct holder_type< T const >
   constexpr holder_type( make_holder_type_tag, P&&... args )
     noexcept( std::is_nothrow_constructible_v< LazyT, P&&... > )
     : v( ARGOT_FORWARD( P )( args )... ) {}
+
+  template
+  < class Fun, class... P
+  , ARGOT_REQUIRES
+    ( InvocableWith< Fun&&, P&&... > )
+    ( SameType
+      < std::remove_cv_t
+        < argot_detail::result_of_constexpr_invoke_t< Fun&&, P&&... > >
+      , std::remove_cv_t< T >
+      >
+    )
+    ()
+  >
+  constexpr holder_type
+  ( make_holder_type_with_result_tag, Fun&& fun, P&&... args )
+    noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
+    : v( argot_detail::constexpr_invoke
+         ( ARGOT_FORWARD( Fun )( fun )
+         , ARGOT_FORWARD( P )( args )...
+         )
+       ) {}
 
   template< class LazyT = T, class Source >
   constexpr holder_type& operator =( Source&& source )
@@ -258,7 +284,150 @@ struct emplace_holder_fn< T&& >
 };
 
 template< class T >
-inline emplace_holder_fn< T > constexpr emplace_holder{};
+constexpr emplace_holder_fn< T > emplace_holder{};
+
+template< class T >
+struct emplace_holder_with_result_fn
+{
+  template
+  < class Fun, class... P
+  , ARGOT_REQUIRES
+    ( InvocableWith< Fun&&, P&&... > )
+    ( SameType
+      < std::remove_cv_t
+        < argot_detail::result_of_constexpr_invoke_t< Fun&&, P&&... > >
+      , std::remove_cv_t< T >
+      >
+    )
+    ()
+  >
+  constexpr std::remove_cv_t< T > operator ()( Fun&& fun, P&&... args ) const
+  noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
+  {
+    return argot_detail::constexpr_invoke
+    ( ARGOT_FORWARD( Fun )( fun )
+    , ARGOT_FORWARD( P )( args )...
+    );
+  }
+};
+
+template< class T >
+struct emplace_holder_with_result_fn< T const >
+{
+  template
+  < class Fun, class... P
+  , ARGOT_REQUIRES
+    ( InvocableWith< Fun&&, P&&... > )
+    ( SameType
+      < std::remove_cv_t
+        < argot_detail::result_of_constexpr_invoke_t< Fun&&, P&&... > >
+      , std::remove_cv_t< T >
+      >
+    )
+    ()
+  >
+  constexpr holder< T const > operator ()( Fun&& fun, P&&... args ) const
+  noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
+  {
+    return holder< T const >
+    ( make_holder_type_with_result_tag()
+    , ARGOT_FORWARD( Fun )( fun )
+    , ARGOT_FORWARD( P )( args )...
+    );
+  }
+};
+
+template< class T >
+struct emplace_holder_with_result_fn< T& >
+{
+  template
+  < class Fun, class... P
+  , ARGOT_REQUIRES
+    ( InvocableWith< Fun&&, P&&... > )
+    ( SameType
+      < argot_detail::result_of_constexpr_invoke_t< Fun&&, P&&... >, T& >
+    )
+    ()
+  >
+  constexpr holder< T& > operator ()( Fun&& fun, P&&... args ) const
+  noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
+  {
+    return holder< T& >
+    ( make_holder_type_tag()
+    , argot_detail::constexpr_invoke
+      ( ARGOT_FORWARD( Fun )( fun )
+      , ARGOT_FORWARD( P )( args )...
+      )
+    );
+  }
+};
+
+template< class T >
+struct emplace_holder_with_result_fn< T&& >
+{
+  template
+  < class Fun, class... P
+  , ARGOT_REQUIRES
+    ( InvocableWith< Fun&&, P&&... > )
+    ( SameType
+      < argot_detail::result_of_constexpr_invoke_t< Fun&&, P&&... >, T&& >
+    )
+    ()
+  >
+  constexpr holder< T&& > operator ()( Fun&& fun, P&&... args ) const
+  noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
+  {
+    return holder< T&& >
+    ( make_holder_type_tag()
+    , argot_detail::constexpr_invoke
+      ( ARGOT_FORWARD( Fun )( fun )
+      , ARGOT_FORWARD( P )( args )...
+      )
+    );
+  }
+};
+
+template<>
+struct emplace_holder_with_result_fn< void >
+{
+  template
+  < class Fun, class... P
+  , ARGOT_REQUIRES
+    ( InvocableWith< Fun&&, P&&... > )
+    ( SameType
+      < std::remove_cv_t
+        < argot_detail::result_of_constexpr_invoke_t< Fun&&, P&&... > >
+      , void
+      >
+    )
+    ()
+  >
+  constexpr void_ operator ()( Fun&& fun, P&&... args ) const
+  noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
+  {
+    argot_detail::constexpr_invoke
+    ( ARGOT_FORWARD( Fun )( fun )
+    , ARGOT_FORWARD( P )( args )...
+    );
+
+    return void_();
+  }
+};
+
+template<>
+struct emplace_holder_with_result_fn< void const >
+  : emplace_holder_with_result_fn< void > {};
+
+template<>
+struct emplace_holder_with_result_fn< void volatile >
+  : emplace_holder_with_result_fn< void > {};
+
+template<>
+struct emplace_holder_with_result_fn< void volatile const >
+  : emplace_holder_with_result_fn< void > {};
+
+template< class T >
+constexpr emplace_holder_with_result_fn< T > emplace_holder_with_result{};
 
 template< class T >
 struct access_impl

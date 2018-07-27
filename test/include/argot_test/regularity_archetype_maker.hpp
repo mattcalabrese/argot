@@ -24,7 +24,13 @@ struct regularity_archetype_base
 
   ~regularity_archetype_base() = default;
 
-  int member;
+  std::size_t member;
+
+ private:
+  template< class >
+  friend struct regularity_archetype;
+
+  explicit regularity_archetype_base( std::size_t value ) : member( value ) {}
 };
 
 template
@@ -71,9 +77,29 @@ struct regularity_archetype
   ARGOT_TEST_SPECIFY_SPECIAL_MEMBER( copy_assign )
   ARGOT_TEST_SPECIFY_SPECIAL_MEMBER( destructor )
 
+  struct make_fn
+  {
+    constexpr
+    regularity_archetype operator ()( std::size_t value ) const noexcept
+    {
+      return regularity_archetype( detail_regularity_archetype::make(), value );
+    }
+  };
+
+  static constexpr make_fn make{};
+
   using regularity_archetype_base
         < DefaultConstructibleValue
         , MoveConstructibleValue
         , CopyConstructibleValue
         >::member;
+
+ private:
+  constexpr regularity_archetype
+  ( detail_regularity_archetype::make, std::size_t value ) noexcept
+    : regularity_archetype_base
+      < DefaultConstructibleValue
+      , MoveConstructibleValue
+      , CopyConstructibleValue
+      >( value ) {}
 };

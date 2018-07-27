@@ -13,6 +13,7 @@
 #include <argot/concepts/union_index.hpp>
 #include <argot/concepts/union_like.hpp>
 #include <argot/detail/conditional.hpp>
+#include <argot/detail/constexpr_invoke.hpp>
 #include <argot/detail/holder.hpp>
 #include <argot/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
@@ -41,9 +42,7 @@ template< class... T >
 class union_;
 
 // Note:
-//   The default definition is used only up to the preprocessed maximum and also
-//   does not handle the "sizeof...( T ) == 0" case.
-// TODO(mattcalabrese) Make copyable/assignable in the places it makes sense.
+//   The default definition is used only up to the preprocessed maximum.
 template< class... T >
 class union_
 {
@@ -56,6 +55,29 @@ class union_
       ::template alternative_type_t< T... >;
  public:
   union_() = default;
+
+  // TODO(mattcalabrese)
+  //   Branch to Constructible for better errors when non-const/non-ref/non-void
+  template
+  < std::size_t I, class Fun, class... P
+  , ARGOT_REQUIRES
+    ( UnionIndex< union_, I > )
+    ( BasicCallableWith
+      < call_detail::emplace_holder_with_result_fn< alternative_type_t< I > >
+          const&
+      , Fun&&, P&&...
+      >
+    )
+    ()
+  >
+  explicit constexpr union_
+  ( in_place_index_with_result_t< I > const /*in_place_index_with_result*/
+  , Fun&& fun, P&&... args
+  ) noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
+    : alternatives
+      ( in_place_index_with_result< I > /*in_place_index_with_result*/
+      , ARGOT_FORWARD( Fun )( fun ), ARGOT_FORWARD( P )( args )...
+      ) {}
 
   // TODO(mattcalabrese)
   //   Branch to Constructible for better errors when non-const/non-ref/non-void
@@ -94,6 +116,8 @@ class union_
   , std::initializer_list< U > ilist, P&&... args
   ) : alternatives
       ( std::in_place_index< I >, ilist, ARGOT_FORWARD( P )( args )... ) {}
+
+  // TODO(mattcalabrese) Emplace with result
 
   // TODO(mattcalabrese)
   //   Branch to Constructible for better errors when non-const/non-ref/non-void

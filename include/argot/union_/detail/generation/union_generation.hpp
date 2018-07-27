@@ -139,7 +139,7 @@ struct union_base
 < BOOST_PP_ENUM_PARAMS( ARGOT_DETAIL_UNION_CURR_NUM_ALTERNATIVES, T ) >
 {
   constexpr union_base() noexcept {}
-  ~union_base() {}
+  ~union_base() noexcept {}
 
 #define BOOST_PP_ITERATION_PARAMS_2                                            \
 ( 3, ( 0, ARGOT_DETAIL_UNION_CURR_NUM_ALTERNATIVES - 1                         \
@@ -203,7 +203,7 @@ struct union_base
 < BOOST_PP_ENUM_PARAMS( ARGOT_DETAIL_UNION_CURR_NUM_ALTERNATIVES, T ) >
 {
   union_base() = default;
-  ~union_base() {}
+  ~union_base() noexcept {}
 
 #define BOOST_PP_ITERATION_PARAMS_2                                            \
 ( 3, ( 0, ARGOT_DETAIL_UNION_CURR_NUM_ALTERNATIVES - 1                         \

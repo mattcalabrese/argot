@@ -222,9 +222,9 @@ struct execute_all_constexpr_tests_impl< test_list< TestHolders... > >
 
 #define ARGOT_TEST_FAIL_GT( lhs, rhs ) ARGOT_TEST_FAIL_REL( >, lhs, rhs )
 
-#define ARGOT_TEST_SUCCESS( prior_result )                                     \
+#define ARGOT_TEST_SUCCESS( ... )                                              \
   if( ::argot::call_detail::constexpr_block_result_t cached_result             \
-        = prior_result                                                         \
+        = __VA_ARGS__                                                          \
     ) {} else { return cached_result; }
 
 #endif // ARGOT_DETAIL_CONSTEXPR_TEST_HPP_

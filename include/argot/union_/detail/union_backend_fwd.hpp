@@ -9,6 +9,7 @@
 #define ARGOT_UNION_DETAIL_UNION_BACKEND_FWD_HPP_
 
 #include <argot/detail/conditional.hpp>
+#include <argot/detail/constexpr_invoke.hpp>
 
 #include <cstddef>
 #include <type_traits>
@@ -17,6 +18,16 @@ namespace argot {
 
 template< class... T >
 class union_;
+
+// TODO(mattcalabrese) Move in_place_index_with_result_t to separate file.
+template< std::size_t I >
+struct in_place_index_with_result_t
+{
+  explicit in_place_index_with_result_t() = default;
+};
+
+template< std::size_t I >
+constexpr in_place_index_with_result_t< I > in_place_index_with_result{};
 
 namespace detail_union {
 

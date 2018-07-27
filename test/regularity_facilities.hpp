@@ -47,27 +47,28 @@
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/gen/not.hpp>
 
+#include <algorithm>
 #include <type_traits>
 #include <utility>
 
 namespace argot_test {
 
-enum class default_constructible { no, trivial, noexcept_, exceptional };
-enum class move_constructible    { no, trivial, noexcept_, exceptional };
-enum class copy_constructible    { no, trivial, noexcept_, exceptional };
-enum class move_assignable       { no, trivial, noexcept_, exceptional };
-enum class copy_assignable       { no, trivial, noexcept_, exceptional };
-enum class destructible          { no, trivial, noexcept_, exceptional };
+enum class default_constructible { no, exceptional, noexcept_, trivial };
+enum class move_constructible    { no, exceptional, noexcept_, trivial };
+enum class copy_constructible    { no, exceptional, noexcept_, trivial };
+enum class move_assignable       { no, exceptional, noexcept_, trivial };
+enum class copy_assignable       { no, exceptional, noexcept_, trivial };
+enum class destructible          { no, exceptional, noexcept_, trivial };
 
-enum class equality_comparable      { no, noexcept_, exceptional };
-enum class inequality_comparable    { no, noexcept_, exceptional };
-enum class less_comparable          { no, noexcept_, exceptional };
-enum class less_equal_comparable    { no, noexcept_, exceptional };
-enum class greater_equal_comparable { no, noexcept_, exceptional };
-enum class greater_comparable       { no, noexcept_, exceptional };
+enum class equality_comparable      { no, exceptional, noexcept_ };
+enum class inequality_comparable    { no, exceptional, noexcept_ };
+enum class less_comparable          { no, exceptional, noexcept_ };
+enum class less_equal_comparable    { no, exceptional, noexcept_ };
+enum class greater_equal_comparable { no, exceptional, noexcept_ };
+enum class greater_comparable       { no, exceptional, noexcept_ };
 
-enum class swappable { no, noexcept_, exceptional };
-enum class hashable  { no, noexcept_, exceptional };
+enum class swappable { no, exceptional, noexcept_ };
+enum class hashable  { no, exceptional, noexcept_ };
 
 template
 < default_constructible DefaultConstructibleValue = default_constructible::no
@@ -130,6 +131,67 @@ struct regularity_profile
   static constexpr hashable hashable_kind
     = HashableValue;
 };
+
+
+struct underlying_value_less
+{
+  template< class Enum, std::enable_if_t< std::is_enum_v< Enum >, int > = 0 >
+  constexpr bool operator()( Enum const lhs, Enum const rhs ) const
+  {
+    using underlying_type = std::underlying_type_t< Enum >;
+
+    return   static_cast< underlying_type >( lhs )
+           < static_cast< underlying_type >( rhs );
+  }
+};
+
+template< class... RegProfs >
+struct combine_regularity_profiles
+{
+  using type
+    = regularity_profile
+      < std::max
+        ( { RegProfs::default_constructible_kind... }, underlying_value_less() )
+      , std::max
+        ( { RegProfs::move_constructible_kind... }, underlying_value_less() )
+      , std::max
+        ( { RegProfs::copy_constructible_kind... }, underlying_value_less() )
+      , std::max
+        ( { RegProfs::move_assignable_kind... }, underlying_value_less() )
+      , std::max
+        ( { RegProfs::copy_assignable_kind... }, underlying_value_less() )
+      , std::max
+        ( { RegProfs::destructible_kind... }, underlying_value_less() )
+      , std::max
+        ( { RegProfs::equality_comparable_kind... }, underlying_value_less() )
+      , std::max
+        ( { RegProfs::inequality_comparable_kind... }, underlying_value_less() )
+      , std::max
+        ( { RegProfs::less_comparable_kind... }, underlying_value_less() )
+      , std::max
+        ( { RegProfs::less_equal_comparable_kind... }, underlying_value_less() )
+      , std::max
+        ( { RegProfs::greater_equal_comparable_kind... }
+        , underlying_value_less()
+        )
+      , std::max
+        ( { RegProfs::greater_comparable_kind... }, underlying_value_less() )
+      , std::max
+        ( { RegProfs::swappable_kind... }, underlying_value_less() )
+      , std::max
+        ( { RegProfs::hashable_kind... }, underlying_value_less() )
+      >;
+};
+
+template<>
+struct combine_regularity_profiles<>
+{
+  using type = regularity_profile<>;
+};
+
+template< class... RegProfs >
+using combine_regularity_profiles_t
+  = typename combine_regularity_profiles< RegProfs... >::type;
 
 // TODO(mattcalabrese) Perform nested checks lazily
 #define ARGOT_TEST_DETAIL_CLASSIFY_SPECIAL_MEMBER( trait_root, concept_ )      \

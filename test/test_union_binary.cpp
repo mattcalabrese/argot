@@ -26,8 +26,11 @@
 #include <type_traits>
 #include <utility>
 
+#include "regularity_archetypes.hpp"
+#include "regularity_facilities.hpp"
+#include "regularity_testing.hpp"
+
 // TODO(mattcalabrese) Test "odd" types (references, void).
-// TODO(mattcalabrese) Test copy, assign, and triviality.
 
 namespace {
 
@@ -40,6 +43,9 @@ using argot::SameValue;
 using argot::UnionLike;
 
 using argot::union_;
+using argot::in_place_index_with_result;
+
+using argot_test::syntactic_regularity_profile_of_t;
 
 template< int I >
 using int_ = std::integral_constant< int, I >;
@@ -1125,6 +1131,2390 @@ ARGOT_REGISTER_TEST( test_union_destroy_not_constexpr )
       un.destroy< 1 >();
 
       ARGOT_TEST_TRUE( destroyed );
+    }
+  }
+
+  return 0;
+}
+
+ARGOT_REGISTER_TEST( test_union_regularity_homogeneous )
+{
+  using argot_test::combine_regularity_profiles_t;
+  using argot_test::regularity_archetype;
+
+  {
+    using alt_prof
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using arch = regularity_archetype< alt_prof >;
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::nothrow_destructor_profile
+        >;
+
+    using un = union_< arch, arch >;
+
+    ARGOT_CONCEPT_ENSURE
+    ( SameType
+      < syntactic_regularity_profile_of_t< un >
+      , expected_prof
+      >
+    );
+
+    ARGOT_TEST_SUCCESS
+    ( argot_test::test_regularity< un, expected_prof >
+      ( []{ return un( in_place_index_with_result< 0 >, arch::make, 0 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 1 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 3 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 5 ); }
+      )
+    );
+  }
+
+  {
+    using alt_prof
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using arch = regularity_archetype< alt_prof >;
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_move_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::nothrow_destructor_profile
+        >;
+
+    using un = union_< arch, arch >;
+
+    ARGOT_CONCEPT_ENSURE
+    ( SameType
+      < syntactic_regularity_profile_of_t< un >
+      , expected_prof
+      >
+    );
+
+    ARGOT_TEST_SUCCESS
+    ( argot_test::test_regularity< un, expected_prof >
+      ( []{ return un( in_place_index_with_result< 0 >, arch::make, 0 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 1 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 3 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 5 ); }
+      )
+    );
+  }
+
+  {
+    using alt_prof
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using arch = regularity_archetype< alt_prof >;
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_move_assign_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::nothrow_destructor_profile
+        >;
+
+    using un = union_< arch, arch >;
+
+    ARGOT_CONCEPT_ENSURE
+    ( SameType
+      < syntactic_regularity_profile_of_t< un >
+      , expected_prof
+      >
+    );
+
+    ARGOT_TEST_SUCCESS
+    ( argot_test::test_regularity< un, expected_prof >
+      ( []{ return un( in_place_index_with_result< 0 >, arch::make, 0 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 1 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 3 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 5 ); }
+      )
+    );
+  }
+
+  {
+    using alt_prof
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using arch = regularity_archetype< alt_prof >;
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_move_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_move_assign_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::nothrow_destructor_profile
+        , argot_test::nothrow_swap_profile
+        >;
+
+    using un = union_< arch, arch >;
+
+    ARGOT_CONCEPT_ENSURE
+    ( SameType
+      < syntactic_regularity_profile_of_t< un >
+      , expected_prof
+      >
+    );
+
+    ARGOT_TEST_SUCCESS
+    ( argot_test::test_regularity< un, expected_prof >
+      ( []{ return un( in_place_index_with_result< 0 >, arch::make, 0 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 1 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 3 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 5 ); }
+      )
+    );
+  }
+
+  {
+    using alt_prof
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch = regularity_archetype< alt_prof >;
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using un = union_< arch, arch >;
+
+    ARGOT_CONCEPT_ENSURE
+    ( SameType
+      < syntactic_regularity_profile_of_t< un >
+      , expected_prof
+      >
+    );
+
+    ARGOT_TEST_SUCCESS
+    ( argot_test::test_regularity< un, expected_prof >
+      ( []{ return un( in_place_index_with_result< 0 >, arch::make, 0 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 1 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 3 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 5 ); }
+      )
+    );
+  }
+
+  {
+    using alt_prof
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch = regularity_archetype< alt_prof >;
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_move_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using un = union_< arch, arch >;
+
+    ARGOT_CONCEPT_ENSURE
+    ( SameType
+      < syntactic_regularity_profile_of_t< un >
+      , expected_prof
+      >
+    );
+
+    ARGOT_TEST_SUCCESS
+    ( argot_test::test_regularity< un, expected_prof >
+      ( []{ return un( in_place_index_with_result< 0 >, arch::make, 0 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 1 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 3 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 5 ); }
+      )
+    );
+  }
+
+  {
+    using alt_prof
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch = regularity_archetype< alt_prof >;
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_move_assign_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using un = union_< arch, arch >;
+
+    ARGOT_CONCEPT_ENSURE
+    ( SameType
+      < syntactic_regularity_profile_of_t< un >
+      , expected_prof
+      >
+    );
+
+    ARGOT_TEST_SUCCESS
+    ( argot_test::test_regularity< un, expected_prof >
+      ( []{ return un( in_place_index_with_result< 0 >, arch::make, 0 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 1 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 3 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 5 ); }
+      )
+    );
+  }
+
+  {
+    using alt_prof
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch = regularity_archetype< alt_prof >;
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_move_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_move_assign_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        , argot_test::nothrow_swap_profile
+        >;
+
+    using un = union_< arch, arch >;
+
+    ARGOT_CONCEPT_ENSURE
+    ( SameType
+      < syntactic_regularity_profile_of_t< un >
+      , expected_prof
+      >
+    );
+
+    ARGOT_TEST_SUCCESS
+    ( argot_test::test_regularity< un, expected_prof >
+      ( []{ return un( in_place_index_with_result< 0 >, arch::make, 0 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 1 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 3 ); }
+      , []{ return un( in_place_index_with_result< 0 >, arch::make, 5 ); }
+      )
+    );
+  }
+
+  return 0;
+}
+
+ARGOT_REGISTER_TEST( test_union_regularity_heterogeneous )
+{
+  using argot_test::combine_regularity_profiles_t;
+  using argot_test::regularity_archetype;
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::nothrow_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::nothrow_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::nothrow_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::nothrow_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::nothrow_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::nothrow_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::nothrow_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::nothrow_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_move_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::nothrow_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_destructor_profile // because stdlib defect
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_move_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_destructor_profile // because stdlib defect
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_destructor_profile // because stdlib defect
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_move_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_destructor_profile // because stdlib defect
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_move_assign_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::nothrow_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_move_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_move_assign_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_move_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_move_assign_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        , argot_test::nothrow_swap_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_move_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_move_assign_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::exceptional_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_move_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_move_assign_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        , argot_test::nothrow_swap_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile\
+        , argot_test::trivial_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile\
+        , argot_test::trivial_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_move_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
+    }
+  }
+
+  {
+    using alt_prof0
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using alt_prof1
+      = combine_regularity_profiles_t
+        < argot_test::no_default_constructor_profile
+        , argot_test::trivial_copy_constructor_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    using arch0 = regularity_archetype< alt_prof0 >;
+    using arch1 = regularity_archetype< alt_prof1 >;
+
+    using expected_prof
+      = combine_regularity_profiles_t
+        < argot_test::nothrow_default_constructor_profile
+        , argot_test::trivial_move_assign_profile
+        , argot_test::trivial_copy_assign_profile
+        , argot_test::trivial_destructor_profile
+        >;
+
+    {
+      using un = union_< arch0, arch1 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch0::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch1::make, 5 ); }
+        )
+      );
+    }
+
+    {
+      using un = union_< arch1, arch0 >;
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < syntactic_regularity_profile_of_t< un >
+        , expected_prof
+        >
+      );
+
+      ARGOT_TEST_SUCCESS
+      ( argot_test::test_regularity< un, expected_prof >
+        ( []{ return un( in_place_index_with_result< 0 >, arch1::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 0 >, arch1::make, 5 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 0 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 1 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 3 ); }
+        , []{ return un( in_place_index_with_result< 1 >, arch0::make, 5 ); }
+        )
+      );
     }
   }
 
