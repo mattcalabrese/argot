@@ -52,6 +52,7 @@
 #include <argot/reducer.hpp>
 #include <argot/reducer_traits.hpp>
 #include <argot/remove_cvref.hpp>
+#include <argot/state_traits.hpp>
 #include <argot/switch_traits.hpp>
 #include <argot/tag.hpp>
 #include <argot/tuple_traits.hpp>

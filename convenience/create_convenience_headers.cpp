@@ -156,6 +156,7 @@ int main()
   create_convenience_header( include_root, path( "argot/receiver_traits" ) );
   create_convenience_header( include_root, path( "argot/reducer" ) );
   create_convenience_header( include_root, path( "argot/reducer_traits" ) );
+  create_convenience_header( include_root, path( "argot/state_traits" ) );
   create_convenience_header( include_root, path( "argot/switch_traits" ) );
   create_convenience_header( include_root, path( "argot/tuple_traits" ) );
   create_convenience_header( include_root, path( "argot/union_traits" ) );

@@ -42,16 +42,23 @@
 #include <argot/discriminated_union/detail/discriminated_union_base.hpp>
 #include <argot/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
-#include <argot/gen/make_concept_map.hpp>
-#include <argot/gen/requires.hpp>
 #include <argot/gen/is_modeled.hpp>
+#include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/or.hpp>
+#include <argot/gen/requires.hpp>
 #include <argot/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/index_of.hpp>
 #include <argot/prov/union_index.hpp>
 #include <argot/prov_traits/destructive_provide.hpp>
 #include <argot/remove_cvref.hpp>
+#include <argot/state_traits/equal_to.hpp>
+#include <argot/state_traits/greater_equal.hpp>
+#include <argot/state_traits/greater_than.hpp>
+#include <argot/state_traits/hash_combine.hpp>
+#include <argot/state_traits/less_equal.hpp>
+#include <argot/state_traits/less_than.hpp>
+#include <argot/state_traits/not_equal_to.hpp>
 #include <argot/union_traits/alternative_type.hpp>
 #include <argot/union_traits/index_type.hpp>
 #include <argot/union_traits/get.hpp>
@@ -402,25 +409,6 @@ class discriminated_union
     return ARGOT_MOVE( *this );
   }
  private:
-  constexpr std::size_t detail_argot_hash() const
-  noexcept( discriminated_union::nothrow_hashable_v )
-  {
-    return argot::call
-    ( [ this
-      , result = std::hash< index_type >()( index_value )
-      ]( auto const index ) mutable
-      {
-        boost::hash_combine
-        ( result
-        , union_traits::get< index.value >( alternatives )
-        );
-
-        return result;
-      }
-    , prov::index_of( *this )
-    );
-  }
- private:
   using base_t::partially_formed_index_value_v;
   using base_t::alternatives;
   using base_t::index_value;
@@ -552,9 +540,12 @@ struct hash_base
             ( variant_traits::index_of( self ) )
       ]( auto const index ) mutable
       {
-        boost::hash_combine
+        state_traits::hash_combine
+        < union_traits::alternative_type_t
+          < discriminated_union< T... >, index.value >
+        >
         ( result
-        , union_traits::get< index.value >( self.pure() )
+        , union_traits::get< index.value >( self )
         );
 
         return result;
@@ -581,15 +572,11 @@ struct make_concept_map< UnionLike< discriminated_union< T... > > >
   template< index_type Index, class Self >
   static constexpr auto&& get( Self&& self ) noexcept
   {
-    if constexpr
-    ( discriminated_union< T... >::template alternative_is_pure_v< Index > )
-      return union_traits::get< Index >
-      ( ARGOT_FORWARD( Self )( self ).alternatives );
-    else
-      return call_detail::access_holder
-      ( union_traits::get< Index >
-        ( ARGOT_FORWARD( Self )( self ).alternatives )
-      );
+    return call_detail::access_holder_if
+    < !discriminated_union< T... >::template alternative_is_pure_v< Index > >
+    ( union_traits::get< Index >
+      ( ARGOT_FORWARD( Self )( self ).alternatives )
+    );
   }
 };
 
@@ -633,19 +620,17 @@ noexcept
 }
 
 template< class... T
-        , ARGOT_REQUIRES
-          ( Equatable< call_detail::holder< T > >... )
-          ()
+        , ARGOT_REQUIRES( Equatable< T >... )()
         >
 constexpr bool operator ==( discriminated_union< T... > const& lhs
                           , discriminated_union< T... > const& rhs
                           )
 noexcept
 ( (    noexcept
-       ( access_raw_concept_map< Equatable< call_detail::holder< T > > >
-         ::equal_to( ARGOT_DECLVAL( call_detail::holder< T > const& )
-                   , ARGOT_DECLVAL( call_detail::holder< T > const& )
-                   )
+       ( state_traits::equal_to< T >
+         ( ARGOT_DECLVAL( T const& )
+         , ARGOT_DECLVAL( T const& )
+         )
        )
     && ...
   )
@@ -658,16 +643,12 @@ noexcept
          && argot::call
             ( [ &lhs, &rhs ]( auto const index ) -> bool
               {
-                return access_raw_concept_map
-                < Equatable
-                  < call_detail::holder
-                    < union_traits::alternative_type_t
-                      < discriminated_union< T... >, index.value >
-                    >
-                  >
-                >::equal_to
-                ( union_traits::get< index.value >( lhs.pure() )
-                , union_traits::get< index.value >( rhs.pure() )
+                return state_traits::equal_to
+                < union_traits::alternative_type_t
+                  < discriminated_union< T... >, index.value >
+                >
+                ( union_traits::get< index.value >( lhs )
+                , union_traits::get< index.value >( rhs )
                 );
               }
             , prov::union_index< discriminated_union< T... > >( lhs_index )
@@ -675,19 +656,17 @@ noexcept
 }
 
 template< class... T
-        , ARGOT_REQUIRES
-          ( Equatable< call_detail::holder< T > >... )
-          ()
+        , ARGOT_REQUIRES( Equatable< T >... )()
         >
 constexpr bool operator !=( discriminated_union< T... > const& lhs
                           , discriminated_union< T... > const& rhs
                           )
 noexcept
 ( (    noexcept
-       ( access_raw_concept_map< Equatable< call_detail::holder< T > > >
-         ::not_equal_to( ARGOT_DECLVAL( call_detail::holder< T > const& )
-                       , ARGOT_DECLVAL( call_detail::holder< T > const& )
-                       )
+       ( state_traits::not_equal_to< T >
+         ( ARGOT_DECLVAL( T const& )
+         , ARGOT_DECLVAL( T const& )
+         )
        )
     && ...
   )
@@ -700,16 +679,12 @@ noexcept
          || argot::call
             ( [ &lhs, &rhs ]( auto const index ) -> bool
               {
-                return access_raw_concept_map
-                < Equatable
-                  < call_detail::holder
-                    < union_traits::alternative_type_t
-                      < discriminated_union< T... >, index.value >
-                    >
-                  >
-                >::not_equal_to
-                ( union_traits::get< index.value >( lhs.pure() )
-                , union_traits::get< index.value >( rhs.pure() )
+                return state_traits::not_equal_to
+                < union_traits::alternative_type_t
+                  < discriminated_union< T... >, index.value >
+                >
+                ( union_traits::get< index.value >( lhs )
+                , union_traits::get< index.value >( rhs )
                 );
               }
             , prov::union_index< discriminated_union< T... > >( lhs_index )
@@ -717,19 +692,17 @@ noexcept
 }
 
 template< class... T
-        , ARGOT_REQUIRES
-          ( Comparable< call_detail::holder< T > >... )
-          ()
+        , ARGOT_REQUIRES( Comparable< T >... )()
         >
 constexpr bool operator <( discriminated_union< T... > const& lhs
                          , discriminated_union< T... > const& rhs
                          )
 noexcept
 ( (    noexcept
-       ( access_raw_concept_map< Comparable< call_detail::holder< T > > >
-         ::less_than( ARGOT_DECLVAL( call_detail::holder< T > const& )
-                    , ARGOT_DECLVAL( call_detail::holder< T > const& )
-                    )
+       ( state_traits::less_than< T >
+         ( ARGOT_DECLVAL( T const& )
+         , ARGOT_DECLVAL( T const& )
+         )
        )
     && ...
   )
@@ -742,17 +715,13 @@ noexcept
          ? argot::call
            ( [ &lhs, &rhs ]( auto const index ) -> bool
              {
-               return access_raw_concept_map
-               < Comparable
-                 < call_detail::holder
-                   < union_traits::alternative_type_t
-                     < discriminated_union< T... >, index.value >
-                   >
-                 >
-               >::less_than
-               ( union_traits::get< index.value >( lhs.pure() )
-               , union_traits::get< index.value >( rhs.pure() )
-               );
+                return state_traits::less_than
+                < union_traits::alternative_type_t
+                  < discriminated_union< T... >, index.value >
+                >
+                ( union_traits::get< index.value >( lhs )
+                , union_traits::get< index.value >( rhs )
+                );
              }
            , prov::union_index< discriminated_union< T... > >( lhs_index )
            )
@@ -760,19 +729,17 @@ noexcept
 }
 
 template< class... T
-        , ARGOT_REQUIRES
-          ( Comparable< call_detail::holder< T > >... )
-          ()
+        , ARGOT_REQUIRES( Comparable< T >... )()
         >
 constexpr bool operator <=( discriminated_union< T... > const& lhs
                           , discriminated_union< T... > const& rhs
                           )
 noexcept
 ( (    noexcept
-       ( access_raw_concept_map< Comparable< call_detail::holder< T > > >
-         ::less_equal( ARGOT_DECLVAL( call_detail::holder< T > const& )
-                     , ARGOT_DECLVAL( call_detail::holder< T > const& )
-                     )
+       ( state_traits::less_equal< T >
+         ( ARGOT_DECLVAL( T const& )
+         , ARGOT_DECLVAL( T const& )
+         )
        )
     && ...
   )
@@ -785,17 +752,13 @@ noexcept
          ? argot::call
            ( [ &lhs, &rhs ]( auto const index ) -> bool
              {
-               return access_raw_concept_map
-               < Comparable
-                 < call_detail::holder
-                   < union_traits::alternative_type_t
-                     < discriminated_union< T... >, index.value >
-                   >
-                 >
-               >::less_equal
-               ( union_traits::get< index.value >( lhs.pure() )
-               , union_traits::get< index.value >( rhs.pure() )
-               );
+                return state_traits::less_equal
+                < union_traits::alternative_type_t
+                  < discriminated_union< T... >, index.value >
+                >
+                ( union_traits::get< index.value >( lhs )
+                , union_traits::get< index.value >( rhs )
+                );
              }
            , prov::union_index< discriminated_union< T... > >( lhs_index )
            )
@@ -803,19 +766,17 @@ noexcept
 }
 
 template< class... T
-        , ARGOT_REQUIRES
-          ( Comparable< call_detail::holder< T > >... )
-          ()
+        , ARGOT_REQUIRES( Comparable< T >... )()
         >
 constexpr bool operator >=( discriminated_union< T... > const& lhs
                           , discriminated_union< T... > const& rhs
                           )
 noexcept
 ( (    noexcept
-       ( access_raw_concept_map< Comparable< call_detail::holder< T > > >
-         ::greater_equal( ARGOT_DECLVAL( call_detail::holder< T > const& )
-                        , ARGOT_DECLVAL( call_detail::holder< T > const& )
-                        )
+       ( state_traits::greater_equal< T >
+         ( ARGOT_DECLVAL( T const& )
+         , ARGOT_DECLVAL( T const& )
+         )
        )
     && ...
   )
@@ -828,17 +789,13 @@ noexcept
          ? argot::call
            ( [ &lhs, &rhs ]( auto const index ) -> bool
              {
-               return access_raw_concept_map
-               < Comparable
-                 < call_detail::holder
-                   < union_traits::alternative_type_t
-                     < discriminated_union< T... >, index.value >
-                   >
-                 >
-               >::greater_equal
-               ( union_traits::get< index.value >( lhs.pure() )
-               , union_traits::get< index.value >( rhs.pure() )
-               );
+                return state_traits::greater_equal
+                < union_traits::alternative_type_t
+                  < discriminated_union< T... >, index.value >
+                >
+                ( union_traits::get< index.value >( lhs )
+                , union_traits::get< index.value >( rhs )
+                );
              }
            , prov::union_index< discriminated_union< T... > >( lhs_index )
            )
@@ -846,19 +803,17 @@ noexcept
 }
 
 template< class... T
-        , ARGOT_REQUIRES
-          ( Comparable< call_detail::holder< T > >... )
-          ()
+        , ARGOT_REQUIRES( Comparable< T >... )()
         >
 constexpr bool operator >( discriminated_union< T... > const& lhs
                          , discriminated_union< T... > const& rhs
                          )
 noexcept
 ( (    noexcept
-       ( access_raw_concept_map< Comparable< call_detail::holder< T > > >
-         ::greater_than( ARGOT_DECLVAL( call_detail::holder< T > const& )
-                       , ARGOT_DECLVAL( call_detail::holder< T > const& )
-                       )
+       ( state_traits::greater_than< T >
+         ( ARGOT_DECLVAL( T const& )
+         , ARGOT_DECLVAL( T const& )
+         )
        )
     && ...
   )
@@ -871,17 +826,13 @@ noexcept
          ? argot::call
            ( [ &lhs, &rhs ]( auto const index ) -> bool
              {
-               return access_raw_concept_map
-               < Comparable
-                 < call_detail::holder
-                   < union_traits::alternative_type_t
-                     < discriminated_union< T... >, index.value >
-                   >
-                 >
-               >::greater_than
-               ( union_traits::get< index.value >( lhs.pure() )
-               , union_traits::get< index.value >( rhs.pure() )
-               );
+                return state_traits::greater_than
+                < union_traits::alternative_type_t
+                  < discriminated_union< T... >, index.value >
+                >
+                ( union_traits::get< index.value >( lhs )
+                , union_traits::get< index.value >( rhs )
+                );
              }
            , prov::union_index< discriminated_union< T... > >( lhs_index )
            )
@@ -898,10 +849,7 @@ namespace std {
 template< class... T >
 struct hash< ::argot::discriminated_union< T... > >
   : ::argot::argot_detail::conditional
-    < (    ARGOT_IS_MODELED
-           ( ::argot::Hashable< ::argot::call_detail::holder< T > > )
-        && ...
-      )
+    < ( ARGOT_IS_MODELED( ::argot::Hashable< T > ) && ... )
     >::template half_meta_apply
     < ::argot::detail_discriminated_union::hash_base
     , ::argot::detail_regular_bases::tainted_hash

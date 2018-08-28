@@ -56,7 +56,6 @@ ARGOT_CONCEPTS_DETAIL_CREATE_LINE_DIRECTIVE( __LINE__ )
 template< class T >
 ARGOT_EXPLICIT_CONCEPT( Comparable )
 (
-  Object< T >
 );
 
 #include <argot/concepts/detail/preprocess_header_end.hpp>
@@ -154,6 +153,74 @@ struct make_concept_map
       return ( lhs > rhs ) ? true : false;
     else
       return ( rhs < lhs ) ? true : false;
+  }
+};
+
+template< class T >
+struct make_concept_map< Comparable< T& > >
+{
+  static constexpr bool equal_to( T const& lhs, T const& rhs ) noexcept
+  {
+    return std::addressof( lhs ) == std::addressof( rhs );
+  }
+
+  static constexpr bool not_equal_to( T const& lhs, T const& rhs ) noexcept
+  {
+    return std::addressof( lhs ) != std::addressof( rhs );
+  }
+
+  static constexpr bool less_than( T const& lhs, T const& rhs ) noexcept
+  {
+    return std::addressof( lhs ) < std::addressof( rhs );
+  }
+
+  static constexpr bool less_equal( T const& lhs, T const& rhs ) noexcept
+  {
+    return std::addressof( lhs ) <= std::addressof( rhs );
+  }
+
+  static constexpr bool greater_equal( T const& lhs, T const& rhs ) noexcept
+  {
+    return std::addressof( lhs ) >= std::addressof( rhs );
+  }
+
+  static constexpr bool greater_than( T const& lhs, T const& rhs ) noexcept
+  {
+    return std::addressof( lhs ) > std::addressof( rhs );
+  }
+};
+
+template< class T >
+struct make_concept_map< Comparable< T&& > >
+{
+  static constexpr bool equal_to( T const& lhs, T const& rhs ) noexcept
+  {
+    return std::addressof( lhs ) == std::addressof( rhs );
+  }
+
+  static constexpr bool not_equal_to( T const& lhs, T const& rhs ) noexcept
+  {
+    return std::addressof( lhs ) != std::addressof( rhs );
+  }
+
+  static constexpr bool less_than( T const& lhs, T const& rhs ) noexcept
+  {
+    return std::addressof( lhs ) < std::addressof( rhs );
+  }
+
+  static constexpr bool less_equal( T const& lhs, T const& rhs ) noexcept
+  {
+    return std::addressof( lhs ) <= std::addressof( rhs );
+  }
+
+  static constexpr bool greater_equal( T const& lhs, T const& rhs ) noexcept
+  {
+    return std::addressof( lhs ) >= std::addressof( rhs );
+  }
+
+  static constexpr bool greater_than( T const& lhs, T const& rhs ) noexcept
+  {
+    return std::addressof( lhs ) > std::addressof( rhs );
   }
 };
 

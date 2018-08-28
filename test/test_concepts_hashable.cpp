@@ -18,9 +18,9 @@ using argot::Not;
 using argot::Hashable;
 
 ARGOT_CONCEPT_ENSURE( Hashable< int > );
-ARGOT_CONCEPT_ENSURE( Not< Hashable< int const > > );
-ARGOT_CONCEPT_ENSURE( Not< Hashable< int volatile > > );
-ARGOT_CONCEPT_ENSURE( Not< Hashable< int volatile const > > );
+ARGOT_CONCEPT_ENSURE( Hashable< int const > );
+ARGOT_CONCEPT_ENSURE( Hashable< int volatile > );
+ARGOT_CONCEPT_ENSURE( Hashable< int volatile const > );
 
 ARGOT_CONCEPT_ENSURE( Not< Hashable< int[5] > > );
 ARGOT_CONCEPT_ENSURE( Not< Hashable< int const[5] > > );
@@ -29,8 +29,8 @@ ARGOT_CONCEPT_ENSURE( Hashable< argot_test::nothrow_hash > );
 ARGOT_CONCEPT_ENSURE( Hashable< argot_test::exceptional_hash > );
 ARGOT_CONCEPT_ENSURE( Not< Hashable< argot_test::no_hash > > );
 
-ARGOT_CONCEPT_ENSURE( Not< Hashable< int& > > );
-ARGOT_CONCEPT_ENSURE( Not< Hashable< int&& > > );
+ARGOT_CONCEPT_ENSURE( Hashable< int& > );
+ARGOT_CONCEPT_ENSURE( Hashable< int&& > );
 
 ARGOT_CONCEPT_ENSURE( Not< Hashable< void > > );
 

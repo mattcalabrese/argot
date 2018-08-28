@@ -9,7 +9,6 @@
 #define ARGOT_CONCEPTS_EQUATABLE_HPP_
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
-#include <argot/concepts/object.hpp>
 #include <argot/declval.hpp>
 #include <argot/gen/explicit_concept.hpp>
 #include <argot/gen/make_concept_map.hpp>
@@ -21,6 +20,8 @@
 #include <argot/concepts/nothrow_equality_comparable.hpp>
 #include <argot/concepts/nothrow_inequality_comparable.hpp>
 #include <argot/gen/requires.hpp>
+
+#include <memory>
 
 #endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
@@ -40,7 +41,6 @@ ARGOT_CONCEPTS_DETAIL_CREATE_LINE_DIRECTIVE( __LINE__ )
 template< class T >
 ARGOT_EXPLICIT_CONCEPT( Equatable )
 (
-  Object< T >
 );
 
 #include <argot/concepts/detail/preprocess_header_end.hpp>
@@ -75,6 +75,38 @@ struct make_concept_map
       return ( lhs != rhs ) ? true : false;
     else
       return ( lhs == rhs ) ? false : true;
+  }
+};
+
+template< class T >
+struct make_concept_map< Equatable< T& > >
+{
+  // TODO(mattcalabrese) Don't do noexcept?
+  static constexpr bool equal_to( T const& lhs, T const& rhs ) noexcept
+  {
+    return std::addressof( lhs ) == std::addressof( rhs );
+  }
+
+  // TODO(mattcalabrese) Don't do noexcept?
+  static constexpr bool not_equal_to( T const& lhs, T const& rhs ) noexcept
+  {
+    return std::addressof( lhs ) != std::addressof( rhs );
+  }
+};
+
+template< class T >
+struct make_concept_map< Equatable< T&& > >
+{
+  // TODO(mattcalabrese) Don't do noexcept?
+  static constexpr bool equal_to( T const& lhs, T const& rhs ) noexcept
+  {
+    return std::addressof( lhs ) == std::addressof( rhs );
+  }
+
+  // TODO(mattcalabrese) Don't do noexcept?
+  static constexpr bool not_equal_to( T const& lhs, T const& rhs ) noexcept
+  {
+    return std::addressof( lhs ) != std::addressof( rhs );
   }
 };
 
