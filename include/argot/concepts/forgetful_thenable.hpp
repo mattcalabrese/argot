@@ -70,7 +70,7 @@ struct bound_function
   ARGOT_CONCEPT_ASSERT( InvocableObjectWith< Fun, ValueType&& > );
 
   ARGOT_NO_UNIQUE_ADDRESS Fun fun;
-  ARGOT_NO_UNIQUE_ADDRESS ValueType arg;  // TODO(mattcalabrese) Use holder to account for references
+  ARGOT_NO_UNIQUE_ADDRESS ValueType arg;  // TODO(mattcalabrese) Use contained to account for references
 
   constexpr void operator ()() &&
   {

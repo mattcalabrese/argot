@@ -21,8 +21,6 @@ BOOST_PP_ITERATION()
 #define ARGOT_DETAIL_UNION_CURR_IMPL_INDEX                                     \
 BOOST_PP_DEC( BOOST_PP_ITERATION() )
 
-// TODO(mattcalabrese) Remove destroy and emplace (only need get here)
-//                     Doing the above requires exposing holder typedef as well.
 template<>
 struct union_impl_preprocessed< ARGOT_DETAIL_UNION_CURR_IMPL_INDEX >
 {

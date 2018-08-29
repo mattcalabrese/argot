@@ -109,6 +109,7 @@
 #include <argot/concepts/move_assignable.hpp>
 #include <argot/concepts/move_constructible.hpp>
 #include <argot/concepts/net_executor.hpp>
+#include <argot/concepts/nothrow_assignable.hpp>
 #include <argot/concepts/nothrow_constructible.hpp>
 #include <argot/concepts/nothrow_copy_assignable.hpp>
 #include <argot/concepts/nothrow_copy_constructible.hpp>

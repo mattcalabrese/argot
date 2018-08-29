@@ -335,7 +335,7 @@ template< ignore_internal_nodes ignore_internal_nodes_value
         >
 class graphviz_dot_edges_t
 {
-  Os&& os;  // TODO(mattcalabrese) Use holder here
+  Os&& os;  // TODO(mattcalabrese) Use contained here
   std::string parent_name;
   TypeOutput type_output;
   ValOutput val_output;

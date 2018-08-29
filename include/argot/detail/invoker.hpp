@@ -11,6 +11,7 @@
 #include <argot/detail/constexpr_invoke.hpp>
 #include <argot/detail/detection.hpp>
 #include <argot/detail/sink.hpp>
+#include <argot/no_unique_address.hpp>
 
 #include <functional>
 #include <type_traits>
@@ -28,7 +29,7 @@ template< class Fun >
 struct invoker_by_reference
 {
   // TODO(mattcalabrese) Require Fun is a reference type
-  // TODO(mattcalabrese) Use call_detail::holder here
+  // TODO(mattcalabrese) Use contained here
   Fun&& fun;
 
   // TODO(mattcalabrese) Constrain
@@ -52,8 +53,8 @@ template< class Fun >
 struct invoker_by_value
 {
   // TODO(mattcalabrese) Require Fun is a reference type
-  // TODO(mattcalabrese) Use call_detail::holder here
-  Fun fun;
+  // TODO(mattcalabrese) Use contained here
+  ARGOT_NO_UNIQUE_ADDRESS Fun fun;
 
   // TODO(mattcalabrese) Constrain
   template< class... P >

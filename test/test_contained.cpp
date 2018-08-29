@@ -5,10 +5,11 @@
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
+#include <argot/contained.hpp>
+
 #include <argot/concepts/same_type.hpp>
 #include <argot/concepts/same_type.hpp>
 #include <argot/detail/constexpr_test.hpp>
-#include <argot/detail/holder.hpp>
 #include <argot/gen/concept_ensure.hpp>
 
 namespace {
@@ -55,26 +56,24 @@ struct dummy
 
 using argot::SameType;
 
-using argot::call_detail::holder;
-using argot::call_detail::access_holder;
-using argot::call_detail::holder_state;
-using argot::call_detail::make_holder_type_tag;
-using argot::call_detail::make_holder;
+using argot::contained;
+using argot::make_contained;
+using argot::access_contained;
 
-ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_unqualified )
+ARGOT_REGISTER_CONSTEXPR_TEST( test_contained_unqualified )
 {
-  using holder_type = holder< dummy >;
+  using contained_t = contained< dummy >;
 
   dummy source( 5 );
 
   // Test construct by copy.
-  holder_type object = make_holder< dummy >( source );
+  contained_t object = make_contained< dummy >( source );
   ARGOT_TEST_EQ( source.state, dummy_state::valid );
   ARGOT_TEST_EQ( source.value, 5 );
 
   // Test construct by move.
   {
-    holder_type object = make_holder< dummy >( std::move( source ) );
+    contained_t object = make_contained< dummy >( std::move( source ) );
     (void)object;
     ARGOT_TEST_EQ( source.state, dummy_state::moved_from );
     ARGOT_TEST_EQ( source.value, 0 );
@@ -82,8 +81,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_unqualified )
 
   // lvalue
   {
-    holder_type& self = object;
-    decltype( auto ) accessed_value = ( access_holder )( self );
+    contained_t& self = object;
+    decltype( auto ) accessed_value = access_contained( self );
 
     using accessed_type = decltype( accessed_value );
     ARGOT_CONCEPT_ENSURE( SameType< accessed_type, dummy& > );
@@ -94,8 +93,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_unqualified )
 
   // const lvalue
   {
-    holder_type const& self = object;
-    decltype( auto ) accessed_value = ( access_holder )( self );
+    contained_t const& self = object;
+    decltype( auto ) accessed_value = access_contained( self );
 
     using accessed_type = decltype( accessed_value );
     ARGOT_CONCEPT_ENSURE( SameType< accessed_type, const dummy& > );
@@ -106,8 +105,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_unqualified )
 
   // rvalue
   {
-    holder_type&& self = std::move( object );
-    decltype( auto ) accessed_value = ( access_holder )( std::move( self ) );
+    contained_t&& self = std::move( object );
+    decltype( auto ) accessed_value = access_contained( std::move( self ) );
 
     using accessed_type = decltype( accessed_value );
     ARGOT_CONCEPT_ENSURE( SameType< accessed_type, dummy&& > );
@@ -118,9 +117,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_unqualified )
 
   // copy
   {
-    holder_type copied_object = object;
-    dummy& source_value = ( access_holder )( object );
-    dummy& copied_value = ( access_holder )( copied_object );
+    contained_t copied_object = object;
+    dummy& source_value = access_contained( object );
+    dummy& copied_value = access_contained( copied_object );
     ARGOT_TEST_EQ( source_value.state, dummy_state::valid );
     ARGOT_TEST_EQ( source_value.value, 5 );
     ARGOT_TEST_EQ( copied_value.state, dummy_state::valid );
@@ -129,9 +128,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_unqualified )
 
   // move
   {
-    holder_type moved_object = std::move( object );
-    dummy& source_value = ( access_holder )( object );
-    dummy& moved_value = ( access_holder )( moved_object );
+    contained_t moved_object = std::move( object );
+    dummy& source_value = access_contained( object );
+    dummy& moved_value = access_contained( moved_object );
     ARGOT_TEST_EQ( source_value.state, dummy_state::moved_from );
     ARGOT_TEST_EQ( source_value.value, 0 );
     ARGOT_TEST_EQ( moved_value.state, dummy_state::valid );
@@ -141,28 +140,30 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_unqualified )
   return 0;
 }
 
-ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_const )
+ARGOT_REGISTER_CONSTEXPR_TEST( test_contained_const )
 {
-  using holder_type = holder< dummy const >;
+  using contained_t = contained< dummy const >;
 
   dummy source( 5 );
 
   // Test construct by copy.
-  holder_type object( make_holder_type_tag(), source );
+  contained_t object = make_contained< dummy const >( source );
   ARGOT_TEST_EQ( source.state, dummy_state::valid );
   ARGOT_TEST_EQ( source.value, 5 );
 
   // Test construct by move.
   {
-    holder_type moved_in_object( make_holder_type_tag(), std::move( source ) );
+    contained_t moved_in_object
+      = make_contained< dummy const >( std::move( source ) );
+    (void)moved_in_object; // TODO(mattcalabrese) test new value.
     ARGOT_TEST_EQ( source.state, dummy_state::moved_from );
     ARGOT_TEST_EQ( source.value, 0 );
   }
 
   // lvalue
   {
-    holder_type& self = object;
-    decltype( auto ) accessed_value = ( access_holder )( self );
+    contained_t& self = object;
+    decltype( auto ) accessed_value = access_contained( self );
 
     using accessed_type = decltype( accessed_value );
     ARGOT_CONCEPT_ENSURE( SameType< accessed_type, const dummy& > );
@@ -173,8 +174,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_const )
 
   // const lvalue
   {
-    holder_type const& self = object;
-    decltype( auto ) accessed_value = ( access_holder )( self );
+    contained_t const& self = object;
+    decltype( auto ) accessed_value = access_contained( self );
 
     using accessed_type = decltype( accessed_value );
     ARGOT_CONCEPT_ENSURE( SameType< accessed_type, const dummy& > );
@@ -185,8 +186,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_const )
 
   // rvalue
   {
-    holder_type&& self = std::move( object );
-    decltype( auto ) accessed_value = ( access_holder )( std::move( self ) );
+    contained_t&& self = std::move( object );
+    decltype( auto ) accessed_value = access_contained( std::move( self ) );
 
     using accessed_type = decltype( accessed_value );
     ARGOT_CONCEPT_ENSURE( SameType< accessed_type, dummy&& > );
@@ -197,9 +198,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_const )
 
   // copy
   {
-    holder_type copied_object = object;
-    dummy const& source_value = ( access_holder )( object );
-    dummy const& copied_value = ( access_holder )( copied_object );
+    contained_t copied_object = object;
+    dummy const& source_value = access_contained( object );
+    dummy const& copied_value = access_contained( copied_object );
     ARGOT_TEST_EQ( source_value.state, dummy_state::valid );
     ARGOT_TEST_EQ( source_value.value, 5 );
     ARGOT_TEST_EQ( copied_value.state, dummy_state::valid );
@@ -208,9 +209,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_const )
 
   // move
   {
-    holder_type moved_object = std::move( object );
-    dummy const& source_value = ( access_holder )( object );
-    dummy const& moved_value = ( access_holder )( moved_object );
+    contained_t moved_object = std::move( object );
+    dummy const& source_value = access_contained( object );
+    dummy const& moved_value = access_contained( moved_object );
     ARGOT_TEST_EQ( source_value.state, dummy_state::moved_from );
     ARGOT_TEST_EQ( source_value.value, 0 );
     ARGOT_TEST_EQ( moved_value.state, dummy_state::valid );
@@ -220,21 +221,21 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_const )
   return 0;
 }
 
-ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_lvalue_reference )
+ARGOT_REGISTER_CONSTEXPR_TEST( test_contained_lvalue_reference )
 {
-  using holder_type = holder< dummy& >;
+  using contained_t = contained< dummy& >;
 
   dummy source( 5 );
 
   // Test construct.
-  holder_type object( make_holder_type_tag(), source );
+  contained_t object = make_contained< dummy& >( source );
   ARGOT_TEST_EQ( source.state, dummy_state::valid );
   ARGOT_TEST_EQ( source.value, 5 );
 
   // lvalue
   {
-    holder_type& self = object;
-    decltype( auto ) accessed_value = ( access_holder )( self );
+    contained_t& self = object;
+    decltype( auto ) accessed_value = access_contained( self );
 
     using accessed_type = decltype( accessed_value );
     ARGOT_CONCEPT_ENSURE( SameType< accessed_type, dummy& > );
@@ -246,8 +247,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_lvalue_reference )
 
   // const lvalue
   {
-    holder_type const& self = object;
-    decltype( auto ) accessed_value = ( access_holder )( self );
+    contained_t const& self = object;
+    decltype( auto ) accessed_value = access_contained( self );
 
     using accessed_type = decltype( accessed_value );
     ARGOT_CONCEPT_ENSURE( SameType< accessed_type, dummy& > );
@@ -259,8 +260,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_lvalue_reference )
 
   // rvalue
   {
-    holder_type&& self = std::move( object );
-    decltype( auto ) accessed_value = ( access_holder )( std::move( self ) );
+    contained_t&& self = std::move( object );
+    decltype( auto ) accessed_value = access_contained( std::move( self ) );
 
     using accessed_type = decltype( accessed_value );
     ARGOT_CONCEPT_ENSURE( SameType< accessed_type, dummy& > );
@@ -272,9 +273,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_lvalue_reference )
 
   // copy
   {
-    holder_type copied_object = object;
-    dummy& source_value = ( access_holder )( object );
-    dummy& copied_value = ( access_holder )( copied_object );
+    contained_t copied_object = object;
+    dummy& source_value = access_contained( object );
+    dummy& copied_value = access_contained( copied_object );
     ARGOT_TEST_EQ( source_value.state, dummy_state::valid );
     ARGOT_TEST_EQ( source_value.value, 5 );
     ARGOT_TEST_EQ( copied_value.state, dummy_state::valid );
@@ -283,9 +284,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_lvalue_reference )
 
   // move
   {
-    holder_type moved_object = std::move( object );
-    dummy& source_value = ( access_holder )( object );
-    dummy& moved_value = ( access_holder )( moved_object );
+    contained_t moved_object = std::move( object );
+    dummy& source_value = access_contained( object );
+    dummy& moved_value = access_contained( moved_object );
     ARGOT_TEST_EQ( source_value.state, dummy_state::valid );
     ARGOT_TEST_EQ( source_value.value, 5 );
     ARGOT_TEST_EQ( moved_value.state, dummy_state::valid );
@@ -295,24 +296,21 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_lvalue_reference )
   return 0;
 }
 
-ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_rvalue_reference )
+ARGOT_REGISTER_CONSTEXPR_TEST( test_contained_rvalue_reference )
 {
-  using holder_type = holder< dummy&& >;
+  using contained_t = contained< dummy&& >;
 
   dummy source( 5 );
 
   // Test construct.
-  holder_type object( make_holder_type_tag(), std::move( source ) );
+  contained_t object = make_contained< dummy&& >( std::move( source ) );
   ARGOT_TEST_EQ( source.state, dummy_state::valid );
   ARGOT_TEST_EQ( source.value, 5 );
 
-  static_assert
-  ( !std::is_constructible< holder_type, make_holder_type_tag, dummy& >::value );
-
   // lvalue
   {
-    holder_type& self = object;
-    decltype( auto ) accessed_value = ( access_holder )( self );
+    contained_t& self = object;
+    decltype( auto ) accessed_value = access_contained( self );
 
     using accessed_type = decltype( accessed_value );
     ARGOT_CONCEPT_ENSURE( SameType< accessed_type, dummy& > );
@@ -324,8 +322,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_rvalue_reference )
 
   // const lvalue
   {
-    holder_type const& self = object;
-    decltype( auto ) accessed_value = ( access_holder )( self );
+    contained_t const& self = object;
+    decltype( auto ) accessed_value = access_contained( self );
 
     using accessed_type = decltype( accessed_value );
     ARGOT_CONCEPT_ENSURE( SameType< accessed_type, dummy& > );
@@ -337,8 +335,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_rvalue_reference )
 
   // rvalue
   {
-    holder_type&& self = std::move( object );
-    decltype( auto ) accessed_value = ( access_holder )( std::move( self ) );
+    contained_t&& self = std::move( object );
+    decltype( auto ) accessed_value = access_contained( std::move( self ) );
 
     using accessed_type = decltype( accessed_value );
     ARGOT_CONCEPT_ENSURE( SameType< accessed_type, dummy&& > );
@@ -349,13 +347,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_holder_rvalue_reference )
   }
 
   // copy
-  static_assert( !std::is_copy_constructible< holder_type >::value );
+  static_assert( !std::is_copy_constructible< contained_t >::value );
 
   // move
   {
-    holder_type moved_object = std::move( object );
-    dummy& source_value = ( access_holder )( object );
-    dummy& moved_value = ( access_holder )( moved_object );
+    contained_t moved_object = std::move( object );
+    dummy& source_value = access_contained( object );
+    dummy& moved_value = access_contained( moved_object );
     ARGOT_TEST_EQ( source_value.state, dummy_state::valid );
     ARGOT_TEST_EQ( source_value.value, 5 );
     ARGOT_TEST_EQ( moved_value.state, dummy_state::valid );

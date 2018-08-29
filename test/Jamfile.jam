@@ -21,7 +21,6 @@ run generate_unparse.cpp ;
 
 # Implementation detail helpers
 # run test_auto_function.cpp /boost//unit_test_framework ;
-run test_holder.cpp ;
 run test_cast_value_list_elements.cpp /boost//unit_test_framework ;
 run test_detail_regular_bases.cpp ;
 
@@ -38,6 +37,7 @@ compile test_gen_or.cpp ;
 
 # Top-level helpers
 compile test_declval.cpp ;
+run test_contained.cpp ;
 
 # Tests that the regularity testing suite works
 run test_regularity_testing.cpp ;

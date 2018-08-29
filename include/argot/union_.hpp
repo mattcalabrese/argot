@@ -14,11 +14,11 @@
 #include <argot/concepts/move_constructible.hpp>
 #include <argot/concepts/union_index.hpp>
 #include <argot/concepts/union_like.hpp>
+#include <argot/contained.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/construct.hpp>
-#include <argot/detail/holder.hpp>
 #include <argot/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
@@ -85,13 +85,13 @@ class union_
 
   template< std::size_t Index >
   static constexpr bool const& alternative_is_pure_v
-    = std::is_same_v< call_detail::holder< alternative_type_t< Index > >
+    = std::is_same_v< contained< alternative_type_t< Index > >
                     , alternative_type_t< Index >
                     >;
 
   static constexpr bool const& is_pure_v
     = std::is_same_v
-      < argot::union_< call_detail::holder< T >... >
+      < argot::union_< contained< T >... >
       , union_
       >;
 
@@ -99,10 +99,10 @@ class union_
     = typename argot_detail::conditional< is_pure_v >::template meta_apply
       < detail_union::union_base
       , union_
-      , call_detail::holder< T >...
+      , contained< T >...
       >;
  public:
-  using pure_type = typename argot::union_< call_detail::holder< T >... >;
+  using pure_type = typename argot::union_< contained< T >... >;
 
   union_() = default;
 
@@ -113,7 +113,7 @@ class union_
   , ARGOT_REQUIRES
     ( UnionIndex< union_, I > )
     ( BasicCallableWith
-      < call_detail::emplace_holder_with_result_fn< alternative_type_t< I > >
+      < emplace_contained_with_result_fn< alternative_type_t< I > >
           const&
       , Fun&&, P&&...
       >
@@ -126,7 +126,7 @@ class union_
   ) noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
     : alternatives
       ( in_place_index_with_result< I >
-      , call_detail::emplace_holder_with_result< alternative_type_t< I > >
+      , argot::emplace_contained_with_result< alternative_type_t< I > >
       , ARGOT_FORWARD( Fun )( fun ), ARGOT_FORWARD( P )( args )...
       ) {}
 
@@ -138,7 +138,7 @@ class union_
   , ARGOT_REQUIRES
     ( UnionIndex< union_, I > )
     ( BasicCallableWith
-      < call_detail::emplace_holder_fn< alternative_type_t< I > > const&
+      < emplace_contained_fn< alternative_type_t< I > > const&
       , P&&...
       >
     )
@@ -148,7 +148,7 @@ class union_
   ( std::in_place_index_t< I > const /*in_place_index*/, P&&... args )
     : alternatives
       ( in_place_index_with_result< I >
-      , call_detail::emplace_holder< alternative_type_t< I > >
+      , argot::emplace_contained< alternative_type_t< I > >
       , ARGOT_FORWARD( P )( args )...
       ) {}
 
@@ -160,7 +160,7 @@ class union_
   , ARGOT_REQUIRES
     ( UnionIndex< union_, I > )
     ( BasicCallableWith
-      < call_detail::emplace_holder_fn< alternative_type_t< I > > const&
+      < emplace_contained_fn< alternative_type_t< I > > const&
       , std::initializer_list< U >&, P&&...
       >
     )
@@ -171,7 +171,7 @@ class union_
   , std::initializer_list< U > ilist, P&&... args
   ) : alternatives
       ( in_place_index_with_result< I >
-      , call_detail::emplace_holder< alternative_type_t< I > >
+      , argot::emplace_contained< alternative_type_t< I > >
       , ilist, ARGOT_FORWARD( P )( args )...
       ) {}
 
@@ -183,7 +183,7 @@ class union_
   , ARGOT_REQUIRES
     ( UnionIndex< union_, I > )
     ( BasicCallableWith
-      < call_detail::emplace_holder_with_result_fn< alternative_type_t< I > >
+      < emplace_contained_with_result_fn< alternative_type_t< I > >
           const&
       , Fun&&, P&&...
       >
@@ -192,11 +192,11 @@ class union_
   >
   constexpr auto& emplace_with_result( Fun&& fun, P&&... args )
   {
-    return call_detail::access_holder_if< !alternative_is_pure_v< I > >
+    return argot::access_contained_if_special< alternative_type_t< I > >
     ( *::new
        ( static_cast< void* >( std::addressof( pure().alternatives ) ) )
-       call_detail::holder< alternative_type_t< I > >
-       ( call_detail::emplace_holder_with_result_fn< alternative_type_t< I > >
+       contained< alternative_type_t< I > >
+       ( emplace_contained_with_result_fn< alternative_type_t< I > >
          ( ARGOT_FORWARD( Fun )( fun ), ARGOT_FORWARD( P )( args )... )
        )
     );
@@ -210,7 +210,7 @@ class union_
   , ARGOT_REQUIRES
     ( UnionIndex< union_, I > )
     ( BasicCallableWith
-      < call_detail::emplace_holder_fn< alternative_type_t< I > > const&
+      < emplace_contained_fn< alternative_type_t< I > > const&
       , P&&...
       >
     )
@@ -218,11 +218,11 @@ class union_
   >
   constexpr auto& emplace( P&&... args )
   {
-    return call_detail::access_holder_if< !alternative_is_pure_v< I > >
+    return argot::access_contained_if_special< alternative_type_t< I > >
     ( *::new
        ( static_cast< void* >( std::addressof( pure().alternatives ) ) )
-       call_detail::holder< alternative_type_t< I > >
-       ( call_detail::emplace_holder< alternative_type_t< I > >
+       contained< alternative_type_t< I > >
+       ( argot::emplace_contained< alternative_type_t< I > >
          ( ARGOT_FORWARD( P )( args )... )
        )
     );
@@ -236,7 +236,7 @@ class union_
   , ARGOT_REQUIRES
     ( UnionIndex< union_, I > )
     ( BasicCallableWith
-      < call_detail::emplace_holder_fn< alternative_type_t< I > > const&
+      < emplace_contained_fn< alternative_type_t< I > > const&
       , std::initializer_list< U >&, P&&...
       >
     )
@@ -244,11 +244,11 @@ class union_
   >
   constexpr auto& emplace( std::initializer_list< U > ilist, P&&... args )
   {
-    return call_detail::access_holder_if< !alternative_is_pure_v< I > >
+    return argot::access_contained_if_special< alternative_type_t< I > >
     ( *::new
        ( static_cast< void* >( std::addressof( pure().alternatives ) ) )
-       call_detail::holder< alternative_type_t< I > >
-       ( call_detail::emplace_holder< alternative_type_t< I > >
+       contained< alternative_type_t< I > >
+       ( argot::emplace_contained< alternative_type_t< I > >
          ( ilist, ARGOT_FORWARD( P )( args )... )
        )
     );
@@ -262,7 +262,7 @@ class union_
   , ARGOT_REQUIRES
     ( UnionIndex< union_, I > )/*
     ( BasicCallableWith
-      < call_detail::emplace_holder_fn< alternative_type_t< I > > const&
+      < emplace_contained_fn< alternative_type_t< I > > const&
       , P&&
       >
     )*/
@@ -270,7 +270,7 @@ class union_
   >
   constexpr auto& assign( P&& arg )
   {
-    return call_detail::assign_holder< alternative_type_t< I > >
+    return argot::assign_contained< alternative_type_t< I > >
     ( detail_union::union_impl_preprocessed< I >::get( pure() )
     , ARGOT_FORWARD( P )( arg )
     );
@@ -284,7 +284,7 @@ class union_
   , ARGOT_REQUIRES
     ( UnionIndex< union_, I > )/*
     ( BasicCallableWith
-      < call_detail::emplace_holder_fn< alternative_type_t< I > > const&
+      < emplace_contained_fn< alternative_type_t< I > > const&
       , std::initializer_list< U >&, P&&...
       >
     )*/
@@ -292,7 +292,7 @@ class union_
   >
   constexpr auto& assign( std::initializer_list< U > ilist )
   {
-    return call_detail::assign_holder< alternative_type_t< I > >
+    return argot::assign_contained< alternative_type_t< I > >
     ( detail_union::union_impl_preprocessed< I >::get( pure() )
     , ilist
     );
@@ -304,18 +304,18 @@ class union_
   < std::size_t I
   , ARGOT_REQUIRES
     ( UnionIndex< union_, I > )
-    ( Destructible< call_detail::holder< alternative_type_t< I > > > )
+    ( Destructible< contained< alternative_type_t< I > > > )
     ()
   >
   constexpr void destroy()
   noexcept
   ( std::is_nothrow_destructible_v
-    < call_detail::holder< alternative_type_t< I > > >
+    < contained< alternative_type_t< I > > >
   )
   {
     if constexpr
     ( !std::is_trivially_destructible_v
-      < call_detail::holder< alternative_type_t< I > > >
+      < contained< alternative_type_t< I > > >
     )
       std::destroy_at
       ( std::addressof
@@ -386,13 +386,13 @@ struct make_concept_map< UnionLike< union_< T... > > >
     if constexpr
     ( std::is_same_v
       < alternative_type_t< Index >
-      , call_detail::holder< alternative_type_t< Index > >
+      , contained< alternative_type_t< Index > >
       >
     )
       return detail_union::union_impl< sizeof...( T ), Index >
       ::get( ARGOT_FORWARD( Self )( self ) );
     else
-      return call_detail::access_holder
+      return argot::access_contained
       ( detail_union::union_impl< sizeof...( T ), Index >
         ::get( ARGOT_FORWARD( Self )( self ).pure() )
       );

@@ -13,6 +13,7 @@
 #include <argot/concepts/argument_receiver_of.hpp>
 #include <argot/concepts/persistent_argument_provider.hpp>
 #include <argot/concepts/instantiation_of.hpp>
+#include <argot/contained.hpp>
 #include <argot/detail/argument_pack.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/gen/make_concept_map.hpp>
@@ -60,13 +61,13 @@ struct value_of_fn
   template< class H, class... T >
   static constexpr H const& head_value( impl< H, T... > const& v ) noexcept
   {
-    return call_detail::access_holder( v.elements.head );
+    return argot::access_contained( v.elements.head );
   }
 
   template< class H, class... T >
   static constexpr H&& head_value( impl< H, T... >&& v ) noexcept
   {
-    return call_detail::access_holder( ARGOT_MOVE( v.elements.head ) );
+    return argot::access_contained( ARGOT_MOVE( v.elements.head ) );
   }
  public:
   // TODO(mattcalabrese) Do this without multiple overloads

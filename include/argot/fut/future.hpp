@@ -15,9 +15,9 @@
 #include <argot/concepts/move_constructible.hpp>
 #include <argot/concepts/reference_to_const_object.hpp>
 #include <argot/concepts/unqualified_object.hpp>
+#include <argot/contained.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
-#include <argot/detail/holder.hpp>
 #include <argot/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
@@ -156,12 +156,12 @@ class moveonly_continuation_type
 template< class T >
 struct destructive_shared_state
 {
-  using holder_type = call_detail::holder< T >;
+  using contained_type = contained< T >;
 
   ~destructive_shared_state()
   {
     if( is_set )
-      result_state.value.~holder_type();
+      result_state.value.~contained_type();
   }
 
   std::mutex mutex;
@@ -171,7 +171,7 @@ struct destructive_shared_state
     ~result_state_type() {}
 
     ARGOT_NO_UNIQUE_ADDRESS void_ empty;
-    ARGOT_NO_UNIQUE_ADDRESS holder_type value;
+    ARGOT_NO_UNIQUE_ADDRESS contained_type value;
   };
 
   ARGOT_NO_UNIQUE_ADDRESS result_state_type result_state;
@@ -194,9 +194,9 @@ struct destructive_shared_state
       else
         if constexpr( std::is_reference_v< raw_result_type > )
         {
-          // TODO(mattcalabrese) Make holder
+          // TODO(mattcalabrese) Make contained
         }
-        else  // TODO(mattcalabrese) Placement-new the holder type not the raw type
+        else  // TODO(mattcalabrese) Placement-new the contained type not the raw type
           ::new
           ( static_cast< void* >( std::addressof( state.result_state.value ) ) )
           raw_result_type( call_detail::constexpr_invoke( ARGOT_MOVE( fun ) ) );

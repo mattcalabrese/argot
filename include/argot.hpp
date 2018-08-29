@@ -19,6 +19,7 @@
 #include <argot/conc_traits.hpp>
 #include <argot/concepts.hpp>
 #include <argot/config.hpp>
+#include <argot/contained.hpp>
 #include <argot/contextually_convert_to_bool.hpp>
 #include <argot/convert_future.hpp>
 #include <argot/declval.hpp>

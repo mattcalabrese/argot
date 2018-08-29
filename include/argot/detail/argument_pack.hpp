@@ -8,9 +8,9 @@
 #ifndef ARGOT_DETAIL_ARGUMENT_PACK_HPP_
 #define ARGOT_DETAIL_ARGUMENT_PACK_HPP_
 
+#include <argot/contained.hpp>
 #include <argot/declval.hpp>
 #include <argot/detail/detection.hpp>
-#include <argot/detail/holder.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/forward.hpp>
 #include <argot/no_unique_address.hpp>
@@ -111,16 +111,19 @@ constexpr decltype( auto ) forward_as_const( T&& arg )
 template< class Head, class... Tail >
 struct argument_pack_t< Head, Tail... >
 {
-  using head_type = holder< Head >;
+  using head_type = contained< Head >;
   using tail_type = argument_pack_t< Tail... >;
-  ARGOT_NO_UNIQUE_ADDRESS holder< Head > head;
+  ARGOT_NO_UNIQUE_ADDRESS contained< Head > head;
   ARGOT_NO_UNIQUE_ADDRESS argument_pack_t< Tail... > tail;
 
   template< class Self >
   static constexpr auto make_invoker( Self&& self )
   {
     return tail_type::make_invoker( ARGOT_FORWARD( Self )( self ).tail )
-    .with_head( ( access_holder )( ARGOT_FORWARD( Self )( self ).head ) );
+    .with_head
+    ( argot::access_contained_if_special< Head >
+      ( ARGOT_FORWARD( Self )( self ).head )
+    );
   }
 };
 
@@ -144,7 +147,7 @@ make_argument_pack( HeadP&& head, TailP&&... tail )
 {
   // TODO(mattcalabrese) sinklike cast to avoid "fake" copies
   return
-  { ( make_holder< Head > )( ARGOT_FORWARD( HeadP )( head ) )
+  { argot::make_contained< Head >( ARGOT_FORWARD( HeadP )( head ) )
   , ( make_argument_pack< Tail... > )( ARGOT_FORWARD( TailP )( tail )... )
   };
 }
@@ -161,7 +164,7 @@ struct argument_pack_as_references_t
   operator ()( Head&& head, Tail&&... tail ) const
   {
     return
-    { make_holder< Head&& >( ARGOT_FORWARD( Head )( head ) )
+    { argot::make_contained< Head&& >( ARGOT_FORWARD( Head )( head ) )
     , argument_pack_as_references_t()( ARGOT_FORWARD( Tail )( tail )... )
     };
   }
@@ -188,7 +191,7 @@ struct argument_pack_as_values_t
   operator ()( Head&& head, Tail&&... tail ) const
   {
     return
-    { make_holder< std::remove_reference_t< Head > const >
+    { argot::make_contained< std::remove_reference_t< Head > const >
       ( ARGOT_FORWARD( Head )( head ) )
     , argument_pack_as_values_t()( ARGOT_FORWARD( Tail )( tail )... )
     };

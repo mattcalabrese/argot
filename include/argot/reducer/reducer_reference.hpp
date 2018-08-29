@@ -10,7 +10,7 @@
 
 #include <argot/concepts/reference.hpp>
 #include <argot/concepts/return_value_reducer.hpp>
-#include <argot/detail/holder.hpp>
+#include <argot/contained.hpp>
 #include <argot/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
@@ -37,7 +37,7 @@ struct reducer_reference_t
       < std::remove_const_t< std::remove_reference_t< Reducer > > >
     );
 
-    call_detail::holder< Reducer > reducer;
+    contained< Reducer > reducer;
   };
 
   template< class Reducer
@@ -45,7 +45,7 @@ struct reducer_reference_t
           >
   constexpr auto operator ()( Reducer&& red ) const
   {
-    return impl< Reducer&& >{ call_detail::make_holder< Reducer&& >
+    return impl< Reducer&& >{ argot::make_contained< Reducer&& >
                               ( ARGOT_FORWARD( Reducer )( red ) )
                             };
   }
@@ -86,7 +86,7 @@ struct make_concept_map
         )
   {
     return reducer_traits::reduce
-    ( call_detail::access_holder( ARGOT_FORWARD( Self )( self ).reducer )
+    ( argot::access_contained( ARGOT_FORWARD( Self )( self ).reducer )
     , reducer_traits::return_types_t< LeadingReturnTypes... >{}
     , reducer_traits::return_types_t< TrailingReturnTypes... >{}
     , ARGOT_FORWARD( Fun )( fun )

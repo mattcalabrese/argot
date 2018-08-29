@@ -9,7 +9,7 @@
 #define ARGOT_REDUCER_PROVIDE_RESULT_TO_HPP_
 
 #include <argot/concepts/return_value_reducer.hpp>
-#include <argot/detail/holder.hpp>
+#include <argot/contained.hpp>
 #include <argot/forward.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
@@ -29,7 +29,7 @@ struct provide_result_to_t
   struct impl
   {
     // TODO(mattcalabrese) Use receiver_reference
-    call_detail::holder< Receiver&& > receiver;
+    contained< Receiver&& > receiver;
   };
 
   // TODO(mattcalabrese) Include enabler
@@ -37,7 +37,7 @@ struct provide_result_to_t
   constexpr impl< Receiver > operator ()( Receiver&& rec ) const
   {
     return
-    { call_detail::make_holder< Receiver&& >
+    { argot::make_contained< Receiver&& >
       ( ARGOT_FORWARD( Receiver )( rec ) )
     };
   }
@@ -83,7 +83,7 @@ struct make_concept_map
   )
   {
     return receiver_traits::receive_branch
-    ( call_detail::access_holder( ARGOT_FORWARD( Self )( self ).receiver )
+    ( argot::access_contained( ARGOT_FORWARD( Self )( self ).receiver )
     , receiver_traits::argument_list_kinds
       ( receiver_traits::argument_types< LeadingReturnTypes&& >... )
     , receiver_traits::argument_list_kinds

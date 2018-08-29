@@ -17,7 +17,7 @@ namespace ready_detail {
 template< class T >
 struct impl
 {
-  // TODO(mattcalabrese) Use holder.
+  // TODO(mattcalabrese) Use contained.
   ARGOT_NO_UNIQUE_ADDRESS T value;
 };
 

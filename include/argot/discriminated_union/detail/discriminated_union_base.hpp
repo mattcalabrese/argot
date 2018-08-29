@@ -14,8 +14,8 @@
 #include <argot/concepts/union_index.hpp>
 #include <argot/concepts/union_like.hpp>
 #include <argot/concepts/variant_like.hpp>
+#include <argot/contained.hpp>
 #include <argot/detail/conditional.hpp>
-#include <argot/detail/holder.hpp>
 #include <argot/detail/regular_bases.hpp>
 #include <argot/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
@@ -156,7 +156,7 @@ struct nontrivial_destructor
 
   ~nontrivial_destructor()
   noexcept
-  ( ( std::is_nothrow_destructible_v< call_detail::holder< T > > && ... ) )
+  ( ( std::is_nothrow_destructible_v< contained< T > > && ... ) )
   {
     this->template to_partially_formed< /*ResetIndexValue =*/ false >();
   }
@@ -186,7 +186,7 @@ struct nontrivial_move_constructor
 
   constexpr nontrivial_move_constructor( nontrivial_move_constructor&& other )
   noexcept
-  ( (    std::is_nothrow_move_constructible_v< call_detail::holder< T > >
+  ( (    std::is_nothrow_move_constructible_v< contained< T > >
       && ...
     )
   )
@@ -240,7 +240,7 @@ struct nontrivial_copy_constructor
   constexpr nontrivial_copy_constructor
   ( nontrivial_copy_constructor const& other )
   noexcept
-  ( (    std::is_nothrow_copy_constructible_v< call_detail::holder< T > >
+  ( (    std::is_nothrow_copy_constructible_v< contained< T > >
       && ...
     )
   )
@@ -269,7 +269,7 @@ template< class... T >
 using copy_constructor
   = typename argot_detail::conditional
     <   std::is_copy_constructible_v< union_< T... > >
-      || !( std::is_copy_constructible_v< call_detail::holder< T > > && ... ) // TODO(mattcalabrese) Do lazily
+      || !( std::is_copy_constructible_v< contained< T > > && ... ) // TODO(mattcalabrese) Do lazily
     >::template meta_apply
     < move_constructor, nontrivial_copy_constructor, T... >;
 
@@ -289,8 +289,8 @@ struct nontrivial_move_assign
   constexpr nontrivial_move_assign& operator =( nontrivial_move_assign&& other )
   noexcept
   ( (    (    std::is_nothrow_move_constructible_v
-              < call_detail::holder< T > >
-           && std::is_nothrow_destructible_v< call_detail::holder< T > >
+              < contained< T > >
+           && std::is_nothrow_destructible_v< contained< T > >
          )
       && ...
     )
@@ -305,14 +305,14 @@ struct nontrivial_move_assign
           using alt_t
             = union_traits::alternative_type_t< union_< T... >, index.value >;
 
-          using holder_t = call_detail::holder< alt_t >;
+          using contained_alt_t = contained< alt_t >;
 
           // If the type is move-assignable and of a compatible noexcept-ness,
           // then use the move-assign operator as an optimization.
           if constexpr
-          (    std::is_move_assignable_v< holder_t >
-            && (     !std::is_nothrow_move_constructible_v< holder_t >
-                  || std::is_nothrow_move_assignable_v< holder_t >
+          (    std::is_move_assignable_v< contained_alt_t >
+            && (     !std::is_nothrow_move_constructible_v< contained_alt_t >
+                  || std::is_nothrow_move_assignable_v< contained_alt_t >
                )
           )
             union_traits::get< index.value >( this->alternatives )
@@ -329,7 +329,7 @@ struct nontrivial_move_assign
 
               // If move-construction can throw, update to partially-formed.
               static constexpr bool move_may_throw
-                = !std::is_nothrow_move_constructible_v< holder_t >;
+                = !std::is_nothrow_move_constructible_v< contained_alt_t >;
 
               if constexpr( move_may_throw )
                 this->index_value = this->partially_formed_index_value_v;
@@ -360,7 +360,7 @@ struct nontrivial_move_assign
 
           this->template to_partially_formed
           < !std::is_nothrow_move_constructible_v
-            < call_detail::holder< alt_t > >
+            < contained< alt_t > >
           >();
 
           this->alternatives.template emplace< other_index.value >
@@ -388,8 +388,8 @@ using move_assign
             && std::is_move_assignable_v< union_< T... > >
             && std::is_trivially_destructible_v< union_< T... > >
          )
-      || !(    (    std::is_move_constructible_v< call_detail::holder< T > >
-                 && std::is_destructible_v< call_detail::holder< T > >
+      || !(    (    std::is_move_constructible_v< contained< T > >
+                 && std::is_destructible_v< contained< T > >
                )
             && ...
           )
@@ -415,8 +415,8 @@ struct nontrivial_copy_assign
   nontrivial_copy_assign& operator =( nontrivial_copy_assign const& other )
   noexcept
   ( (    (    std::is_nothrow_copy_constructible_v
-              < call_detail::holder< T > >
-           && std::is_nothrow_destructible_v< call_detail::holder< T > >
+              < contained< T > >
+           && std::is_nothrow_destructible_v< contained< T > >
          )
       && ...
     )
@@ -430,14 +430,14 @@ struct nontrivial_copy_assign
           using alt_t
             = union_traits::alternative_type_t< union_< T... >, index.value >;
 
-          using holder_t = call_detail::holder< alt_t >;
+          using contained_alt_t = contained< alt_t >;
 
           // If the type is copy-assignable and of a compatible noexcept-ness,
           // then use the copy-assign operator as an optimization.
           if constexpr
-          (    std::is_copy_assignable_v< holder_t >
-            && (     !std::is_nothrow_copy_constructible_v< holder_t >
-                  || std::is_nothrow_copy_assignable_v< holder_t >
+          (    std::is_copy_assignable_v< contained_alt_t >
+            && (     !std::is_nothrow_copy_constructible_v< contained_alt_t >
+                  || std::is_nothrow_copy_assignable_v< contained_alt_t >
                )
           )
           {
@@ -455,7 +455,7 @@ struct nontrivial_copy_assign
 
               // If copy-construction can throw, update to partially-formed.
               static constexpr bool copy_may_throw
-                = !std::is_nothrow_copy_constructible_v< holder_t >;
+                = !std::is_nothrow_copy_constructible_v< contained_alt_t >;
 
               if constexpr( copy_may_throw )
                 this->index_value = this->partially_formed_index_value_v;
@@ -484,7 +484,7 @@ struct nontrivial_copy_assign
 
           this->template to_partially_formed
           < !std::is_nothrow_copy_constructible_v
-            < call_detail::holder< alt_t > >
+            < contained< alt_t > >
           >();
 
           this->alternatives.template emplace< other_index.value >
@@ -508,8 +508,8 @@ using discriminated_union_base
             && std::is_copy_assignable_v< union_< T... > >
             && std::is_trivially_destructible_v< union_< T... > >
          )
-      || !(    (    std::is_copy_constructible_v< call_detail::holder< T > >
-                 && std::is_destructible_v< call_detail::holder< T > >
+      || !(    (    std::is_copy_constructible_v< contained< T > >
+                 && std::is_destructible_v< contained< T > >
                )
             && ...
           )

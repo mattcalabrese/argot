@@ -12,8 +12,8 @@
 #include <argot/concepts/invocable_with.hpp>
 #include <argot/concepts/potentially_invocable.hpp>
 #include <argot/concepts/reference.hpp>
+#include <argot/contained.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
-#include <argot/detail/holder.hpp>
 #include <argot/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
@@ -38,7 +38,7 @@ struct invocable_reference_t
     constexpr decltype( auto ) operator ()( P&&... args ) const &
     {
       return argot_detail::constexpr_invoke
-      ( call_detail::access_holder( invocable )
+      ( argot::access_contained( invocable )
       , ARGOT_FORWARD( P )( args )...
       );
     }
@@ -49,12 +49,12 @@ struct invocable_reference_t
     constexpr decltype( auto ) operator ()( P&&... args ) const &&
     {
       return argot_detail::constexpr_invoke
-      ( call_detail::access_holder( ARGOT_MOVE( invocable ) )
+      ( argot::access_contained( ARGOT_MOVE( invocable ) )
       , ARGOT_FORWARD( P )( args )...
       );
     }
 
-    call_detail::holder< InvocableReference > invocable;
+    contained< InvocableReference > invocable;
   };
 public:
   // TODO(mattcalabrese) Constrain to be possibly invocable
@@ -65,7 +65,7 @@ public:
   operator ()( Invocable&& provider ) const noexcept
   {
     return impl< Invocable&& >
-    { call_detail::make_holder< Invocable&& >
+    { argot::make_contained< Invocable&& >
       ( ARGOT_FORWARD( Invocable )( provider ) )
     };
   }

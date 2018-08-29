@@ -11,7 +11,7 @@
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/concepts/rvalue_reference.hpp>
-#include <argot/detail/holder.hpp>
+#include <argot/contained.hpp>
 #include <argot/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
@@ -39,7 +39,7 @@ struct receiver_reference_t
     ARGOT_CONCEPT_ASSERT
     ( ArgumentReceiver< std::remove_reference_t< ReceiverReference > > );
 
-    call_detail::holder< ReceiverReference > receiver;
+    contained< ReceiverReference > receiver;
   };
 public:
   template< class Receiver >
@@ -47,7 +47,7 @@ public:
   < impl< Receiver&& > >
   operator ()( Receiver&& receiver ) const noexcept
   {
-    return { call_detail::make_holder< Receiver&& >( ARGOT_MOVE( receiver ) ) };
+    return { argot::make_contained< Receiver&& >( ARGOT_MOVE( receiver ) ) };
   }
 } inline constexpr receiver_reference{};
 
@@ -79,7 +79,7 @@ struct make_concept_map
   )
   {
     return receiver_traits::receive_branch
-    ( call_detail::access_holder( ARGOT_MOVE( self ).receiver )
+    ( argot::access_contained( ARGOT_MOVE( self ).receiver )
     , receiver_traits::argument_list_kinds( LeadingPs()... )
     , receiver_traits::argument_list_kinds( TrailingPs()... )
     , ARGOT_FORWARD( P )( args )...

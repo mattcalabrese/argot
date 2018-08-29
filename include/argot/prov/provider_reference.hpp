@@ -11,12 +11,11 @@
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/reference.hpp>
-#include <argot/detail/holder.hpp>
+#include <argot/contained.hpp>
 #include <argot/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/no_unique_address.hpp>
 #include <argot/prov_traits/provide.hpp>
 #include <argot/remove_cvref.hpp>
 
@@ -34,7 +33,7 @@ struct provider_reference_fn
 
     ARGOT_CONCEPT_ASSERT( Reference< ProviderReference > );
 
-    ARGOT_NO_UNIQUE_ADDRESS call_detail::holder< ProviderReference > provider;
+    contained< ProviderReference > provider;
   };
 public:
   template< class Provider
@@ -43,7 +42,7 @@ public:
   [[nodiscard]] constexpr auto operator ()( Provider&& provider ) const noexcept
   {
     return impl< Provider&& >
-    { call_detail::make_holder< Provider&& >
+    { argot::make_contained< Provider&& >
       ( ARGOT_FORWARD( Provider )( provider ) )
     };
   }
@@ -70,7 +69,7 @@ struct make_concept_map
   provide( Self&& self, Receiver&& receiver )
   {
     return prov_traits::provide
-    ( call_detail::access_holder( ARGOT_FORWARD( Self )( self ).provider )
+    ( argot::access_contained( ARGOT_FORWARD( Self )( self ).provider )
     , ARGOT_MOVE( receiver )
     );
   }

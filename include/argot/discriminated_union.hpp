@@ -34,10 +34,10 @@
 #include <argot/concepts/union_index.hpp>
 #include <argot/concepts/union_like.hpp>
 #include <argot/concepts/variant_like.hpp>
+#include <argot/contained.hpp>
 #include <argot/declval.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/constexpr_swap.hpp>
-#include <argot/detail/holder.hpp>
 #include <argot/detail/regular_bases.hpp>
 #include <argot/discriminated_union/detail/discriminated_union_base.hpp>
 #include <argot/forward.hpp>
@@ -102,13 +102,13 @@ template< class... T >
 class discriminated_union
   : argot_detail::conditional
     < std::is_same_v
-      < argot::discriminated_union< call_detail::holder< T >... >
+      < argot::discriminated_union< contained< T >... >
       , argot::discriminated_union< T... >
       >
     >::template meta_apply
     < detail_discriminated_union::discriminated_union_base
     , discriminated_union
-    , call_detail::holder< T >...
+    , contained< T >...
     >
   , detail_discriminated_union_adl::adl_base< discriminated_union< T... > >
 {
@@ -128,13 +128,13 @@ class discriminated_union
 
   template< std::size_t Index >
   static constexpr bool const& alternative_is_pure_v
-    = std::is_same_v< call_detail::holder< alternative_type_t< Index > >
+    = std::is_same_v< contained< alternative_type_t< Index > >
                     , alternative_type_t< Index >
                     >;
 
   static constexpr bool const& is_pure_v
     = std::is_same_v
-      < argot::discriminated_union< call_detail::holder< T >... >
+      < argot::discriminated_union< contained< T >... >
       , discriminated_union
       >;
 
@@ -142,13 +142,13 @@ class discriminated_union
     = typename argot_detail::conditional< is_pure_v >::template meta_apply
       < detail_discriminated_union::discriminated_union_base
       , discriminated_union
-      , call_detail::holder< T >...
+      , contained< T >...
       >;
 
   using typename base_t::index_type;
  public:
   using pure_type
-    = typename argot::discriminated_union< call_detail::holder< T >... >;
+    = typename argot::discriminated_union< contained< T >... >;
 
   discriminated_union() = default;
 
@@ -159,7 +159,7 @@ class discriminated_union
   , ARGOT_REQUIRES
     ( UnionIndex< discriminated_union, I > )
     ( BasicCallableWith
-      < call_detail::emplace_holder_with_result_fn< alternative_type_t< I > >
+      < emplace_contained_with_result_fn< alternative_type_t< I > >
           const&
       , Fun&&, P&&...
       >
@@ -172,19 +172,19 @@ class discriminated_union
   ) noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
     : base_t
       ( in_place_index_with_result< I >
-      , call_detail::emplace_holder_with_result< alternative_type_t< I > >
+      , emplace_contained_with_result< alternative_type_t< I > >
       , ARGOT_FORWARD( Fun )( fun ), ARGOT_FORWARD( P )( args )...
       ) {}
 
   // TODO(mattcalabrese)
   //   Branch to Constructible for better errors when non-const/non-ref/non-void
-  // TODO(mattcalabrese) Make sure noexcept works with holder
+  // TODO(mattcalabrese) Make sure noexcept works with contained
   template
   < index_type I, class... P
   , ARGOT_REQUIRES
     ( UnionIndex< discriminated_union, I > )
     ( BasicCallableWith
-      < call_detail::emplace_holder_fn< alternative_type_t< I > > const&
+      < emplace_contained_fn< alternative_type_t< I > > const&
       , P&&...
       >
     )
@@ -195,19 +195,19 @@ class discriminated_union
   noexcept( std::is_nothrow_constructible_v< alternative_type_t< I >, P&&... > )
     : base_t
       ( in_place_index_with_result< I >
-      , call_detail::emplace_holder< alternative_type_t< I > >
+      , emplace_contained< alternative_type_t< I > >
       , ARGOT_FORWARD( P )( args )...
       ) {}
 
   // TODO(mattcalabrese)
   //   Branch to Constructible for better errors when non-const/non-ref/non-void
-  // TODO(mattcalabrese) Make sure noexcept works with holder
+  // TODO(mattcalabrese) Make sure noexcept works with contained
   template
   < index_type I, class U, class... P
   , ARGOT_REQUIRES
     ( UnionIndex< discriminated_union, I > )
     ( BasicCallableWith
-      < call_detail::emplace_holder_fn< alternative_type_t< I > > const&
+      < emplace_contained_fn< alternative_type_t< I > > const&
       , std::initializer_list< U >&, P&&...
       >
     )
@@ -222,7 +222,7 @@ class discriminated_union
     < alternative_type_t< I >, std::initializer_list< U >&, P&&... >
   ) : base_t
       ( in_place_index_with_result< I >
-      , call_detail::emplace_holder< alternative_type_t< I > >
+      , emplace_contained< alternative_type_t< I > >
       , ilist, ARGOT_FORWARD( P )( args )...
       ) {}
 
@@ -235,7 +235,7 @@ class discriminated_union
   , ARGOT_REQUIRES
     ( UnionIndex< discriminated_union, I > )
     ( BasicCallableWith
-      < call_detail::emplace_holder_with_result_fn< alternative_type_t< I > >
+      < emplace_contained_with_result_fn< alternative_type_t< I > >
           const&
       , Fun&&, P&&...
       >
@@ -247,14 +247,14 @@ class discriminated_union
     auto& pure_alternative
       = *::new
          ( static_cast< void* >( std::addressof( alternatives ) ) )
-         call_detail::holder< alternative_type_t< I > >
-         ( call_detail::emplace_holder_with_result_fn< alternative_type_t< I > >
+         contained< alternative_type_t< I > >
+         ( emplace_contained_with_result_fn< alternative_type_t< I > >
            ( ARGOT_FORWARD( Fun )( fun ), ARGOT_FORWARD( P )( args )... )
          );
 
     index_value = I;
 
-    return call_detail::access_holder_if< !alternative_is_pure_v< I > >
+    return argot::access_contained_if_special< alternative_type_t< I > >
     ( pure_alternative );
   }
 
@@ -266,7 +266,7 @@ class discriminated_union
   , ARGOT_REQUIRES
     ( UnionIndex< discriminated_union, I > )
     ( BasicCallableWith
-      < call_detail::emplace_holder_fn< alternative_type_t< I > > const&
+      < emplace_contained_fn< alternative_type_t< I > > const&
       , P&&...
       >
     )
@@ -280,14 +280,14 @@ class discriminated_union
     auto& pure_alternative
       = *::new
          ( static_cast< void* >( std::addressof( alternatives ) ) )
-         call_detail::holder< alternative_type_t< I > >
-         ( call_detail::emplace_holder< alternative_type_t< I > >
+         contained< alternative_type_t< I > >
+         ( emplace_contained< alternative_type_t< I > >
            ( ARGOT_FORWARD( P )( args )... )
          );
 
     index_value = I;
 
-    return call_detail::access_holder_if< !alternative_is_pure_v< I > >
+    return argot::access_contained_if_special< alternative_type_t< I > >
     ( pure_alternative );
   }
 
@@ -299,7 +299,7 @@ class discriminated_union
   , ARGOT_REQUIRES
     ( UnionIndex< discriminated_union, I > )
     ( BasicCallableWith
-      < call_detail::emplace_holder_fn< alternative_type_t< I > > const&
+      < emplace_contained_fn< alternative_type_t< I > > const&
       , std::initializer_list< U >&, P&&...
       >
     )
@@ -315,14 +315,14 @@ class discriminated_union
     auto& pure_alternative
       = *::new
          ( static_cast< void* >( std::addressof( alternatives ) ) )
-         call_detail::holder< alternative_type_t< I > >
-         ( call_detail::emplace_holder< alternative_type_t< I > >
+         contained< alternative_type_t< I > >
+         ( emplace_contained< alternative_type_t< I > >
            ( ilist, ARGOT_FORWARD( P )( args )... )
          );
 
     index_value = I;
 
-    return call_detail::access_holder_if< !alternative_is_pure_v< I > >
+    return argot::access_contained_if_special< alternative_type_t< I > >
     ( pure_alternative );
   }
 
@@ -334,7 +334,7 @@ class discriminated_union
   , ARGOT_REQUIRES
     ( UnionIndex< discriminated_union, I > )/*
     ( BasicCallableWith
-      < call_detail::emplace_holder_fn< alternative_type_t< I > > const&
+      < emplace_contained_fn< alternative_type_t< I > > const&
       , P&&
       >
     )*/
@@ -342,8 +342,12 @@ class discriminated_union
   >
   constexpr auto& assign( P&& arg )
   {
-    return call_detail::access_holder_if< !alternative_is_pure_v< I > >
-    ( alternatives.template assign< I >( ARGOT_FORWARD( P )( arg ) ) );
+    return argot::access_contained_if_special< alternative_type_t< I > >
+    ( argot::assign_contained< alternative_type_t< I > >
+      ( union_traits::get< I >( alternatives )
+      , ARGOT_FORWARD( P )( arg )
+      )
+    );
   }
 
   // TODO(mattcalabrese)
@@ -354,7 +358,7 @@ class discriminated_union
   , ARGOT_REQUIRES
     ( UnionIndex< discriminated_union, I > )/*
     ( BasicCallableWith
-      < call_detail::emplace_holder_fn< alternative_type_t< I > > const&
+      < emplace_contained_fn< alternative_type_t< I > > const&
       , std::initializer_list< U >&, P&&...
       >
     )*/
@@ -362,8 +366,10 @@ class discriminated_union
   >
   constexpr auto& assign( std::initializer_list< U > ilist )
   {
-    return call_detail::access_holder_if< !alternative_is_pure_v< I > >
-    ( alternatives.template assign< I >( ilist ) );
+    return argot::access_contained_if_special< alternative_type_t< I > >
+    ( argot::assign_contained< alternative_type_t< I > >
+      ( union_traits::get< I >( alternatives ), ilist )
+    );
   }
 
   // TODO(mattcalabrese) Branch on const so there is a better error.
@@ -372,13 +378,13 @@ class discriminated_union
   < std::size_t I
   , ARGOT_REQUIRES
     ( UnionIndex< discriminated_union, I > )
-    ( Destructible< call_detail::holder< alternative_type_t< I > > > )
+    ( Destructible< contained< alternative_type_t< I > > > )
     ()
   >
   constexpr void destroy()
   noexcept
   ( std::is_nothrow_destructible_v
-    < call_detail::holder< alternative_type_t< I > > >
+    < contained< alternative_type_t< I > > >
   )
   {
     alternatives.template destroy< I >();
@@ -425,11 +431,11 @@ struct discriminated_union_core_access
                                  , discriminated_union< T... >& rhs
                                  )
   noexcept
-  ( (    (    ARGOT_IS_MODELED( NothrowSwappable< call_detail::holder< T > > )
+  ( (    (    ARGOT_IS_MODELED( NothrowSwappable< contained< T > > )
            && ARGOT_IS_MODELED
-              ( NothrowMoveConstructible< call_detail::holder< T > > )
+              ( NothrowMoveConstructible< contained< T > > )
            && ARGOT_IS_MODELED
-              ( NothrowDestructible< call_detail::holder< T > > )
+              ( NothrowDestructible< contained< T > > )
          )
       && ...
     )
@@ -437,7 +443,7 @@ struct discriminated_union_core_access
   {
     // If the underlying union is swappable then we can avoid all branching.
     if constexpr
-    ( ARGOT_IS_MODELED( Swappable< union_< call_detail::holder< T >... > > ) )
+    ( ARGOT_IS_MODELED( Swappable< union_< contained< T >... > > ) )
       detail_argot_swap::constexpr_swap( lhs.alternatives, rhs.alternatives );
     else
       argot::call
@@ -527,7 +533,7 @@ struct hash_base
        ( NothrowHashable
          < union_traits::index_type_t< discriminated_union< T... > > >
        )
-    && (    ARGOT_IS_MODELED( NothrowHashable< call_detail::holder< T > > )
+    && (    ARGOT_IS_MODELED( NothrowHashable< contained< T > > )
          && ...
        )
   )
@@ -572,8 +578,10 @@ struct make_concept_map< UnionLike< discriminated_union< T... > > >
   template< index_type Index, class Self >
   static constexpr auto&& get( Self&& self ) noexcept
   {
-    return call_detail::access_holder_if
-    < !discriminated_union< T... >::template alternative_is_pure_v< Index > >
+    return argot::access_contained_if_special
+    < typename discriminated_union< T... >
+      ::template alternative_type_t< Index >
+    >
     ( union_traits::get< Index >
       ( ARGOT_FORWARD( Self )( self ).alternatives )
     );
@@ -597,19 +605,19 @@ namespace detail_discriminated_union_adl {
 
 template< class... T
         , ARGOT_REQUIRES
-          ( Swappable< call_detail::holder< T > >... )
-          ( MoveConstructible< call_detail::holder< T > >... )
-          ( Destructible< call_detail::holder< T > >... )
+          ( Swappable< contained< T > >... )
+          ( MoveConstructible< contained< T > >... )
+          ( Destructible< contained< T > >... )
           ()
         >
 constexpr void swap( discriminated_union< T... >& lhs
                    , discriminated_union< T... >& rhs
                    )
 noexcept
-( (    (    ARGOT_IS_MODELED( NothrowSwappable< call_detail::holder< T > > )
+( (    (    ARGOT_IS_MODELED( NothrowSwappable< contained< T > > )
          && ARGOT_IS_MODELED
-            ( NothrowMoveConstructible< call_detail::holder< T > > )
-         && ARGOT_IS_MODELED( NothrowDestructible< call_detail::holder< T > > )
+            ( NothrowMoveConstructible< contained< T > > )
+         && ARGOT_IS_MODELED( NothrowDestructible< contained< T > > )
        )
     && ...
   )

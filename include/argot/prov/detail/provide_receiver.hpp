@@ -14,9 +14,9 @@
 namespace argot::prov::prov_detail {
 
 // IMPORTANT:
-//   This directly contains a reference instead of being in a holder
+//   This directly contains a reference instead of being in a contained
 //   because it is never assigned-to. This saves template instantiations.
-// TODO(mattcalabrese) Possibly change this to use the holder or a pointer.
+// TODO(mattcalabrese) Possibly change this to use the contained or a pointer.
 template< class Receiver >
 struct provide_receiver
 {
