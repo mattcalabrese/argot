@@ -8,19 +8,24 @@
 #ifndef ARGOT_UNION_HPP_
 #define ARGOT_UNION_HPP_
 
-#include <argot/concepts/basic_callable_with.hpp>
+#include <argot/concepts/assignable_when_contained.hpp>
 #include <argot/concepts/destructible.hpp>
+#include <argot/concepts/emplaceable_when_contained.hpp>
+#include <argot/concepts/emplaceable_with_result_when_contained.hpp>
 #include <argot/concepts/move_assignable.hpp>
 #include <argot/concepts/move_constructible.hpp>
+#include <argot/concepts/nothrow_assignable_when_contained.hpp>
+#include <argot/concepts/nothrow_emplaceable_when_contained.hpp>
+#include <argot/concepts/nothrow_emplaceable_with_result_when_contained.hpp>
 #include <argot/concepts/union_index.hpp>
 #include <argot/concepts/union_like.hpp>
 #include <argot/contained.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
-#include <argot/detail/conditional.hpp>
 #include <argot/detail/construct.hpp>
 #include <argot/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
+#include <argot/gen/is_modeled.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/union_/detail/config.hpp>
@@ -106,91 +111,88 @@ class union_
 
   union_() = default;
 
-  // TODO(mattcalabrese)
-  //   Branch to Constructible for better errors when non-const/non-ref/non-void
   template
   < std::size_t I, class Fun, class... P
   , ARGOT_REQUIRES
     ( UnionIndex< union_, I > )
-    ( BasicCallableWith
-      < emplace_contained_with_result_fn< alternative_type_t< I > >
-          const&
-      , Fun&&, P&&...
-      >
+    ( EmplaceableWithResultWhenContained
+      < alternative_type_t< I >, Fun&&, P&&... >
     )
     ()
   >
   explicit constexpr union_
   ( in_place_index_with_result_t< I > const /*in_place_index_with_result*/
   , Fun&& fun, P&&... args
-  ) noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
+  ) noexcept
+    ( ARGOT_IS_MODELED
+      ( NothrowEmplaceableWithResultWhenContained
+        < alternative_type_t< I >, Fun&&, P&&... >
+      )
+    )
     : alternatives
       ( in_place_index_with_result< I >
       , argot::emplace_contained_with_result< alternative_type_t< I > >
       , ARGOT_FORWARD( Fun )( fun ), ARGOT_FORWARD( P )( args )...
       ) {}
 
-  // TODO(mattcalabrese)
-  //   Branch to Constructible for better errors when non-const/non-ref/non-void
-  // TODO(mattcalabrese) noexcept
   template
   < std::size_t I, class... P
   , ARGOT_REQUIRES
     ( UnionIndex< union_, I > )
-    ( BasicCallableWith
-      < emplace_contained_fn< alternative_type_t< I > > const&
-      , P&&...
-      >
-    )
+    ( EmplaceableWhenContained< alternative_type_t< I >, P&&... > )
     ()
   >
   explicit constexpr union_
   ( std::in_place_index_t< I > const /*in_place_index*/, P&&... args )
-    : alternatives
+  noexcept
+  ( ARGOT_IS_MODELED
+    ( NothrowEmplaceableWhenContained< alternative_type_t< I >, P&&... > )
+  ) : alternatives
       ( in_place_index_with_result< I >
       , argot::emplace_contained< alternative_type_t< I > >
       , ARGOT_FORWARD( P )( args )...
       ) {}
 
-  // TODO(mattcalabrese)
-  //   Branch to Constructible for better errors when non-const/non-ref/non-void
-  // TODO(mattcalabrese) noexcept
   template
   < std::size_t I, class U, class... P
   , ARGOT_REQUIRES
     ( UnionIndex< union_, I > )
-    ( BasicCallableWith
-      < emplace_contained_fn< alternative_type_t< I > > const&
-      , std::initializer_list< U >&, P&&...
-      >
+    ( EmplaceableWhenContained
+      < alternative_type_t< I >, std::initializer_list< U >&, P&&... >
     )
     ()
   >
   explicit constexpr union_
   ( std::in_place_index_t< I > const /*in_place_index*/
   , std::initializer_list< U > ilist, P&&... args
-  ) : alternatives
+  ) noexcept
+    ( ARGOT_IS_MODELED
+      ( NothrowEmplaceableWhenContained
+        < alternative_type_t< I >, std::initializer_list< U >&, P&&... >
+      )
+    )
+    : alternatives
       ( in_place_index_with_result< I >
       , argot::emplace_contained< alternative_type_t< I > >
       , ilist, ARGOT_FORWARD( P )( args )...
       ) {}
 
-  // TODO(mattcalabrese)
-  //   Branch to Constructible for better errors when non-const/non-ref/non-void
-  // TODO(mattcalabrese) noexcept
   template
   < std::size_t I, class Fun, class... P
   , ARGOT_REQUIRES
     ( UnionIndex< union_, I > )
-    ( BasicCallableWith
-      < emplace_contained_with_result_fn< alternative_type_t< I > >
-          const&
-      , Fun&&, P&&...
-      >
+    ( EmplaceableWithResultWhenContained
+      < alternative_type_t< I >, Fun&&, P&&... >
     )
     ()
   >
   constexpr auto& emplace_with_result( Fun&& fun, P&&... args )
+  noexcept
+  ( ARGOT_IS_MODELED
+    ( NothrowEmplaceableWithResultWhenContained
+      < alternative_type_t< I >, Fun&&, P&&... >
+    )
+  )
   {
     return argot::access_contained_if_special< alternative_type_t< I > >
     ( *::new
@@ -202,21 +204,18 @@ class union_
     );
   }
 
-  // TODO(mattcalabrese)
-  //   Branch to Constructible for better errors when non-const/non-ref/non-void
-  // TODO(mattcalabrese) noexcept
   template
   < std::size_t I, class... P
   , ARGOT_REQUIRES
     ( UnionIndex< union_, I > )
-    ( BasicCallableWith
-      < emplace_contained_fn< alternative_type_t< I > > const&
-      , P&&...
-      >
-    )
+    ( EmplaceableWhenContained< alternative_type_t< I >, P&&... > )
     ()
   >
   constexpr auto& emplace( P&&... args )
+  noexcept
+  ( ARGOT_IS_MODELED
+    ( NothrowEmplaceableWhenContained< alternative_type_t< I >, P&&... > )
+  )
   {
     return argot::access_contained_if_special< alternative_type_t< I > >
     ( *::new
@@ -228,21 +227,22 @@ class union_
     );
   }
 
-  // TODO(mattcalabrese)
-  //   Branch to Constructible for better errors when non-const/non-ref/non-void
-  // TODO(mattcalabrese) noexcept
   template
   < std::size_t I, class U, class... P
   , ARGOT_REQUIRES
     ( UnionIndex< union_, I > )
-    ( BasicCallableWith
-      < emplace_contained_fn< alternative_type_t< I > > const&
-      , std::initializer_list< U >&, P&&...
-      >
+    ( EmplaceableWhenContained
+      < alternative_type_t< I >, std::initializer_list< U >&, P&&... >
     )
     ()
   >
   constexpr auto& emplace( std::initializer_list< U > ilist, P&&... args )
+  noexcept
+  ( ARGOT_IS_MODELED
+    ( NothrowEmplaceableWhenContained
+      < alternative_type_t< I >, std::initializer_list< U >&, P&&... >
+    )
+  )
   {
     return argot::access_contained_if_special< alternative_type_t< I > >
     ( *::new
@@ -254,21 +254,18 @@ class union_
     );
   }
 
-  // TODO(mattcalabrese)
-  //   Branch to Assignable for better errors when non-const/non-ref/non-void
-  // TODO(mattcalabrese) noexcept
   template
   < std::size_t I, class P
   , ARGOT_REQUIRES
-    ( UnionIndex< union_, I > )/*
-    ( BasicCallableWith
-      < emplace_contained_fn< alternative_type_t< I > > const&
-      , P&&
-      >
-    )*/
+    ( UnionIndex< union_, I > )
+    ( AssignableWhenContained< alternative_type_t< I >, P&& > )
     ()
   >
   constexpr auto& assign( P&& arg )
+  noexcept
+  ( ARGOT_IS_MODELED
+    ( NothrowAssignableWhenContained< alternative_type_t< I >, P&& > )
+  )
   {
     return argot::assign_contained< alternative_type_t< I > >
     ( detail_union::union_impl_preprocessed< I >::get( pure() )
@@ -276,21 +273,22 @@ class union_
     );
   }
 
-  // TODO(mattcalabrese)
-  //   Branch to Assignable for better errors when non-const/non-ref/non-void
-  // TODO(mattcalabrese) noexcept
   template
   < std::size_t I, class U
   , ARGOT_REQUIRES
-    ( UnionIndex< union_, I > )/*
-    ( BasicCallableWith
-      < emplace_contained_fn< alternative_type_t< I > > const&
-      , std::initializer_list< U >&, P&&...
-      >
-    )*/
+    ( UnionIndex< union_, I > )
+    ( AssignableWhenContained
+      < alternative_type_t< I >, std::initializer_list< U >& >
+    )
     ()
   >
   constexpr auto& assign( std::initializer_list< U > ilist )
+  noexcept
+  ( ARGOT_IS_MODELED
+    ( NothrowAssignableWhenContained
+      < alternative_type_t< I >, std::initializer_list< U >& >
+    )
+  )
   {
     return argot::assign_contained< alternative_type_t< I > >
     ( detail_union::union_impl_preprocessed< I >::get( pure() )
@@ -298,8 +296,6 @@ class union_
     );
   }
 
-  // TODO(mattcalabrese) Branch on const so there is a better error.
-  // TODO(mattcalabrese) Make sure this is constexpr if trivially destructible.
   template
   < std::size_t I
   , ARGOT_REQUIRES

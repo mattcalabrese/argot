@@ -27,6 +27,7 @@
 #include <argot/concepts/argument_type.hpp>
 #include <argot/concepts/argument_types.hpp>
 #include <argot/concepts/assignable.hpp>
+#include <argot/concepts/assignable_when_contained.hpp>
 #include <argot/concepts/basic_callable_with.hpp>
 #include <argot/concepts/bool_or_constant.hpp>
 #include <argot/concepts/can_default_to_reference_to.hpp>
@@ -56,6 +57,8 @@
 #include <argot/concepts/default_constructible.hpp>
 #include <argot/concepts/default_for_type.hpp>
 #include <argot/concepts/destructible.hpp>
+#include <argot/concepts/emplaceable_when_contained.hpp>
+#include <argot/concepts/emplaceable_with_result_when_contained.hpp>
 #include <argot/concepts/equality_comparable.hpp>
 #include <argot/concepts/equatable.hpp>
 #include <argot/concepts/exception.hpp>
@@ -110,11 +113,14 @@
 #include <argot/concepts/move_constructible.hpp>
 #include <argot/concepts/net_executor.hpp>
 #include <argot/concepts/nothrow_assignable.hpp>
+#include <argot/concepts/nothrow_assignable_when_contained.hpp>
 #include <argot/concepts/nothrow_constructible.hpp>
 #include <argot/concepts/nothrow_copy_assignable.hpp>
 #include <argot/concepts/nothrow_copy_constructible.hpp>
 #include <argot/concepts/nothrow_default_constructible.hpp>
 #include <argot/concepts/nothrow_destructible.hpp>
+#include <argot/concepts/nothrow_emplaceable_when_contained.hpp>
+#include <argot/concepts/nothrow_emplaceable_with_result_when_contained.hpp>
 #include <argot/concepts/nothrow_equality_comparable.hpp>
 #include <argot/concepts/nothrow_greater_equal_comparable.hpp>
 #include <argot/concepts/nothrow_greater_than_comparable.hpp>

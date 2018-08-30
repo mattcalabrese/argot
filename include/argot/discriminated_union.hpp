@@ -9,9 +9,12 @@
 #define ARGOT_DISCRIMINATED_UNION_HPP_
 
 #include <argot/call/call.hpp>
+#include <argot/concepts/assignable_when_contained.hpp>
 #include <argot/concepts/basic_callable_with.hpp>
 #include <argot/concepts/comparable.hpp>
 #include <argot/concepts/destructible.hpp>
+#include <argot/concepts/emplaceable_when_contained.hpp>
+#include <argot/concepts/emplaceable_with_result_when_contained.hpp>
 #include <argot/concepts/equality_comparable.hpp>
 #include <argot/concepts/equatable.hpp>
 #include <argot/concepts/greater_equal_comparable.hpp>
@@ -20,7 +23,10 @@
 #include <argot/concepts/less_equal_comparable.hpp>
 #include <argot/concepts/less_than_comparable.hpp>
 #include <argot/concepts/move_constructible.hpp>
+#include <argot/concepts/nothrow_assignable_when_contained.hpp>
 #include <argot/concepts/nothrow_destructible.hpp>
+#include <argot/concepts/nothrow_emplaceable_when_contained.hpp>
+#include <argot/concepts/nothrow_emplaceable_with_result_when_contained.hpp>
 #include <argot/concepts/nothrow_equality_comparable.hpp>
 #include <argot/concepts/nothrow_greater_equal_comparable.hpp>
 #include <argot/concepts/nothrow_greater_than_comparable.hpp>
@@ -60,8 +66,8 @@
 #include <argot/state_traits/less_than.hpp>
 #include <argot/state_traits/not_equal_to.hpp>
 #include <argot/union_traits/alternative_type.hpp>
-#include <argot/union_traits/index_type.hpp>
 #include <argot/union_traits/get.hpp>
+#include <argot/union_traits/index_type.hpp>
 #include <argot/variant_traits/index_of.hpp>
 #include <argot/void_.hpp>
 
@@ -96,7 +102,7 @@ struct adl_base {};
 
 // TODO(mattcalabrese) Possibly optimize the nullary and unary cases.
 
-// TODO(mattcalabrese) Make explicit "destroy" functions (with an without index)
+// TODO(mattcalabrese) Make explicit "destroy" with no index.
 // TODO(mattcalabrese) Make emplace function that's aware of the current index
 template< class... T >
 class discriminated_union
@@ -152,64 +158,54 @@ class discriminated_union
 
   discriminated_union() = default;
 
-  // TODO(mattcalabrese)
-  //   Branch to Constructible for better errors when non-const/non-ref/non-void
   template
   < std::size_t I, class Fun, class... P
   , ARGOT_REQUIRES
     ( UnionIndex< discriminated_union, I > )
-    ( BasicCallableWith
-      < emplace_contained_with_result_fn< alternative_type_t< I > >
-          const&
-      , Fun&&, P&&...
-      >
+    ( EmplaceableWithResultWhenContained
+      < alternative_type_t< I >, Fun&&, P&&... >
     )
     ()
   >
   explicit constexpr discriminated_union
   ( in_place_index_with_result_t< I > const /*in_place_index_with_result*/
   , Fun&& fun, P&&... args
-  ) noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
+  ) noexcept
+    ( ARGOT_IS_MODELED
+      ( NothrowEmplaceableWithResultWhenContained
+        < alternative_type_t< I >, Fun&&, P&&... >
+      )
+    )
     : base_t
       ( in_place_index_with_result< I >
       , emplace_contained_with_result< alternative_type_t< I > >
       , ARGOT_FORWARD( Fun )( fun ), ARGOT_FORWARD( P )( args )...
       ) {}
 
-  // TODO(mattcalabrese)
-  //   Branch to Constructible for better errors when non-const/non-ref/non-void
-  // TODO(mattcalabrese) Make sure noexcept works with contained
   template
   < index_type I, class... P
   , ARGOT_REQUIRES
     ( UnionIndex< discriminated_union, I > )
-    ( BasicCallableWith
-      < emplace_contained_fn< alternative_type_t< I > > const&
-      , P&&...
-      >
-    )
+    ( EmplaceableWhenContained< alternative_type_t< I >, P&&... > )
     ()
   >
   explicit constexpr discriminated_union
   ( std::in_place_index_t< I > const /*in_place_index*/, P&&... args )
-  noexcept( std::is_nothrow_constructible_v< alternative_type_t< I >, P&&... > )
-    : base_t
+  noexcept
+  ( ARGOT_IS_MODELED
+    ( NothrowEmplaceableWhenContained< alternative_type_t< I >, P&&... > )
+  ) : base_t
       ( in_place_index_with_result< I >
       , emplace_contained< alternative_type_t< I > >
       , ARGOT_FORWARD( P )( args )...
       ) {}
 
-  // TODO(mattcalabrese)
-  //   Branch to Constructible for better errors when non-const/non-ref/non-void
-  // TODO(mattcalabrese) Make sure noexcept works with contained
   template
   < index_type I, class U, class... P
   , ARGOT_REQUIRES
     ( UnionIndex< discriminated_union, I > )
-    ( BasicCallableWith
-      < emplace_contained_fn< alternative_type_t< I > > const&
-      , std::initializer_list< U >&, P&&...
-      >
+    ( EmplaceableWhenContained
+      < alternative_type_t< I >, std::initializer_list< U >&, P&&... >
     )
     ()
   >
@@ -218,32 +214,37 @@ class discriminated_union
   , std::initializer_list< U > ilist, P&&... args
   )
   noexcept
-  ( std::is_nothrow_constructible_v
-    < alternative_type_t< I >, std::initializer_list< U >&, P&&... >
+  ( ARGOT_IS_MODELED
+    ( NothrowEmplaceableWhenContained
+      < alternative_type_t< I >, std::initializer_list< U >&, P&&... >
+    )
   ) : base_t
       ( in_place_index_with_result< I >
       , emplace_contained< alternative_type_t< I > >
       , ilist, ARGOT_FORWARD( P )( args )...
       ) {}
 
-
-  // TODO(mattcalabrese)
-  //   Branch to Constructible for better errors when non-const/non-ref/non-void
-  // TODO(mattcalabrese) noexcept
   template
   < std::size_t I, class Fun, class... P
   , ARGOT_REQUIRES
     ( UnionIndex< discriminated_union, I > )
-    ( BasicCallableWith
-      < emplace_contained_with_result_fn< alternative_type_t< I > >
-          const&
-      , Fun&&, P&&...
-      >
+    ( EmplaceableWithResultWhenContained
+      < alternative_type_t< I >, Fun&&, P&&... >
     )
     ()
   >
   constexpr auto& emplace_with_result( Fun&& fun, P&&... args )
+  noexcept
+  (   ( std::is_nothrow_destructible_v< contained< T > > && ... )
+    && ARGOT_IS_MODELED
+       ( NothrowEmplaceableWithResultWhenContained
+         < alternative_type_t< I >, Fun&&, P&&... >
+       )
+  )
   {
+    this->template to_partially_formed
+    < !std::is_nothrow_constructible_v< alternative_type_t< I >, P&&...> >();
+
     auto& pure_alternative
       = *::new
          ( static_cast< void* >( std::addressof( alternatives ) ) )
@@ -258,21 +259,21 @@ class discriminated_union
     ( pure_alternative );
   }
 
-  // TODO(mattcalabrese)
-  //   Branch to Constructible for better errors when non-const/non-ref/non-void
-  // TODO(mattcalabrese) noexcept
   template
   < index_type I, class... P
   , ARGOT_REQUIRES
     ( UnionIndex< discriminated_union, I > )
-    ( BasicCallableWith
-      < emplace_contained_fn< alternative_type_t< I > > const&
-      , P&&...
-      >
-    )
+    ( EmplaceableWhenContained< alternative_type_t< I >, P&&... > )
     ()
   >
   constexpr auto& emplace( P&&... args )
+  noexcept
+  (    ( std::is_nothrow_destructible_v< contained< T > > && ... )
+    && ARGOT_IS_MODELED
+       ( NothrowEmplaceableWhenContained
+         < alternative_type_t< I >, P&&... >
+       )
+  )
   {
     this->template to_partially_formed
     < !std::is_nothrow_constructible_v< alternative_type_t< I >, P&&...> >();
@@ -291,21 +292,23 @@ class discriminated_union
     ( pure_alternative );
   }
 
-  // TODO(mattcalabrese)
-  //   Branch to Constructible for better errors when non-const/non-ref/non-void
-  // TODO(mattcalabrese) noexcept
   template
   < index_type I, class U, class... P
   , ARGOT_REQUIRES
     ( UnionIndex< discriminated_union, I > )
-    ( BasicCallableWith
-      < emplace_contained_fn< alternative_type_t< I > > const&
-      , std::initializer_list< U >&, P&&...
-      >
+    ( EmplaceableWhenContained
+      < alternative_type_t< I >, std::initializer_list< U >&, P&&... >
     )
     ()
   >
   constexpr auto& emplace( std::initializer_list< U > ilist, P&&... args )
+  noexcept
+  (    ( std::is_nothrow_destructible_v< contained< T > > && ... )
+    && ARGOT_IS_MODELED
+       ( NothrowEmplaceableWhenContained
+         < alternative_type_t< I >, std::initializer_list< U >&, P&&... >
+       )
+  )
   {
     this->template to_partially_formed
     < !std::is_nothrow_constructible_v
@@ -326,21 +329,18 @@ class discriminated_union
     ( pure_alternative );
   }
 
-  // TODO(mattcalabrese)
-  //   Branch to Assignable for better errors when non-const/non-ref/non-void
-  // TODO(mattcalabrese) noexcept
   template
   < index_type I, class P
   , ARGOT_REQUIRES
-    ( UnionIndex< discriminated_union, I > )/*
-    ( BasicCallableWith
-      < emplace_contained_fn< alternative_type_t< I > > const&
-      , P&&
-      >
-    )*/
+    ( UnionIndex< discriminated_union, I > )
+    ( AssignableWhenContained< alternative_type_t< I >, P&& > )
     ()
   >
   constexpr auto& assign( P&& arg )
+  noexcept
+  ( ARGOT_IS_MODELED
+    ( NothrowAssignableWhenContained< alternative_type_t< I >, P&& > )
+  )
   {
     return argot::access_contained_if_special< alternative_type_t< I > >
     ( argot::assign_contained< alternative_type_t< I > >
@@ -350,21 +350,22 @@ class discriminated_union
     );
   }
 
-  // TODO(mattcalabrese)
-  //   Branch to Assignable for better errors when non-const/non-ref/non-void
-  // TODO(mattcalabrese) noexcept
   template
   < index_type I, class U
   , ARGOT_REQUIRES
-    ( UnionIndex< discriminated_union, I > )/*
-    ( BasicCallableWith
-      < emplace_contained_fn< alternative_type_t< I > > const&
-      , std::initializer_list< U >&, P&&...
-      >
-    )*/
+    ( UnionIndex< discriminated_union, I > )
+    ( AssignableWhenContained
+      < alternative_type_t< I >, std::initializer_list< U >& >
+    )
     ()
   >
   constexpr auto& assign( std::initializer_list< U > ilist )
+  noexcept
+  ( ARGOT_IS_MODELED
+    ( NothrowAssignableWhenContained
+      < alternative_type_t< I >, std::initializer_list< U >& >
+    )
+  )
   {
     return argot::access_contained_if_special< alternative_type_t< I > >
     ( argot::assign_contained< alternative_type_t< I > >
@@ -372,8 +373,6 @@ class discriminated_union
     );
   }
 
-  // TODO(mattcalabrese) Branch on const so there is a better error.
-  // TODO(mattcalabrese) Make sure this is constexpr if trivially destructible.
   template
   < std::size_t I
   , ARGOT_REQUIRES
@@ -393,7 +392,8 @@ class discriminated_union
       index_value = partially_formed_index_value_v;
   }
 
-  // TODO(mattcalabrese) Make a way to set to partially formed, from any state?
+  // TODO(mattcalabrese) Make a way to destroy from any state?
+  // TODO(mattcalabrese) Make a way to emplace from specific state?
 
   constexpr pure_type& pure() & noexcept
   {
