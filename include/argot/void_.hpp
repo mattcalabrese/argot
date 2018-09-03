@@ -35,8 +35,7 @@ using is_regular_void = std::is_void< T >;
 
 template< class Fun, class... P >
 constexpr decltype( auto ) void_to_regular_void_invoke( Fun&& fun, P&&... args )
-noexcept
-( noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > ) )
+noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
 {
   return argot_detail::constexpr_invoke
   ( ARGOT_FORWARD( Fun )( fun ), ARGOT_FORWARD( P )( args )... );
@@ -44,8 +43,7 @@ noexcept
 
 template< class Fun, class... P >
 constexpr decltype( auto ) regular_void_to_void_invoke( Fun&& fun, P&&... args )
-noexcept
-( noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > ) )
+noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
 {
   return argot_detail::constexpr_invoke
   ( ARGOT_FORWARD( Fun )( fun ), ARGOT_FORWARD( P )( args )... );
@@ -121,7 +119,6 @@ bool constexpr is_regular_void_v< void_ volatile > = true;
 template<>
 bool constexpr is_regular_void_v< void_ volatile const > = true;
 
-// TODO(mattcalabrese) Possibly use inheritance?
 template< class T >
 using is_regular_void = std::bool_constant< is_regular_void_v< T > >;
 
@@ -145,8 +142,7 @@ using regular_void_to_void_t
 
 template< class Fun, class... P >
 constexpr decltype( auto ) void_to_regular_void_invoke( Fun&& fun, P&&... args )
-noexcept
-( noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > ) )
+noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
 {
   if constexpr
   ( std::is_void_v
@@ -165,8 +161,7 @@ noexcept
 
 template< class Fun, class... P >
 constexpr decltype( auto ) regular_void_to_void_invoke( Fun&& fun, P&&... args )
-noexcept
-( noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > ) )
+noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
 {
   if constexpr
   ( is_regular_void_v
