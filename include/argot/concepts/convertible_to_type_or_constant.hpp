@@ -1,6 +1,6 @@
 
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -34,7 +34,7 @@ template< class T, T Value >
 struct is_std_integral_constant< std::integral_constant< T, Value > >
   : std::true_type {};
 
-}  // namespace argot(::convertible_to_type_or_constant_detail)
+} // namespace argot(::convertible_to_type_or_constant_detail)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
 s/convertible_to_type_or_constant.h
@@ -81,6 +81,6 @@ struct make_concept_map
   ::_::template apply<>
 > {};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_CONVERTIBLE_TO_TYPE_OR_CONSTANT_HPP_

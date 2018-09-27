@@ -32,7 +32,7 @@ struct is_modeled_impl
   ::argot_detail_concept_is_not_mapped
 > : gen_detail::is_modeled_impl_false_base {};
 
-}  // namespace (argot::concept_detail)
+} // namespace (argot::concept_detail)
 
 #define ARGOT_EXPLICIT_CONCEPT( name )                                         \
 struct name                                                                    \

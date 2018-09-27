@@ -103,6 +103,6 @@ struct lazy_expand_access_impl< Temp, T, I, std::void_t< Temp< T, I > > >
 template< template< class /*T*/, auto /*I*/ > class Temp, class T, auto I >
 struct lazy_expand_access : lazy_expand_access_impl< Temp, T, I > {};
 
-}  // namespace (argot::call_detail)
+} // namespace (argot::call_detail)
 
 #endif  // ARGOT_DETAIL_DETECTION_HPP_

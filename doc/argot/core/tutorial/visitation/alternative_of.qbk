@@ -1,0 +1,55 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[heading Outputting a Variant]
+
+Again, the underlying problem here is that even though each of the alternatives
+of the `std::variant` has an overload for streaming, the `std::variant` itself
+does not. However, much like when we tried to output a `std::tuple` in the first
+tutorial, =Argot= supplies a facility that allows us to do what we need. In this
+case, all that we need is an ArgumentProvider that represents the currently
+active alternative of a VariantLike type. The facility in the library that
+corresponds to that idea is prov::alternative_of.
+
+[import ../../../../../example/tutorial/fundamentals/visitation/alternative_of.cpp]
+[example]
+
+[note
+  prov::alternative_of works /variant-like/ types, which is to say types that
+  model the VariantLike concept. Out-of-the-box, this means that
+  prov::alternative_of can be used with many types, including but not limited to
+  specializations of:
+
+* argot::discriminated_union
+* std::optional
+* std::variant
+* boost::optional
+* boost::variant
+
+User-defined types that model the VariantLike concept types are automatically
+able to be used with prov::alternative_of.
+]
+
+[heading Understanding prov_alternative_of]
+
+There is something more interesting about such a `std::variant` expansion than
+the expansion of a std::tuple. What we've done here is produced an argument
+whose type can only be fully known when the object is accessed. This is because
+which alternative is active at any given point in time can change at run-time.
+
+The result of a call to prov::alternative_of is known, informally, as a
+/branching argument provider/. Such an ArgumentProvider corresponds to some
+finite number of /possible/ argument lists, with the precise argument list not
+being known statically. For a prov::alternative_of provision, there are /N/
+possible argument lists, where /N/ is the number of alternatives of the
+VariantLike type. Each one of those possible argument lists represents exactly
+one argument, which is a reference to one of the alternatives of the VariantLike
+type.
+
+There are even more sophisticated branching argument providers, but this is
+perhaps the most likely one that you would use in day-to-day manipulation of
+a VariantLike type.

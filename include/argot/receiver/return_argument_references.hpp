@@ -51,8 +51,8 @@ template< class ArgumentTypes >
 using argument_types_to_tuple_t
   = typename argument_types_to_tuple< ArgumentTypes >::type;
 
-}  // namespace argot::receiver::return_argument_references_detail
-}  // namespace argot::receiver
+} // namespace argot::receiver::return_argument_references_detail
+} // namespace argot::receiver
 
 template<>
 struct make_concept_map
@@ -85,6 +85,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_RETURN_ARGUMENT_REFERENCES_HPP_

@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -45,7 +45,7 @@ ARGOT_EXPLICIT_CONCEPT( ForgetfulThenable )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 // This preprocessor block includes concept maps for all detected future-likes.
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
@@ -126,7 +126,7 @@ struct continuation< Exec, Fun, ValueType& >
   ARGOT_NO_UNIQUE_ADDRESS Fun fun;
 };
 
-}  // namespace argot(::detail_forgetful_thenable)
+} // namespace argot(::detail_forgetful_thenable)
 
 template< class Fut, class Exec >
 struct make_concept_map
@@ -157,7 +157,7 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #ifdef ARGOT_HAS_BOOST_FUTURE_WITH_CONTINUATION
 #include <argot/concepts/forgetful_thenable/detail/boost_future.hpp>

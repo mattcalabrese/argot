@@ -53,7 +53,7 @@ template< class Conversion >
 using result_of_result_of_transform_t
   = std::invoke_result_t< transform_t const&, Conversion&& >;
 
-}  // namespace argot::reducer
+} // namespace argot::reducer
 
 template< class Conversion >
 struct make_concept_map
@@ -105,6 +105,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_REDUCER_TRANSFORM_HPP_

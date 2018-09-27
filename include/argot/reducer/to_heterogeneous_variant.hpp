@@ -84,8 +84,8 @@ using remove_duplicates_t
   = typename remove_duplicates_impl
     < reducer_traits::return_types_t<>, T... >::type;
 
-}  // namespace argot::reducer::to_heterogeneous_variant_detail
-}  // namespace argot::reducer
+} // namespace argot::reducer::to_heterogeneous_variant_detail
+} // namespace argot::reducer
 
 template<>
 struct make_concept_map
@@ -161,6 +161,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_REDUCER_TO_HETEROGENEOUS_VARIANT_HPP_

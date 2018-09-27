@@ -1,0 +1,17 @@
+digraph complex_example
+{
+  edge[headport=w,tailport=e]
+  rankdir=LR
+  node[shape=Mrecord,style=filled]
+  Root[label="prov::conditional( true , prov::if_ ( true , prov::if_( true, 3 ) ) , prov::conditional( true, 4, 5 ) )",shape=box3d,fillcolor=yellowgreen]
+  Arguments[label="{0|{{int|3}}}",fillcolor=yellowgreen]
+  "Root" -> Arguments[color=yellowgreen,penwidth=4.0]
+  Leaf1[label="{1|{$ no parameters $}}",fillcolor=wheat]
+  "Root" -> Leaf1 
+  Leaf2[label="{2|{$ no parameters $}}",fillcolor=wheat]
+  "Root" -> Leaf2 
+  Leaf3[label="{3|{int}}",fillcolor=wheat]
+  "Root" -> Leaf3 
+  Leaf4[label="{4|{int}}",fillcolor=wheat]
+  "Root" -> Leaf4 
+}

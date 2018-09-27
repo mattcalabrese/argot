@@ -47,7 +47,7 @@ struct argument_receiver_of
       < ArgumentReceiverOf< Receiver, L..., ProviderArgumentLists..., T... > >;
 };
 
-}  // namespace argot::receiver_traits(::branch_to_provision_detail)
+} // namespace argot::receiver_traits(::branch_to_provision_detail)
 
 // TODO(mattcalabrese) Make forms for destruct and persistent providers.
 struct branch_to_provision_t
@@ -132,6 +132,6 @@ using result_of_branch_to_provision_t
     , LeadingPossibilities&&, TrailingPossibilities&&
     , Provider&&
     >;
-}  // namespace (argot::receiver_traits)
+} // namespace (argot::receiver_traits)
 
 #endif  // ARGOT_RECEIVER_TRAITS_BRANCH_TO_PROVISION_HPP_

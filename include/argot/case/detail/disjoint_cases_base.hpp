@@ -40,6 +40,6 @@ struct disjoint_cases_base
   }
 };
 
-}  // namespace (argot::case_detail)
+} // namespace (argot::case_detail)
 
 #endif  // ARGOT_CASE_DETAIL_DISJOINT_CASES_BASE_HPP_

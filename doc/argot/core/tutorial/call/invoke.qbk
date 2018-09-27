@@ -1,0 +1,18 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[heading argot_call as std_invoke]
+
+Though quite a bit higher-level, the argot::call facility can be thought of as
+a generalization of `std::invoke`. That is to say, when used with "normal"
+arguments, argot::call is just a higher-order function that executes a
+function object with the specified arguments, returning the result of that call.
+
+For example:
+
+[import ../../../../../example/tutorial/fundamentals/call/invoke.cpp]
+[example]

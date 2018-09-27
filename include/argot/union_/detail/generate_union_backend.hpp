@@ -42,6 +42,6 @@ namespace argot::detail_union {
 )
 #include BOOST_PP_ITERATE()
 
-}  // namespace (argot::detail_union)
+} // namespace (argot::detail_union)
 
 #endif  // ARGOT_UNION_DETAIL_GENERATE_UNION_BACKEND_HPP_

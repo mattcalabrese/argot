@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2018 Matt Calabrese
+  Copyright (c) 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -13,19 +13,19 @@
 #include <argot/conc_traits/as_future.hpp>
 #include <argot/concepts/concurrent_argument_provider.hpp>
 #include <argot/concepts/decay_sinkable.hpp>
-#include <argot/concepts/liftable_call.hpp>
+#include <argot/concepts/invocable_object_with_provision.hpp>
 #include <argot/concepts/sinkable.hpp>
-#include <argot/detail/sink.hpp>
 #include <argot/detail/forward.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
+#include <argot/detail/sink.hpp>
 #include <argot/fut/augment.hpp>
 #include <argot/fut_traits/value_type.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/lift_call.hpp>
-#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 

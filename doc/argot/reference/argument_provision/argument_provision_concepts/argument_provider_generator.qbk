@@ -1,0 +1,41 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section ArgumentProviderGenerator]
+
+[heading Description]
+
+An =ArgumentProviderGenerator= is a =callable object= that returns an
+ArgumentProviderQ when invoked.
+
+[note
+  Because every valid function parameter type is implicitly an
+  ArgumentProviderQ unless explicitly adjusted, any =callable object= that
+  returns a valid function parameter type is an =ArgumentProviderGenerator=.
+]
+
+[heading Requirements]
+
+A type is an =ArgumentProviderGenerator= for types `P...` if it is a
+=callable object= with respect to argument types `P...` and the invocation
+returns an ArgumentProviderQ.
+
+[heading Modeled by]
+Some models of =ArgumentProviderGenerator= that are included as a part of this
+library are:
+
+* prov_access_tupleQ
+* prov_active_alternative_ofQ
+* prov_composeQ
+* prov_eatQ
+* prov_identityQ
+* prov_transformQ
+* prov_unpackQ
+
+[heading Related Tutorials]
+
+[endsect]

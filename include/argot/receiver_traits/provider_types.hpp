@@ -71,7 +71,7 @@ template< class T >
 using argument_list_kinds_of_provider_types_t
   = typename argument_list_kinds_of_provider_types< T >::type;
 
-}  // namespace argot::receiver_traits
-}  // namespace argot
+} // namespace argot::receiver_traits
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_TRAITS_PROVIDER_TYPES_HPP_

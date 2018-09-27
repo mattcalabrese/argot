@@ -42,8 +42,8 @@ using undirected_vertex_descriptor
 using strict_undirected_vertex_descriptor
   = vertex_descriptor_< graph_kind::strict_undirected >;
 
-}  // namespace argot::receiver::graphviz
-}  // namespace argot::receiver
-}  // namespace argot
+} // namespace argot::receiver::graphviz
+} // namespace argot::receiver
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_GRAPHVIZ_VERTEX_DESCRIPTOR_HPP_

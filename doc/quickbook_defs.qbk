@@ -1,0 +1,363 @@
+[/==============================================================================
+    Copyright (C) 2016-2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[template argot[]argot]
+[template boost[]boost]
+[template std[]std] 
+
+[template header_opener_argot[]<argot/]
+[template header_opener_boost[]<boost/argot/]
+
+[template header_closer_argot[].hpp>]
+[template header_closer_boost[].hpp>]
+
+[template header_argot_all[]<argot.hpp>]
+[template header_boost_all[]<boost/argot.hpp>]
+
+[def namespaceQ[?__argot_namespace__[argot]][?__boost_namespace__[boost]][?__std_namespace__[std]]]
+
+[def header_allQ[?__argot_namespace__[header_argot_all]][?__boost_namespace__[header_boost_all]][?__std_namespace__[header_std_all]]]
+
+[template header_opener[][?__argot_namespace__[header_opener_argot]][?__boost_namespace__[header_opener_boost]][?__std_namespace__[header_opener_std]]]
+
+[template header_closer[][?__argot_namespace__[header_closer_argot]][?__boost_namespace__[header_closer_boost]][?__std_namespace__[header_closer_std]]]
+
+[template header_all[][header_opener][header_closer]]
+[template top_header[name][header_opener][name][header_closer]]
+[template header[space name][header_opener][space]/[name][header_closer]]
+
+[template namespaced[namespace identifier] [namespace]::[identifier]]
+
+[template note_for_ub[][note
+  Prior to reaching an operation whose execution would be undefined, this
+  facility expands `BOOST_ASSERT( false )`. For users who wish to avoid any
+  chance of undefined behavior by way of this facility, make sure that
+  `BOOST_ASSERT` is setup appropriately.
+ ]
+]
+
+[template top_header_spec[name]
+[heading Header]
+```
+ // Primary header for this facility.
+ #include ``[top_header [name]]``
+```
+]
+
+[template header_spec[space name]
+[heading Header]
+```
+ // Primary header for this facility.
+ #include ``[header [space]..[name]]``
+```
+]
+
+[template unspecified_type[][~unspecified-type]]
+[template unspecified_expansion[][~unspecified-expansion]]
+[template see_prologue_result_of[][link argot.prologue.result_of [~see-prologue]]]
+
+[template prov_synopsis_spec[name]
+[heading Synopsis]
+```
+ namespace ``namespaceQ`` {
+ namespace prov {
+
+ inline auto constexpr ``[name]`` = ``[~unspecified]``;
+
+ }  // namespace ``namespaceQ``::prov
+ }  // namespace ``namespaceQ``
+```
+]
+
+[template prov_gen_synopsis_spec[name tparams fparams]
+[heading Synopsis]
+```
+ namespace ``namespaceQ`` {
+ namespace prov {
+
+ struct
+ {
+   template< ``[tparams]`` >
+   constexpr auto operator ()( ``[fparams]`` ) const noexcept;
+ 
+ } inline constexpr ``[name]`` = {};
+
+ }  // namespace ``namespaceQ``::prov
+ }  // namespace ``namespaceQ``
+```
+]
+
+[template prov_header_synopsis_spec[name]
+[header_spec prov..[name]]
+[prov_synopsis_spec [name]]
+]
+
+[template prov_gen_header_synopsis_spec[name tparams fparams]
+[header_spec prov..[name]]
+[prov_gen_synopsis_spec [name]..[tparams]..[fparams]]
+]
+
+[template reference_section[][link argot.ref reference section]]
+
+[def default_call_algorithmQ
+  [link argot.ref.call.call default "call" algorithm]]
+
+[def Default_call_algorithmQ
+  [link argot.ref.call.call Default "call" algorithm]]
+
+[def __ConcurrentArgumentProvider__ ConcurrentArgumentProvider]
+
+[template argument_provider[] [link argot.core.terminology.argot_abstractions.argument_provider argument provider]]
+[template argument_providers[] [link argot.core.terminology.argot_abstractions.argument_provider argument providers]]
+
+[template argument_receiver[] [link argot.core.terminology.argot_abstractions.argument_receiver argument receiver]]
+[template argument_receivers[] [link argot.core.terminology.argot_abstractions.argument_receiver argument receivers]]
+
+[template return_value_reducer[] [link argot.core.terminology.argot_abstractions.return_value_reducer return value reducer]]
+[template return_value_reducers[] [link argot.core.terminology.argot_abstractions.return_value_reducer return value reducers]]
+
+[def std::decay_t [@https://en.cppreference.com/w/cpp/types/decay `std::decay_t`]]
+[def std::forward [@https://en.cppreference.com/w/cpp/utility/forward `std::forward`]]
+[def std::move [@https://en.cppreference.com/w/cpp/utility/move `std::move`]]
+[def std::remove_cvref_t [@https://en.cppreference.com/w/cpp/types/remove_cvref `std::remove_cvref_t`]]
+[def std::remove_reference_t [@https://en.cppreference.com/w/cpp/types/remove_reference `std::remove_reference_t`]]
+
+[def std::bool_constant [@https://en.cppreference.com/w/cpp/types/integral_constant `std::bool_constant`]]
+[def std::integral_constant [@https://en.cppreference.com/w/cpp/types/integral_constant `std::integral_constant`]]
+[def std::false_type [@https://en.cppreference.com/w/cpp/types/integral_constant `std::false_type`]]
+[def std::true_type [@https://en.cppreference.com/w/cpp/types/integral_constant `std::true_type`]]
+
+[def std::enable_if [@https://en.cppreference.com/w/cpp/types/enable_if `std::enable_if`]]
+
+[def std::abort [@https://en.cppreference.com/w/cpp/utility/program/abort `std::abort`]]
+[def std::exit [@https://en.cppreference.com/w/cpp/utility/program/exit `std::exit`]]
+[def std::quick_exit [@https://en.cppreference.com/w/cpp/utility/program/quick_exit `std::quick_exit`]]
+
+[def std_invoke std\u003A:invoke]
+[def std_apply std\u003A:apply]
+[def std_visit std\u003A:visit]
+
+[def std::invoke [@https://en.cppreference.com/w/cpp/utility/functional/invoke `std::invoke`]]
+[def std::apply [@https://en.cppreference.com/w/cpp/utility/apply `std::apply`]]
+[def std::visit [@https://en.cppreference.com/w/cpp/utility/variant/visit `std::visit`]]
+
+[def std::array [@https://en.cppreference.com/w/cpp/container/array `std::array`]]
+[def std::cout [@https://en.cppreference.com/w/cpp/io/cout `std::cout`]]
+[def std::optional [@https://en.cppreference.com/w/cpp/utility/optional `std::optional`]]
+[def std::pair [@https://en.cppreference.com/w/cpp/utility/pair `std::pair`]]
+[def std::string [@https://en.cppreference.com/w/cpp/string/basic_string `std::string`]]
+[def std::tuple [@https://en.cppreference.com/w/cpp/utility/tuple `std::tuple`]]
+[def std::variant [@https://en.cppreference.com/w/cpp/utility/variant `std::variant`]]
+
+[def std::ref [@https://en.cppreference.com/w/cpp/utility/functional/ref `std::ref`]]
+
+[def std::make_tuple [@https://en.cppreference.com/w/cpp/utility/tuple/make_tuple `std::make_tuple`]]
+
+[def boost::array [@https://www.boost.org/doc/libs/release/doc/html/array.html `boost::array`]]
+
+[def boost::optional [@https://www.boost.org/doc/libs/release/libs/optional/doc/html/index.html `boost::optional`]]
+[def boost::tuple [@https://www.boost.org/doc/libs/release/libs/tuple/doc/html/tuple_users_guide.html `boost::tuple`]]
+[def boost::variant [@https://www.boost.org/doc/libs/release/doc/html/variant.html `boost::variant`]]
+
+[template containers_of_boost_fusion[][@https://www.boost.org/doc/libs/release/libs/fusion/doc/html/fusion/container.html Containers of =Boost.Fusion=]]
+
+[def boost::fusion::vector [@https://www.boost.org/doc/libs/release/libs/fusion/doc/html/fusion/container/vector.html `boost::fusion::vector`]]
+[def boost::fusion::const [@https://www.boost.org/doc/libs/release/libs/fusion/doc/html/fusion/container/cons.html `boost::fusion::const`]]
+[def boost::fusion::list [@https://www.boost.org/doc/libs/release/libs/fusion/doc/html/fusion/container/list.html `boost::fusion::list`]]
+[def boost::fusion::deque [@https://www.boost.org/doc/libs/release/libs/fusion/doc/html/fusion/container/deque.html `boost::fusion::deque`]]
+[def boost::fusion::front_extended_deque [@https://www.boost.org/doc/libs/release/libs/fusion/doc/html/fusion/container/front_extended_deque.html `boost::fusion::front_extended_deque`]]
+[def boost::fusion::back_extended_deque [@https://www.boost.org/doc/libs/release/libs/fusion/doc/html/fusion/container/back_extended_deque.html `boost::fusion::back_extended_deque`]]
+[def boost::fusion::set [@https://www.boost.org/doc/libs/release/libs/fusion/doc/html/fusion/container/set.html `boost::fusion::set`]]
+[def boost::fusion::map [@https://www.boost.org/doc/libs/release/libs/fusion/doc/html/fusion/container/map.html `boost::fusion::map`]]
+
+[def Boost.Hana [@https://www.boost.org/doc/libs/release/libs/hana/doc/html/index.html =Boost.Hana=]]
+
+[def detail_argot::remove_cvref_t std::remove_cvref_t]
+[def detail_argot::remove_cvref std::remove_cvref]
+
+[def _Not Not]
+[def Not [link argot.ref.gen.not `Not`]]
+
+[def TransparentRequirement [link argot.ref.gen.transparent_requirement `TransparentRequirement`]]
+[def _TransparentRequirement TransparentRequirement]
+
+[def ARGOT_REQUIRES [link argot.ref.gen.requires `ARGOT_REQUIRES`]]
+[def _ARGOT_REQUIRES ARGOT_REQUIRES]
+
+[def ARGOT_IS_MODELED [link argot.ref.gen.is_modeled `ARGOT_IS_MODELED`]]
+[def _ARGOT_IS_MODELED ARGOT_IS_MODELED]
+
+[def _Effects_Equivalent_to_Provider Effects Equivalent to Provider]
+[def Effects_Equivalent_to_Provider [link argot.prologue.argot_elements_table /Effects Equivalent to Provider/]]
+
+[def _Constraints Constraints]
+[def _Mandates Mandates]
+[def _Expects Expects]
+[def _Ensures Ensures]
+[def _Synchronization Synchronization]
+[def _Returns Returns]
+[def _Throws Throws]
+[def _Complexity Complexity]
+[def _Remarks Remarks]
+[def _Error_Conditions Error Conditions]
+[def _Effects_Equivalent_to Effects Equivalent to]
+[def _Effects Effects]
+
+[def Constraints [link argot.prologue.standard_elements_table /Constraints/]]
+[def Mandates [link argot.prologue.standard_elements_table /Mandates/]]
+[def Expects [link argot.prologue.standard_elements_table /Expects/]]
+[def Ensures [link argot.prologue.standard_elements_table /Ensures/]]
+[def Effects [link argot.prologue.standard_elements_table /Effects/]]
+[def Synchronization [link argot.prologue.standard_elements_table /Synchronization/]]
+[def Returns [link argot.prologue.standard_elements_table /Returns/]]
+[def Throws [link argot.prologue.standard_elements_table /Throws/]]
+[def Complexity [link argot.prologue.standard_elements_table /Complexity/]]
+[def Remarks [link argot.prologue.standard_elements_table /Remarks/]]
+[def Error_Conditions [link argot.prologue.standard_elements_table /Error Conditions/]]
+[def Effects_Equivalent_to [link argot.prologue.standard_elements_table /Effects Equivalent to/]]
+
+[def reducer_toQ [link
+  argot.ref.reducer.spec.to `reducer::to`]]
+
+[def make_concept_mapQ make_concept_map]
+
+[def Callable_referenceQ [@http://en.cppreference.com/w/cpp/concept/Callable]]
+
+[def qualified_callQ [link argot.ref.call.call namespaceQ::call]]
+
+[def prov_traits_provideQ [link argot.ref.prov.traits.provide `prov_traits::provide`]]
+
+[def receiver_traits_result_of_receive_t receiver_traits::result_of_receive_t]
+
+[def receiver_traits_receiveQ receiver_traits::receive]
+
+[def reducer_provide_result_toQ [link argot.ref.reducer.spec.provide_result_to `reducer::provide_result_to`]]
+
+[def PrefaceQ [link argot.preface Preface]]
+
+[def TutorialsQ [link argot.tutorials Tutorials]]
+
+[def prov_traitsQ [link argot.ref.prov.traits prov_traits]]
+
+[def __tutorial_invoke_name__ Invoking a Callable]
+[def __tutorial_invoke__ [link argot.tutorials.basic.invoke Basic: __tutorial_invoke_name__]]
+
+[def __tutorial_unpack_name__ Unpacking a Tuple]
+[def __tutorial_unpack__ [link argot.tutorials.basic.unpack Basic: __tutorial_unpack_name__]]
+
+[def __tutorial_tuple_access_name__ Accessing a Tuple with a Runtime Index]
+[def __tutorial_tuple_access__ [link argot.tutorials.basic.tuple_access Basic: __tutorial_tuple_access_name__]]
+
+[def __tutorial_active_alternative_of_name__ Accessing the Active Field of a Variant]
+[def __tutorial_active_alternative_of__ [link argot.tutorials.basic.active_alternative_of Basic: __tutorial_active_alternative_of_name__]]
+
+[def __tutorial_compose_name__ Accessing the Active Field of Each Element of a Tuple of Variants]
+[def __tutorial_compose__ [link argot.tutorials.intermediate.compose Intermediate: __tutorial_compose_name__]]
+
+[def __tutorial_return_value_reduction_strategy_name__ Retrieving a Variant of Results When Invoking a Function with the Active Field of a Variant]
+[def __tutorial_return_value_reduction_strategy__ [link argot.tutorials.intermediate.return_value_reduction_strategy Intermediate: __tutorial_return_value_reduction_strategy_name__]]
+
+[def __tutorial_call_to_name__ Explicitly Specifying a Return Type]
+[def __tutorial_call_to__ [link argot.tutorials.intermediate.return_value_reduction_strategy Basic: __tutorial_call_to_name__]]
+
+[def __tutorial_argument_provider_name__ Creating a Simple Argument Provider]
+[def __tutorial_argument_provider__ [link argot.tutorials.advanced.argument_provider Advanced: __tutorial_argument_provider_name__]]
+
+[template simple_definition_disclaimer[][important The following is a simplified example
+  definition where the provision does not include the required conditional
+  `noexcept` declaration, nor does the provision fail substitution at the top
+  level when the ProvidableFunctionQ is not =callable= with the provided
+  arguments.]]
+
+[def unspecified_typeQ [~unspecified-type]]
+[def unspecified_valueQ [~unspecified]]
+[def unspecified_non_type_template_parameter_kindQ [~unspecified-non-type-template-parameter-kind]]
+[def unspecified_non_type_template_parameter_valueQ [~unspecified]]
+
+[def struct_expositionQ `struct`]
+
+[template description_heading[][heading Description]]
+
+[template parameters_heading[][heading Parameters]]
+
+[template provider_properties_heading[][heading Provider Properties]]
+
+[template example_usage_heading[][heading Example Usage]]
+
+[template model_of_heading[][heading Model of]]
+
+[template modeled_by_heading[][heading Modeled by]]
+
+[template refinement_of_heading[][heading Refinement of]]
+
+[template refined_by_heading[][heading Refined by]]
+
+[template related_references_heading[][heading Related References]]
+
+[template basic_usage_heading[][heading Basic Usage]]
+
+[template topics_explored_heading[][heading Topics Explored]]
+
+[template related_tutorials_heading[][heading Related Tutorials]]
+
+[template synopsis_heading[][heading Synopsis]
+The following is an outline of the interface of this facility. The names of
+identifiers may be relied on, but the precise definitions that appear in the
+outline are exposition-only and may differ from those in the actual
+implementation.]
+
+[template example_definition_heading[][heading Example Definition]
+The following is an example of how one might implement this facility. It is only
+shown as an aid in understanding certain details of operation. The actual
+implementation in the library may differ from what appears here.]
+
+[template element_spec_heading[][heading Implementation Requirements]]
+[template expects_heading[][heading _Expects]]
+[template facility_heading[][heading Facility Kind]]
+
+[template global_object_designator[]
+[facility_heading]
+* [link argot.core.terminology.facilities.global_object Global _Object]]
+
+[template global_object_template_designator[]
+[facility_heading]
+* [link argot.core.terminology.facilities.global_object_template Global _Object Template]]
+
+[template global_object_trait_designator[]
+[facility_heading]
+* [link argot.core.terminology.facilities.global_object_trait Global _Object Trait]]
+
+[template global_function_object_designator[]
+[facility_heading]
+* [link argot.core.terminology.facilities.global_function_object Global Function _Object]]
+
+[template global_function_object_template_designator[]
+[facility_heading]
+* [link argot.core.terminology.facilities.global_function_object_template Global Function _Object Template]]
+
+[template argot_gen_concept[] [link argot.gen.terminology.facilities.gen_concept =Argot.Gen= concept]]
+
+[template gen_concept_designator[]
+[facility_heading]
+* [link argot.gen.terminology.facilities.gen_concept =Argot.Gen= Concept]]
+
+[template unpack_tutorial[][link argot.core.tutorial.output Unpacking a Tuple]]
+[template visitation_tutorial[][link argot.core.tutorial.visitation Accessing a Variant Alternative]]
+
+[/ Note: These are not properly formatted as code]
+[def <iostream> [^<[@https://en.cppreference.com/w/cpp/header/iostream iostream]>]]
+[def <string> [^<[@https://en.cppreference.com/w/cpp/header/string string]>]]
+[def <tuple> [^<[@https://en.cppreference.com/w/cpp/header/tuple tuple]>]]
+[def <type_traits> [^<[@https://en.cppreference.com/w/cpp/header/type_traits type_traits]>]]
+[def <utility> [^<[@https://en.cppreference.com/w/cpp/header/utility utility]>]]
+[def <variant> [^<[@https://en.cppreference.com/w/cpp/header/variant variant]>]]
+
+[def valueless_by_exception [@https://en.cppreference.com/w/cpp/utility/variant/valueless_by_exception `valueless_by_exception`]]
+
+[template swap_idiom[] [@https://en.cppreference.com/w/cpp/named_req/Swappable swap idiom]]
+
+[template stlab_executor_concept[] [@http://stlab.cc/libraries/concurrency/executor/ stlab executor concept]]

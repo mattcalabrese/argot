@@ -57,7 +57,7 @@ constexpr call_fun_t< Fun&& > make_call_fun( Fun&& fun ) noexcept
   return { std::addressof( fun ) };
 }
 
-}  // namespace argot::detail_call_object_base
+} // namespace argot::detail_call_object_base
 
 template< class Fun >
 struct call_object_base
@@ -168,6 +168,6 @@ struct call_object_base
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CALL_OBJECT_BASE_HPP_

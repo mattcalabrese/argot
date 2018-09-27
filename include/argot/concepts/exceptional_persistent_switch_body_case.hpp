@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -37,7 +37,7 @@ struct exception_persistent_cases_requirements
       >;
 };
 
-}  // namespace argot(::exception_persistent_cases_detail)
+} // namespace argot(::exception_persistent_cases_detail)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
 s/exceptional_persitent_switch_body_case.h
@@ -64,6 +64,6 @@ ARGOT_AUTO_CONCEPT( ExceptionalPersistentSwitchBodyCase )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_EXCEPTIONAL_PERSISTENT_SWITCH_BODY_CASE_HPP_

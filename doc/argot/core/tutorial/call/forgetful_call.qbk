@@ -1,0 +1,20 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[heading Calling a Function Without Needing the Return Value]
+
+As with `std::visit`, an invocation of argot::call requires that all
+invocations of the user-provided function with the represented arguments must
+have the same exact return type. If this is not the case than substitution will
+fail. If the individual invocations would have different return types, but you
+do not need to access the return value, then you can use argot::forgetful_call,
+which is exactly the same except that the return value of each possible
+execution is discarded. Invocations of argot::forgetful_call always have the
+return type `void`.
+
+[import ../../../../../example/tutorial/fundamentals/call/forgetful_call.cpp]
+[example]

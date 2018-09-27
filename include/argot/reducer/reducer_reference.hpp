@@ -59,7 +59,7 @@ template< class Reducer >
 using result_of_reducer_reference
   = basic_result_of< reducer_reference_t const&, Reducer >;
 
-}  // namespace argot::reducer
+} // namespace argot::reducer
 
 template< class Reducer >
 struct make_concept_map
@@ -96,6 +96,6 @@ struct make_concept_map
 
 // TODO(mattcalabrese) Make persistent form
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_REDUCER_REDUCER_REFERENCE_HPP_

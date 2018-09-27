@@ -1,0 +1,16 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[heading argot_call as std_apply]
+
+Of course, argot::call can work with any number of ArgumentProviders, as well,
+just as argot::output can. One interesting implication of this is that not only
+can argot::call be thought of as a generalization of `std::invoke`, but it is
+also a generalization of std::apply:
+
+[import ../../../../../example/tutorial/fundamentals/call/apply.cpp]
+[example]

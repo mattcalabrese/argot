@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -8,6 +8,21 @@
 #ifndef ARGOT_COMPOSE_HPP_
 #define ARGOT_COMPOSE_HPP_
 
+//[description
+/*`
+argot::compose is a facility for combining a series of unary /invocable objects/
+into a single function object where the output of the first invocable object
+acts as the input to the next, whose output acts as the input to the next, and
+so on, with the return of the final invocable acting as the return of the
+resultant function object. A call to argot::compose with no arguments produces
+an identity function that perfect-forwards its input into its output by
+reference.
+
+The function object that is returned by argot::compose contains each of the
+parameters it was given, by value.
+*/
+//]
+
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/composable.hpp>
 #include <argot/concepts/decay_sinkable.hpp>
@@ -15,22 +30,28 @@
 #include <argot/concepts/potentially_invocable_object.hpp>
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
-#include <argot/detail/sink.hpp>
 #include <argot/detail/forward.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/sink.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/identity.hpp>
-#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/void_.hpp>
 
 #include <type_traits>
 #include <utility>
 
+//[docs
+/*`
+[synopsis_heading]
+*/
+
 namespace argot {
 
-struct compose_t
+struct compose_fn
 {
+  //<-
  private:
   template< class Head, class Next, class... Tail >
   struct impl;
@@ -128,7 +149,7 @@ struct compose_t
       )
     };
   }
- public:
+ public: //->
   template< class... Transformations
           , ARGOT_REQUIRES
             ( PotentiallyInvocableObject< std::decay_t< Transformations > >... )
@@ -136,7 +157,8 @@ struct compose_t
             ()
           >
   [[nodiscard]]
-  constexpr auto operator()( Transformations&&... transformations ) const
+  constexpr auto operator()( Transformations&&... transformations ) const//=;
+  //<-
   {
     if constexpr( sizeof...( Transformations ) == 0 )
       return identity;
@@ -145,17 +167,21 @@ struct compose_t
       ( call_detail::forward_and_decay_sink< Transformations >
         ( transformations )...
       );
-  }
+  } //->
 } inline constexpr compose{};
 
 template< class... Transformations >
-using result_of_compose
-  = basic_result_of< compose_t const&, Transformations... >;
+using result_of_compose//= = ``[see_prologue_result_of]``;
+//<-
+  = basic_result_of< compose_fn const&, Transformations... >; //->
 
 template< class... Transformations >
-using result_of_compose_t
-  = basic_result_of_t< compose_t const&, Transformations... >;
+using result_of_compose_t//= = ``[see_prologue_result_of]``;
+//<-
+  = basic_result_of_t< compose_fn const&, Transformations... >; //->
 
-}  // namespace argot
+} // namespace argot
+
+//]
 
 #endif  // ARGOT_COMPOSE_HPP_

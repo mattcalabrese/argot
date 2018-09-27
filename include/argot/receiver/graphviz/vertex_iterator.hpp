@@ -66,8 +66,8 @@ using undirected_vertex_iterator
 using strict_undirected_vertex_iterator
   = vertex_iterator_< graph_kind::strict_undirected >;
 
-}  // namespace argot::receiver::graphviz
-}  // namespace argot::receiver
-}  // namespace argot
+} // namespace argot::receiver::graphviz
+} // namespace argot::receiver
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_GRAPHVIZ_VERTEX_ITERATOR_HPP_

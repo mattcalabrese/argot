@@ -1,0 +1,41 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:prov Argument Providers and Argument Provider Generators]
+
+[include argument_providers/access_tuple.qbk]
+[include argument_providers/access_union.qbk]
+[include argument_providers/access_variant.qbk]
+[include argument_providers/active_alternative_of.qbk]
+[include argument_providers/bind_provision.qbk]
+[include argument_providers/compose.qbk]
+[include argument_providers/conditional.qbk]
+[include argument_providers/constant_variant_index_of.qbk]
+[include argument_providers/deep_provide.qbk]
+[include argument_providers/default_to_reference_to.qbk]
+[include argument_providers/default_to_value_of.qbk]
+[include argument_providers/eat.qbk]
+[include argument_providers/for_.qbk]
+[include argument_providers/group.qbk]
+[include argument_providers/if_.qbk]
+[include argument_providers/nothing.qbk]
+[include argument_providers/reference_to.qbk]
+[include argument_providers/switch_.qbk]
+[include argument_providers/transform.qbk]
+[include argument_providers/to_constant_bool.qbk]
+[include argument_providers/to_constant_in_range.qbk]
+[include argument_providers/to_constant_tuple_index.qbk]
+[include argument_providers/to_constant_union_index.qbk]
+[include argument_providers/to_constant_variant_index.qbk]
+[include argument_providers/tuple_indices.qbk]
+[include argument_providers/union_indices.qbk]
+[include argument_providers/unpack.qbk]
+[include argument_providers/unpack_integer_sequence.qbk]
+[include argument_providers/value_of.qbk]
+[include argument_providers/variant_indices.qbk]
+
+[endsect]

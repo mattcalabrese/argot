@@ -53,7 +53,7 @@ namespace argot::prov::switch_detail {
 #error ARGOT_MAX_PREPROCESSED_SWITCH_CASES too large for preprocessed forms.
 #endif
 
-}  // namespace (argot::prov::switch_detail)
+} // namespace (argot::prov::switch_detail)
 
 #endif  // End of check that usage of preprocessed switching is specified.
 

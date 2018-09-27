@@ -16,6 +16,6 @@ struct lazy_expand
   using type = Temp< P... >;
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_LAZY_EXPAND_HPP_

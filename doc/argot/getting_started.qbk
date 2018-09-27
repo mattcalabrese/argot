@@ -1,0 +1,172 @@
+[/==============================================================================
+    Copyright (C) 2016, 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[chapter Getting Started
+  [quickbook 1.7]
+  [id argot.prologue]
+]
+
+[h1 Using This Library]
+
+This library is developed in a Git repository located on GitHub at 
+[@http://www.github.com/mattcalabrese/argot]. In order to
+run the tests (recommended) you must have Boost.Build and an environment
+variable `BOOST_ROOT` containing the path to your root Boost directory. It only
+depends on Boost.Test for testing, and a few C++17 features. Currently only
+very recent Clang builds will pass all of the tests, due to bugs and/or missing
+C++17 features in other compilers. The library is large and forward-looking with
+no attempts to back-port to C++14 or earlier.
+
+[h1:elements Specification Elements]
+
+The =Argot= docs make use of the same /elements/ that the C++ standard has
+adopted with the proposal [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0788r3.pdf
+P0788: Standard Library Specification in a Concepts and Contracts World], which
+was accepted for C++20. These elements are used to formally describe the
+requirements of a function, a type, or a template. Descriptions of those
+elements are repeated below.
+
+[table:standard_elements_table Standard Table of Elements
+ [[ [*Element] ]        [ [*Description] ]]
+ [[['_Constraints]]     [ Conditions that must be statisfied in order for a
+                          function to participate in overload resolution. These
+                          are analogous to conditions used in a standard C++
+                          requires-clause or in a `std::enable_if` condition. If
+                          the condition is not met, substitution into the
+                          template will fail. \[/Note:/ Instead of specifying
+                          constrains via a named element, the =Argot=
+                          documentation specifies such constraints by way of the
+                          ARGOT_REQUIRES macro. This is out of convenience, at
+                          least for the time being, as the declaration of each
+                          functions is pulled directly from the source code.
+                          ['—end note]\]
+                        ]
+ ]
+ [[['_Mandates]]        [ Compile-time circumstances under which, when
+                          unsatisfied, an implementation must produce a
+                          diagnostic. Such a diagnostic is often in the form of
+                          a `static_assert`.
+                        ]
+ ]
+ [[['_Expects]]         [ Preconditions that must be met for the operation to be
+                          well-defined. _Not satisfying such a condition is
+                          formally undefined behavior, although =Argot= uses
+                          `BOOST_ASSERT` to check such conditions, allowing
+                          users to have more control over what happens on a
+                          checkable precondition violation.
+                        ]
+ ]
+ [[['_Ensures]]         [ Postconditions that the operation is guaranteed to meet
+                          upon the function's return. \[/Note:/ If a function
+                          propagates an exception instead of returning, the
+                          postconditions are not guaranteed to be met.
+                          ['—end note]\]
+                        ]
+ ]
+ [[['_Effects]]         [ A description of the actions that are performed by the
+                          function. \[/Note:/ If the documentation secifies
+                          "/_Effects_Equivalent_to/", then the code that is
+                          specified additionally describes what is returned,
+                          constraints (as-if each expression in the definition
+                          were evaluated in a SFINAE-context with all dependent
+                          types), and the `noexcept`-specification of the
+                          function (as-if the conjunction of each expression in
+                          the definition were the operand of the `noexcept`
+                          operator).['—end note]\]
+                        ]
+ ]
+ [[['_Synchronization]] [ The synchronization operations applicable to the
+                          function.
+                        ]
+ ]
+ [[['_Returns]   ]      [ A description of the values returned by the function.]]
+ [[['_Throws]    ]      [ Any exceptions thrown by the function.]]
+ [[['_Complexity]]      [ The time and/or space complexity of the function.]]
+ [[['_Remarks]   ]      [ Additional semantic constraints on the function.]]
+ [[['_Error_Conditions]][ The error conditions for error codes reported by the
+                          function.
+                        ]
+ ]
+]
+
+In addition to the standard elements described above, =Argot= also introduces
+its own:
+
+[table:argot_elements_table Argot-Specific Table of Elements
+ [[ [*Element] ]                       [ [*Description] ]]
+ [[['_Effects_Equivalent_to_Provider]] [ This is similar to an
+                                         "Effects_Equivalent_to" specification
+                                         with the following differences:
+
+                                         * It is only used when specifying a
+                                           function or function template that
+                                           returns an ArgumentProvider.
+                                         * The ArgumentProvider that is returned
+                                           by the implementation may be of a
+                                           different type than what is shown by
+                                           the code as long as its provision
+                                           would have the same effect. That is
+                                           to say, destructive provision
+                                           produces the same types of arguments,
+                                           with the same values (and argument identities, if specified). Persistent
+                                           provision also matches that of the
+                                           ArgumentProvider whenever the return
+                                           type that is shown is a
+                                           PersistentArgumentProvider.
+                                       ]
+ ]
+]
+
+[h1:directories Directory and Namespace Structure]
+
+=Argot= has several subdirectories and nested namespaces. Each nested namespace
+has a corresponding subdirectory of the same name. For example, all names that
+live in the `argot::prov` namespace are introduced by headers that are declared
+in the `argot/prov` directory. The converse, however, is not always true. That
+is to say there are some subdirectories that are used for organization, but do
+not introduce their own namespace. For example, there is an `argot/concepts`
+directory that contains all of the =Argot.Gen= concept definitions, but those
+live in the top-level `argot` namespace.
+
+Each directory in =Argot= is also coupled with a convenience header in the
+parent directory that includes all of the headers of the subdirectory. This
+convenience header has the same name as the subdirectory name, but with the
+`.hpp` extension.
+
+For example, `#include <argot/prov.hpp>` includes every header file in the
+`argot/prov/` directory. Similarly, `#include <argot.hpp>` includes every header
+file in the entire project (this is recursive, as it will ultimately include the
+convenience headers for each subdirectory).
+
+[warning It is highly recommended that you do not rely on the convenience
+         headers unless in precompiled-headers or in `.cpp` files that are not
+         frequently compiled, since parsing of these files can be costly. A
+         `#include <argot.hpp>` will pull in tens of thousands of lines of code
+         in =Argot= alone, not counting all of the code coming from transitive
+         inclusion of standard library code and other dependencies.
+]
+
+[h1:function_objects Functions as Function Objects]
+
+Most of the function-like facilities in this library are actually function
+objects.
+
+TODO(mattcalabrese) Rationale, examples
+
+[h1:result_of Template Aliases of the Form result_of_[~xxx]]
+
+Many function templates in this library come with associated `result_of_`[~xxx]
+template aliases that, when put through substitution, resolve to the return type
+of the associated operation.
+
+TODO(mattcalabrese) Basic Example and an Example with explicit template args
+
+[h1:concepts Concepts and Concept Maps]
+
+Concepts in =Argot= are represented through a sublibrary called =Argot.Gen=.
+
+TODO(mattcalabrese) Elaborate

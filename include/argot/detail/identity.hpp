@@ -27,6 +27,6 @@ struct identity
 template< class T >
 using identity_t = typename identity< T >::type;
 
-}  // namespace (argot::argot_detail)
+} // namespace (argot::argot_detail)
 
 #endif  // ARGOT_DETAIL_IDENTITY_HPP_

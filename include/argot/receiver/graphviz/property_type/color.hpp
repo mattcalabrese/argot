@@ -20,9 +20,9 @@ struct color
 
 };
 
-}  // namespace argot::receiver::graphviz::property_type
-}  // namespace argot::receiver::graphviz
-}  // namespace argot::receiver
-}  // namespace argot
+} // namespace argot::receiver::graphviz::property_type
+} // namespace argot::receiver::graphviz
+} // namespace argot::receiver
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_GRAPHVIZ_PROPERTY_TYPE_COLOR_HPP_

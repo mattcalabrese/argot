@@ -1,0 +1,27 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:provide_result_to reducer::provide_result_to]
+
+[heading Description]
+
+This function template takes a ProvidableFunctionQ `p` as a function argument
+and yields a ReturnValueReductionSpecifierQ whose associated `reduce` function
+of each corresponding ReturnValueReducerQ directly returns the result of a
+`branch` call of `p`. 
+
+[header_spec reducer..provide_result_to]
+
+[heading Model of]
+
+* ReturnValueReductionSpecifierQ
+
+[heading Basic Usage]
+
+[heading Related Tutorials]
+
+[endsect]

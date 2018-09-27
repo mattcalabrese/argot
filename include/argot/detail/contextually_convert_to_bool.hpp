@@ -17,7 +17,7 @@ struct contextually_convert_to_bool_t
 
 } inline constexpr contextually_convert_to_bool{};
 
-}  // namespace argot_detail
-}  // namespace argot
+} // namespace argot_detail
+} // namespace argot
 
 #endif  // ARGOT_DETAIL_CONTEXTUALLY_CONVERT_TO_BOOL_HPP_

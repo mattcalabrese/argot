@@ -23,8 +23,8 @@ struct is_callable : std::is_invocable< Fun&&, P&&... > {};
 template< class Fun, class... P >
 bool constexpr is_callable_v = std::is_invocable_v< Fun, P... >;
 
-}  // namespace argot::call_detail
-}  // namespace argot
+} // namespace argot::call_detail
+} // namespace argot
 
 #endif
 

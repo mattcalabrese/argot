@@ -23,7 +23,7 @@ struct expand_case_values_for_type_impl
   using apply = Template< static_cast< ValueType >( Values )... >;
 };
 
-}  // namespace expand_case_values_for_type_detail
+} // namespace expand_case_values_for_type_detail
 
 template< class Body, template< auto... > class Template, class ValueType >
 using expand_case_values_for_type_t
@@ -43,6 +43,6 @@ template< class Body, class ValueType >
 case_values_for_type_t< Body, ValueType > constexpr case_values_for_type_v{};
 */
 
-}  // namespace (argot::switch_traits)
+} // namespace (argot::switch_traits)
 
 #endif  // ARGOT_SWITCH_TRAITS_EXPAND_CASE_VALUES_FOR_TYPE_HPP_

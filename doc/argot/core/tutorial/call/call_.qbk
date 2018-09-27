@@ -1,0 +1,17 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[heading Converting to a Single Return Type]
+
+The simplest form of return value reduction is one that forces a conversion to a
+type that each possible return type is implicitly convertible to. This kind of
+reduction is common enough that there is a simple syntax for it. All you have to
+do is invoke argot::call_ with an explicit template argument corresponding to
+the return type that you desire:
+
+[import ../../../../../example/tutorial/fundamentals/call/call_.cpp]
+[example]

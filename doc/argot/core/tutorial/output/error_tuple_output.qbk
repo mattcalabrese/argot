@@ -1,0 +1,19 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[heading A First Attempt at Outputting a Tuple]
+
+Of course, the above example is not particulary interesting. We've not yet seen
+anything that you couldn't already do with `std::cout` directly. To make things
+a little bit more interesting, let's try to output a tuple.
+
+The following code will not compile, because `std::tuple` does not overload
+`operator <<`, but we will see shortly how to use argot::output to accomplish
+our goal:
+
+[import ../../../../../example/tutorial/fundamentals/output/error_tuple_output.cpp]
+[example]

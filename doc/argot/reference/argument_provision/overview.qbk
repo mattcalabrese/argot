@@ -1,0 +1,16 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[h1 Overview]
+
+The =Argument Provision= section of this documentation covers all of the
+concepts related to placeholders that are used with callQ as a means to
+describe portions of an argument list, along with models of those concepts and
+traits used to access associated types, functions, and data of those models.
+The information presented is a formal specification that is targeted toward
+people who are already familiar with the notion of argument provision that has
+been described in the PrefaceQ and TutorialsQ sections.

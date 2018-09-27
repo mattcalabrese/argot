@@ -24,8 +24,8 @@ struct traversal_category
   , public virtual boost::adjacency_graph_tag
   , public virtual boost::vertex_list_graph_tag {};
 
-}  // namespace argot::receiver::graphviz(::graph_traits_detail)
-}  // namespace (argot::receiver::graphviz)
+} // namespace argot::receiver::graphviz(::graph_traits_detail)
+} // namespace (argot::receiver::graphviz)
 
 //#include <argot/receiver/graphviz/adjacency_iterator.hpp>
 #include <argot/receiver/graphviz/edge_descriptor.hpp>
@@ -86,6 +86,6 @@ struct graph_traits< argot::receiver::graphviz::graph_< Kind > >
     = argot::receiver::graphviz::edge_iterator_< Kind >;
 };
 
-}  // namespace boost
+} // namespace boost
 
 #endif  // ARGOT_RECEIVER_GRAPHVIZ_GRAPH_DETAIL_GRAPH_TRAITS_HPP_

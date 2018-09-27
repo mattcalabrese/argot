@@ -57,6 +57,6 @@ using result_of_destructive_forgetful_then_provide_t
     , ConcProvider, Exec, Receiver
     >;
 
-}  // namespace (argot::conc_traits)
+} // namespace (argot::conc_traits)
 
 #endif  // ARGOT_CONC_TRAITS_DESTRUCTIVE_FORGETFUL_PROVIDE_HPP_

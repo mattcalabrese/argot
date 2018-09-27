@@ -23,7 +23,7 @@ namespace {
 
 void argot_test_main();
 
-}  // namespace
+} // namespace
 
 int main()
 {

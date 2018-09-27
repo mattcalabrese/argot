@@ -48,6 +48,6 @@ struct concatenate_value_lists
       >::type;
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif // ARGOT_VALUE_LIST_HPP_

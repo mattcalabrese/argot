@@ -48,6 +48,6 @@ template< class Fun, class... P >
 using result_of_forgetful_call
   = basic_result_of< forgetful_call_fn const&, Fun, P... >;
 
-}  // namespace argot
+} // namespace argot
 
 #endif // ARGOT_FORGETFUL_CALL_HPP_

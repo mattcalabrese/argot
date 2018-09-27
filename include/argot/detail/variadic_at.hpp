@@ -34,6 +34,6 @@ template< std::size_t I, class... T >
 using variadic_at_t
   = typename variadic_at_impl< I == 0 >::template apply< I, T... >;
 
-}  // namespace (argot::argot_detail)
+} // namespace (argot::argot_detail)
 
 #endif  // ARGOT_DETAIL_VARIADIC_AT_HPP_

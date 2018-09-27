@@ -66,6 +66,6 @@ using result_of_destructive_then_provide_t
     , ConcProvider, Exec, Receiver
     >;
 
-}  // namespace (argot::conc_traits)
+} // namespace (argot::conc_traits)
 
 #endif  // ARGOT_CONC_TRAITS_DESTRUCTIVE_PROVIDE_HPP_

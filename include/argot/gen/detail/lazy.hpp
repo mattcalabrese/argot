@@ -16,6 +16,6 @@ using LazyTpl = Template< P... >;
 template< class T >
 using Lazy = T;
 
-}  // namespace (argot::gen_detail)
+} // namespace (argot::gen_detail)
 
 #endif  // ARGOT_GEN_DETAIL_LAZY_HPP_

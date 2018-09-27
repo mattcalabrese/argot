@@ -1,0 +1,19 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[heading Returning a Variant of Results without Duplicates]
+
+Finally, often times when returning a variant of results, you may wish to...
+
+[note There are several ReturnValueReducers that come with =Argot=, but not all
+      are covered by the tutorials. To learn more about what kinds of reducers
+      are included, check out the [link argot.ref.reducer Return Value Reducers]
+      portion of the reference section.
+]
+
+[import ../../../../../example/tutorial/fundamentals/call/to_heterogeneous_variant.cpp]
+[example]

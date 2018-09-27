@@ -92,6 +92,6 @@ constexpr auto invocable_to_basic_callable_by_value( Inv&& invocable )
     return call_detail::forward_and_decay_sink< Inv >( invocable );
 }
 
-}  // namespace (argot::argot_detail)
+} // namespace (argot::argot_detail)
 
 #endif  // ARGOT_DETAIL_INVOKER_HPP_

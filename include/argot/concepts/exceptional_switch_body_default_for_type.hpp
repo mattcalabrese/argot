@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -38,7 +38,7 @@ struct exceptional_default_requirements
       >;
 };
 
-}  // namespace argot(::exceptional_default_detail)
+} // namespace argot(::exceptional_default_detail)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
 s/exceptional_switch_body_default_for_type.h
@@ -65,6 +65,6 @@ ARGOT_AUTO_CONCEPT( ExceptionalSwitchBodyDefaultForType )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_EXCEPTIONAL_SWITCH_BODY_DEFAULT_FOR_TYPE_HPP_

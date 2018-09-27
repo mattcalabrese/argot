@@ -32,7 +32,7 @@ struct is_modeled_impl
   < is_modeled_v< typename ConceptSpec::requirements > >::_::template apply<>
 > : gen_detail::is_modeled_impl_true_base {};
 
-}  // namespace (argot::auto_concept_detail)
+} // namespace (argot::auto_concept_detail)
 
 #define ARGOT_AUTO_CONCEPT( name )                                             \
 struct name                                                                    \

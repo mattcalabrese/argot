@@ -58,14 +58,16 @@ struct element_or_fn
 } inline constexpr element_or{};
 
 template< class Opt, class Otherwise >
-using result_of_element_or
-  = basic_result_of< element_or_fn const&, Opt, Otherwise >;
+using result_of_element_or//= = ``[see_prologue_result_of]``;
+//<-
+  = basic_result_of< element_or_fn const&, Opt, Otherwise >; //->
 
 template< class Opt, class Otherwise >
-using result_of_element_or_t
-  = basic_result_of_t< element_or_fn const&, Opt, Otherwise >;
+using result_of_element_or_t//= = ``[see_prologue_result_of]``;
+//<-
+  = basic_result_of_t< element_or_fn const&, Opt, Otherwise >; //->
 
-}  // namespace argot(::prov)
+} // namespace argot(::prov)
 
 template< class Opt, class Otherwise >
 struct make_concept_map
@@ -147,6 +149,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_PROV_ELEMENT_OR_HPP_

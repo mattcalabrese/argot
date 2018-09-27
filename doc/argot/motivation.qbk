@@ -1,0 +1,30 @@
+[/==============================================================================
+    Copyright (C) 2016, 2017, 2018 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[chapter Motivation
+  [quickbook 1.7]
+  [id argot.motivation]
+]
+
+[h1 Simplification of User Code]
+
+The primary motivation for a facility such as this arises from the desire for
+developers to reuse existing functions whenever possible without having to
+manually create lambdas. The need to create lambdas or other auxiliary named
+functions comes up frequently when a user wishes to unpack a tuple as only a
+subset of the arguments of a larger argument list in order to do things such as
+unpack only a portion of an argument list and their only tuple unpacking
+facility is `std::apply`. A similar need is common when a user needs to forward
+along the active field of a variant as only one argument of a larger argument
+list when their only facility is `std::visit`.
+
+Expanding tuples in-place in an argument list is not an uncommon practice in
+other mainstream languages such as Python, and forwarding the active alternative
+of a variant to an existing function, while rare, is also not unheard of, even
+in statically-typed languages [footnote For an example of a statically-typed
+language with the ability to access the active field of a variant, refer to the
+Clay programming language and its dispatch operator.].

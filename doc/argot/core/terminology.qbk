@@ -1,0 +1,21 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:terminology Terminology]
+
+Before diving into the library, there are several terms that will be used freely
+throughout the documentation that are described in this chapter. Whenever a term
+is used elsewhere in the documentation it will refer back to one of these
+descriptions, so you may safely skip this chapter and jump to the meat of the
+documentation if you so choose. That said, you may find it helpful to read
+through this chapter first, as it presents the terms in a logical order.
+
+[include terminology/algebraic_data_types.qbk]
+[include terminology/argot_abstractions.qbk]
+[include terminology/facilities.qbk]
+
+[endsect]

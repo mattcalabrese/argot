@@ -20,6 +20,6 @@ struct concept_base
   using assertion = requirements::assertion;
 };
 
-}  // namespace (argot::gen_detail)
+} // namespace (argot::gen_detail)
 
 #endif  // ARGOT_GEN_DETAIL_CONCEPT_BASE_HPP_

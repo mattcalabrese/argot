@@ -183,6 +183,6 @@ struct zipper_previous
 template< class Zipper >
 using zipper_previous_t = typename zipper_previous< Zipper >::type;
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_ZIPPER_HPP_

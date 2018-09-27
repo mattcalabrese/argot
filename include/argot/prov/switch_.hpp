@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,15 @@
 
 #ifndef ARGOT_PROV_SWITCH_HPP_
 #define ARGOT_PROV_SWITCH_HPP_
+
+//[description
+/*`
+prov::switch_ is a facility for expressing switch-like control flow during
+argument provision.
+
+[global_function_object_designator]
+*/
+//]
 
 // TODO(mattcalabrese) Remove unnecessary includes.
 #include <argot/basic_result_of.hpp>
@@ -20,17 +29,17 @@
 #include <argot/concepts/switchable.hpp>
 #include <argot/concepts/unhandled_switchable_value.hpp>
 #include <argot/detail/forward.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/is_modeled.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/switch_/detail/provision_kind.hpp>
 #include <argot/prov/switch_/detail/switch_impl_fwd.hpp>
 #include <argot/prov/switch_/detail/switch_provision.hpp>
 #include <argot/prov/unreachable.hpp>
-#include <argot/detail/remove_cvref.hpp>
 #include <argot/switch_traits/combine.hpp>
 #include <argot/switch_traits/num_cases.hpp>
 #include <argot/switch_traits/provider_of_isolated.hpp>
@@ -39,8 +48,13 @@
 #include <type_traits>
 #include <utility>
 
-namespace argot {
-namespace prov {
+//[docs
+/*`
+[synopsis_heading]
+*/
+
+namespace argot::prov {
+//<-
 namespace switch_detail {
 
 template< class ValueType, class... Bodies >
@@ -54,19 +68,23 @@ struct switch_impl
   ARGOT_NO_UNIQUE_ADDRESS body_t body;
 };
 
-}  // namespace argot::prov(::switch_detail)
+} // namespace argot::prov(::switch_detail)
+//->
 
 struct switch_fn
 {
   // TODO(mattcalabrese) Special-case the simple cases, like with group.
   template< class ValueType, class... Bodies
           , ARGOT_REQUIRES
-            ( Switchable< ValueType, detail_argot::remove_cvref_t< Bodies >... > )
+            ( Switchable
+              < ValueType, detail_argot::remove_cvref_t< Bodies >... >
+            )
             ( Sinkable< Bodies&& >... )
             ()
           >
   [[nodiscard]]
-  constexpr auto operator ()( ValueType const value, Bodies&&... bodies ) const
+  constexpr auto operator ()( ValueType const value, Bodies&&... bodies ) const//=;
+  //<-
   {
     if constexpr( is_modeled_v< StdIntegralConstant< ValueType > > )
     {
@@ -106,22 +124,28 @@ struct switch_fn
       "an argument to argot::prov::switch_."
     )
   ]]
-  static constexpr unreachable_t
+  static constexpr prov::unreachable_t
   switch_on_std_integral_constant_reaches_implicit_default()
   {
-    return unreachable;
-  }
+    return prov::unreachable;
+  } //->
 } inline constexpr switch_{};
 
 template< class ValueType, class... Bodies >
-using result_of_switch
-  = basic_result_of< switch_fn const&, ValueType, Bodies... >;
+using result_of_switch//= = ``[see_prologue_result_of]``;
+//<-
+  = basic_result_of< switch_fn const&, ValueType, Bodies... >; //->
 
 template< class ValueType, class... Bodies >
-using result_of_switch_t
-  = basic_result_of_t< switch_fn const&, ValueType, Bodies... >;
+using result_of_switch_t//= = ``[see_prologue_result_of]``;
+//<-
+  = basic_result_of_t< switch_fn const&, ValueType, Bodies... >; //->
 
-}  // namespace argot(::prov)
+} // namespace (argot::prov)
+
+//]
+
+namespace argot {
 
 template< class ValueType, class... Bodies >
 struct make_concept_map
@@ -149,7 +173,8 @@ struct make_concept_map
   )
   {
     return prov::switch_detail::switch_provision
-    < (   switch_traits::num_cases_v< detail_argot::remove_cvref_t< Bodies > > + ...
+    < (   switch_traits::num_cases_v< detail_argot::remove_cvref_t< Bodies > >
+        + ...
         + std::size_t{ 0 }
       )
     , prov::switch_detail::provision_kind::destructive
@@ -184,7 +209,8 @@ struct make_concept_map
   )
   {
     return prov::switch_detail::switch_provision
-    < (   switch_traits::num_cases_v< detail_argot::remove_cvref_t< Bodies > > + ...
+    < (   switch_traits::num_cases_v< detail_argot::remove_cvref_t< Bodies > >
+        + ...
         + std::size_t{ 0 }
       )
     , prov::switch_detail::provision_kind::persistent
@@ -192,6 +218,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_PROV_SWITCH_HPP_

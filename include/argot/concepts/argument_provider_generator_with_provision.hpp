@@ -43,7 +43,7 @@ struct invocations_return_an_argument_provider
          >;
 };
 
-}  // namespace argot(::detail_argument_provider_generator_with_provision)
+} // namespace argot(::detail_argument_provider_generator_with_provision)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
 s/argument_provider_generator_with_provision.h
@@ -69,6 +69,6 @@ ARGOT_AUTO_CONCEPT( ArgumentProviderGeneratorWithProvision )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_ARGUMENT_PROVIDER_GENERATOR_WITH_PROVISION_HPP_

@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,18 @@
 
 #ifndef ARGOT_CONCEPTS_SWITCH_CONDITION_HPP_
 #define ARGOT_CONCEPTS_SWITCH_CONDITION_HPP_
+
+//[description
+/*`
+SwitchCondition is an [argot_gen_concept] that is satisfied by types that are
+allowed as a standard `switch` condition.
+
+[note
+  Types that are usable in a standard `switch` condition are itegral types and
+  `enum` types.
+]
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/gen/explicit_concept.hpp>
@@ -49,6 +61,6 @@ struct make_concept_map
   < std::is_integral_v< T > || std::is_enum_v< T > >
 > {};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_SWITCH_CONDITION_HPP_

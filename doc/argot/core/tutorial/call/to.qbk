@@ -1,0 +1,21 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[heading argot_call with Return Type Reductions]
+
+Unlike with `std::visit`, argot::call comes with a variety ways of dealing with
+invocations where the different possibilities have different return types. This
+is handled in the library through the ReturnValueReducer concept. At a high
+level, a ReturnValueReducer is what tells a facility like argot::call what to
+return in cases where different different branches would have lead to
+conflicting return types. Such a ReturnValueReducer is passed to argot::call by
+way of `operator[]`.
+
+As an example, 
+
+[import ../../../../../example/tutorial/fundamentals/call/to.cpp]
+[example]

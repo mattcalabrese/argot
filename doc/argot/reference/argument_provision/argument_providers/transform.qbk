@@ -1,0 +1,37 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:transform prov::transform]
+
+`prov::transform` is 
+
+[header_spec prov..transform]
+
+[heading Synopsis]
+
+```
+ namespace namespaceQ {
+ namespace prov {
+
+ inline auto constexpr transform = ``[~unspecified]``;
+
+ // Requires:
+ //   std::remove_cv_t< std::remove_reference_t< ArgumentProvider > > is an
+ //   instantiation of argument_provider, otherwise substitution will fail.
+ template< class... ArgumentProviderGenerators >
+ constexpr /*deduced*/ operator |( ArgumentProviderGenerators&&... generators
+                                 );
+                                 
+ }  // namespace ``namespaceQ``::prov
+ }  // namespace ``namespaceQ``
+```
+
+[heading Basic Usage]
+
+[heading Related Tutorials]
+
+[endsect]

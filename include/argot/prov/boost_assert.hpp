@@ -8,6 +8,15 @@
 #ifndef ARGOT_PROV_BOOST_ASSERT_HPP_
 #define ARGOT_PROV_BOOST_ASSERT_HPP_
 
+//[description
+/*`
+prov::boost_assert is an ExceptionalPersistentArgumentProvider that expands
+`BOOST_ASSERT( false )` when provision takes place.
+
+[global_object_designator]
+*/
+//]
+
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/concepts/persistent_argument_provider.hpp>
@@ -20,12 +29,30 @@
 
 #include <boost/assert.hpp>
 
-namespace argot {
-namespace prov {
+//[docs
+/*`
+[synopsis_heading]
+*/
+
+namespace argot::prov {
 
 struct boost_assert_t {} inline constexpr boost_assert{};
 
-}  // namespace argot(::prov)
+} // namespace (argot::prov)
+
+/*`
+[provider_properties_heading]
+
+[table Provider
+ [[Property][Description]]
+ [[Logical Provision][No provision]]
+ [[Possible Argument Types][]]
+]
+*/
+
+//]
+
+namespace argot {
 
 template<>
 struct make_concept_map< ArgumentProvider< prov::boost_assert_t > >
@@ -57,6 +84,6 @@ struct make_concept_map< PersistentArgumentProvider< prov::boost_assert_t > >
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_PROV_BOOST_ASSERT_HPP_

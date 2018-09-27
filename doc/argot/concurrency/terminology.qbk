@@ -1,0 +1,17 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:terminology Terminology]
+
+The concurrency portion of =Argot= builds a lot on existing ideas in
+concurrency, but also introduces a handful of new ones that are unique to
+=Argot=. Y
+
+[include terminology/common_terms.qbk]
+[include terminology/argot_abstractions.qbk]
+
+[endsect]

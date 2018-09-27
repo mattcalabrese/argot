@@ -18,7 +18,7 @@ struct always { using type = T; };
 template< class T, class... Ignored >
 using always_t = typename always< T, Ignored... >::type;
 
-}  // namespace argot::call_detail
-}  // namespace argot
+} // namespace argot::call_detail
+} // namespace argot
 
 #endif  // ARGOT_DETAIL_ALWAYS_HPP_

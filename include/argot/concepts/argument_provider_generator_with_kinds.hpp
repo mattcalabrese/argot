@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -41,7 +41,7 @@ struct invocations_return_an_argument_provider
 };
 
 
-}  // namespace argot(::argument_provider_generator_with_kinds_detail)
+} // namespace argot(::argument_provider_generator_with_kinds_detail)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
 s/argument_provider_generator_with_kinds.h
@@ -67,6 +67,6 @@ ARGOT_AUTO_CONCEPT( ArgumentProviderGeneratorWithKinds )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_ARGUMENT_PROVIDER_GENERATOR_WITH_KINDS_HPP_

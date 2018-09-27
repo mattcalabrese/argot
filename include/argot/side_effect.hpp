@@ -8,6 +8,14 @@
 #ifndef ARGOT_SIDE_EFFECT_HPP_
 #define ARGOT_SIDE_EFFECT_HPP_
 
+//[description
+/*`
+argot::side_effect is a facilty for expanding models of ArgumentProvider purely
+for their side-effects. All arguments that are produced are left ignored, but
+the provision operation is still executed.
+*/
+//]
+
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/persistent_argument_provider.hpp>
@@ -21,6 +29,11 @@
 #include <argot/receiver/do_nothing.hpp>
 
 #include <type_traits>
+
+//[docs
+/*`
+[synopsis_heading]
+*/
 
 namespace argot {
 
@@ -41,7 +54,8 @@ struct side_effect_fn
     )
     ()
   >
-  constexpr void operator ()( Providers&&... providers ) const
+  constexpr void operator ()( Providers&&... providers ) const//=;
+  //<-
   {
     ( static_cast< void >
       ( prov_traits::provide
@@ -49,17 +63,21 @@ struct side_effect_fn
       )
     , ...
     );
-  }
+  } //->
 } inline constexpr side_effect{};
 
 template< class... P >
-using result_of_side_effect_t
-  = basic_result_of_t< side_effect_fn const&, P... >;
+using result_of_side_effect_t//= = ``[see_prologue_result_of]``;
+//<-
+  = basic_result_of_t< side_effect_fn const&, P... >; //->
 
 template< class... P >
-using result_of_side_effect
-  = basic_result_of< side_effect_fn const&, P... >;
+using result_of_side_effect//= = ``[see_prologue_result_of]``;
+//<-
+  = basic_result_of< side_effect_fn const&, P... >; //->
 
-}  // namespace argot
+} // namespace argot
+
+//]
 
 #endif // ARGOT_SIDE_EFFECT_HPP_

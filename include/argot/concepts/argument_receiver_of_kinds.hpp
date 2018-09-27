@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -45,7 +45,7 @@ struct argument_receiver_of_kinds
          >;
 };
 
-}  // namespace argot(::argument_receiver_of_kinds_detail)
+} // namespace argot(::argument_receiver_of_kinds_detail)
 
 template< class Receiver, class ArgListKinds >
 using ArgumentReceiverOfKinds
@@ -54,6 +54,6 @@ using ArgumentReceiverOfKinds
       ::argument_receiver_of_kinds< Receiver, ArgListKinds >
     >;
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_ARGUMENT_RECEIVER_OF_KINDS_HPP_

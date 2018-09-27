@@ -276,8 +276,8 @@ struct forward_and_decay_sink_t
 template< class P >
 forward_and_decay_sink_t< P > constexpr forward_and_decay_sink{};
 
-}  // namespace argot::call_detail
-}  // namespace argot
+} // namespace argot::call_detail
+} // namespace argot
 
 #define ARGOT_SINK( ... )                                                      \
 static_cast                                                                    \

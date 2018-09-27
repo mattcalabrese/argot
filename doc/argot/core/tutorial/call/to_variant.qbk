@@ -1,0 +1,15 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[heading Returning a Variant of Results]
+
+Sometimes it is important to preserve all of the data associated with the return
+value of each possible invocation. One way to do this is to store the result in
+a variant whose alternatives are each of the possible return types.
+
+[import ../../../../../example/tutorial/fundamentals/call/to_variant.cpp]
+[example]

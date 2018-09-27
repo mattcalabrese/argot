@@ -1,0 +1,67 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:facilities Kinds of Facilities]
+
+=Argot= defines a variety of /kinds/ of facilities, following certain patterns.
+
+[heading:global_object Global _Object_]
+
+When the docs describe some facility called /foo/ that is defined by =Argot= as
+a /global object/, it implies several things.
+
+* There is a type called `foo_t` in the specified namespace.
+* There is an `inline constexpr` instance of `foo_t` called `foo` in the
+  specified namespace.
+
+[heading:global_object_template Global _Object_ Template]
+
+When the docs describe some facility called /foo/ that is defined by =Argot= as
+a /global object template/, it implies several things.
+
+* There is a type called `foo_t` in the specified namespace.
+* There is an `inline constexpr` instance of `foo_t` called `foo` in the
+  specified namespace.
+
+[heading:global_object_trait Global _Object_ Trait]
+
+When the docs describe some facility called /foo/ that is defined by =Argot= as
+a /global object trait/, it implies several things.
+
+* There is a type called `foo_t` in the specified namespace.
+* There is an `inline constexpr` instance of `foo_t` called `foo_v` in the
+  specified namespace.
+
+[heading:global_function_object Global Function _Object_]
+
+When the docs describe some facility called /foo/ that is defined by =Argot= as
+a /global function object/, it implies several things.
+
+* There is a type called `foo_fn` in the specified namespace with at least one
+  overload of `operator ()`.
+* There is an `inline constexpr` instance of `foo_fn` called `foo` in the
+  specified namespace.
+* There is a `template` called `result_of_foo_t` in the specified namespace.
+  This template takes the argument types of a hypothetical call to `foo` and
+  resolves to the result type of such an invocation in a /sfinae-friendly/
+  manner.
+
+[heading:global_function_object_template Global Function _Object_ Template]
+
+When the docs describe some facility called /foo/ that is defined by =Argot= as
+a /global function object template/, it implies several things.
+
+* There is a type-template called `foo_fn` in the specified namespace with at
+  least one overload of `operator ()`.
+* There is an `inline constexpr` variable template for `foo_fn` instances
+  called `foo` in the specified namespace.
+* There is a `template` called `result_of_foo_t` in the specified namespace.
+  This template takes the explicit template arguments and the function
+  argument types of a hypothetical call to `foo` and resolves to the result
+  type of such an invocation in a /sfinae-friendly/ manner.
+
+[endsect:facilities]

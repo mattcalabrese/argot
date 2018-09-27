@@ -1,0 +1,14 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:concepts Algebraic Type Concepts]
+
+[include algebraic_type_concepts/tuple_like.qbk]
+[include algebraic_type_concepts/union_like.qbk]
+[include algebraic_type_concepts/variant_like.qbk]
+
+[endsect]

@@ -1,0 +1,87 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section call]
+
+[heading Description]
+
+This is the primary overload of `call`. It takes a =callable object= `c` and any
+amount of ArgumentProvidersQ and performs as single invocation of `c` with
+whatever each of the ArgumentProvidersQ provides, in succession. If one or
+more of the ArgumentProvidersQ is a branching ArgumentProviderQ,
+substitution will fail if the potential invocations of `c` do not all have the
+same exact return type.
+
+[note
+  If a user wishes to invoke `c` even when one or more possibly-called overloads
+  has a different return type, or if they wish to perform a reduction operation
+  on the result before it is returned, then they can do so with the other
+  call_algorithmsQ.
+]
+
+[heading Header]
+
+// TODO(mattcalabrese) Specify
+
+[heading Synopsis]
+
+```
+ namespace namespaceQ {
+
+ template< ``[~unspecified-non-type-template-parameter-kind]`` = ``[~unspecified]``
+         , class Fun, class... P
+         >
+ constexpr ``[~deduced]`` call( Fun&& fun, P&&... args ) noexcept( ``[~deduced]`` );
+
+ }  // namespace ``namespaceQ``
+```
+
+[heading Requirements]
+
+[heading Instantiation]
+Substitution will fail whenever substitution of the equivalent call_reducer_specQ
+invocation would fail.
+
+[heading Example Definition]
+
+[simple_definition_disclaimer]
+
+```
+ namespace namespaceQ {
+
+ namespace detail {
+
+ enum class require_same_return_type {};  // Only for exposition
+
+ }  // namespace ``namespaceQ``::detail
+
+ template< detail::require_same_return_type = detail::require_same_return_type{}
+         , class Fun, class... P
+         >
+ constexpr decltype( auto ) call( Fun&& fun, P&&... args )
+ {
+   return ``call_reducer_specQ``( std::forward< Fun >( fun ), std::forward< P >( args )... );
+ }
+
+ }  // namespace ``namespaceQ``
+```
+
+[heading Related Tutorials]
+
+* __tutorial_invoke__
+* __tutorial_tuple_access__
+* __tutorial_active_alternative_of__
+* __tutorial_compose__
+* __tutorial_return_value_reduction_strategy__
+
+[heading Related References]
+
+* named_call_always_returnQ
+* call_reducer_specQ
+* ArgumentProviderQ
+
+[endsect]

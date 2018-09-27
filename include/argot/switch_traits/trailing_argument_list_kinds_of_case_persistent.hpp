@@ -34,9 +34,9 @@ template< class Case, auto Value >
 trailing_argument_list_kinds_of_case_persistent_t< Case, Value > constexpr
 trailing_argument_list_kinds_of_case_persistent_v{};
 
-}  // namespace argot(::switch_traits)
+} // namespace argot(::switch_traits)
 
-}  // namespace argot
+} // namespace argot
 
 #endif
 // ARGOT_SWITCH_TRAITS_TRAILING_ARGUMENT_LIST_KINDS_OF_CASE_PERSISTENT_HPP_

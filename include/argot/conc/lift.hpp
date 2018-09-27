@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -8,23 +8,36 @@
 #ifndef ARGOT_CONC_LIFT_HPP_
 #define ARGOT_CONC_LIFT_HPP_
 
-#include <argot/concepts/concurrent_argument_provider.hpp>
+//[description
+/*`
+conc::lift is a facility that takes an ArgumentProvider and returns a
+corresponding ConcurrentArgumentProvider that provides what the original
+ArgumentProvider provides. It captures the input ArgumentProvider by value.
+*/
+//]
+
 #include <argot/concepts/argument_provider.hpp>
+#include <argot/concepts/concurrent_argument_provider.hpp>
 #include <argot/concepts/sinkable.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/fut/ready.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
-#include <argot/detail/remove_cvref.hpp>
 
-namespace argot {
-namespace conc {
+//[docs
+/*`
+[synopsis_heading]
+*/
+
+namespace argot::conc {
 
 struct lift_fn
 {
+  //<-
   template< class Provider >
   struct impl
   {
@@ -35,20 +48,36 @@ struct lift_fn
 
     ARGOT_NO_UNIQUE_ADDRESS destructive_future_argument_provider_t fut_prov;
   };
-
+  //->
   template< class Provider
-          , ARGOT_REQUIRES( ArgumentProvider< detail_argot::remove_cvref_t< Provider > > )
-                          ( Sinkable< Provider&& > )
-                          ()
+          , ARGOT_REQUIRES
+            ( ArgumentProvider< detail_argot::remove_cvref_t< Provider > > )
+            ( Sinkable< Provider&& > )
+            ()
           >
-  [[nodiscard]] constexpr auto operator()( Provider&& provider ) const
+  [[nodiscard]] constexpr auto operator()( Provider&& provider ) const//=;
+  //<-
   {
     return impl< detail_argot::remove_cvref_t< Provider > >
     { fut::ready( call_detail::forward_and_sink< Provider >( provider ) ) };
-  }
+  } //->
 } inline constexpr lift{};
 
-} // namespace argot(::conc)
+template< class Provider >
+using result_of_lift//= = ``[see_prologue_result_of]``;
+//<-
+  = basic_result_of< lift_fn const&, Provider >; //->
+
+template< class Provider >
+using result_of_lift_t//= = ``[see_prologue_result_of]``;
+//<-
+  = basic_result_of_t< lift_fn const&, Provider >; //->
+
+} // namespace (argot::conc)
+
+//]
+
+namespace argot {
 
 template< class Provider >
 struct make_concept_map

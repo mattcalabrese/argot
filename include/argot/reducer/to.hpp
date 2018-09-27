@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,15 @@
 
 #ifndef ARGOT_REDUCER_TO_HPP_
 #define ARGOT_REDUCER_TO_HPP_
+
+//[description
+/*`
+reducer::to is a facility for specifying a ReturnValueReducer that converts to
+a user-specified type. Each possible return type must be implicitly convertible
+to the user-specified type, otherwise substitution will fail when reduction is
+to take place.
+*/
+//]
 
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/basic_callable_with.hpp>
@@ -24,24 +33,30 @@
 #include <type_traits>
 #include <utility>
 
-namespace argot {
-namespace reducer {
+//[docs
+/*`
+[synopsis_heading]
+*/
 
-template< class ReturnType >
-struct to_t
+namespace argot::reducer {
+
+template< class Ret >
+struct to_t//= {};
+//<-
 {
-  ARGOT_CONCEPT_ASSERT( argot::ReturnType< ReturnType > );
-};
+  ARGOT_CONCEPT_ASSERT( ReturnType< Ret > );
+}; //->
 
-template< class ReturnType >
-ARGOT_REQUIRES( argot::ReturnType< ReturnType > )
-< to_t< ReturnType > > constexpr to{};
+template< class Ret >
+ARGOT_REQUIRES( ReturnType< Ret > )
+< to_t< Ret > > constexpr to{};
 
+//<-
 namespace to_detail {
 
 // TODO(mattcalabrese) Remove this base and old-style sfinae.
 // TODO(mattcalabrese) If bool, use ContextuallyConvertibleToBool
-template< class ReturnType, class /*Enabler*/ = void >
+template< class Ret, class /*Enabler*/ = void >
 struct to_impl
 {
   using is_homogeneous = std::true_type;
@@ -49,12 +64,12 @@ struct to_impl
   template
   < class... LeadingReturnTypes, class... TrailingReturnTypes, class Fun >
   static constexpr ARGOT_REQUIRES
-  ( argot::ReturnType< LeadingReturnTypes >... )
-  ( argot::ReturnType< TrailingReturnTypes >... )
+  ( ReturnType< LeadingReturnTypes >... )
+  ( ReturnType< TrailingReturnTypes >... )
   ( BasicCallableWith< Fun&& > )
-  ( Convertible< basic_result_of_t< Fun&& >, ReturnType > )
-  < ReturnType >
-  reduce( to_t< ReturnType > /*self*/
+  ( Convertible< basic_result_of_t< Fun&& >, Ret > )
+  < Ret >
+  reduce( to_t< Ret > /*self*/
         , reducer_traits::return_types_t< LeadingReturnTypes... >
         , reducer_traits::return_types_t< TrailingReturnTypes... >
         , Fun&& fun
@@ -64,10 +79,10 @@ struct to_impl
   }
 };
 
-template< class ReturnType >
+template< class Ret >
 struct to_impl
-< ReturnType
-, call_detail::fast_enable_if_t< std::is_void_v< ReturnType > >
+< Ret
+, call_detail::fast_enable_if_t< std::is_void_v< Ret > >
 >
 {
   using is_homogeneous = std::true_type;
@@ -75,11 +90,11 @@ struct to_impl
   template
   < class... LeadingReturnTypes, class... TrailingReturnTypes, class Fun >
   static constexpr ARGOT_REQUIRES
-  ( argot::ReturnType< LeadingReturnTypes >... )
-  ( argot::ReturnType< TrailingReturnTypes >... )
+  ( ReturnType< LeadingReturnTypes >... )
+  ( ReturnType< TrailingReturnTypes >... )
   ( BasicCallableWith< Fun&& > )
   < void >
-  reduce( to_t< ReturnType > /*self*/
+  reduce( to_t< Ret > /*self*/
         , reducer_traits::return_types_t< LeadingReturnTypes... >
         , reducer_traits::return_types_t< TrailingReturnTypes... >
         , Fun&& fun
@@ -89,18 +104,23 @@ struct to_impl
   }
 };
 
-}  // namespace argot::reducer::to_detail
-}  // namespace argot::reducer
+} // namespace argot::reducer::to_detail
+//->
+} // namespace (argot::reducer)
 
-template< class ReturnType >
-struct make_concept_map< ReturnValueReducer< reducer::to_t< ReturnType > > >
-  : reducer::to_detail::to_impl< ReturnType >{};
+//]
 
-template< class ReturnType >
+namespace argot {
+
+template< class Ret >
+struct make_concept_map< ReturnValueReducer< reducer::to_t< Ret > > >
+  : reducer::to_detail::to_impl< Ret >{};
+
+template< class Ret >
 struct make_concept_map
-< PersistentReturnValueReducer< reducer::to_t< ReturnType > > >
-  : reducer::to_detail::to_impl< ReturnType >{};
+< PersistentReturnValueReducer< reducer::to_t< Ret > > >
+  : reducer::to_detail::to_impl< Ret >{};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_REDUCER_TO_HPP_

@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2018 Matt Calabrese
+  Copyright (c) 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -8,16 +8,31 @@
 #ifndef ARGOT_EXECUTOR_IMMEDIATE_HPP_
 #define ARGOT_EXECUTOR_IMMEDIATE_HPP_
 
+//[description
+/*`
+executor::immediate is an ImmediateExecutor that invokes its argument in the
+current thread of execution and returns without any other side-effects.
+*/
+//]
+
 #include <argot/concepts/executor.hpp>
 #include <argot/detail/forward.hpp>
 #include <argot/gen/make_concept_map.hpp>
 
-namespace argot {
-namespace executor {
+//[docs
+/*`
+[synopsis_heading]
+*/
+
+namespace argot::executor {
 
 struct immediate_t {} inline constexpr immediate;
 
-}  // namespace argot(::executor)
+} // namespace (argot::executor)
+
+//]
+
+namespace argot {
 
 template<>
 struct make_concept_map< Executor< executor::immediate_t > >

@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2018 Matt Calabrese
+  Copyright (c) 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,13 @@
 
 #ifndef ARGOT_CONCEPTS_VARIANT_INDEX_HPP_
 #define ARGOT_CONCEPTS_VARIANT_INDEX_HPP_
+
+//[description
+/*`
+VariantIndex is an [argot_gen_concept] for determining if a value is a valid
+index for the given VariantLike type.
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/variant_like.hpp>
@@ -53,6 +60,6 @@ struct make_concept_map
   >::_::template apply<>
 > {};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_VARIANT_INDEX_HPP_

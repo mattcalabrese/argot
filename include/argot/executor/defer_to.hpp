@@ -70,7 +70,7 @@ template< class NetExec, class Alloc = std::allocator< void > >
 using result_of_defer_to
   = basic_result_of< defer_to_fn const&, NetExec, Alloc >;
 
-}  // namespace argot(::executor)
+} // namespace argot(::executor)
 
 template< class NetExec, class Alloc >
 struct make_concept_map

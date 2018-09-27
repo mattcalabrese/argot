@@ -1,0 +1,24 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[chapter Standardization
+  [quickbook 1.7]
+  [id argot.standardization]
+]
+
+[h1 Proposal]
+
+This library has an associated proposal targeting the C++ standard using the
+root document number P0376 [footnote The most recent revision of the proposal
+corresponding to this library for the C++ standard library that has been in a
+WG21 mailing at the time of this writing is
+[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0376r0.html P0376R0].
+A more recent [@ ../../p0376_draft.html draft] is included in the top-level
+directory of this library.]. Because it is in continued development, this
+library will likely diverge from the proposal before updates are brought back in
+in future revisions. It is also of a broader scope than the standard proposal,
+which only presents the most fundamental facilities.

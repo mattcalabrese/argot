@@ -106,6 +106,6 @@ using result_of_reduce
 
 // TODO(mattcalabrese) Make a result of unbound reduce.
 
-}  // namespace (argot::reducer_traits)
+} // namespace (argot::reducer_traits)
 
 #endif  // ARGOT_REDUCER_TRAITS_REDUCE_HPP_

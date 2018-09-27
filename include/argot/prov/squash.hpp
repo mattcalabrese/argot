@@ -8,6 +8,17 @@
 #ifndef ARGOT_PROV_SQUASH_HPP_
 #define ARGOT_PROV_SQUASH_HPP_
 
+//[description
+/*`
+prov::squash is an ArgumentProviderGenerator that takes a
+HigherOrderArgumentProvider, `provider`, as an argument, and returns an
+ArgumentProvider that expands to what `provider` expands to after provision. It
+is a monadic join.
+
+[global_function_object_designator]
+*/
+//]
+
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/argument_receiver_of_kinds.hpp>
@@ -16,11 +27,12 @@
 #include <argot/concepts/persistent_argument_provider.hpp>
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/concatenate.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/nothing.hpp>
 #include <argot/prov/value_of.hpp>
@@ -32,14 +44,11 @@
 #include <argot/receiver/nested_receiver.hpp>
 #include <argot/receiver/provide_arguments_to.hpp>
 #include <argot/receiver/receiver_reference.hpp>
-#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 #include <utility>
 
-namespace argot {
-namespace prov {
-namespace squash_detail {
+namespace argot::prov::squash_detail {
 
 template< class ArgumentTypes >
 struct squashed_argument_types_impl_impl;
@@ -77,10 +86,18 @@ using persistent_squashed_argument_types_t
   = typename squashed_argument_types_impl
     < prov_traits::argument_list_kinds_of_persistent_t< Provider > >::type;
 
-}  // namespace argot::prov(::squash_detail)
+} // namespace (argot::prov::squash_detail)
+
+//[docs
+/*`
+[synopsis_heading]
+*/
+
+namespace argot::prov {
 
 struct squash_fn
 {
+//<-
  public:
   template< class Provider >
   struct impl
@@ -89,14 +106,16 @@ struct squash_fn
 
     ARGOT_NO_UNIQUE_ADDRESS Provider provider;
   };
- public:
+ public: //->
   template< class Provider
           , ARGOT_REQUIRES
             ( HigherOrderArgumentProvider< detail_argot::remove_cvref_t< Provider > > )
             ( Sinkable< Provider&& > )
             ()
           >
-  [[nodiscard]] constexpr auto operator ()( Provider&& provider ) const
+  [[nodiscard]]
+  constexpr auto operator ()( Provider&& provider ) const//=;
+  //<-
   {
     using provider_type = detail_argot::remove_cvref_t< Provider >;
 
@@ -110,16 +129,24 @@ struct squash_fn
       else
         return impl< detail_argot::remove_cvref_t< Provider > >
         { call_detail::forward_and_sink< Provider >( provider ) };
-  }
+  } //->
 } inline constexpr squash{};
 
 template< class Provider >
-using result_of_squash = basic_result_of< squash_fn const&, Provider >;
+using result_of_squash//= = ``[see_prologue_result_of]``;
+//<-
+  = basic_result_of< squash_fn const&, Provider >; //->
 
 template< class Provider >
-using result_of_squash_t = basic_result_of_t< squash_fn const&, Provider >;
+using result_of_squash_t//= = ``[see_prologue_result_of]``;
+//<-
+  = basic_result_of_t< squash_fn const&, Provider >; //->
 
-}  // namespace argot(::prov)
+} // namespace (argot::prov)
+
+//]
+
+namespace argot {
 
 template< class Provider >
 struct make_concept_map< ArgumentProvider< prov::squash_fn::impl< Provider > > >
@@ -172,6 +199,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_PROV_SQUASH_HPP_

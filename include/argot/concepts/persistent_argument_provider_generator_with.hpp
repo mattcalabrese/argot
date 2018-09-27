@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,14 @@
 
 #ifndef ARGOT_CONCEPTS_PERSISTENT_ARGUMENT_PROVIDER_GENERATOR_WITH_HPP_
 #define ARGOT_CONCEPTS_PERSISTENT_ARGUMENT_PROVIDER_GENERATOR_WITH_HPP_
+
+//[description
+/*`
+PersistentArgumentProviderGeneratorWith is an [argot_gen_concept] that is
+satisfied if the specified PersistentInvocableObject returns an ArgumentProvider
+when const-lvalue-invoked with the specified argument types.
+*/
+//]
 
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/argument_provider_generator_with.hpp>
@@ -34,7 +42,7 @@ struct invocation_returns_an_argument_provider
 };
 
 
-}  // namespace argot(::persistent_argument_provider_generator_with_detail)
+} // namespace argot(::persistent_argument_provider_generator_with_detail)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
 s/persistent_argument_provider_generator_with.h
@@ -60,6 +68,6 @@ ARGOT_AUTO_CONCEPT( PersistentArgumentProviderGeneratorWith )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_PERSISTENT_ARGUMENT_PROVIDER_GENERATOR_WITH_HPP_

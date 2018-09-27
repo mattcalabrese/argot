@@ -84,9 +84,9 @@ ARGOT_RECEIVER_GRAPHVIZ_EDGE_PROPERTY_DECL( weight );
 ARGOT_RECEIVER_GRAPHVIZ_EDGE_PROPERTY_DECL( xlabel );
 ARGOT_RECEIVER_GRAPHVIZ_EDGE_PROPERTY_DECL( xlp );
 
-}  // namespace argot::receiver::graphviz::edge_property
-}  // namespace argot::receiver::graphviz
-}  // namespace argot::receiver
-}  // namespace argot
+} // namespace argot::receiver::graphviz::edge_property
+} // namespace argot::receiver::graphviz
+} // namespace argot::receiver
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_GRAPHVIZ_EDGE_PROPERTY_HPP_

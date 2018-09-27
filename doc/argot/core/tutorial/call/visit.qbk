@@ -1,0 +1,14 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[heading argot_call as std_visit]
+
+Perhaps unsurprisingly, just as argot::call is a generalization of
+`std::invoke`, it is also a generalization of `std::visit`:
+
+[import ../../../../../example/tutorial/fundamentals/call/visit.cpp]
+[example]

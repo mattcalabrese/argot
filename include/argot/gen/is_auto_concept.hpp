@@ -25,6 +25,6 @@ template< class T >
 using is_auto_concept
   = std::bool_constant< T::argot_gen_detail_is_auto_concept_v >;
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_GEN_IS_AUTO_CONCEPT_HPP_

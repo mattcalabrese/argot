@@ -45,7 +45,7 @@ struct as_impl
   elements_type elements;
 };
 
-}  // namespace argot(::prov::as_detail)
+} // namespace argot(::prov::as_detail)
 
 template< class... P >
 struct make_concept_map
@@ -99,6 +99,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_PROV_AS_DETAIL_AS_IMPL_HPP_

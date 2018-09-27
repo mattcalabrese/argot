@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -14,10 +14,10 @@
 #include <argot/concepts/persistent_argument_provider.hpp>
 #include <argot/concepts/persistent_argument_provider_to.hpp>
 #include <argot/detail/conditional.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -27,6 +27,7 @@ struct provide_t
 {
   // TODO(mattcalabrese)
   //   Possibly check if we can even sinklike_cast.
+  // TODO(mattcalabrese) Make the constrain readable
   template
   < class Provider, class Receiver
   , ARGOT_REQUIRES
@@ -70,6 +71,6 @@ template< class Provider, class Receiver >
 using result_of_provide
   = basic_result_of< provide_t const&, Provider, Receiver >;
 
-}  // namespace (argot::prov_traits)
+} // namespace (argot::prov_traits)
 
 #endif  // ARGOT_PROV_TRAITS_PROVIDE_HPP_

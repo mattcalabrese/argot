@@ -1,0 +1,47 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:transform reducer::transform]
+
+[heading Description]
+
+[header_spec reducer..transform]
+
+[heading Synopsis]
+
+```
+ namespace namespaceQ {
+ namespace reducer {
+
+ template< class ReturnType >
+ inline auto constexpr transform = ``[~unspecified]``;
+
+ }  // namespace ``namespaceQ``::reducer
+ }  // namespace ``namespaceQ``
+```
+
+[heading Model of]
+
+* HomogeneousReturnValueReductionSpecifierQ
+
+[heading Basic Usage]
+
+```
+ int main()
+ {
+   using namespaceQ::reducer::always_return;
+
+   // The following two invocations of are equivalent.
+   namespaceQ::call[ trasnform( TODO(mattcalabrese) Fill in ) ]( []( int ) {}, 5 );
+
+   namespaceQ::call< void >( []( int ) {}, 5 );
+ }
+```
+
+[heading Related Tutorials]
+
+[endsect]

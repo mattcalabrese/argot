@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -8,14 +8,24 @@
 #ifndef ARGOT_PROV_GROUP_HPP_
 #define ARGOT_PROV_GROUP_HPP_
 
+//[description
+/*`
+prov::group is used to logically concatenate a series of ArgumentProviders
+together into a single ArgumentProvider.
+
+[global_function_object_designator]
+*/
+//]
+
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/argument_receiver_of_kinds.hpp>
 #include <argot/concepts/persistent_argument_provider.hpp>
 #include <argot/concepts/sinkable.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/nothing.hpp>
 #include <argot/prov/provider_reference.hpp>
@@ -25,16 +35,20 @@
 #include <argot/prov_traits/persistent_provide.hpp>
 #include <argot/receiver/receiver_reference.hpp>
 #include <argot/receiver/with_trailing_provider.hpp>
-#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 #include <utility>
 
-namespace argot {
-namespace prov {
+//[docs
+/*`
+[synopsis_heading]
+*/
+
+namespace argot::prov {
 
 struct group_fn
 {
+//<-
  public:
   // TODO(mattcalabrese) Skip over every instance of prov::nothing_t and
   //                     reference to prov::nothing_t.
@@ -97,6 +111,7 @@ struct group_fn
     };
   }
  public:
+//->
   template< class... Providers
           , ARGOT_REQUIRES
             ( ArgumentProvider< detail_argot::remove_cvref_t< Providers > >... )
@@ -105,22 +120,48 @@ struct group_fn
           >
   [[nodiscard]]
   constexpr auto operator ()( Providers&&... providers ) const
-  noexcept( ( call_detail::is_nothrow_sinkable_v< Providers&& > && ... ) )
+  noexcept( ( call_detail::is_nothrow_sinkable_v< Providers&& > && ... ) )//=;
+  //<-
   {
     if constexpr( sizeof...( Providers ) == 0 ) return prov::nothing;
     else
       return make_impl
       ( call_detail::forward_and_sink< Providers >( providers )... );
-  }
+  } //->
 } inline constexpr group{};
 
 template< class... Providers >
-using result_of_group = basic_result_of< group_fn const&, Providers... >;
+using result_of_group//= = ``[see_prologue_result_of]``;
+//<-
+  = basic_result_of< group_fn const&, Providers... >; //->
 
 template< class... Providers >
-using result_of_group_t = basic_result_of_t< group_fn const&, Providers... >;
+using result_of_group_t//= = ``[see_prologue_result_of]``;
+//<-
+  = basic_result_of_t< group_fn const&, Providers... >; //->
 
-}  // namespace argot(::prov)
+} // namespace (argot::prov)
+
+/*`
+[table Parameters
+ [[Parameter][Requirement][Description]]
+ [[`Providers&&... providers`]
+  [Each parameter of `providers` is a Sinkable reference to a possibly-qualified
+   ArgumentProvider
+  ]
+  [The ArgumentProviders to be logically concatenated together]
+ ]
+]
+
+[provider_properties_heading]
+
+// TODO(mattcalabrese) Make table
+
+*/
+
+//]
+
+namespace argot {
 
 template< class... T >
 struct make_concept_map
@@ -182,6 +223,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_PROV_GROUP_HPP_

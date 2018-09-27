@@ -63,6 +63,6 @@ using result_of_destructive_provide
   = basic_result_of
     < destructive_provide_t const&, Case&&, ValueType&&, Receiver&& >;;
 */
-}  // namespace (argot::switch_traits)
+} // namespace (argot::switch_traits)
 
 #endif  // ARGOT_SWITCH_TRAITS_PERSISTENT_PROVIDE_ISOLATED_CASE_HPP_

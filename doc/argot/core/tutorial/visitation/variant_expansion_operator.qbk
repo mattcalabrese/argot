@@ -1,0 +1,23 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[h1 Expansion Operator]
+
+Just like with tuple expansion, as described in the first tutorial, there is a
+convenience operator for performing variant expansion:
+
+[import ../../../../../example/tutorial/fundamentals/visitation/variant_expansion_operator.cpp]
+[example]
+
+[h2 Expansion Operator Details]
+
+Notice that this operator is actually the same as for tuple expansion. Rather
+than being a specific operator to TupleLike types, the expansion operator is a
+very general operator that is used to expand objects that have a "default"
+ArgumentProvider that is commonly associated with them. In the case of a
+TupleLike type, that operation is equivalent to prov::unpack. In the case of a
+VariantLike type, that operation is equivalent to prov::alternative_of.

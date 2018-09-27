@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -15,7 +15,7 @@
 
 namespace argot {
 
-struct forward_arguments_as_tuple_t
+struct forward_arguments_as_tuple_fn
 {
   template< class... P >
   constexpr std::tuple< P&&... > operator ()( P&&... args ) const
@@ -24,6 +24,6 @@ struct forward_arguments_as_tuple_t
   }
 } inline constexpr forward_arguments_as_tuple{};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_FORWARD_ARGUMENTS_AS_TUPLE_HPP_

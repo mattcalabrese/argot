@@ -48,6 +48,6 @@ struct make_concept_map
 , call_detail::fast_enable_if_t< std::is_same_v< T, std::decay_t< T > > >
 > {};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_DECAYED_TYPE_HPP_

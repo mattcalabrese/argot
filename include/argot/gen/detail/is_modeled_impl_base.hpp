@@ -37,7 +37,7 @@ struct is_modeled_impl_false_base
   using or_ = std::bool_constant< is_modeled_v< Or< ConceptSpecs... > > >;
 };
 
-}  // namespace argot(::gen_detail)
-}  // namespace argot
+} // namespace argot(::gen_detail)
+} // namespace argot
 
 #endif  // ARGOT_GEN_DETAIL_IS_MODELED_IMPL_BASE_HPP_

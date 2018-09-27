@@ -343,10 +343,10 @@ struct graphviz_dot_string_impl
   }
 };
 
-}  // namespace argot::receiver::return_graphviz_dot_detail
+} // namespace argot::receiver::return_graphviz_dot_detail
 
-}  // namespace argot::receiver
-}  // namespace argot
+} // namespace argot::receiver
+} // namespace argot
 
 #endif
 

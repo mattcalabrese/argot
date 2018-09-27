@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,14 @@
 
 #ifndef ARGOT_CONCEPTS_IMMEDIATE_EXECUTOR_HPP_
 #define ARGOT_CONCEPTS_IMMEDIATE_EXECUTOR_HPP_
+
+//[description
+/*`
+ImmediateExecutor is an [argot_gen_concept] for `Executor` types that complete
+the execution of Invocables that they are given before returning from `execute`
+operations.
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/executor.hpp>
@@ -36,6 +44,6 @@ ARGOT_EXPLICIT_CONCEPT( ImmediateExecutor )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_IMMEDIATE_EXECUTOR_HPP_

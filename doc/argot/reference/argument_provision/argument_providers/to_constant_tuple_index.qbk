@@ -1,0 +1,13 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:to_constant_tuple_index prov::to_constant_tuple_index]
+
+[import ../../../../../example/prov/to_constant_tuple_index.cpp]
+[docs]
+
+[endsect]

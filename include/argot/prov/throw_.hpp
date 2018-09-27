@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -8,6 +8,15 @@
 #ifndef ARGOT_PROV_THROW_HPP_
 #define ARGOT_PROV_THROW_HPP_
 
+//[description
+/*`
+prov::throw_ is used to create an ExceptionalArgumentProvider that throws an
+exception during provision.
+
+[global_function_object_template_designator]
+*/
+//]
+
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/concepts/constructible.hpp>
@@ -15,13 +24,14 @@
 #include <argot/concepts/exception.hpp>
 #include <argot/concepts/persistent_argument_provider.hpp>
 #include <argot/concepts/sinkable.hpp>
-#include <argot/detail/unreachable.hpp>
 #include <argot/detail/forward.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
+#include <argot/detail/unreachable.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/impossible.hpp>
-#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/group.hpp>
 #include <argot/prov_traits/argument_list_kinds_of_destructive.hpp>
@@ -29,20 +39,24 @@
 #include <argot/receiver/reduced_invoke.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/reducer/same_type_or_fail.hpp>
-#include <argot/detail/remove_cvref.hpp>
 
-namespace argot {
-namespace prov {
+//[docs
+/*`
+[synopsis_heading]
+*/
+
+namespace argot::prov {
+//<-
 namespace throw_detail {
 
-template< class ExceptionType, class Provider >
+template< class Excep, class Provider >
 struct throw_impl
 {
-  ARGOT_CONCEPT_ASSERT( Exception< ExceptionType > );
+  ARGOT_CONCEPT_ASSERT( Exception< Excep > );
   ARGOT_CONCEPT_ASSERT( ArgumentProvider< Provider > );
   ARGOT_CONCEPT_ASSERT
   ( ConstructibleWithKinds
-    < ExceptionType
+    < Excep
     , prov_traits::argument_list_kinds_of_destructive_t< Provider >
     >
   );
@@ -50,63 +64,95 @@ struct throw_impl
   ARGOT_NO_UNIQUE_ADDRESS Provider provider;
 };
 
-template< class ExceptionType >
+template< class Excep >
 struct throwing_function
 {
-  ARGOT_CONCEPT_ASSERT( Exception< ExceptionType > );
+  ARGOT_CONCEPT_ASSERT( Exception< Excep > );
 
   template
   < class... P
-  , ARGOT_REQUIRES( Constructible< ExceptionType, P&&... > )()
+  , ARGOT_REQUIRES( Constructible< Excep, P&&... > )()
   >
   [[noreturn]] impossible operator()( P&&... args ) const
   {
-    throw ExceptionType( ARGOT_FORWARD( P )( args )... );
+    throw Excep( ARGOT_FORWARD( P )( args )... );
   }
 };
 
-}  // namespace argot::prov(::throw_detail)
+} // namespace argot::prov(::throw_detail)
+//->
 
-template< class ExceptionType >
+template< class Excep >
 struct throw_fn
 {
-  ARGOT_CONCEPT_ASSERT( Exception< ExceptionType > );
-
+  //<-
+  ARGOT_CONCEPT_ASSERT( Exception< Excep > );
+  //->
   template
   < class... P
   , ARGOT_REQUIRES
     ( ArgumentProvider< detail_argot::remove_cvref_t< P > >... )
     ( Sinkable< P&& >... )
     ( ConstructibleWithKinds
-      < ExceptionType
+      < Excep
       , prov_traits::argument_list_kinds_of_destructive_t
-        < result_of_group_t< P&&... > >
+        < prov::result_of_group_t< P&&... > >
       >
     )
     ()
   >
-  [[nodiscard]] constexpr auto operator ()( P&&... providers ) const
+  [[nodiscard]]
+  constexpr auto operator ()( P&&... providers ) const//=;
+  //<-
   {
     return throw_detail::throw_impl
-    < ExceptionType, result_of_group_t< P&&... > >
+    < Excep, result_of_group_t< P&&... > >
     { prov::group( call_detail::forward_and_sink< P >( providers )... ) };
-  }
+  } //->
 };
 
-template< class ExceptionType >
-ARGOT_REQUIRES( Exception< ExceptionType > )
-< throw_fn< ExceptionType > > constexpr throw_{};
+template< class Excep >
+ARGOT_REQUIRES( Exception< Excep > )
+< throw_fn< Excep > > constexpr throw_{};
 
-template< class ExceptionType, class... P >
-using result_of_throw_
-  = basic_result_of< throw_fn< ExceptionType > const&, P... >;
+template< class Excep, class... P >
+using result_of_throw_//= = ``[see_prologue_result_of]``;
+//<-
+  = basic_result_of< throw_fn< Excep > const&, P... >; //->
 
-template< class ExceptionType, class... P >
-using result_of_throw_t
-  = ARGOT_REQUIRES( Exception< ExceptionType > )
-    < basic_result_of_t< throw_fn< ExceptionType > const&, P... > >;
+template< class Excep, class... P >
+using result_of_throw_t//= = ``[see_prologue_result_of]``;
+//<-
+  = ARGOT_REQUIRES( Exception< Excep > )
+    < basic_result_of_t< throw_fn< Excep > const&, P... > >; //->
 
-}  // namespace argot(::prov)
+} // namespace (argot::prov)
+
+/*`
+[table Explicit Template Parameters
+ [[Parameter][Requirement][Description]]
+ [[`class Excep`]
+  [An Exception type]
+  [The type of the exception to be thrown]
+ ]
+]
+
+[table Function Parameters
+ [[Parameter][Requirement][Description]]
+ [[`P&&... providers`]
+  [Each type in `P&&...` is a Sinkable reference to a possibly-qualified
+   ArgumentProvider
+  ]
+  [After provision, the arguments to construct the exception as if by direct
+   non-list initialization
+  ]
+ ]
+]
+*/
+
+//]
+
+namespace argot {
 
 template< class ExceptionType, class Provider >
 struct make_concept_map
@@ -173,6 +219,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_PROV_THROW_HPP_

@@ -1,11 +1,10 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#include <argot/gen/associated_requirements.hpp>
 #include <argot/gen/auto_concept.hpp>
 #include <argot/gen/explicit_concept.hpp>
 #include <argot/gen/is_modeled.hpp>

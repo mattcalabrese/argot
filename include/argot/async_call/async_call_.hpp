@@ -71,7 +71,7 @@ ARGOT_REQUIRES( FuturePackager< FPackager > )
               ( ReturnType< Ret > )
 < async_call_to_fn< FPackager, Ret > > constexpr async_call_{};
 
-}  // namespace argot
+} // namespace argot
 
 
 #endif  // ARGOT_ASYNC_CALL_ASYNC_CALL_TO_HPP_

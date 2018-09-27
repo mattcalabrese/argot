@@ -1,0 +1,35 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:is_homogeneous reducer_traits::is_homogeneous]
+
+[heading Description] 
+
+[header_spec reducer_traits..is_homogeneous]
+
+[heading Synopsis]
+
+```
+ namespace namespaceQ {
+ namespace reducer_traits {
+
+ template< class ReturnValueReducer >
+ struct is_homogeneous;
+
+ template< class ReturnValueReducer >
+ inline bool constexpr is_homogeneous_v
+   = is_homogeneous< ReturnValueReducer >::value;
+
+ }  // namespace ``namespaceQ``::reducer_traits
+ }  // namespace ``namespaceQ``
+```
+
+[heading Basic Usage]
+
+[heading Related Tutorials]
+
+[endsect]

@@ -26,7 +26,7 @@ namespace reducer {
 
 struct same_type_or_fail_t {} inline constexpr same_type_or_fail{};
 
-}  // namespace argot(::reducer)
+} // namespace argot(::reducer)
 
 template<>
 struct make_concept_map
@@ -84,6 +84,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_REDUCER_SAME_TYPE_OR_FAIL_HPP_

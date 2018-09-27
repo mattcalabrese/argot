@@ -78,7 +78,7 @@ struct no_cases_impl
       >::type;
 };
 
-}  // namespace
+} // namespace
    //   argot::switch_traits(::argument_list_kinds_of_body_destructive_detail)
 
 template< class Body, class ValueType >
@@ -103,8 +103,8 @@ template< class Body, class ValueType >
 argument_list_kinds_of_body_destructive_t< Body, ValueType > constexpr
 argument_list_kinds_of_body_destructive_v{};
 
-}  // namespace argot(::switch_traits)
+} // namespace argot(::switch_traits)
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_SWITCH_TRAITS_ARGUMENT_LIST_KINDS_OF_BODY_DESTRUCTIVE_HPP_

@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,13 @@
 
 #ifndef ARGOT_VOID_HPP_
 #define ARGOT_VOID_HPP_
+
+//[description
+/*`
+This header contains various facilities for interacting with `void` in generic
+code.
+*/
+//]
 
 #ifdef __cpp_regular_void // If Regular Void p0146 is implemented...
 
@@ -19,7 +26,7 @@ namespace argot {
 
 using void_ = void;
 
-inline void_ constexpr void_v{};
+inline constexpr void_ void_v{};
 
 template< class T >
 using void_to_regular_void_t = T;
@@ -49,14 +56,14 @@ noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
   ( ARGOT_FORWARD( Fun )( fun ), ARGOT_FORWARD( P )( args )... );
 }
 
-}  // namespace argot
+} // namespace argot
 
 #else  // Otherwise, we live in a dystopian world without Regular Void p0146.
 
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
-#include <argot/detail/give_qualifiers_to.hpp>
 #include <argot/detail/forward.hpp>
+#include <argot/detail/give_qualifiers_to.hpp>
 
 #include <cstddef>
 #include <functional>
@@ -174,7 +181,7 @@ noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
     ( ARGOT_FORWARD( Fun )( fun ), ARGOT_FORWARD( P )( args )... );
 }
 
-}  // namespace argot
+} // namespace argot
 
 namespace std {
 
@@ -188,7 +195,7 @@ struct hash< ::argot::void_ >
   }
 };
 
-}  // namespace std
+} // namespace std
 
 #endif  // End of branching for Regular Void
 

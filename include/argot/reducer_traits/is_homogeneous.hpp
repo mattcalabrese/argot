@@ -23,7 +23,7 @@ using is_homogeneous
 template< class Reducer >
 bool constexpr is_homogeneous_v = is_homogeneous< Reducer >::value;
 
-}  // namespace argot::reducer_traits
-}  // namespace argot
+} // namespace argot::reducer_traits
+} // namespace argot
 
 #endif  // ARGOT_REDUCER_TRAITS_IS_HOMOGENEOUS_HPP_

@@ -31,6 +31,6 @@ bool constexpr is_nothrow_basic_callable_v
       ( argot_detail::exact_declval< P&& >()... )  // TODO(mattcalabrese) Eliminate the &&
     );
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_BASIC_RESULT_OF_HPP_

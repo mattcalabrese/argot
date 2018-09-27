@@ -28,6 +28,6 @@ struct concept_checker_base
   using ARGOT_RESULT_TYPE_ = T;
 };
 
-}  // namespace (argot::gen_detail)
+} // namespace (argot::gen_detail)
 
 #endif  // ARGOT_GEN_DETAIL_CONCEPT_BASE_HPP_

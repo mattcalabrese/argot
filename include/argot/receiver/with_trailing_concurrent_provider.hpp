@@ -71,7 +71,7 @@ using result_of_with_trailing_concurrent_provider
   = basic_result_of
     < with_trailing_concurrent_provider_t const&, Receiver, Provider >;
 
-}  // namespace argot::receiver
+} // namespace argot::receiver
 
 template< class Receiver, class Provider >
 struct make_concept_map
@@ -110,6 +110,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_WITH_TRAILING_CONCURRENT_PROVIDER_HPP_

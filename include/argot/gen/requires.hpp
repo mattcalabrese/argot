@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -8,10 +8,18 @@
 #ifndef ARGOT_GEN_REQUIRES_HPP_
 #define ARGOT_GEN_REQUIRES_HPP_
 
-#include <argot/gen/transparent_requirement.hpp>
+//[description
+/*`
+ARGOT_REQUIRES is a macro that can be used to enable and disable templates via
+substitution failures as based on one or more /gen concepts/, or produce a hard
+error when expanded elsewhere. 
+*/
+//]
+
 #include <argot/gen/is_auto_concept.hpp>
 #include <argot/gen/is_modeled.hpp>
 #include <argot/gen/requires/detail/macro_backend.hpp>
+#include <argot/gen/transparent_requirement.hpp>
 
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
@@ -92,7 +100,7 @@ struct requires_impl< H, T... >
 
 struct empty {};
 
-}  // namespace argot(::requires_detail)
+} // namespace argot(::requires_detail)
 
 // TODO(mattcalabrese)
 //   Branch based on if it's a Not requirements so that we can produce and error
@@ -113,11 +121,21 @@ using requires_
   = FAILED_BECAUSE_THE_FOLLOWING_CONCEPT_IS_NOT_MODELED
     < typename requires_detail::requires_impl< ConceptSpecs... >::type >;
 
-}  // namespace argot
+} // namespace argot
 
 #define ARGOT_REQUIRES( ... )                                                  \
 typename ::argot::requires_< __VA_ARGS__ >::_::template ARGOT_RESULT
 
 #include <argot/gen/type.hpp>
+
+//[docs
+/*`
+[synopsis_heading]
+
+```
+``#define ARGOT_REQUIRES( ... ) [unspecified_expansion]``
+```
+*/
+//]
 
 #endif  // ARGOT_GEN_REQUIRES_HPP_

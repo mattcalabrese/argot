@@ -56,7 +56,7 @@ struct provider_of_isolated_default_t
   Body body;
 };
 
-}  // namespace argot::switch_traits(::provider_of_isolated_detail)
+} // namespace argot::switch_traits(::provider_of_isolated_detail)
 
 // TODO(mattcalabrese) Make the concept contain this, but with a default.
 template< auto Value >
@@ -96,7 +96,7 @@ ARGOT_REQUIRES( SwitchCondition< decltype( Value ) > )
 
 // TODO(mattcalabrese) Make result of calculators
 
-}  // namespace argot(::switch_traits)
+} // namespace argot(::switch_traits)
 
 template< class Body, auto Value >
 struct make_concept_map
@@ -232,6 +232,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_SWITCH_TRAITS_PROVIDER_OF_CASE_HPP_

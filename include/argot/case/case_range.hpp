@@ -73,7 +73,7 @@ using expand_offset_range_t
       ( UnderlyingBegin )
     >::type;
 
-}  // namespace argot(::case_range_detail)
+} // namespace argot(::case_range_detail)
 
 // TODO(mattcalabrese) Constrain
 template< auto Begin, auto End >
@@ -120,6 +120,6 @@ struct make_concept_map< CaseLabels< case_range_t< Begin, End > > >
       >;
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CASE_CASE_RANGE_HPP_

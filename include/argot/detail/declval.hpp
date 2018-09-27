@@ -15,7 +15,7 @@ using add_rvalue_reference_t = T&&;
 
 extern char dummy[];
 
-}  // namespace (argot::detail_declval)
+} // namespace (argot::detail_declval)
 
 #define ARGOT_DECLVAL( ... )                                                   \
 reinterpret_cast                                                               \

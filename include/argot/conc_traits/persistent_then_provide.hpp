@@ -68,6 +68,6 @@ using result_of_persistent_then_provide_t
     , ConcProvider, Exec, Receiver
     >;
 
-}  // namespace (argot::conc_traits)
+} // namespace (argot::conc_traits)
 
 #endif  // ARGOT_CONC_TRAITS_PERSISTENT_PROVIDE_HPP_

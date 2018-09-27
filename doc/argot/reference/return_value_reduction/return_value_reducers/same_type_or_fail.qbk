@@ -1,0 +1,41 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:same_type_or_fail reducer::same_type_or_fail]
+
+[heading Description]
+
+The `same_type_or_fail` template is a ReturnValueReductionSpecifierQ that will
+only succeed at substitution if all of the argument types are exactly the same.
+In this case, the return type of the resultant ReturnValueReducerQ is that
+type and the associated `reduce` function directly returns the result of the
+call to the source function. The default ReturnValueReductionSpecifierQ of the
+default_call_algorithmQ is `same_type_or_fail`.
+
+[header_spec reducer..same_type_or_fail]
+
+[heading Model of]
+
+* HomogeneousReturnValueReductionSpecifierQ
+
+[heading Basic Usage]
+
+```
+ int main()
+ {
+  using namespaceQ::reducer::same_type_or_fail;
+
+  // The following two invocations are equivalent.
+  namespaceQ::call_[ same_type_or_fail ]( []( int ) {}, 5 );
+
+  namespaceQ::call( []( int ) {}, 5 );
+ }
+```
+
+[heading Related Tutorials]
+
+[endsect]

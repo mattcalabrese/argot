@@ -16,7 +16,7 @@ namespace call_detail {
 template< auto Value >
 using constant = std::integral_constant< decltype( Value ), Value >;
 
-}  // namespace call_detail
-}  // namespace argot
+} // namespace call_detail
+} // namespace argot
 
 #endif  // ARGOT_DETAIL_CONSTANT_HPP_

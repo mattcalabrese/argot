@@ -1,0 +1,47 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section ArgumentProvider]
+
+[heading Description]
+
+An =ArgumentProvider= is an object that is capable of being expanded into zero
+or more valid parameter types. An =ArgumentProvider= is primarily used as a
+placeholder argument appearing as one of the trailing of an invocation of one of
+the call_algorithmsQ. In such a case, an =ArgumentProvider= describes a portion
+of the argument list that should be passed to the target =callable object= which
+was passed in as the first argument to the call_algorithmQ.
+
+Put another way, while a lambda is generally used as a means to create a
+=function object= to be passed to a higher-order function, which is then
+executed, an =ArgumentProvider= can be thought of as a means to create a series
+of 0 or more arguments to be passed to one of the =Callable= parameters of a
+higher-order function.
+
+[heading Requirements]
+
+In order for a type `T` to be a valid =ArgumentProvider= it must be a valid
+function parameter type for which prov_traits_provideQ invokes its source
+function exactly once with any number of arguments and directly returns the
+result of that invocation.
+
+[heading Models]
+Unless behavior is overridden, every type that is a valid parameter type is
+implicitly an =ArgumentProvider= that perfect-forwards itself. Most of the
+[^ArgumentProvider]s that exist in this library are unnamed and created by an
+ArgumentProviderGeneratorQ. Named [^ArgumentProvider]s with a behavior that
+is different from the default are listed below:
+
+* prov_nothingQ
+
+[heading Related References]
+
+* prov_traitsQ
+* call_algorithmsQ
+* ArgumentProviderGeneratorQ
+
+[endsect]

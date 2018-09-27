@@ -28,6 +28,6 @@ struct deduced_concept_assertion
       < ConceptSpec >::CONCEPT_ASSERTION_FAILURE;
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_GEN_DETAIL_CONCEPT_ASSERTION

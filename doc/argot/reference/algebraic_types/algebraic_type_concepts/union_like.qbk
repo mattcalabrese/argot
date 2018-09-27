@@ -1,0 +1,40 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section UnionLike]
+
+[heading Description]
+
+A =UnionLike= is an =object type= that represents exactly one of `N` different
+contained /alternatives/ at any given point in the object's lifetime. The value
+`N` and the type of each /alternative/ are fixed at compile-time. Each model of
+the =UnionLike= concept is accessible through a set of traits provided by the
+library, which include functions to access to each alternative's type and value.
+
+[heading Requirements]
+
+In order to model the =UnionLike= concept, the `concept_map_` `template` must
+be specialized for the type and define the following nested names with the
+specified semantics:
+
+[heading Traits]
+
+TODO(mattcalabrese) Describe the traits
+
+[heading Modeled by]
+
+* `std::variant< `[~H, T...]` >`
+* `boost::variant< `[~H, T...]` >`
+
+[heading Refined by]
+
+* VariantLikeQ
+
+[heading Related References]
+
+
+[endsect]

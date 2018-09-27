@@ -13,6 +13,6 @@ namespace argot {
 template< class T >
 struct TransparentRequirement {};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_GEN_TRANSPARENT_REQUIREMENT_HPP_

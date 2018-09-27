@@ -31,6 +31,6 @@ struct make_concept_map
 , call_detail::fast_enable_if_t< !is_modeled_v< ConceptSpec > >
 >{};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_GEN_NOT_HPP_

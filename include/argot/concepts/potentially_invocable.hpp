@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,13 @@
 
 #ifndef ARGOT_CONCEPTS_POTENTIALLY_INVOCABLE_HPP_
 #define ARGOT_CONCEPTS_POTENTIALLY_INVOCABLE_HPP_
+
+//[description
+/*`
+PotentiallyInvocable is an [argot_gen_concept] that is satisfied by types that
+have the potential to have an overloaded `operator()`.
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/gen/explicit_concept.hpp>
@@ -32,7 +39,7 @@ struct can_add_ref_impl< T, std::void_t< T& > > : std::true_type {};
 template< class T >
 struct can_add_ref : can_add_ref_impl< T >::type {};
 
-}  // namespace argot(::potentially_invocable_detail)
+} // namespace argot(::potentially_invocable_detail)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
 s/potentially_invocable.h
@@ -74,6 +81,6 @@ struct make_concept_map
   ::_::template apply<>
 > {};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_POTENTIALLY_INVOCABLE_HPP_

@@ -54,6 +54,6 @@ using result_of_destructive_provide_isolated_default
     , Body&&, ValueType&&, Receiver&&
     >;
 
-}  // namespace (argot::switch_traits)
+} // namespace (argot::switch_traits)
 
 #endif  // ARGOT_SWITCH_TRAITS_DESTRUCTIVE_PROVIDE_ISOLATED_DEFAULT_HPP_

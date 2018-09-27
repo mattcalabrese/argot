@@ -8,24 +8,51 @@
 #ifndef ARGOT_PROV_ASSERT_HPP_
 #define ARGOT_PROV_ASSERT_HPP_
 
+//[description
+/*`
+prov::assert_ is an ExceptionalPersistentArgumentProvider that expands
+`assert( false )` when provision takes place.
+
+[global_object_designator]
+*/
+//]
+
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/concepts/persistent_argument_provider.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/detail/unreachable.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/impossible.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
-#include <argot/detail/remove_cvref.hpp>
 
 #include <cassert>
 
-namespace argot {
-namespace prov {
+//[docs
+/*`
+[synopsis_heading]
+*/
+
+namespace argot::prov {
 
 struct assert_t {} inline constexpr assert_{};
 
-}  // namespace argot(::prov)
+} // namespace (argot::prov)
+
+/*`
+[provider_properties_heading]
+
+[table Provider
+ [[Property][Description]]
+ [[Logical Provision][No provision]]
+ [[Possible Argument Types][]]
+]
+*/
+
+//]
+
+namespace argot {
 
 template<>
 struct make_concept_map< ArgumentProvider< prov::assert_t > >
@@ -57,6 +84,6 @@ struct make_concept_map< PersistentArgumentProvider< prov::assert_t > >
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_PROV_ASSERT_HPP_

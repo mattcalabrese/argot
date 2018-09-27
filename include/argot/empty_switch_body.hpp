@@ -29,6 +29,6 @@ struct make_concept_map< SwitchBody< empty_switch_body_t > >
   using expand_case_values_t = Template<>;
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_EMPTY_SWITCH_BODY_HPP_

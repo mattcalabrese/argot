@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,14 @@
 
 #ifndef ARGOT_CONCEPTS_PERSISTENT_ARGUMENT_PROVIDER_TO_HPP_
 #define ARGOT_CONCEPTS_PERSISTENT_ARGUMENT_PROVIDER_TO_HPP_
+
+//[description
+/*`
+PersistentArgumentProviderTo is an [argot_gen_concept] that is satisfied if the
+specified PersistentArgumentProvider is compatible with the specified
+ArgumentReceiver when undergoing persistent provision.
+*/
+//]
 
 #include <argot/concepts/argument_receiver_of_kinds.hpp>
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
@@ -38,7 +46,7 @@ struct argument_receiver_of
       >;
 };
 
-}  // namespace argot(::persistent_argument_provider_to_detail)
+} // namespace argot(::persistent_argument_provider_to_detail)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
 s/persistent_argument_provider_to.h
@@ -65,6 +73,6 @@ ARGOT_AUTO_CONCEPT( PersistentArgumentProviderTo )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_PERSISTENT_ARGUMENT_PROVIDER_TO_HPP_

@@ -1,0 +1,47 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:argot_abstractions Argot-Specific Abstractions]
+
+In addition to more general abstractions, =Argot= makes use of some of its own
+abstractions that are specific to the library. 
+
+[heading:argument_provider Argument Provider]
+
+The most fundamental notion that is specific to =Argot= is called an
+/argument provider/ and is represented by the ArgumentProvider concept. A type
+that models the ArgumentProvider concept represents an /argument list/ in an
+ordered set of possible argument lists. 
+
+TODO(mattcalabrese) Example
+
+[heading:argument_receiver Argument Receiver]
+
+An /argument receiver/ is an object that can process a series of arguments,
+usually being passed to it by an ArgumentProvider, in addition to processing a
+compile-time representation of other possible argument lists that it could
+have been passed (which would have appeared depending on run-time control flow).
+
+TODO(mattcalabrese) Example
+
+[heading:return_value_reducer Return Value Reducer]
+
+A /return value reducer/ is a concept that is similar in many ways to an
+/argument receiver/, though users are more likely to encounter them in practice
+because they are used with the higher-level facilities of =Argot=. A return
+value reducer is responsible for taking a return value and a set of other
+possible return types (which would have appeared depending on run-time control
+flow) and optionally transforming that return value to something different,
+including potential changes to its type. It is represented by the concept ReturnValueReducer.
+
+This idea is rather simple, though is difficult to explain verbally, so below is
+a concrete example of a usage of on of the ReturnValueReducer types that is
+included in the library.
+
+TODO(mattcalabrese) Example
+
+[endsect]

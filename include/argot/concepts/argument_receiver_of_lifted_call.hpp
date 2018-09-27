@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -11,7 +11,7 @@
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/concepts/argument_receiver_of.hpp>
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
-#include <argot/concepts/liftable_call.hpp>
+#include <argot/concepts/invocable_object_with_provision.hpp>
 #include <argot/gen/auto_concept.hpp>
 #include <argot/gen/transparent_requirement.hpp>
 
@@ -52,7 +52,7 @@ struct argument_receiver_of_lifted_call_requirements
     , reducer_traits::return_types_of_call_t< Invocable, Providers... >
     > {};
 
-}  // namespace argot(::argument_receiver_of_lifted_call_detail)
+} // namespace argot(::argument_receiver_of_lifted_call_detail)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
 s/argument_receiver_of_lifted_call.h
@@ -69,7 +69,7 @@ template< class Receiver, class Invocable, class... Providers >
 ARGOT_AUTO_CONCEPT( ArgumentReceiverOfLiftedCall )
 (
   ArgumentReceiver< Receiver >
-, LiftableCall< Invocable, Providers... >
+, InvocableObjectWithProvision< Invocable, Providers... >
 , TransparentRequirement
   < argument_receiver_of_lifted_call_detail
     ::argument_receiver_of_lifted_call_requirements
@@ -81,6 +81,6 @@ ARGOT_AUTO_CONCEPT( ArgumentReceiverOfLiftedCall )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_ARGUMENT_RECEIVER_OF_LIFTED_CALL_HPP_

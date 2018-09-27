@@ -45,7 +45,7 @@ struct stlab_fn
 
 } inline constexpr stlab;
 
-}  // namespace argot(::executor)
+} // namespace argot(::executor)
 
 template< class StlabExec >
 struct make_concept_map< Executor< executor::stlab_fn::impl< StlabExec > > >

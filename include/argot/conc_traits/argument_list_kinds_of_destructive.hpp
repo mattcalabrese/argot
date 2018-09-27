@@ -75,7 +75,7 @@ struct deduce_argument_list_kinds_of
       >;
 };
 
-}  // namespace argot::conc_traits(::argument_list_kinds_of_destructive_detail)
+} // namespace argot::conc_traits(::argument_list_kinds_of_destructive_detail)
 
 template< class Provider >
 using argument_list_kinds_of_destructive_t
@@ -105,7 +105,7 @@ template< class Provider >
 argument_list_kinds_of_destructive_t< Provider > constexpr
 argument_list_kinds_of_destructive_v{};
 
-}  // namespace argot(::conc_traits)
+} // namespace argot(::conc_traits)
 
 template<>
 struct make_concept_map

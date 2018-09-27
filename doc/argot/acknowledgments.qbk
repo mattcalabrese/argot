@@ -1,0 +1,17 @@
+[/==============================================================================
+    Copyright (C) 2016, 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[chapter Acknowledgments
+  [quickbook 1.7]
+  [id argot.acknowledgments]
+]
+
+Thanks to Tony Van Eerd, who unintentionally encouraged me to flesh out this
+library into what it has become. Also thanks to Louis Dionne, Vittorio Romeo,
+Jackie Kay, Bryce Lelbach, Gašper Ažman, Jeff Snyder, Zach Laine, Alisdair
+Meredith, Peter Dimov, Michael Caisse, and all others who voiced their support
+and interest during its development.

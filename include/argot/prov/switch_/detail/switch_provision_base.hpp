@@ -55,6 +55,6 @@ struct switch_provision_base< provision_kind::persistent >
       < Body, ValueType >;
 };
 
-}  // namespace (argot::prov::switch_detail)
+} // namespace (argot::prov::switch_detail)
 
 #endif  // ARGOT_PROV_SWITCH_DETAIL_SWITCH_PROVISION_BASE_HPP_

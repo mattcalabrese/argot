@@ -1,0 +1,16 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:range_concatenation 5. Implementing Range Concatenation]
+
+[topics_explored_heading]
+
+* argot::call
+* prov::index_of
+* The expansion operator
+
+[endsect:range_concatenation]

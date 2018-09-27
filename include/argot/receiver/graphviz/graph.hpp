@@ -313,7 +313,7 @@ struct clear_vertex_directed
   }
 };
 
-}  // namespace argot::receiver::graphviz::graph_detail
+} // namespace argot::receiver::graphviz::graph_detail
 
 template< graph_kind Kind >
 void clear_vertex
@@ -381,7 +381,7 @@ struct add_edge_strict_impl
   }
 };
 
-}  // namespace argot::receiver::graphviz::graph_detail
+} // namespace argot::receiver::graphviz::graph_detail
 
 // Note:
 //   For graphs that do not allow parallel edges this violates complexity
@@ -477,8 +477,8 @@ void remove_in_edge_if
 
 // TODO(mattcalabrese) Implement remove_edge_if
 
-}  // namespace argot::receiver::graphviz
-}  // namespace argot::receiver
-}  // namespace argot
+} // namespace argot::receiver::graphviz
+} // namespace argot::receiver
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_GRAPHVIZ_GRAPH_HPP_

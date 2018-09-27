@@ -58,7 +58,7 @@ using partition_previous_t = zipper_previous_t< PartitionedProviders >;
 template< class PartitionedProviders >
 using partition_previous = zipper_previous< PartitionedProviders >;
 
-}  // namespace (argot::receiver_traits)
+} // namespace (argot::receiver_traits)
 
 #endif
 

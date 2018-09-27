@@ -34,6 +34,6 @@ using result_of_expand = basic_result_of< expand_fn const&, Exp >;
 template< class Exp >
 using result_of_expand_t = basic_result_of_t< expand_fn const&, Exp >;
 
-}  // namespace (argot::prov)
+} // namespace (argot::prov)
 
 #endif  // ARGOT_PROV_EXPAND_EXPAND_HPP_

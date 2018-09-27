@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2018 Matt Calabrese
+  Copyright (c) 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -118,7 +118,7 @@ template< class Receiver >
 using result_of_default_to_expand_arguments_to
   = basic_result_of< default_to_expand_arguments_to_t const&, Receiver  >;
 
-}  // namespace argot(::detail_expandable)
+} // namespace argot(::detail_expandable)
 
 template< class Receiver >
 struct make_concept_map
@@ -172,6 +172,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_DETAIL_CONC_EXPANDABLE_DETAIL_DEFAULT_TO_EXPAND_ARGUMENTS_TO_HPP_

@@ -40,6 +40,6 @@ struct conditional< false >
   using half_meta_apply = U;
 };
 
-}  // namespace (argot::argot_detail)
+} // namespace (argot::argot_detail)
 
 #endif  // ARGOT_DETAIL_CONDITIONAL_HPP_

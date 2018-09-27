@@ -120,7 +120,7 @@ struct switch_provision
 
 #endif  // ARGOT_MAX_PREPROCESSED_SWITCH_CASES_IS_VALID
 
-}  // namespace (argot::prov::switch_detail)
+} // namespace (argot::prov::switch_detail)
 
 #else  // Otherwise, we are generating the preprocessed forms as files...
 

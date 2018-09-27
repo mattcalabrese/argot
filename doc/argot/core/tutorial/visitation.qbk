@@ -1,0 +1,40 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:visitation 2. Accessing a Variant Alternative]
+
+There is much more to =Argot= than unpacking tuples. As described, =Argot= is
+fundamentally about taking an expression and "converting" it to separate
+arguments through the concept of an ArgumentProvider and facilities that
+understand the abstraction.
+
+Elaborating on that description a bit, an ArgumentProvider is capable of
+representing an argument list, but notably, *the amount and types of an
+ArgumentProvider's represented argument list are not required to be fully known
+at compile-time*. The implications of this are far-reaching and give an
+incredible about of power and expressivity to a user, but in practice, most
+applications of this capability are very simple.
+
+Perhaps the most common form of ArgumentProvider that takes advantage of this
+capability is an ArgumentProvider that operates on a [sum_type], such as an
+instance of the `std::variant` template. To see what is meant by that, let's
+try to output the currently active /alternative/ of a `std::variant` and see
+what happens.
+
+[topics_explored_heading]
+
+* argot::output
+* ArgumentProvider
+* prov::alternative_of
+* VariantLike
+* The expansion operator
+
+[include visitation/error_variant_output.qbk]
+[include visitation/alternative_of.qbk]
+[include visitation/variant_expansion_operator.qbk]
+
+[endsect:visitation]

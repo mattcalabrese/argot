@@ -75,6 +75,6 @@ struct switch_provision< 0, Kind >
   }
 };
 
-}  // namespace (argot::prov::switch_detail)
+} // namespace (argot::prov::switch_detail)
 
 #endif  // ARGOT_PROV_SWITCH_DETAIL_SWITCH_PROVISION_0_CASES_HPP_

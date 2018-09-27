@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -15,16 +15,16 @@
 #include <argot/concepts/invocable_with_each.hpp>
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
-#include <argot/detail/sink.hpp>
 #include <argot/detail/forward.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
+#include <argot/detail/sink.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/detail/move.hpp>
 #include <argot/prov/group.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
-#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 #include <utility>
@@ -57,7 +57,7 @@ template< class Fun, class... ArgumentListKinds >
 result_types_as_argument_types_t< Fun, ArgumentListKinds... > constexpr
 result_types_as_argument_types{};
 
-}  // namespace argot::receiver::forward_result_to_detail
+} // namespace argot::receiver::forward_result_to_detail
 
 struct forward_result_to_t
 {
@@ -94,7 +94,7 @@ template< class Receiver, class Invocable >
 using result_of_forward_result_to
   = basic_result_of< forward_result_to_t const&, Receiver&&, Invocable&& >;
 
-}  // namespace argot::receiver
+} // namespace argot::receiver
 
 // TODO(mattcalabrese) Fix this (uses old-style constraints and forwarding)
 template< class Receiver, class Invocable >
@@ -146,6 +146,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_FORWARD_RESULT_TO_HPP_

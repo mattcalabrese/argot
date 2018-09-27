@@ -31,7 +31,7 @@ namespace case_detail {
 template< class Cases >
 struct unreachable_case_t {};
 
-}  // namespace argot(::case_detail)
+} // namespace argot(::case_detail)
 
 template< class Cases >
 struct make_concept_map
@@ -99,6 +99,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CASE_DETAIL_UNREACHABLE_CASE_HPP_

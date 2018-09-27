@@ -70,7 +70,7 @@ struct continuation
   ARGOT_NO_UNIQUE_ADDRESS Fun fun;
 };
 
-}  // namespace argot(::fut::squash_detail)
+} // namespace argot(::fut::squash_detail)
 
 struct squash_t
 {
@@ -97,7 +97,7 @@ struct squash_t
 
 // TODO(mattcalabrese) result calculators
 
-}  // namespace argot(::fut)
+} // namespace argot(::fut)
 
 template< class FutFut >
 struct make_concept_map< Future< fut::squash_t::impl< FutFut > > >
@@ -202,6 +202,6 @@ struct make_concept_map
 
 #endif
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_FUT_SQUASH_HPP_

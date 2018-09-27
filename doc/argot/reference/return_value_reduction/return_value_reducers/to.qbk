@@ -1,0 +1,59 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:to reducer::to]
+
+[heading Description]
+
+This ReturnValueReductionSpecifierQ always yields the type `T` specified by the
+user, regardless of the source return type set. If all of the input return types
+are implicitly convertible to the user-specified type, or if the user-specified
+type is `void`, then instantiation succeeds, resulting in a
+HomogeneousReturnValueReducerQ with a `reduce` function that directly returns the
+result of the source function. In the case that the user specifies `void` as
+`T`, the `reduce` function executes the source function and does not have an
+explicit return statement.
+
+Using `to< T >` with the default_call_algorithmQ is equivalent
+to invoking `call` with `T` explicitly passed in as the first template argument.
+
+[header_spec reducer..to]
+
+[heading Synopsis]
+
+```
+ namespace namespaceQ {
+ namespace reducer {
+
+ template< class ReturnType >
+ inline auto constexpr to = ``[~unspecified]``;
+
+ }  // namespace ``namespaceQ``::reducer
+ }  // namespace ``namespaceQ``
+```
+
+[heading Model of]
+
+* HomogeneousReturnValueReductionSpecifierQ
+
+[heading Basic Usage]
+
+```
+ int main()
+ {
+   using namespaceQ::reducer::to;
+
+   // The following two invocations of are equivalent.
+   namespaceQ::call[ to< void > ]( []( int ) {}, 5 );
+
+   namespaceQ::call_< void >( []( int ) {}, 5 );
+ }
+```
+
+[heading Related Tutorials]
+
+[endsect]

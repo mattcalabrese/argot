@@ -61,7 +61,7 @@ struct permute< receiver_traits::argument_list_kinds_t< HeadTypeLists... >
       >::type;
 };
 
-}  // namespace argot::call_detail
-}  // namespace argot
+} // namespace argot::call_detail
+} // namespace argot
 
 #endif  // ARGOT_DETAIL_PERMUTE_HPP_

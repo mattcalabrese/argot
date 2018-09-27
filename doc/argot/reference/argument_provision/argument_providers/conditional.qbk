@@ -1,0 +1,38 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:conditional prov::conditional]
+
+[heading Description]
+
+`prov::conditional` is a higher-order ArgumentProviderGeneratorQ that is
+analogous to the `?:` operator. It takes a `bool` or a `std::bool_constant`
+instantiation named `condition` as the first parameter and an
+ArgumentProviderQ for each of the second two parameters. If `condition` is
+`true` or `std::true_type`, then the result of the call to `prov::conditional`
+provides whatever the second parameter provides, otherwise it provides whatever
+the third parameter provides. When `condition` is a `bool`, the resultant
+ArgumentProviderQ is a binary branching ArgumentProviderQ where the order
+of the branches is parameter two followed by parameter three. When `condition`
+is an instantiation of `std::bool_constant`, the resultant ArgumentProviderQ
+is a non-branching ArgumentProviderQ.
+
+[prov_header_synopsis_spec conditional]
+
+[heading Basic Usage]
+
+[heading Example Definition]
+
+[heading Related Tutorials]
+
+[heading Related References]
+
+* ArgumentProviderQ
+* ArgumentProviderGeneratorQ
+* prov_ifQ
+
+[endsect]

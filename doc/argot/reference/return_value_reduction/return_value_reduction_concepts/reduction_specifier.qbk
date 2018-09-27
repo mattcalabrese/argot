@@ -1,0 +1,22 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section ReductionSpecifier]
+
+[heading Description]
+
+A =ReductionSpecifier= is a type that describes how a ReturnValueReducerQ
+evaluates a given function in way that yields the ReturnValueReducerQ's
+associated `return_type`.
+
+[heading Requirements]
+
+Given a type `T`, `T` is a model of =ReductionSpecier= if it...
+
+[heading Related Tutorials]
+
+[endsect]

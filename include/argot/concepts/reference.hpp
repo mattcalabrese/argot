@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,12 @@
 
 #ifndef ARGOT_CONCEPTS_REFERENCE_HPP_
 #define ARGOT_CONCEPTS_REFERENCE_HPP_
+
+//[description
+/*`
+Reference is an [argot_gen_concept] that is satisfied by reference types.
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/gen/explicit_concept.hpp>
@@ -40,6 +46,6 @@ struct make_concept_map< Reference< T& > > {};
 template< class T >
 struct make_concept_map< Reference< T&& > > {};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_REFERENCE_HPP_

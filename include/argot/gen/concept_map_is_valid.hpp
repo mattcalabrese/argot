@@ -26,6 +26,6 @@ template< class ConceptForm >
 bool constexpr concept_map_is_valid_v
   = concept_map_is_valid< ConceptForm >::value;
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_GEN_CONCEPT_MAP_IS_VALID_HPP_

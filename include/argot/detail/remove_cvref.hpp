@@ -85,6 +85,6 @@ struct remove_cvref< T volatile const&& >
 template< class T >
 using remove_cvref_t = typename remove_cvref< T >::type;
 
-}  // namespace (argot::detail_argot)
+} // namespace (argot::detail_argot)
 
 #endif  // ARGOT_DETAIL_REMOVE_CVREF_HPP_

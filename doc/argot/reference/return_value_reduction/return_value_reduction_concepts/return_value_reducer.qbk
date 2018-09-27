@@ -1,0 +1,32 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section ReturnValueReducer]
+
+[heading Description]
+
+A =ReturnValueReducer= is a type that is capable of describing how any one of a
+set of function objects with possibly-different return types can be invoked in a
+way that would yield an instance of some type that is the same regardless of
+which function object is invoked. Models of this concept are primarily
+instantiations of a ReturnValueReductionSpecifierQ.
+
+[heading Requirements]
+
+Given a type `T`, `T` is a model of =ReturnValueReducer= if:
+
+* It has a nested type called `return_type` that is a valid function return type.
+* It has an associated __Reducer__ type. This __Reducer__ may be expressed as a
+nested type of `T` called `reducer`, otherwise __default_reducer__ is assumed to be
+the associated __Reducer__ for `T`.
+
+[heading Models]
+
+All models of =ReturnValueReducer= in this library are instantiations of a
+ReturnValueReductionSpecifierQ.
+
+[endsect]

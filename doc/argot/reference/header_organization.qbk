@@ -1,0 +1,38 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[h1 Header Organization]
+
+[heading Layout]
+
+Headers in this library are hierarchical in a way that corresponds to the
+directory structure. For each subdirectory, there is a corresponding `.hpp`
+convenience header with the same name that includes all of the documented `.hpp`
+files in the similarly-named subdirectory.
+
+Convenience headers are mostly provided for use with precompiled headers.
+Including them without need can negatively impact compile times by bringing
+unnecessary code into a translation unit.
+
+[heading Example]
+
+An example usage of the directory layout can be seen here:
+
+```
+ // This is the documented minimal header for using prov::unpack.
+ #include ``[header prov..unpack]``
+
+ // Alternatively, this can be included, which transitively includes the
+ // minimal unpack header in addition to all of the other documented
+ // header files in that directory.
+ #include ``[top_header prov]``
+
+ // The convenience headers are documented header files and so the convenience
+ // header from one directory up will also include the convenience header of
+ // any subdirectories.
+ #include ``[header_all]``
+```

@@ -1,0 +1,26 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[h1 Tutorial Organization]
+
+The tutorials in this section are loosely organized in a way that increases in
+complex, subtle, or niche uses of the library. Each tutorial may assume an
+understanding of facilities covered in earlier tutorials, so they are
+most-easily understood if read in order. In lieu of following the tutorials in
+order, users may refer to links provided at the start of each section that
+direct them to tutorials and documentation for facilities that are expected to
+already be understood by the reader.
+
+Though the tutorials are categorized from /Basic/ to /Expert/, these are
+relative terms. None of the tutorials should be particularly difficult to
+grasp by developers who are familiar with C++.
+
+[important
+  Not all facilities are covered in the tutorials. If you are interested in
+  learning all of the public aspects of the library, you will need to explore
+  the referenceQ sections of the documentation.
+]

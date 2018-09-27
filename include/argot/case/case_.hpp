@@ -50,6 +50,6 @@ struct make_concept_map
   using expand_case_values_t = Template< Value >;
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CASE_CASE_HPP_

@@ -28,7 +28,7 @@ template< class ValueType, class ValueList >
 using cast_value_list_elements_t
   = typename cast_value_list_elements< ValueType, ValueList >::type;
 
-}  // namespace argot(::case_detail)
-}  // namespace argot
+} // namespace argot(::case_detail)
+} // namespace argot
 
 #endif  // ARGOT_CASE_DETAIL_CAST_VALUE_LIST_ELEMENTS_HPP_

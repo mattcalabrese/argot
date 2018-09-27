@@ -51,7 +51,7 @@ template< class Values >
 using values_to_integral_constant_argument_list_kinds_t
   = typename values_to_integral_constant_argument_list_kinds< Values >::type;
 
-}  // namespace argot(::case_detail)
+} // namespace argot(::case_detail)
 
 template< class Cases >
 struct make_concept_map< SwitchBody< case_detail::as_constant_t< Cases > > >
@@ -148,6 +148,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CASE_DETAIL_AS_CONSTANT_HPP_

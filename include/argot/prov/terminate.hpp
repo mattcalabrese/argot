@@ -8,6 +8,15 @@
 #ifndef ARGOT_PROV_TERMINATE_HPP_
 #define ARGOT_PROV_TERMINATE_HPP_
 
+//[description
+/*`
+prov::terminate is an ExceptionalPersistentArgumentProvider that calls
+`std::terminate` when provision takes place.
+
+[global_object_designator]
+*/
+//]
+
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/concepts/persistent_argument_provider.hpp>
@@ -19,13 +28,30 @@
 
 #include <exception>
 
-namespace argot {
-namespace prov {
+//[docs
+/*`
+[synopsis_heading]
+*/
+
+namespace argot::prov {
 
 struct terminate_t {} inline constexpr terminate{};
 
-}  // namespace argot(::prov)
+} // namespace (argot::prov)
 
+/*`
+[provider_properties_heading]
+
+[table Provider
+ [[Property][Description]]
+ [[Logical Provision][No provision]]
+ [[Possible Argument Types][]]
+]
+*/
+
+//]
+
+namespace argot {
 template<>
 struct make_concept_map< ArgumentProvider< prov::terminate_t > >
 {
@@ -56,6 +82,6 @@ struct make_concept_map< PersistentArgumentProvider< prov::terminate_t > >
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_PROV_TERMINATE_HPP_

@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -46,7 +46,7 @@ struct all_return_types_are_the_same_requirement
       < prov::result_of_default_to_reference_to_t< P... > >
     > {};
 
-}  // namespace argot(::detail_argot_invocable)
+} // namespace argot(::detail_argot_invocable)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME() s/argot_invocable.h
 
@@ -72,6 +72,6 @@ ARGOT_AUTO_CONCEPT( ArgotInvocable )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_ARGOT_INVOCABLE_HPP_

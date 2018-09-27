@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,14 @@
 
 #ifndef ARGOT_CONCEPTS_PERSISTENT_ARGUMENT_PROVIDER_HPP_
 #define ARGOT_CONCEPTS_PERSISTENT_ARGUMENT_PROVIDER_HPP_
+
+//[description
+/*`
+PersistentArgumentProvider is the [argot_gen_concept] for [argument_providers]
+that support a form of argument provision that is non-destructive and therefore
+may be performed multiple times.
+*/
+//]
 
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
@@ -35,6 +43,6 @@ ARGOT_EXPLICIT_CONCEPT( PersistentArgumentProvider )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_PERSISTENT_ARGUMENT_PROVIDER_HPP_

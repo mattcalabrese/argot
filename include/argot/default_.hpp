@@ -117,6 +117,8 @@ using result_of_default_t
 
 using default_unreachable_t = default_t::unreachable_impl;
 
+inline constexpr default_unreachable_t default_unreachable{};
+
 template<>
 struct make_concept_map< SwitchBody< default_t::unreachable_impl > >
 {
@@ -392,6 +394,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_DEFAULT_HPP_
