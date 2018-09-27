@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,13 @@
 
 #ifndef ARGOT_CONCEPTS_RETURN_TYPE_HPP_
 #define ARGOT_CONCEPTS_RETURN_TYPE_HPP_
+
+//[description
+/*`
+ReturnType is an [argot_gen_concept] that is satisfied by each type that can be
+specified in the return type of a function type.
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/gen/explicit_concept.hpp>
@@ -43,6 +50,6 @@ ARGOT_EXPLICIT_CONCEPT( ReturnType )
 template< class R >
 struct make_concept_map< ReturnType< R >, std::void_t< R() > > {};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_RETURN_TYPE_HPP_

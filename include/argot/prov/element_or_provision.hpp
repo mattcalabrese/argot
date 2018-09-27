@@ -8,6 +8,19 @@
 #ifndef ARGOT_PROV_ELEMENT_OR_PROVISION_HPP_
 #define ARGOT_PROV_ELEMENT_OR_PROVISION_HPP_
 
+//[description
+/*`
+prov::element_or_provision is a function object that takes an OptionalLike and
+an ArgumentProvider as arguments. It returns an ArgumentProvider that provides a
+reference to the contained element if the OptionalLike is engaged, otherwise it
+provides whatever the second argument to prov::element_or_provision provides.
+The object returned from prov::element_or_provision contains the OptionalLike by
+reference and contains the ArgumentProvider by value.
+
+[global_function_object_designator]
+*/
+//]
+
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/argument_receiver_of_kinds.hpp>
@@ -37,11 +50,16 @@
 #include <memory>
 #include <type_traits>
 
-namespace argot {
-namespace prov {
+//[docs
+/*`
+[synopsis_heading]
+*/
+
+namespace argot::prov {
 
 struct element_or_provision_fn
 {
+//<-
   template< class Opt, class Provider >
   struct impl
   {
@@ -53,31 +71,41 @@ struct element_or_provision_fn
     std::remove_reference_t< Opt >* opt;
     ARGOT_NO_UNIQUE_ADDRESS Provider provider;
   };
-
+//->
   template< class Opt, class Provider
-          , ARGOT_REQUIRES( OptionalLike< detail_argot::remove_cvref_t< Opt > > )
-                          ( Not< VolatileObject< detail_argot::remove_cvref_t< Opt > > > )
-                          ( ArgumentProvider< detail_argot::remove_cvref_t< Provider > > )
-                          ( Sinkable< Provider&& > )
-                          ()
+          , ARGOT_REQUIRES
+            ( OptionalLike< detail_argot::remove_cvref_t< Opt > > )
+            ( Not< VolatileObject< detail_argot::remove_cvref_t< Opt > > > )
+            ( ArgumentProvider< detail_argot::remove_cvref_t< Provider > > )
+            ( Sinkable< Provider&& > )
+            ()
           >
   [[nodiscard]]
-  constexpr auto operator ()( Opt&& opt, Provider&& provider ) const
+  constexpr auto operator ()( Opt&& opt, Provider&& provider ) const//=;
+  //<-
   {
     return impl< Opt&&, detail_argot::remove_cvref_t< Provider > >
     { std::addressof( opt ), ARGOT_FORWARD_AND_SINK( Provider )( provider ) };
-  }
+  } //->
 } inline constexpr element_or_provision{};
 
 template< class Opt, class Provider >
-using result_of_element_or_provision
-  = basic_result_of< element_or_provision_fn const&, Opt, Provider >;
+using result_of_element_or_provision//= = ``[see_prologue_result_of]``;
+//<-
+  = basic_result_of< element_or_provision_fn const&, Opt, Provider >; //->
 
 template< class Opt, class Provider >
-using result_of_element_or_provision_t
-  = basic_result_of_t< element_or_provision_fn const&, Opt, Provider >;
+using result_of_element_or_provision_t//= = ``[see_prologue_result_of]``;
+//<-
+  = basic_result_of_t< element_or_provision_fn const&, Opt, Provider >; //->
 
-}  // namespace argot(::prov)
+} // namespace (argot::prov)
+
+// TODO(mattcalabrese) Add a provision table
+
+//]
+
+namespace argot {
 
 template< class Opt, class Provider >
 struct make_concept_map
@@ -170,6 +198,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_PROV_ELEMENT_OR_PROVISION_HPP_

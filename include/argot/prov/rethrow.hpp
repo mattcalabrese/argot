@@ -8,6 +8,16 @@
 #ifndef ARGOT_PROV_RETHROW_HPP_
 #define ARGOT_PROV_RETHROW_HPP_
 
+//[description
+/*`
+prov::rethrow is an ExceptionalPersistentArgumentProvider that executes a
+`throw` expression during provision to rethrow the current exception that is
+being handled.
+
+[global_object_designator]
+*/
+//]
+
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/concepts/persistent_argument_provider.hpp>
@@ -16,12 +26,30 @@
 #include <argot/impossible.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 
-namespace argot {
-namespace prov {
+//[docs
+/*`
+[synopsis_heading]
+*/
+
+namespace argot::prov {
 
 struct rethrow_t {} inline constexpr rethrow{};
 
-}  // namespace argot(::prov)
+} // namespace (argot::prov)
+
+/*`
+[provider_properties_heading]
+
+[table Provider
+ [[Property][Description]]
+ [[Logical Provision][No provision]]
+ [[Possible Argument Types][]]
+]
+*/
+
+//]
+
+namespace argot {
 
 template< >
 struct make_concept_map< ArgumentProvider< prov::rethrow_t > >
@@ -51,6 +79,6 @@ struct make_concept_map< PersistentArgumentProvider< prov::rethrow_t > >
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_PROV_RETHROW_HPP_

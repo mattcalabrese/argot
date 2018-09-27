@@ -71,6 +71,6 @@ template< class Provider, class Receiver >
 using result_of_then_provide_
   = basic_result_of< then_provide_fn const&, Provider, Receiver >;
 
-}  // namespace (argot::conc_traits)
+} // namespace (argot::conc_traits)
 
 #endif  // ARGOT_CONC_TRAITS_PROVIDE_HPP_

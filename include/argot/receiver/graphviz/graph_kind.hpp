@@ -93,7 +93,7 @@ struct graph_kind_traits_impl< graph_kind::strict_undirected >
   }
 };
 
-}  // namespace argot::receiver::graphviz::graph_kind_detail
+} // namespace argot::receiver::graphviz::graph_kind_detail
 
 template< graph_kind kind >
 struct is_valid_graph_kind
@@ -103,8 +103,8 @@ template< graph_kind kind >
 inline
 bool constexpr is_valid_graph_kind_v = is_valid_graph_kind< kind >::value;
 
-}  // namespace argot::receiver::graphviz
-}  // namespace argot::receiver
-}  // namespace argot
+} // namespace argot::receiver::graphviz
+} // namespace argot::receiver
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_GRAPHVIZ_GRAPH_KIND_HPP_

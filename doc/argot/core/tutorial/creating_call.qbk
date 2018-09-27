@@ -1,0 +1,27 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:creating_call 6. Recreating argot_call]
+
+At the moment, argot::call may feel a little bit like magic. In actuality, the
+implementation is relatively straight-forward when examined from the top-down.
+In this part of the tutorial, we will unravel argot::call, down to some of the
+lowest-level facilities of =Argot=.
+
+[topics_explored_heading]o
+
+* argot::call
+* argot::forgetful_call
+* prov_traits::provide
+* receiver::forgetful_invoke
+* receiver::reduced_invoke
+* reducer::same_type_or_fail
+* prov::group
+* prov::reference_to
+* prov::default_reference_to
+
+[endsect:creating_call]

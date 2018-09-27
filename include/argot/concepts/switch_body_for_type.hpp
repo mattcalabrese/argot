@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -68,7 +68,7 @@ struct switch_body_for_type_default_requirements
     , switch_body_for_type_no_default
     > {};
 
-}  // namespace argot(::switch_body_for_type_detail)
+} // namespace argot(::switch_body_for_type_detail)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
 s/switch_body_for_type.h
@@ -100,6 +100,6 @@ ARGOT_AUTO_CONCEPT( SwitchBodyForType )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_SWITCH_BODY_FOR_TYPE_HPP_

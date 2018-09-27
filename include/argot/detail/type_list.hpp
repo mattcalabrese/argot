@@ -14,7 +14,7 @@ namespace call_detail {
 template< class... T >
 struct type_list{};
 
-}  // namespace argot::call_detail
-}  // namespace argot
+} // namespace argot::call_detail
+} // namespace argot
 
 #endif  // ARGOT_DETAIL_TYPE_LIST_HPP_

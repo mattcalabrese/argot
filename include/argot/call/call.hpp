@@ -97,9 +97,10 @@ struct call_t
   }
 
   template< class Reducer
-          , ARGOT_REQUIRES( ReturnValueReducer< detail_argot::remove_cvref_t< Reducer > > )
-                          ( Sinkable< Reducer&& > )
-                          ()
+          , ARGOT_REQUIRES
+            ( ReturnValueReducer< detail_argot::remove_cvref_t< Reducer > > )
+            ( Sinkable< Reducer&& > )
+            ()
           >
   [[nodiscard]] constexpr auto operator []( Reducer&& reducer ) const
   {
@@ -123,6 +124,6 @@ template< class Reducer, class Fun, class... P >
 using result_of_reduced_call
   = call_detail::result_of_bracketed_call< call_t const&, Reducer, Fun, P... >;
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CALL_CALL_HPP_

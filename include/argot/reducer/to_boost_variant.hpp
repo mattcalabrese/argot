@@ -56,8 +56,8 @@ using return_type
   = typename boost_variant_type
     < std::make_index_sequence< sizeof...( T ) >, T... >::type;
 
-}  // namespace argot::reducer::to_boost_variant_detail
-}  // namespace argot::reducer
+} // namespace argot::reducer::to_boost_variant_detail
+} // namespace argot::reducer
 
 template<>
 struct make_concept_map< ReturnValueReducer< reducer::to_boost_variant_t > >
@@ -90,6 +90,6 @@ struct make_concept_map< ReturnValueReducer< reducer::to_boost_variant_t > >
   };
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_REDUCER_TO_BOOST_VARIANT_HPP_

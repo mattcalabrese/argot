@@ -42,7 +42,7 @@ template< class Source, class Target >
 using give_qualifiers_to_t
   = typename give_qualifiers_to< Source, Target >::type;
 
-}  // namespace argot::call_detail
-}  // namespace argot
+} // namespace argot::call_detail
+} // namespace argot
 
 #endif  // ARGOT_DETAIL_GIVE_QUALIFIERS_TO_HPP_

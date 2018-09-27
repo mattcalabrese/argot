@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2018 Matt Calabrese
+  Copyright (c) 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,13 @@
 
 #ifndef ARGOT_FUT_AUGMENT_HPP_
 #define ARGOT_FUT_AUGMENT_HPP_
+
+//[description
+/*`
+fut::augment is a facility for creating a Future based on an existing Future and
+a /transformation/ to be applied to the result.
+*/
+//]
 
 #include <argot/concepts/decay_sinkable.hpp>
 #include <argot/concepts/forgetful_thenable.hpp>
@@ -16,21 +23,26 @@
 #include <argot/concepts/persistent_forgetful_thenable.hpp>
 #include <argot/concepts/persistent_future.hpp>
 #include <argot/concepts/sinkable.hpp>
+#include <argot/detail/forward.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/executor/immediate.hpp>
+#include <argot/fut_traits/value_type.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/detail/move.hpp>
-#include <argot/detail/forward.hpp>
-#include <argot/fut_traits/value_type.hpp>
 #include <argot/no_unique_address.hpp>
-#include <argot/detail/remove_cvref.hpp>
 
-namespace argot {
-namespace fut {
-namespace augment_detail {
+//[docs
+/*`
+[synopsis_heading]
+*/
+
+namespace argot::fut {
+//<-
+namespace detail_augment {
 
 template< class Fut, class Augmentation >
 struct impl
@@ -62,9 +74,10 @@ struct continuation
   ARGOT_NO_UNIQUE_ADDRESS Fun fun;
 };
 
-}  // namespace argot(::fut::augment_detail)
+} // namespace argot(::fut::detail_augment)
+//->
 
-struct augment_t
+struct augment_fn
 {
   template< class Fut, class Augmentation
           , ARGOT_REQUIRES
@@ -79,23 +92,28 @@ struct augment_t
             ()
           >
   [[nodiscard]]
-  constexpr auto operator()( Fut&& fut, Augmentation&& augmentation ) const
+  constexpr auto operator()( Fut&& fut, Augmentation&& augmentation ) const//=;
+  //<-
   {
-    return augment_detail::impl
+    return detail_augment::impl
     < detail_argot::remove_cvref_t< Fut >, std::decay_t< Augmentation > >
     { call_detail::forward_and_sink< Fut >( fut )
     , call_detail::forward_and_decay_sink< Augmentation >( augmentation )
     };
-  }
+  } //->
 } inline constexpr augment{};
 
 // TODO(mattcalabrese) result calculators
 
-}  // namespace argot(::fut)
+} // namespace (argot::fut)
+
+//]
+
+namespace argot {
 
 template< class Fut, class Augmentation >
 struct make_concept_map
-< Future< fut::augment_detail::impl< Fut, Augmentation > > >
+< Future< fut::detail_augment::impl< Fut, Augmentation > > >
 {
   // TODO(mattcalabrese) Fix argument type
   using value_type_t
@@ -105,21 +123,21 @@ struct make_concept_map
 
 template< class Fut, class Augmentation, class Exec >
 struct make_concept_map
-< ForgetfulThenable< fut::augment_detail::impl< Fut, Augmentation >, Exec >
+< ForgetfulThenable< fut::detail_augment::impl< Fut, Augmentation >, Exec >
 , ARGOT_REQUIRES( ForgetfulThenable< Fut, Exec > )<>
 >
 {
   // TODO(mattcalabrese) Constrain
   template< class ExecP, class Fun >
   static constexpr void forgetful_then
-  ( fut::augment_detail::impl< Fut, Augmentation >&& self
+  ( fut::detail_augment::impl< Fut, Augmentation >&& self
   , ExecP&& exec, Fun&& fun
   )
   {
     access_raw_concept_map< ForgetfulThenable< Fut, Exec > >::forgetful_then
     ( ARGOT_MOVE( self.fut )
     , ARGOT_FORWARD( ExecP )( exec )
-    , fut::augment_detail::continuation
+    , fut::detail_augment::continuation
       < Augmentation, detail_argot::remove_cvref_t< Fun > >
       { ARGOT_MOVE( self.augmentation ), ARGOT_FORWARD( Fun )( fun ) }
     );
@@ -128,7 +146,7 @@ struct make_concept_map
 
 template< class Fut, class Augmentation >
 struct make_concept_map
-< PersistentFuture< fut::augment_detail::impl< Fut, Augmentation > >
+< PersistentFuture< fut::detail_augment::impl< Fut, Augmentation > >
 , ARGOT_REQUIRES( PersistentFuture< Fut > )<>
 >
 {
@@ -137,13 +155,13 @@ struct make_concept_map
 template< class Fut, class Augmentation, class Exec >
 struct make_concept_map
 < PersistentForgetfulThenable
-  < fut::augment_detail::impl< Fut, Augmentation >, Exec >
+  < fut::detail_augment::impl< Fut, Augmentation >, Exec >
 , ARGOT_REQUIRES( PersistentForgetfulThenable< Fut, Exec > )<>
 >
 {
   template< class ExecP, class Fun >
   static constexpr void forgetful_then
-  ( fut::augment_detail::impl< Fut, Augmentation > const& self
+  ( fut::detail_augment::impl< Fut, Augmentation > const& self
   , ExecP&& exec, Fun&& fun
   )
   {
@@ -151,7 +169,7 @@ struct make_concept_map
     ::forgetful_then
     ( self.fut
     , ARGOT_FORWARD( ExecP )( exec )
-    , fut::augment_detail::continuation
+    , fut::detail_augment::continuation
       < Augmentation, detail_argot::remove_cvref_t< Fun > >
       { ARGOT_MOVE( self.augmentation ), ARGOT_FORWARD( Fun )( fun ) }
     );
@@ -161,13 +179,13 @@ struct make_concept_map
 template< class Fut, class Augmentation, class FPackager, class Exec >
 struct make_concept_map
 < IntrinsicThenable
-  < fut::augment_detail::impl< Fut, Augmentation >, FPackager, Exec >
+  < fut::detail_augment::impl< Fut, Augmentation >, FPackager, Exec >
 , ARGOT_REQUIRES( IntrinsicThenable< Fut, FPackager, Exec > )<>
 >
 {
   template< class ExecP, class Fun >
   static constexpr auto
-  then( fut::augment_detail::impl< Fut, Augmentation >&& self
+  then( fut::detail_augment::impl< Fut, Augmentation >&& self
       , ExecP&& exec, Fun&& fun
       )
   {
@@ -175,7 +193,7 @@ struct make_concept_map
     ::then
     ( ARGOT_MOVE( self.fut )
     , ARGOT_FORWARD( ExecP )( exec )
-    , fut::augment_detail::continuation
+    , fut::detail_augment::continuation
       < Augmentation, detail_argot::remove_cvref_t< Fun > >
       { ARGOT_MOVE( self.augmentation ), ARGOT_FORWARD( Fun )( fun ) }
     );
@@ -185,13 +203,13 @@ struct make_concept_map
 template< class Fut, class Augmentation, class FPackager, class Exec >
 struct make_concept_map
 < IntrinsicPersistentThenable
-  < fut::augment_detail::impl< Fut, Augmentation >, FPackager, Exec >
+  < fut::detail_augment::impl< Fut, Augmentation >, FPackager, Exec >
 , ARGOT_REQUIRES( IntrinsicPersistentThenable< Fut, FPackager, Exec > )<>
 >
 {
   template< class ExecP, class Fun >
   static constexpr auto
-  then( fut::augment_detail::impl< Fut, Augmentation > const& self
+  then( fut::detail_augment::impl< Fut, Augmentation > const& self
       , ExecP&& exec, Fun&& fun
       )
   {
@@ -199,13 +217,13 @@ struct make_concept_map
     < IntrinsicPersistentThenable< Fut, FPackager, Exec > >::then
     ( self.fut
     , ARGOT_FORWARD( ExecP )( exec )
-    , fut::augment_detail::continuation
+    , fut::detail_augment::continuation
       < Augmentation, detail_argot::remove_cvref_t< Fun > >
       { ARGOT_MOVE( self.augmentation ), ARGOT_FORWARD( Fun )( fun ) }
     );
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_FUT_AUGMENT_HPP_

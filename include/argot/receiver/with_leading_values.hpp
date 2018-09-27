@@ -107,7 +107,7 @@ using result_of_with_leading_values_t
     , Receiver, LeadingArgs, TrailingArgs, P...
     >;
 
-}  // namespace argot::receiver
+} // namespace argot::receiver
 
 // TODO(mattcalabrese) Fix this (uses old-style constraints and forwarding)
 template
@@ -156,6 +156,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_WITH_LEADING_VALUES_HPP_

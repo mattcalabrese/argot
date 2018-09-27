@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,23 @@
 
 #ifndef ARGOT_CONCEPTS_TUPLE_LIKE_HPP_
 #define ARGOT_CONCEPTS_TUPLE_LIKE_HPP_
+
+//[description
+/*`
+TupleLike is an [argot_gen_concept] for types whose instances logically
+contain some number of subobjects, where the number and types of those
+subobjects is known at compile-time. Its [ConceptMap] specifies the list of
+subobject types, known formally as /element types/, an /index type/ that is an
+integral type that may be used to index into the list of /element types/, and
+an accessor for retrieving a Reference to a subject when provided an instance
+of the TupleLike and a corresponding /index/.
+
+[note A set of traits and function objects for interacting with models of
+TupleLike are provided in the namespace argot::tuple_traits. It is recommended
+that users interact with the TupleLike via the facilities in that namespace as
+opposed to accessing the concept map directly.]
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/unqualified_object.hpp>
@@ -61,7 +78,7 @@ using result_of_get_t = decltype( get< I >( ARGOT_DECLVAL( T ) ) );
 template< class Tup >
 using tuple_size_sfinae = decltype( std::tuple_size< Tup >::value );
 
-}  // namespace argot(::tuple_like_detail)
+} // namespace argot(::tuple_like_detail)
 
 template< class Tup >
 struct make_concept_map
@@ -87,6 +104,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_TUPLE_LIKE_HPP_

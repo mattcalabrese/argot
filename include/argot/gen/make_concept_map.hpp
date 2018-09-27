@@ -20,6 +20,6 @@ template< class ConceptForm, class /*Enabler*/ = void >
 struct make_concept_map
   : auto_concept_map_impl< ConceptForm >{};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_GEN_MAKE_CONCEPT_MAP_HPP_

@@ -1,0 +1,51 @@
+[/==============================================================================
+    Copyright (C) 2016, 2017, 2018 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[book Argot
+    [quickbook 1.7]
+    [authors [Calabrese, Matt]]
+    [copyright 2016, 2017, 2018, 2019 Matt Calabrese]
+    [id argot]
+    [license
+        Distributed under the Boost Software License, Version 1.0.
+        (See accompanying file LICENSE_1_0.txt or copy at
+        [@http://www.boost.org/LICENSE_1_0.txt])
+    ]
+]
+
+[warning
+  This is not an official Boost library. It is a candidate library that is
+  intended for inclusion with Boost pending a positive review. If accepted, all
+  names from this library that appear in the namespace `argot` would instead
+  appear in the namespace `boost`.
+]
+
+
+[/def __boost_namespace__]
+[def __argot_namespace__]
+[/def __std_namespace__]
+
+[import quickbook_defs.qbk]
+[import quickbook_links.qbk]
+
+[include argot/preface.qbk]
+[include argot/motivation.qbk]
+[include argot/getting_started.qbk]
+[include argot/library_breakdown.qbk]
+[include argot/core.qbk]
+[include argot/concurrency.qbk]
+[include argot/generic_programming.qbk]
+[include argot/reference.qbk]
+[include argot/rationale.qbk]
+[include argot/acknowledgments.qbk]
+
+[/
+[include argot/tutorials.qbk]
+[include argot/rationale.qbk]
+[include argot/reference.qbk]
+[include argot/standardization.qbk]
+/]

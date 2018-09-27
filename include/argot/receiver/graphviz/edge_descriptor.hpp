@@ -40,6 +40,6 @@ using undirected_edge_descriptor
 using strict_undirected_edge_descriptor
   = edge_descriptor_< graph_kind::strict_undirected >;
 
-}  // namespace (argot::receiver::graphviz)
+} // namespace (argot::receiver::graphviz)
 
 #endif  // ARGOT_RECEIVER_GRAPHVIZ_EDGE_DESCRIPTOR_HPP_

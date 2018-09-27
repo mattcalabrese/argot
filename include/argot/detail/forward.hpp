@@ -13,7 +13,7 @@ namespace argot::detail_forward {
 template< class T >
 using direct_identity_t = T;
 
-}  // namespace (argot::detail_forward)
+} // namespace (argot::detail_forward)
 
 #define ARGOT_FORWARD( ... )                                                   \
 static_cast< ::argot::detail_forward::direct_identity_t< __VA_ARGS__ >&& >

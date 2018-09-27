@@ -304,8 +304,8 @@ template< class ValueType >
 persistent_body_for_default_t< ValueType > constexpr
 persistent_body_for_default{};
 
-}  // namespace argot::switch_traits(::combine_detail)
-}  // namespace argot(::switch_traits)
+} // namespace argot::switch_traits(::combine_detail)
+} // namespace argot(::switch_traits)
 
 // TODO(mattcalabrese) Properly constrain
 template< class... Bodies >
@@ -536,6 +536,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_SWITCH_TRAITS_COMBINE_HPP_

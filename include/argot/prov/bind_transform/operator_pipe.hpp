@@ -12,10 +12,10 @@
 #include <argot/concepts/composable_with_provision.hpp>
 #include <argot/concepts/decay_sinkable.hpp>
 #include <argot/concepts/sinkable.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/prov/bind_transform/bind_transform.hpp>
-#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -39,13 +39,14 @@ template< class Provider, class Transformation
           ()
         >
 [[nodiscard]] constexpr auto operator |
-( Provider&& provider, Transformation&& transformation )
+( Provider&& provider, Transformation&& transformation )//=;
+//<-
 {
   return prov::bind_transform
   ( call_detail::forward_and_sink< Provider >( provider )
   , call_detail::forward_and_decay_sink< Transformation >( transformation )
   );
-}
+} //->
 
 } // namespace argot(::prov::bind_transform_pipe)
 

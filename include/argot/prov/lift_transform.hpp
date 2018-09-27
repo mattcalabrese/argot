@@ -17,18 +17,18 @@
 #include <argot/concepts/persistent_argument_provider.hpp>
 #include <argot/concepts/potentially_invocable_object.hpp>
 #include <argot/concepts/sinkable.hpp>
-#include <argot/detail/sink.hpp>
 #include <argot/detail/forward.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
+#include <argot/detail/sink.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/invocable_reference.hpp>
-#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov_traits/destructive_provide.hpp>
 #include <argot/prov_traits/persistent_provide.hpp>
 #include <argot/receiver/forward_transformed_arguments.hpp>
 #include <argot/receiver/receiver_reference.hpp>
-#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 #include <utility>
@@ -54,7 +54,9 @@ struct lift_transform_fn
   < class Provider, class... Transformations
   , ARGOT_REQUIRES
     ( ComposableWithProvision
-      < detail_argot::remove_cvref_t< Provider >, std::decay_t< Transformations >... >
+      < detail_argot::remove_cvref_t< Provider >
+      , std::decay_t< Transformations >...
+      >
     )
     ( Sinkable< Provider&& > )
     ( DecaySinkable< Transformations&& >... )
@@ -82,16 +84,18 @@ struct lift_transform_fn
 } inline constexpr lift_transform{};
 
 template< class Provider, class... Transformations >
-using result_of_lift_transform
+using result_of_lift_transform//= = ``[see_prologue_result_of]``;
+//<-
   = basic_result_of
-    < lift_transform_fn const&, Provider&&, Transformations... >;
+    < lift_transform_fn const&, Provider&&, Transformations... >; //->
 
 template< class Provider, class... Transformations >
-using result_of_lift_transform_t
+using result_of_lift_transform_t//= = ``[see_prologue_result_of]``;
+//<-
   = basic_result_of_t
-    < lift_transform_fn const&, Provider&&, Transformations... >;
+    < lift_transform_fn const&, Provider&&, Transformations... >; //->
 
-}  // namespace argot(::prov)
+} // namespace argot(::prov)
 
 template< class Provider, class Transformation >
 struct make_concept_map
@@ -155,6 +159,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_PROV_LIFT_TRANSFORM_HPP_

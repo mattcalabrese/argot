@@ -178,8 +178,8 @@ constexpr auto make_receive_branch_invoker
   };
 }
 
-}  // namespace argot::receiver::with_leading_values_detail
-}  // namespace argot::receiver
-}  // namespace argot
+} // namespace argot::receiver::with_leading_values_detail
+} // namespace argot::receiver
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_WITH_LEADING_VALUES_DETAIL_INVOKER_HPP_

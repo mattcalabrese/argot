@@ -70,7 +70,7 @@ template< class NetExec, class Alloc = std::allocator< void > >
 using result_of_post_to
   = basic_result_of< post_to_fn const&, NetExec, Alloc >;
 
-}  // namespace argot(::executor)
+} // namespace argot(::executor)
 
 template< class NetExec, class Alloc >
 struct make_concept_map

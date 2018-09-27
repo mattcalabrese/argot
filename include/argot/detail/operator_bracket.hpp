@@ -60,7 +60,7 @@ struct bracketed_call_t
   }
 } /*inline*/ constexpr bracketed_call{};
 
-}  // namespace argot::call_detail
-}  // namespace argot
+} // namespace argot::call_detail
+} // namespace argot
 
 #endif  // ARGOT_DETAIL_OPERATOR_BRACKET_HPP_

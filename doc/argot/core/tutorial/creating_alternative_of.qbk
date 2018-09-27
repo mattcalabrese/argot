@@ -1,0 +1,26 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:creating_alternative_of 7. Creating an Argument Provider]
+
+Though the library provides many built-in models of the ArgumentProvider
+concept, you may also create your own. There are multiple ways to do this, but
+the easiest (and often, best) way is via composition, using low-level
+higher-order constructs.
+
+[topics_explored_heading]
+
+* prov::alternative_of
+* prov::reference_to
+* prov::lift_call
+* prov::variant_index
+* variant_traits::index_of
+* variant_traits::get
+* variant_traits::natural_get
+* prov::value_in_range
+
+[endsect:creating_alternative_of]

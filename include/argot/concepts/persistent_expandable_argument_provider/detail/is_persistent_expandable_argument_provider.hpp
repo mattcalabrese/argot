@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -67,7 +67,7 @@ template< class T >
 bool constexpr is_persistent_expandable_argument_provider_v
   = is_persistent_expandable_argument_provider_t< T >::value;
 
-}  // namespace argot(::persistent_expandable_argument_provider_detail)
+} // namespace argot(::persistent_expandable_argument_provider_detail)
 
 template<>
 struct make_concept_map
@@ -107,6 +107,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_PERSISTENT_ARGUMENT_PROVIDER_OF_EXPANDABLES_DETAIL_IS_HPP_

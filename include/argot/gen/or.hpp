@@ -33,6 +33,6 @@ struct make_concept_map
   >::_::template apply<>
 > {};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_GEN_OR_HPP_

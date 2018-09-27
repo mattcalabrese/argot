@@ -1,0 +1,72 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:call_always_return call_< ReturnType >]
+
+[heading Description]
+
+This overload of `call` is provided for convenience as a shorthand for invoking
+the default_call_algorithmQ with a ReturnValueReductionSpecifierQ that always
+yields a user-specified type.
+
+[heading Header]
+
+// TODO(mattcalabrese) Specify
+
+[heading Synopsis]
+
+```
+ namespace namespaceQ {
+
+ template< class ReturnType, class Fun, class... P >
+ constexpr ``[~deduced]`` call( Fun&& fun, P&&... args ) noexcept( ``[~deduced]`` );
+
+ }  // namespace ``namespaceQ``
+ ```
+
+[heading Requirements]
+* `ReturnType` is a valid function return type.
+* `fun` is =Callable= with each permutation of provided arguments of `args`
+and the result of each of those invocations is of the type `ReturnType` or is
+of a type that is implicitly convertible to `ReturnType`, or `ReturnType` is
+`void`.
+
+[heading Instantiation]
+Substitution will fail whenever substitution of the equivalent call_reducer_specQ
+invocation would fail.
+
+[heading Example Definition]
+
+[simple_definition_disclaimer]
+
+```
+ namespace namespaceQ {
+
+ template< class ReturnType, class Fun, class... P >
+ constexpr decltype( auto ) call( Fun&& fun, P&&... args )
+ {
+   return ``call_reducer_specQ``[ ``reducer_always_returnQ``< ReturnType > ]( std::forward< Fun >( fun )
+                                                   , std::forward< P >( args )...
+                                                   );
+
+ }  // namespace ``namespaceQ``
+```
+
+[heading Related Tutorials]
+
+Most tutorials that relate to the default_call_algorithmQ also relate to this
+overload of `call`. Tutorials that specifically relate to this overload are:
+
+* __tutorial_call_always_return__
+
+[heading Related References]
+
+* callQ
+* call_reducer_specQ
+* ArgumentProviderQ
+
+[endsect]

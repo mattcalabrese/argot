@@ -26,23 +26,25 @@ namespace argot::state_traits {
 template< class T >
 struct hash_combine_fn
 {
+  //<-
   ARGOT_CONCEPT_ENSURE( Hashable< T > );
-
+  //->
   constexpr void operator ()( std::size_t& curr, T const& state ) const
-  noexcept( ARGOT_IS_MODELED( NothrowHashable< T > ) )
+  noexcept( ARGOT_IS_MODELED( NothrowHashable< T > ) )//=;
+  //<-
   {
     // TODO(mattcalabrese) Also possibly special-case arrays?
     if constexpr( std::is_reference_v< T > )
       boost::hash_combine( curr, std::addressof( state ) );
     else
       boost::hash_combine( curr, state );
-  }
+  } //->
 };
 
 template< class T >
 ARGOT_REQUIRES( Hashable< T > )
 < hash_combine_fn< T > > constexpr hash_combine{};
 
-}  // namespace (argot::state_traits)
+} // namespace (argot::state_traits)
 
 #endif  // ARGOT_STATE_TRAITS_HASH_COMBINE_HPP_

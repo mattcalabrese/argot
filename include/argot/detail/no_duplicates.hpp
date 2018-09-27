@@ -122,7 +122,7 @@ struct integer_sequence_cast< ValueType, value_list_t< Values... > >
 template< class ValueType, class IntegerSequence >
 using integer_sequence_cast_t = typename integer_sequence_cast< ValueType, IntegerSequence >::type;
 
-}  // namespace argot::call_detail
-}  // namespace argot
+} // namespace argot::call_detail
+} // namespace argot
 
 #endif  // ARGOT_DETAIL_NO_DUPLICATES_HPP_

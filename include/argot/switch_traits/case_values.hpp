@@ -40,6 +40,6 @@ using case_values = call_detail::lazy_expand< case_values_t, Body >;
 template< class Body >
 case_values_t< Body > constexpr case_values_v{};
 
-}  // namespace (argot::switch_traits)
+} // namespace (argot::switch_traits)
 
 #endif  // ARGOT_SWITCH_TRAITS_CASE_VALUES_HPP_

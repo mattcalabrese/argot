@@ -19,6 +19,6 @@ ARGOT_AUTO_CONCEPT( And )
   ConceptSpecs...
 );
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_GEN_AND_HPP_

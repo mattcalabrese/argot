@@ -34,9 +34,9 @@ template< class Case, auto Value >
 leading_argument_list_kinds_of_case_destructive_t< Case, Value > constexpr
 leading_argument_list_kinds_of_case_destructive_v{};
 
-}  // namespace argot(::switch_traits)
+} // namespace argot(::switch_traits)
 
-}  // namespace argot
+} // namespace argot
 
 #endif
 // ARGOT_SWITCH_TRAITS_LEADING_ARGUMENT_LIST_KINDS_OF_CASE_DESTRUCTIVE_HPP_

@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,13 @@
 
 #ifndef ARGOT_CONCEPTS_CONTEXTUALLY_CONVERTIBLE_TO_BOOL_HPP_
 #define ARGOT_CONCEPTS_CONTEXTUALLY_CONVERTIBLE_TO_BOOL_HPP_
+
+//[description
+/*`
+ContextuallyConvertibleToBool is the [argot_gen_concept] for types that are
+[contextually_convertible_to_bool].
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/valid.hpp>
@@ -23,7 +30,7 @@ template< class T >
 using contextually_convertible_to_bool_requirement_impl
   = decltype( ARGOT_DECLVAL( T ) ? true : false );
 
-}  // namespace argot(::contextually_convertible_to_bool_detail)
+} // namespace argot(::contextually_convertible_to_bool_detail)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
 s/contextually_convertible_to_bool.h
@@ -65,6 +72,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_CONTEXTUALLY_CONVERTIBLE_TO_BOOL_HPP_

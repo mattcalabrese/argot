@@ -30,7 +30,7 @@ struct result_of_return_argument_list_kinds
   using type = result_of_return_argument_list_kinds_t;
 };
 
-}  // namespace argot(::receiver)
+} // namespace argot(::receiver)
 
 template <>
 struct make_concept_map
@@ -57,6 +57,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_RETURN_ARGUMENT_LIST_KINDS_HPP_

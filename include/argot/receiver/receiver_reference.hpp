@@ -59,7 +59,7 @@ template< class Receiver >
 using result_of_receiver_reference
   = basic_result_of< receiver_reference_t const&, Receiver&& >;
 
-}  // namespace argot::receiver
+} // namespace argot::receiver
 
 // TODO(mattcalabrese) Use a reference wrapper during recursion
 template< class ReceiverReference >
@@ -87,6 +87,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_RECEIVER_REFERENCE_HPP_

@@ -1,0 +1,38 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:compose prov::compose]
+
+`prov::compose` is 
+
+[header_spec prov..compose]
+
+[heading Synopsis]
+
+```
+ namespace namespaceQ {
+ namespace prov {
+
+ inline auto constexpr compose = ``[~unspecified]``;
+
+ // Requires:
+ //   std::remove_cv_t< std::remove_reference_t< ArgumentProvider > > is an
+ //   instantiation of argument_provider, otherwise substitution will fail.
+ template< class ArgumentProvider, class Callable >
+ constexpr /*deduced*/ operator |( ArgumentProvider&& provider
+                                 , Callable&& callable
+                                 ) noexcept( /*deduced*/ );
+                                 
+ }  // namespace ``namespaceQ``::prov
+ }  // namespace ``namespaceQ``
+```
+
+[heading Basic Usage]
+
+[heading Related Tutorials]
+
+[endsect]

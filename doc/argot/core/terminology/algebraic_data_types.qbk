@@ -1,0 +1,60 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:algebraic_data_types Algebraic Data Types]
+
+At a high level, the term /algebraic data type/ is a formal way of refering to a
+type that is composed of other data types. There are two common kinds of
+algebraic data types that are frequently encountered in C++, known as
+/product types/ and /sum types/.
+
+[h1 Product Types]
+
+A tuple type, such as an instantiation of `std::tuple` (or, more simply, a
+`struct`), is a form of algebraic data type known as a /product type/. A tuple
+logically contains an instance of each of its /operand/ types (which, in the
+`std::tuple` case, are its template parameters). An instance of a /product type/
+has as many possible states as the product of the amount of states of each of
+its operand types. A product type with no operands can be in exactly one state
+and is analogous to the multiplicative identity.
+
+One of the commonly-referenced concepts of =Argot=, called TupleLike, is a
+description for /product types/ in C++.
+
+TODO(mattcalabrese) Example
+
+[h1 Sum Types]
+
+A variant type, such as an instantiation of `std::variant` (or, more simply, a
+`union`), is a form of algebraic data type known as a /sum type/. A variant
+logically contains an instance of exactly one of its /operand/ types (which, in
+the `std::variant` case, are its template parameters). An instance of a
+/sum type/ has as many possible states as the product of the amount of states of
+each of its operand types. A sum type with no operands has no valid states and
+is analogous to the additive identity.
+
+One of the commonly-referenced concepts of =Argot=, called VariantLike, is a
+description for /sum types/ in C++.
+
+TODO(mattcalabrese) Example
+
+[h1 General Algebraic Data Types]
+
+A /general algebraic data type/ is a possibly recursive sum type of product
+types. Though not often directly created through a single template in C++,
+unlike a `std::tuple` or a `std::variant`, they do come up naturally in practice
+in various domains. For example, the =Boost.Spirit= library produces general
+algebraic data types during parsing.
+
+One of the fundamental concepts of =Argot=, called ArgumentProvider, can be
+thought of as a description for a form of /general algebraic data type/. It
+represents the notion of a /sum type/ of possible argument lists. The
+ArgumentProvider concept will be described in more detail later on.
+
+TODO(mattcalabrese) Example
+
+[endsect]

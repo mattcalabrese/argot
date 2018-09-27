@@ -1,0 +1,31 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:provide prov_traits::provide]
+
+[header_spec prov_traits..provide]
+
+[heading Synopsis]
+
+```
+ namespace namespaceQ {
+ namespace prov_traits {
+
+ template< class Fun, class... ArgumentProviders >
+ constexpr ``[~deduced]`` provide( Fun&& fun
+                          , ArgumentProviders&&... providers
+                          ) noexcept( ``[~deduced]`` );
+
+ }  // namespace ``namespaceQ``::prov_traits
+ }  // namespace ``namespaceQ``
+```
+
+[heading Basic Usage]
+
+[heading Related Tutorials]
+
+[endsect]

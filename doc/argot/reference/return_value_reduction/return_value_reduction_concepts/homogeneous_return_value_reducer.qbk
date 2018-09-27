@@ -1,0 +1,35 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section HomogeneousReturnValueReducer]
+
+[heading Description]
+
+A =HomogeneousReturnValueReducer= is a ReturnValueReducerQ whose associated
+`reduce` function does not instantiate the __invocation_identifier__ that is
+passed to it. The main purpose of modeling =HomogeneousReturnValueReducer= is as
+a means to optimize the compile-time of call_algorithmsQ.
+
+[heading Requirements]
+
+[heading Refinement of]
+
+The =HomogeneousReturnValueReducer= concept refines the following concept:
+
+* ReturnValueReducerQ
+
+[heading Modeled by]
+
+Some ReturnValueReductionSpecifiersQ whose associated ReturnValueReducersQ model
+=HomogeneousReturnValueReducer= are:
+
+* reducer_same_type_or_failQ
+* reducer_always_returnQ
+
+[heading Related Tutorials]
+
+[endsect]

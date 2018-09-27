@@ -58,7 +58,7 @@ template< class Fun >
 using result_of_forgetful_invoke
   = basic_result_of< forgetful_invoke_fn const&, Fun >;
 
-}  // namespace (argot::receiver)
+} // namespace (argot::receiver)
 
 namespace argot {
 
@@ -82,6 +82,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_FORGETFUL_INVOKE_HPP_

@@ -31,7 +31,7 @@ namespace case_detail {
 template< class Cases >
 struct as_is_t {};
 
-}  // namespace argot(::case_detail)
+} // namespace argot(::case_detail)
 
 template< class Cases >
 struct make_concept_map< SwitchBody< case_detail::as_is_t< Cases > > >
@@ -98,6 +98,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CASE_DETAIL_AS_IS_HPP_

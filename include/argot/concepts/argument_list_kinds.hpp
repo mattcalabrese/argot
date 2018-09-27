@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,12 @@
 
 #ifndef ARGOT_CONCEPTS_ARGUMENT_LIST_KINDS_HPP_
 #define ARGOT_CONCEPTS_ARGUMENT_LIST_KINDS_HPP_
+
+//[description
+/*`
+ArgumentProvider is an [argot_gen_concept_alias] .
+*/
+//]
 
 #include <argot/concepts/argument_types.hpp>
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
@@ -42,13 +48,13 @@ struct argument_list_kinds_impl
          >;
 };
 
-}  // namespace argot(::argument_list_kinds_concept_detail)
+} // namespace argot(::argument_list_kinds_concept_detail)
 
 template< class Kinds >
 using ArgumentListKinds
   = TransparentRequirement
     < argument_list_kinds_concept_detail::argument_list_kinds_impl< Kinds > >;
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_ARGUMENT_LIST_KINDS_HPP_

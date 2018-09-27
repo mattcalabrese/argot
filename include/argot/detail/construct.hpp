@@ -35,7 +35,7 @@ template< class T >
 ARGOT_REQUIRES( Object< T > )
 < construct_fn< std::remove_cv_t< T > > > constexpr construct{};
 
-}  // namespace argot(::detail_argot)
-}  // namespace argot
+} // namespace argot(::detail_argot)
+} // namespace argot
 
 #endif  // ARGOT_DETAIL_CONSTRUCT_HPP_

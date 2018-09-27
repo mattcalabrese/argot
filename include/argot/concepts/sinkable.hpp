@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,16 @@
 
 #ifndef ARGOT_CONCEPTS_SINKABLE_HPP_
 #define ARGOT_CONCEPTS_SINKABLE_HPP_
+
+//[description
+/*`
+Sinkable is an [argot_gen_concept] that is statisfied by each type `T` where the
+type `std::remove_cvref_t< T >` is implicitly constructible from a `T` when only
+considering constructors that may be invoked with an argument of type
+`std::remove_const_t< std::remove_reference_t< T > > &&` or
+`std::remove_const_t< std::remove_reference_t< T > > const&`.
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/gen/explicit_concept.hpp>
@@ -59,6 +69,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_SINKABLE_HPP_

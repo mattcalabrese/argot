@@ -37,7 +37,7 @@ struct disjoint_provided_t
   Provider provider;
 };
 
-}  // namespace argot(::case_detail)
+} // namespace argot(::case_detail)
 
 template< class Cases, class Provider >
 struct make_concept_map
@@ -116,6 +116,6 @@ struct make_concept_map
   }
 };
 */
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CASE_DETAIL_DISJOINT_PROVIDED_HPP_

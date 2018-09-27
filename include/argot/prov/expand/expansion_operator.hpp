@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2018 Matt Calabrese
+  Copyright (c) 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -14,22 +14,25 @@
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 
-namespace argot {
-namespace expansion_operator {
+namespace argot::expansion_operator {
 
 template< class Exp
         , ARGOT_REQUIRES( Expandable< Exp&& > )()
         >
-[[nodiscard]] constexpr auto operator +( Exp&& exp )
+[[nodiscard]]
+constexpr auto operator +( Exp&& exp )//=;
+//<-
 {
   return access_raw_concept_map< Expandable< Exp&& > >
   ::expand( ARGOT_FORWARD( Exp )( exp ) );
-}
+} //->
 
 template< class Exp
         , ARGOT_REQUIRES( HigherOrderExpandable< Exp&& > )()
         >
-[[nodiscard]] constexpr auto operator ++( Exp&& exp )
+[[nodiscard]]
+constexpr auto operator ++( Exp&& exp )//=;
+//<-
 {
   using secondary_expandable_t
     = decltype( access_raw_concept_map< Expandable< Exp&& > >
@@ -40,17 +43,15 @@ template< class Exp
   ::expand( access_raw_concept_map< Expandable< Exp&& > >
             ::expand( ARGOT_FORWARD( Exp )( exp ) )
           );
-}
+} //->
 
-} // namespace argot(::expansion_operator)
+} // namespace (argot::expansion_operator)
 
-namespace operators {
+namespace argot::operators {
 
 using expansion_operator::operator +;
 using expansion_operator::operator ++;
 
-} // namespace argot(::operators)
-
-}  // namespace argot
+} // namespace (argot::operators)
 
 #endif  // ARGOT_PROV_EXPAND_EXPANSION_OPERATOR_HPP_

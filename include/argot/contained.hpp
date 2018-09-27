@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2018 Matt Calabrese
+  Copyright (c) 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,27 @@
 
 #ifndef ARGOT_CONTAINED_HPP_
 #define ARGOT_CONTAINED_HPP_
+
+//[description
+/*`
+argot::contained is a facility for generic code that allows the developer to
+encapsulate and manipulate instances of types in a way such the associated
+operations behave as though they were of a =Regular= type, even if those
+operations when applied directly would otherwise differ in semantics.
+
+It is a unary template-alias that is an identity operation if the passed-in
+template argument, `T`, is an unqualified object type, otherwise:
+
+* If `T` is a reference type, `contained< T >` is a type for which its value is
+  considered to be the address of the target object. It is move-only if `T` is
+  an rvalue reference type.
+* If `T` is a c-style array type, `contained< T >` has the same =Regular=
+  operations as the element type, as appropriately applied to all elements.
+* If `T` is `void`, it behaves as `argot::void_`.
+* If `T` is a const-qualified object type, `contained< T >` has the same
+  properties as its const-unqualified form.
+*/
+//]
 
 #include <argot/concepts/assignable.hpp>
 #include <argot/concepts/constructible.hpp>

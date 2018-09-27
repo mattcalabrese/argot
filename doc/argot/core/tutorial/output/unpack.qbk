@@ -1,0 +1,49 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[heading Outputting a Tuple]
+
+Again, the underlying problem here is that even though each of the elements of
+the `std::tuple` has an overload for streaming, the `std::tuple` itself does
+not.
+
+But that is not the end of the story.
+
+The =Argot= library is fundamentally about the ability to take an expression and
+"convert" it to a series of arguments. More precisely, the library introduces a
+concept called an ArgumentProvider that can represent such a "conversion".
+Several facilities in =Argot= recognize when an ArgumentProvider is given to
+them, and those facilities transform such an ArgumentProvider appropriately into
+its logically-represented arguments. It does this internally by way of an extra
+level of indirection that is hidden from the user.
+
+So, imagine if we had an ArgumentProvider that /represented/ a tuple expansion
+into a separate argument for each element of that tuple? In fact, =Argot= has
+exactly such ArgumentProviders, which can be obtained through the facility
+prov::unpack. With the ability to represent such an idea, and with a function
+like argot::output that understands how to utilize an ArgumentProvider, we write
+code like the following.
+
+[import ../../../../../example/tutorial/fundamentals/output/unpack.cpp]
+[example]
+
+[note
+  prov::unpack works with /tuple-like/ types, which is to say types that model
+  the TupleLike concept. Out-of-the-box, this means that prov::unpack can be
+  used with many types, including but not limited to specializations of:
+
+* std::array
+* std::pair
+* std::tuple
+* boost::array
+* boost::tuple
+* [containers_of_boost_fusion]
+* Containers of Boost.Hana
+
+User-defined types that model the TupleLike concept types will automatically be
+able to be used with prov::unpack. 
+]

@@ -1,0 +1,37 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[chapter Library Breakdown
+  [quickbook 1.7]
+  [id argot.breakdown]
+]
+
+[h1 Fundamentals]
+
+The fundamentals of =Argot= consists of the top-level argot::call facility,
+concepts for notions such as TupleLike types and VariantLike types, the
+lower-level concepts that are unique to this library such as the
+ArgumentProvider concept, a suite of ArgumentProviders, and various other
+top-level facilities related to the concepts that are introduced. 
+
+[h1 Concurrency]
+
+Beyond the core of the library is a suite of facilities for dealing with
+concurrent execution. It builds on the abstractions of the core library, but
+applies them to abstractions such as Future types and Executor types, and allows
+for simple and efficient chaining of concurrent operations plus all of the
+functionality of the core library as applied to concurrency. It is not
+recommended for users to advance to the concurrent portion of =Argot= until they
+are comfortable with the core of =Argot=.
+
+[h1 Generic Programming]
+
+Somewhat separate from the rest of =Argot= is a lower-level sublibrary for
+generic programming called =Argot.Gen= that is for the specification of
+/concepts/ and /concept maps/. It underpins the majority of the facilities in
+=Argot=, but it is not necessary to understand in detail for anything other than
+advanced uses of the library.

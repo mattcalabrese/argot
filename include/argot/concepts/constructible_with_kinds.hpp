@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -46,7 +46,7 @@ struct constructible_with_kinds_impl
       >;
 };
 
-}  // namespace argot(::constructible_with_kinds_detail)
+} // namespace argot(::constructible_with_kinds_detail)
 
 template< class T, class Kinds >
 using ConstructibleWithKinds
@@ -55,6 +55,6 @@ using ConstructibleWithKinds
       ::constructible_with_kinds_impl< T, Kinds >
     >;
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_CONSTRUCTIBLE_WITH_KINDS_HPP_

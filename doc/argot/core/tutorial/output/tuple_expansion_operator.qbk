@@ -1,0 +1,24 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[heading Expansion Operator]
+
+Because tuple expansion is so common, =Argot= provides a simpler syntax than
+prov::unpack by way of an overloaded unary `operator +`. This operator is known
+by the library as the /expansion operator/. It is a constrained operator, but it
+lives in its own namespace, intentionally not found by argument-dependent-loopup
+in order to prevent collisions with existing operator overloads.
+
+To use the expansion operator, bring it in to a local scope with a
+`using namespace argot::expansion_operator;` declaration.
+
+[warning Bringing in the `argot::expansion_operator` namespace is heavily
+         discouraged outside of function scope, especially if in a header file.
+]
+
+[import ../../../../../example/tutorial/fundamentals/output/tuple_expansion_operator.cpp]
+[example]

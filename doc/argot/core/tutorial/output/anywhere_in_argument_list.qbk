@@ -1,0 +1,11 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+Anywhere in an Argument List:
+
+[import ../../../../../example/tutorial/fundamentals/output/anywhere_in_argument_list.cpp]
+[example]

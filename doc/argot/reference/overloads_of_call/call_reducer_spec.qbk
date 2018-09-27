@@ -1,0 +1,45 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:call_reducer_spec call\[ ReturnValueReductionSpecifier \]]
+
+[heading Description]
+
+This form of callQ is capable of accepting a
+ReturnValueReductionSpecifierQ by way of an overloaded `operator []`. Because
+it is an object (unlike the other call_algorithmsQ, which are function
+templates), it is also useful as an argument to higher-order functions.
+
+[top_header_spec call]
+
+[heading Synopsis]
+
+```
+ namespace namespaceQ {
+
+ struct ``[~unspecified]``
+ {
+   // Requires: RVRSpec is a model of ``ReturnValueReductionSpecifierQ``
+   template< class RVRSpec >
+   ``[~unspecified]`` operator []( RVRSpec&& reducer_spec ) const noexcept;
+
+   template< class Fun, class... P >
+   ``[~deduced]`` operator ()( Fun&& fun, P&&... args ) noexcept( ``[~deduced]`` );
+ } constexpr call_ = {};
+
+ }  // namespace ``namespaceQ``
+```
+
+[heading Related Tutorials]
+
+[heading Related References]
+
+* callQ
+* named_call_always_returnQ
+* ArgumentProviderQ
+
+[endsect]

@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -46,7 +46,7 @@ struct invocable_with_each_impl
       >;
 };
 
-}  // namespace argot(::invocable_with_each_detail)
+} // namespace argot(::invocable_with_each_detail)
 
 template< class Invocable, class... ArgumentListKinds >
 using InvocableWithEach
@@ -55,6 +55,6 @@ using InvocableWithEach
       < Invocable, ArgumentListKinds... >
     >;
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_INVOCABLE_WITH_EACH_HPP_

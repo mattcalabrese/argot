@@ -150,8 +150,8 @@ struct execute_all_constexpr_tests_impl< test_list< TestHolders... > >
   }
 };
 
-}  // namespace argot::call_detail
-}  // namespace argot
+} // namespace argot::call_detail
+} // namespace argot
 
 #define ARGOT_TEST_FAIL( message )                                             \
   return ::argot::call_detail::constexpr_block_result_t                        \

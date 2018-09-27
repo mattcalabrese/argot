@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -33,7 +33,7 @@ struct return_type_is_valid_parameter_type
     = Req< ParameterType< std::invoke_result_t< Invocable&&, P&&... > > >;
 };
 
-}  // namespace argot(::transformation_with_detail)
+} // namespace argot(::transformation_with_detail)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
 s/transformation_with.h
@@ -60,6 +60,6 @@ ARGOT_AUTO_CONCEPT( TransformationWith )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_BASIC_TRANSFORMATION_WITH_HPP_

@@ -51,6 +51,6 @@ template< class Ret >
 ARGOT_REQUIRES( ReturnType< Ret > )
 < call_to_fn< Ret > > constexpr call_{};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CALL_CALL_TO_HPP_

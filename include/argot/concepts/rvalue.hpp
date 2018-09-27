@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,13 @@
 
 #ifndef ARGOT_CONCEPTS_RVALUE_HPP_
 #define ARGOT_CONCEPTS_RVALUE_HPP_
+
+//[description
+/*`
+RValue is an [argot_gen_concept] that is satisfied by Object types and
+RvalueReference types.
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/object.hpp>
@@ -44,6 +51,6 @@ struct make_concept_map
 , ARGOT_REQUIRES( Or< Object< T >, RvalueReference< T > > )<>
 > {};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_RVALUE_HPP_

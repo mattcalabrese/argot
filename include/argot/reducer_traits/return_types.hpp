@@ -17,7 +17,7 @@ struct return_types_t{};
 template< class... ReturnTypes >
 return_types_t< ReturnTypes... > constexpr return_types{};
 
-}  // namespace argot::reducer_traits
-}  // namespace argot
+} // namespace argot::reducer_traits
+} // namespace argot
 
 #endif  // ARGOT_REDUCER_TRAITS_POSSIBLE_RETURN_TYPES_HPP_

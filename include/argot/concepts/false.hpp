@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,19 @@
 
 #ifndef ARGOT_CONCEPTS_FALSE_HPP_
 #define ARGOT_CONCEPTS_FALSE_HPP_
+
+//[description
+/*`
+False is an [argot_gen_concept] that is only satisfied by the `bool` value
+`false`.
+
+[note
+  False can be used along with ARGOT_REQUIRES as a way to contrain templates by
+  an arbitrary boolean metafunction, similar to std::enable_if with a negated
+  condition.
+]
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/gen/explicit_concept.hpp>
@@ -43,6 +56,6 @@ ARGOT_EXPLICIT_CONCEPT( False )
 template<>
 struct make_concept_map< False< false > > {};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_FALSE_HPP_

@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,13 @@
 
 #ifndef ARGOT_CONCEPTS_NET_EXECUTOR_HPP_
 #define ARGOT_CONCEPTS_NET_EXECUTOR_HPP_
+
+//[description
+/*`
+NetExecutor is an [argot_gen_concept] for the requirements of the
+[net_executor_concept].
+*/
+//]
 
 #include <argot/concepts/copy_constructible.hpp>
 #include <argot/concepts/destructible.hpp>
@@ -73,6 +80,6 @@ struct make_concept_map
 */
 #endif // !defined( ARGOT_GENERATE_PREPROCESSED_CONCEPTS )
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_NET_EXECUTOR_HPP_

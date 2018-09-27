@@ -66,6 +66,6 @@ using undirected_edge_iterator
 using strict_undirected_edge_iterator
   = edge_iterator_< graph_kind::strict_undirected >;
 
-}  // namespace (argot::receiver::graphviz)
+} // namespace (argot::receiver::graphviz)
 
 #endif  // ARGOT_RECEIVER_GRAPHVIZ_EDGE_ITERATOR_HPP_

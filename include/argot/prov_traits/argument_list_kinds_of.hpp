@@ -50,6 +50,6 @@ template< class Provider >
 argument_list_kinds_of_t< Provider > constexpr
 argument_list_kinds_of_v{};
 
-}  // namespace (argot::prov_traits)
+} // namespace (argot::prov_traits)
 
 #endif  // ARGOT_PROV_TRAITS_ARGUMENT_LIST_KINDS_OF_HPP_

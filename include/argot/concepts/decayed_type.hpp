@@ -8,6 +8,13 @@
 #ifndef ARGOT_CONCEPTS_DECAYED_TYPE_HPP_
 #define ARGOT_CONCEPTS_DECAYED_TYPE_HPP_
 
+//[description
+/*`
+DecayedType is an [argot_gen_concept] that is satisfied by each type `T` for
+which `std::decay_t< T >` is the same type as `T`.
+*/
+//]
+
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/gen/explicit_concept.hpp>
 #include <argot/gen/make_concept_map.hpp>
@@ -48,6 +55,6 @@ struct make_concept_map
 , call_detail::fast_enable_if_t< std::is_same_v< T, std::decay_t< T > > >
 > {};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_DECAYED_TYPE_HPP_

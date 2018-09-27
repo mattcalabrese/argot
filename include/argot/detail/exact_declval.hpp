@@ -13,6 +13,6 @@ namespace argot::argot_detail {
 template< class T >
 T exact_declval();  // Purposely never defined (possibly static_assert)
 
-}  // namespace (argot::argot_detail)
+} // namespace (argot::argot_detail)
 
 #endif  // ARGOT_DETAIL_EXACT_DECLVAL_HPP_

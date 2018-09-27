@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,13 @@
 
 #ifndef ARGOT_CONCEPTS_ARGUMENT_RECEIVER_OF_HPP_
 #define ARGOT_CONCEPTS_ARGUMENT_RECEIVER_OF_HPP_
+
+//[description
+/*`
+ArgumentReceiverOf is an [argot_gen_concept] that is satisfied by an
+ArgumentReceiver and a compatible series of `receive` argument types.
+*/
+//]
 
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/concepts/argument_types.hpp>
@@ -78,7 +85,7 @@ using result_of_raw_receive_t
     , result_of_raw_receive_impl< Receiver, Possibilities... >
     >::type;
 
-}  // namespace argot(::argument_receiver_of_detail)
+} // namespace argot(::argument_receiver_of_detail)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
 s/argument_receiver_of.h
@@ -106,6 +113,6 @@ ARGOT_AUTO_CONCEPT( ArgumentReceiverOf )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_ARGUMENT_RECEIVER_OF_HPP_

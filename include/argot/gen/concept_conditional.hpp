@@ -23,6 +23,6 @@ template< class ConceptInstance >
 using concept_conditional
   = argot_detail::conditional< is_modeled_v< ConceptInstance > >;
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_GEN_CONCEPT_CONDITIONAL_HPP_

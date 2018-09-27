@@ -20,6 +20,6 @@ template< class R, class... P >
 bool constexpr is_invocable_v
   = call_detail::is_detected_v< std::result_of_t, R&&( P&&... ) >;
 
-}  // namespace (argot::argot_detail)
+} // namespace (argot::argot_detail)
 
 #endif  // ARGOT_DETAIL_INVOCABLE_HPP_

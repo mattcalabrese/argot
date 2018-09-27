@@ -61,7 +61,7 @@ template< class... ProviderArgumentListKinds >
 using squashed_argument_list_kinds_t
   = typename squashed_argument_list_kinds< ProviderArgumentListKinds... >::type;
 
-}  // namespace argot::receiver(::provide_arguments_to_detail)
+} // namespace argot::receiver(::provide_arguments_to_detail)
 
 struct provide_arguments_to_t
 {
@@ -93,7 +93,7 @@ template< class Receiver >
 using result_of_provide_arguments_to
   = basic_result_of< provide_arguments_to_t const&, Receiver  >;
 
-}  // namespace argot(::receiver)
+} // namespace argot(::receiver)
 
 template< class Receiver >
 struct make_concept_map
@@ -137,6 +137,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_PROVIDE_ARGUMENTS_TO_HPP_

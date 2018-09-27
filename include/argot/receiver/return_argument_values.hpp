@@ -65,8 +65,8 @@ struct argument_types_are_sinkable< receiver_traits::argument_types_t< P... > >
   using expand_requirements = Req< Sinkable< P&& >... >;
 };
 
-}  // namespace argot::receiver::return_argument_values_detail
-}  // namespace argot::receiver
+} // namespace argot::receiver::return_argument_values_detail
+} // namespace argot::receiver
 
 template<>
 struct make_concept_map
@@ -107,6 +107,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_RETURN_ARGUMENT_VALUES_HPP_

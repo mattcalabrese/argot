@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,14 @@
 
 #ifndef ARGOT_CONCEPTS_OPTIONAL_LIKE_HPP_
 #define ARGOT_CONCEPTS_OPTIONAL_LIKE_HPP_
+
+//[description
+/*`
+OptionalLike is the [argot_gen_concept] for each type that can be though of as
+a [sum_type] where the alternatives are an element type `T` and the lack of a
+`T`, as represented by `opt_traits::nil< T >`.
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/gen/explicit_concept.hpp>
@@ -89,6 +97,6 @@ struct make_concept_map< OptionalLike< std::optional< T > > >
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_OPTIONAL_LIKE_HPP_

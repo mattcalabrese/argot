@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2018 Matt Calabrese
+  Copyright (c) 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -11,6 +11,27 @@
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/reference.hpp>
 #include <argot/gen/explicit_concept.hpp>
+
+//[description
+/*`
+Expandable is an [argot_gen_concept] that is satisfied by reference types for
+which there is a reasonable associated default ArgumentProvider, which is
+returned from an associated function of Expandable called `expand`. The
+associated `expand` function is used when invoking prov::expand or when using
+the [expansion_operator]. Users are encouraged to model this concept explicitly
+in order to be usable with prov::expand and the [expansion_operator].
+
+Type categories that are automatically considered to be Expandable are:
+
+[table:expansions Expansions
+ [[Category][Expands to]]
+ [[TupleLike][prov::unpack(arg)]]
+ [[VariantLike][prov::alternative_of(arg)]]
+ [[HigherOrderArgumentProvider][TODO(mattcalabrese) Describe]]
+ [[ExpandableArgumentProvider][TODO(mattcalabrese) Describe]]
+]
+*/
+//]
 
 namespace argot {
 
@@ -203,7 +224,7 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #include <argot/concepts/persistent_expandable_argument_provider.hpp>
 

@@ -528,7 +528,7 @@ class graphviz_dot_t
   ValOutput val_output;
 };
 
-}  // namespace argot::receiver::graphviz_dot_detail
+} // namespace argot::receiver::graphviz_dot_detail
 
 struct demangled_type_output
 {
@@ -659,8 +659,8 @@ graphviz_dot
   );
 }
 
-}  // namespace argot::receiver
-}  // namespace argot
+} // namespace argot::receiver
+} // namespace argot
 
 #endif
 

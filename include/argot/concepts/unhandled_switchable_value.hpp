@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,13 @@
 
 #ifndef ARGOT_CONCEPTS_UNHANDLED_SWITCHABLE_VALUE_HPP_
 #define ARGOT_CONCEPTS_UNHANDLED_SWITCHABLE_VALUE_HPP_
+
+//[description
+/*`
+UnhandledSwitchableValue is an [argot_gen_concept] that is satisfied for a value
+is not covered by the specified SwitchBody.
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/switch_body_case.hpp>
@@ -82,7 +89,7 @@ struct unhandled_switchable_value_requirements
       >;
 };
 
-}  // namespace argot(::unhandled_switchable_value_detail)
+} // namespace argot(::unhandled_switchable_value_detail)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
 s/unhandled_switchable_value.h
@@ -111,6 +118,6 @@ ARGOT_AUTO_CONCEPT( UnhandledSwitchableValue )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_UNHANDLED_SWITCHABLE_VALUE_HPP_

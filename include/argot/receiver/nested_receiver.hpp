@@ -144,7 +144,7 @@ using result_of_nested_receiver
   = basic_result_of
     < nested_receiver_t const&, Receiver, LeadingArgLists, TrailingArgLists >;
 
-}  // namespace argot::receiver
+} // namespace argot::receiver
 
 // TODO(mattcalabrese) Use a reference wrapper during recursion
 template
@@ -194,6 +194,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_NESTED_RECEIVER_HPP_

@@ -36,6 +36,6 @@ template< class ConcProvider >
 using result_of_as_future
   = basic_result_of< as_future_fn const&, ConcProvider >;
 
-}  // namespace (argot::conc_traits)
+} // namespace (argot::conc_traits)
 
 #endif  // ARGOT_CONC_TRAITS_AS_FUTURE_HPP_

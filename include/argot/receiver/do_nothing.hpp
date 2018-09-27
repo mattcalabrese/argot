@@ -8,18 +8,45 @@
 #ifndef ARGOT_RECEIVER_DO_NOTHING_HPP_
 #define ARGOT_RECEIVER_DO_NOTHING_HPP_
 
+//[description
+/*`
+receiver::do_nothing is an ArgumentReceiver that can receive any arguments, but
+does nothing with those arguments. It is useful when exploiting an
+ArgumentProvider for its side-effects.
+
+[note This is a low-level facility. If you wish to exploit an ArgumentProvider
+      for its side-effects and do not want to deal with an ArgumentReceiver
+      directly, the argot::side_effect facility is a higher-level facility that
+      can be used for similar overall behavior.
+]
+*/
+//]
+
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/gen/make_concept_map.hpp>
+
+//[docs
+/*`
+[synopsis_heading]
+*/
 
 namespace argot::receiver {
 
 struct do_nothing_fn
 {
+  //<-
   struct impl {};
-  constexpr impl operator()() const noexcept { return {}; }
+  //->
+  constexpr auto operator()() const noexcept//=;
+  //<-
+  {
+    return impl{};
+  } //->
 } inline constexpr do_nothing{};
 
 } // namespace (argot::receiver)
+
+//]
 
 namespace argot {
 

@@ -8,22 +8,36 @@
 #ifndef ARGOT_PACKAGER_BOOST_FUTURE_HPP_
 #define ARGOT_PACKAGER_BOOST_FUTURE_HPP_
 
+//[description
+/*`
+packager::boost_future is a FuturePackager that generates `boost::future`
+objects.
+
+[note TODO(mattcalabrese) Explain how to enable continuations in boost.]
+*/
+//]
+
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/future_packager.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
 #include <argot/detail/forward.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/fut_traits/config.hpp>
 #include <argot/gen/make_concept_map.hpp>
-#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
-#include <argot/detail/remove_cvref.hpp>
-
-#include <exception>
 
 #include <boost/thread/future.hpp>
 
-namespace argot {
-namespace packager {
+#include <exception>
+
+//[docs
+/*`
+[synopsis_heading]
+*/
+
+namespace argot::packager {
+//<-
 namespace detail_boost_future_packager {
 
 template< class Fun, class... P >
@@ -66,11 +80,16 @@ struct packaged_t
     future;
 };
 
-}  // namespace argot::packager(::detail_boost_future_packager)
+} // namespace argot::(packager::detail_boost_future_packager)
+//->
 
 struct boost_future {};
 
-} // namespace argot(::packager)
+} // namespace (argot::packager)
+
+//]
+
+namespace argot {
 
 template<>
 struct make_concept_map< FuturePackager< packager::boost_future > >
@@ -80,7 +99,8 @@ struct make_concept_map< FuturePackager< packager::boost_future > >
   static constexpr auto package( Exec&& exec, Fun&& fun )
   {
     return packager::detail_boost_future_packager::packaged_t
-    < detail_argot::remove_cvref_t< Fun >, P... >( ARGOT_FORWARD( Fun )( fun ) );
+    < detail_argot::remove_cvref_t< Fun >, P... >
+    ( ARGOT_FORWARD( Fun )( fun ) );
   }
 };
 

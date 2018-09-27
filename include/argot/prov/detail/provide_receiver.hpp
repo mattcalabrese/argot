@@ -33,6 +33,6 @@ struct provide_receiver
   }
 };
 
-}  // namespace (argot::prov::prov_detail)
+} // namespace (argot::prov::prov_detail)
 
 #endif  // ARGOT_PROV_DETAIL_PROVIDE_RECEIVER_HPP_

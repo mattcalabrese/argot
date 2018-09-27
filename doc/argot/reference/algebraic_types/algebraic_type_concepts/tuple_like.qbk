@@ -1,0 +1,39 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section TupleLike]
+
+[heading Description]
+
+A =TupleLike= is an =object type= that represents `N` different contained
+/elements/, each of a potentially different type, where those types and `N` are
+fixed at compile-time. Associated functions of the =TupleLike= concept are
+accessible through traits provided by the library.
+
+[heading Refinement of]
+
+* =object type=
+
+[heading Requirements]
+
+In order to model the =TupleLike= concept, the `make_concept_map` `template`
+must be specialized for the type and define the following nested names with the
+specified semantics:
+
+[heading Traits]
+
+TODO(mattcalabrese) Describe the traits
+
+[heading Modeled by]
+
+* `std::array< `[~T, N]` >`
+* `std::pair< `[~T, U]` >`
+* `std::tuple< `[~T...]` >`\
+
+[heading Related References]
+
+[endsect]

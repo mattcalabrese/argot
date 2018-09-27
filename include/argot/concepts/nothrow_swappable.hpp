@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2018 Matt Calabrese
+  Copyright (c) 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,14 @@
 
 #ifndef ARGOT_CONCEPTS_NOTHROW_SWAPPABLE_HPP_
 #define ARGOT_CONCEPTS_NOTHROW_SWAPPABLE_HPP_
+
+//[description
+/*`
+NothrowSwappable is an [argot_gen_concept] for determining if an
+UnqualifiedObject type supports the [swap_idiom] with lvalue operands, and where
+that operation is `noexcept`.
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/swappable.hpp>
@@ -49,9 +57,10 @@ struct make_concept_map
 < NothrowSwappable< T >
 , typename call_detail::detached_fast_enable_if
   < std::is_object_v< T > >::_::template and_
+  < std::is_same_v< T, std::remove_cv_t< T > > >::_::template and_
   < std::is_nothrow_swappable_v< T > >::void_
 > {};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_NOTHROW_SWAPPABLE_HPP_

@@ -1,0 +1,16 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[heading Expansion Anywhere in an Argument List]
+
+Finally, the facilities provided by =Argot= are not limited to accepting just
+one ArgumentProvider. Instead, you expand any number of ArgumentProviders that
+you wish, interleaved with as many "normal" parameters as you wish. Each
+ArgumentProvider is expanded in-place.
+
+[import ../../../../../example/tutorial/fundamentals/output/multiple_expansions.cpp]
+[example]

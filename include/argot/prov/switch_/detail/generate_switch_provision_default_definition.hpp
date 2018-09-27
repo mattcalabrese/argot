@@ -143,7 +143,7 @@ struct switch_provision
 
 #ifndef ARGOT_PREPROCESSING_MODE
 
-}  // namespace (argot::prov::switch_detail)
+} // namespace (argot::prov::switch_detail)
 
 #else
 

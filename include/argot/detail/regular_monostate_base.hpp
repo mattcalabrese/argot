@@ -53,14 +53,14 @@ struct regular_monostate_base
   friend constexpr void swap( Child&, Child& ) noexcept {}
 };
 
-}  // namespace argot(::detail_monostate_base)
+} // namespace argot(::detail_monostate_base)
 
 namespace argot_detail {
 
 using detail_monostate_base::regular_monostate_base;
 
-}  // namespace argot_detail
-}  // namespace argot
+} // namespace argot_detail
+} // namespace argot
 
 // TODO(mattcalabrese) Use traits to pass by value when feasible.
 #define ARGOT_DETAIL_MONOSTATE_HASH_DEFINITION( ... )                          \

@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,13 @@
 
 #ifndef ARGOT_CONCEPTS_VARIANT_LIKE_HPP_
 #define ARGOT_CONCEPTS_VARIANT_LIKE_HPP_
+
+//[description
+/*`
+VariantLike is an [argot_gen_concept] corresponding to the concept of a
+[sum_type].
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/optional_like.hpp>
@@ -92,6 +99,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_VARIANT_LIKE_HPP_

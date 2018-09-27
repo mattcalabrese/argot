@@ -31,7 +31,7 @@ struct case_values_for_type_impl< value_list_t< Values... > >
   using apply = value_list_t< static_cast< ValueType >( Values )... >;
 };
 
-}  // namespace case_values_for_type_detail
+} // namespace case_values_for_type_detail
 
 template< class Body, class ValueType >
 using case_values_for_type_t
@@ -52,7 +52,7 @@ struct case_values_for_type_impl
   using apply = value_list_t< static_cast< ValueType >( Values )... >;
 };
 
-}  // namespace case_values_for_type_detail
+} // namespace case_values_for_type_detail
 
 template< class Body, class ValueType >
 using case_values_for_type_t
@@ -73,6 +73,6 @@ using case_values_for_type
 template< class Body, class ValueType >
 case_values_for_type_t< Body, ValueType > constexpr case_values_for_type_v{};
 
-}  // namespace (argot::switch_traits)
+} // namespace (argot::switch_traits)
 
 #endif  // ARGOT_SWITCH_TRAITS_CASE_VALUES_FOR_TYPE_HPP_

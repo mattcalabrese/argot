@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -8,30 +8,44 @@
 #ifndef ARGOT_RECEIVER_FORWARD_TRANSFORMED_ARGUMENTS_HPP_
 #define ARGOT_RECEIVER_FORWARD_TRANSFORMED_ARGUMENTS_HPP_
 
+//[description
+/*`
+receiver::forward_transformed_arguments is a facility that takes an
+ArgumentReceiver and a unary /invocable/, resulting in an ArgumentReceiver that
+forwards each individual argument it receives to the /invocable/, and passes the
+result of those transformations to the original ArgumentReceiver. The original
+ArgumentReceiver and the /decayed/ invocable are captured by value.
+*/
+//]
+
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/concepts/decay_sinkable.hpp>
 #include <argot/concepts/potentially_invocable_object.hpp>
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
-#include <argot/detail/sink.hpp>
 #include <argot/detail/forward.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
+#include <argot/detail/sink.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/detail/move.hpp>
 #include <argot/prov/group.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
-#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 #include <utility>
 
-namespace argot {
-namespace receiver {
+//[docs
+/*`
+[synopsis_heading]
+*/
 
-namespace forward_transformed_arguments_detail {
+namespace argot::receiver {
+//<-
+namespace detail_forward_transformed_arguments {
 
 template< class... ArgumentListKinds >
 struct individual_argument_types {};
@@ -92,10 +106,12 @@ template< class Invocable, class... ArgumentListKinds >
 transformed_argument_types_t< Invocable, ArgumentListKinds... > constexpr
 transformed_argument_types{};
 
-}  // namespace argot::receiver(::forward_transformed_arguments_detail)
+} // namespace argot::receiver(::detail_forward_transformed_arguments)
+//->
 
-struct forward_transformed_arguments_t
+struct forward_transformed_arguments_fn
 {
+  //<-
   template< class Receiver, class Invocable >
   struct impl
   {
@@ -105,38 +121,51 @@ struct forward_transformed_arguments_t
     Receiver receiver;
     Invocable invocable;
   };
-
-  template< class Receiver, class Invocable >
-  constexpr ARGOT_REQUIRES
-  ( ArgumentReceiver< detail_argot::remove_cvref_t< Receiver > > )
-  ( PotentiallyInvocableObject< std::decay_t< Invocable&& > > )
-  ( Sinkable< Receiver&& > )
-  ( DecaySinkable< Invocable&& > )
-  < impl< detail_argot::remove_cvref_t< Receiver >, detail_argot::remove_cvref_t< Invocable > > >
-  operator ()( Receiver&& receiver, Invocable&& invocable ) const
+  //->
+  template< class Receiver, class Invocable
+          , ARGOT_REQUIRES
+            ( ArgumentReceiver< detail_argot::remove_cvref_t< Receiver > > )
+            ( PotentiallyInvocableObject< std::decay_t< Invocable&& > > )
+            ( Sinkable< Receiver&& > )
+            ( DecaySinkable< Invocable&& > )
+            ()
+          >
+  constexpr auto
+  operator ()( Receiver&& receiver, Invocable&& invocable ) const//=;
+  //<-
   {
-    return { call_detail::forward_and_sink< Receiver >( receiver )
-           , call_detail::forward_and_decay_sink< Invocable >( invocable )
-           };
-  }
+    return impl
+    < detail_argot::remove_cvref_t< Receiver >
+    , detail_argot::remove_cvref_t< Invocable >
+    >
+    { call_detail::forward_and_sink< Receiver >( receiver )
+    , call_detail::forward_and_decay_sink< Invocable >( invocable )
+    };
+  } //->
 } inline constexpr forward_transformed_arguments{};
 
 template< class Receiver, class Invocable >
-using result_of_forward_transformed_arguments_t
+using result_of_forward_transformed_arguments_t//= = ``[see_prologue_result_of]``;
+//<-
   = basic_result_of_t
-    < forward_transformed_arguments_t const&, Receiver&&, Invocable&& >;
+    < forward_transformed_arguments_fn const&, Receiver&&, Invocable&& >; //->
 
 template< class Receiver, class Invocable >
-using result_of_forward_transformed_arguments
+using result_of_forward_transformed_arguments//= = ``[see_prologue_result_of]``;
+//<-
   = basic_result_of
-    < forward_transformed_arguments_t const&, Receiver&&, Invocable&& >;
+    < forward_transformed_arguments_fn const&, Receiver&&, Invocable&& >; //->
 
-}  // namespace argot(::receiver)
+} // namespace (argot::receiver)
+
+//]
+
+namespace argot {
 
 template< class Receiver, class Invocable >
 struct make_concept_map
 < ArgumentReceiver
-  < receiver::forward_transformed_arguments_t::impl< Receiver, Invocable > >
+  < receiver::forward_transformed_arguments_fn::impl< Receiver, Invocable > >
 >
 {
   // TODO(mattcalabrese) Constraints
@@ -147,7 +176,7 @@ struct make_concept_map
 /*, ARGOT_REQUIRES
     ( InvocableWithKinds
       < Invocable const&
-      , receiver::forward_transformed_arguments_detail
+      , receiver::detail_forward_transformed_arguments
         ::individual_argument_types_t
         < receiver_traits::argument_list_kinds_t< LeadingArgumentListKinds... >
         , receiver_traits::argument_list_kinds_t
@@ -159,14 +188,14 @@ struct make_concept_map
     ( ArgumentReceiverOfKinds
       < Receiver
       , call_detail::concatenate_t
-        < receiver::forward_transformed_arguments_detail
+        < receiver::detail_forward_transformed_arguments
           ::transformed_argument_types
           < Invocable const&, LeadingArgumentListKinds... >
         , receiver_traits::argument_list_kinds_t
           < receiver_traits::argument_types_t
             < std::invoke_result_t< Invocable const&, P&& >... >
           >
-        , receiver::forward_transformed_arguments_detail
+        , receiver::detail_forward_transformed_arguments
           ::transformed_argument_types
           < Invocable const&, TrailingArgumentListKinds... >
         >
@@ -176,7 +205,7 @@ struct make_concept_map
   >
   static constexpr decltype( auto )
   receive_branch
-  ( receiver::forward_transformed_arguments_t::impl< Receiver, Invocable >&&
+  ( receiver::forward_transformed_arguments_fn::impl< Receiver, Invocable >&&
       self
   , receiver_traits::argument_list_kinds_t< LeadingArgumentListKinds... >
   , receiver_traits::argument_list_kinds_t< TrailingArgumentListKinds... >
@@ -186,10 +215,10 @@ struct make_concept_map
     // TODO(mattcalabrese) Handle void-to-regular-void constexpr_invoke
     return receiver_traits::receive_branch
     ( ARGOT_MOVE( self.receiver )
-    , receiver::forward_transformed_arguments_detail
+    , receiver::detail_forward_transformed_arguments
       ::transformed_argument_types
       < Invocable const&, LeadingArgumentListKinds... >
-    , receiver::forward_transformed_arguments_detail
+    , receiver::detail_forward_transformed_arguments
       ::transformed_argument_types
       < Invocable const&, TrailingArgumentListKinds... >
     , argot_detail::constexpr_invoke
@@ -200,6 +229,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_FORWARD_TRANSFORMED_ARGUMENTS_HPP_

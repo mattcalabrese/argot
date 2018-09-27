@@ -12,6 +12,6 @@ namespace argot::prov::switch_detail {
 
 enum class provision_kind { destructive, persistent };
 
-}  // namespace (argot::prov::switch_detail)
+} // namespace (argot::prov::switch_detail)
 
 #endif  // ARGOT_PROV_SWITCH_DETAIL_PROVISION_KIND_HPP_

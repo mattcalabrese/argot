@@ -1,0 +1,69 @@
+[/==============================================================================
+    Copyright (C) 2016, 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[chapter Rationale
+  [quickbook 1.7]
+  [id argot.rationale]
+]
+
+[heading Why a Library?]
+
+Many of the facilities of this library feel like they may be better of as
+something that could or should be directly supported by the language. To some,
+that may indicate that this project may be better off as a language-level
+proposal for C++. While this is considered as a possible goal for =Argot=, its
+existence first as a library is essential in understanding the concepts
+involved and what functionality is essential. It is possible that some day the
+abstractions that are present in =Argot= will surface in a language-level
+proposal, in which case this library will be analogous to the relationship
+between =Boost.Lambda= and language-level lambdas.
+
+Exploration as a library facility is important for understanding the feature and
+also for establishing motivating cases that these kinds of abstractions can
+solve in an elegant manner.
+
+[heading Why Is Argot.Gen Used Instead of Language-Level Concepts?]
+
+[heading Why Do Tuples and Variants Not Automatically Expand?]
+
+[heading Why Does Argot Have Its Own Tuple, Variant, and Optional Equivalents?]
+
+[heading Why Can ArgumentProviders Represent Uninhabitable Argument Lists?]
+
+For a long time, =Argot= did not support the representation of an
+ExceptionalArgumentProvider. Instead, each ArgumentProvider was required to
+represent what can be thought of as a sum-type of argument lists where there
+were always at least one possibility. Before recognizing the utility 
+
+What actually triggered the generalization of the abstraction to supporting the
+idea of an ExceptionalArgumentProvider was multiple situations, such as:
+
+* The terminating case of certain ArgumentProvider generators naturally leads to
+  an ArgumentProvider that can represent a provision operation that cannot
+  logically return. Examples include a prov::value_in_range invocation with an
+  empty range, or a prov::value_in_set invocation with an empty set.
+* For higher-order facilities that are branching argument-providers, for which a
+  user can specify behavior for one or more branches, it can be important to
+  allow them to have a particular branch not contribute to the overall set of
+  possible argument lists. This is most-commonly the case when one or more
+  branches would lead to what would imply a precondition violation from a
+  higher-level call, or to a situation where an exception should be thrown.
+
+While it is possible to attempt to special-case these situations, it would only
+complicate the programming model. By embracing the notion of provision that may
+not return, these situations can be very naturally handled.
+
+[heading Why Is the Library So Big?]
+
+=Argot= is intended to be directly useful for the average programmer, but it
+also contains several more niche, theory-based facilties that users are
+encouraged to explore. During the development of =Argot=, many of the more
+powerful and practical facilities emerged from this form of exploration, often
+blossoming from abstractions that were understood to be /sound/, but without yet having an immediately-recognizable practical application at the time of their
+inception. By exposing such abstractions sooner than later, users may find
+higher-level utility in them before concrete examples arise.
+

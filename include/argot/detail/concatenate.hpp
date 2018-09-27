@@ -48,7 +48,7 @@ struct concatenate
       >::type;
 };
 
-}  // namespace argot::call_detail
-}  // namespace argot
+} // namespace argot::call_detail
+} // namespace argot
 
 #endif  // ARGOT_DETAIL_CONCATENATE_HPP_

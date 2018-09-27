@@ -16,7 +16,6 @@
 #include <argot/concepts/persistent_thenable.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/fut_traits/value_type.hpp>
-#include <argot/future_spawner.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/detail/move.hpp>

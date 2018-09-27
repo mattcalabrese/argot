@@ -205,7 +205,7 @@ struct value_zipper_find_impl< std::index_sequence< Indices... >, Values >
   static value_zipper_end_t< Values > find_impl( value_list_t< NotFound > );
 };
 
-}  // namespace argot(::value_zipper_detail)
+} // namespace argot(::value_zipper_detail)
 
 template< class Values, auto Value >
 struct value_zipper_find;
@@ -235,6 +235,6 @@ template< class Values, auto Value >
 struct value_zipper_contains
   : std::bool_constant< value_zipper_contains_v< Values, Value > > {};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_VALUE_ZIPPER_HPP_

@@ -56,7 +56,7 @@ struct return_value_reducer_of
       >;
 };
 
-}  // namespace argot::reducer_traits(::destructive_reduce_detail)
+} // namespace argot::reducer_traits(::destructive_reduce_detail)
 
 struct destructive_reduce_t
 {
@@ -119,6 +119,6 @@ using result_of_destructive_reduce_t
 
 // TODO(mattcalabrese) Make a result of unbound reduce.
 
-}  // namespace (argot::reducer_traits)
+} // namespace (argot::reducer_traits)
 
 #endif  // ARGOT_REDUCER_TRAITS_DESTRUCTIVE_REDUCE_HPP_

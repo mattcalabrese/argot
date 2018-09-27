@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,14 @@
 
 #ifndef ARGOT_CONCEPTS_PERSISTENT_RETURN_VALUE_REDUCER_HPP_
 #define ARGOT_CONCEPTS_PERSISTENT_RETURN_VALUE_REDUCER_HPP_
+
+//[description
+/*`
+PersistentReturnValueReducer is the [argot_gen_concept] for
+[return_value_reducers] that support a form of reduction that is non-destructive
+and therefore may be performed multiple times.
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/return_value_reducer.hpp>
@@ -33,6 +41,6 @@ ARGOT_EXPLICIT_CONCEPT( PersistentReturnValueReducer )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_PERSISTENT_RETURN_VALUE_REDUCER_HPP_

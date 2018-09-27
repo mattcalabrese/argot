@@ -17,6 +17,6 @@ enum class provision_kind;
 template< std::size_t NumRemainingCases, provision_kind Kind >
 struct switch_provision;
 
-}  // namespace (argot::prov::switch_detail)
+} // namespace (argot::prov::switch_detail)
 
 #endif  // ARGOT_PROV_SWITCH_DETAIL_SWITCH_PROVISION_FWD_HPP_

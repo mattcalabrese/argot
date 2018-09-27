@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,13 @@
 
 #ifndef ARGOT_CONCEPTS_BASIC_CALLABLE_WITH_HPP_
 #define ARGOT_CONCEPTS_BASIC_CALLABLE_WITH_HPP_
+
+//[description
+/*`
+BasicCallableWith is an [argot_gen_concept] that is satisfied by types for which
+a function-call expression is valid with the specified argument types.
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/detail/declval.hpp>
@@ -48,6 +55,6 @@ struct make_concept_map
   < decltype( ARGOT_DECLVAL( Function&& )( ARGOT_DECLVAL( P )... ) ) >
 > {};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_BASIC_CALLABLE_WITH_HPP_

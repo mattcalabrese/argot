@@ -40,7 +40,7 @@ template< class Fun, class ArgTypes >
 using basic_result_of_call_with_t
   = typename basic_result_of_call_with< Fun, ArgTypes >::type;
 
-}  // namespace argot::call_detail
-}  // namespace argot
+} // namespace argot::call_detail
+} // namespace argot
 
 #endif  // ARGOT_DETAIL_CALL_WITH_HPP_

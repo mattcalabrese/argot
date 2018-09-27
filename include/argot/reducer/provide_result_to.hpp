@@ -55,7 +55,7 @@ struct result_of_provide_result_to
     = result_of_provide_result_to_t< Receiver >;
 };
 
-}  // namespace argot::reducer
+} // namespace argot::reducer
 
 template< class Receiver >
 struct make_concept_map
@@ -93,6 +93,6 @@ struct make_concept_map
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_REDUCER_PROVIDE_RESULT_TO_HPP_

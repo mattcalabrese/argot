@@ -68,7 +68,7 @@ struct deduce_argument_list_kinds_of
       >;
 };
 
-}  // namespace argot::conc_traits(::argument_list_kinds_of_persistent_detail)
+} // namespace argot::conc_traits(::argument_list_kinds_of_persistent_detail)
 
 template< class Provider >
 using argument_list_kinds_of_persistent_t
@@ -119,6 +119,6 @@ argument_list_kinds_of_persistent_v{};
 
 #endif
 
-}  // namespace (argot::conc_traits)
+} // namespace (argot::conc_traits)
 
 #endif  // ARGOT_CONC_TRAITS_ARGUMENT_LIST_KINDS_OF_PERSISTENT_HPP_

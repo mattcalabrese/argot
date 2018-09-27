@@ -115,9 +115,9 @@ ARGOT_RECEIVER_GRAPHVIZ_GRAPH_PROPERTY_DECL( viewport );
 ARGOT_RECEIVER_GRAPHVIZ_GRAPH_PROPERTY_DECL( voro_margin );
 ARGOT_RECEIVER_GRAPHVIZ_GRAPH_PROPERTY_DECL( xdotversion );
 
-}  // namespace argot::receiver::graphviz::graph_property
-}  // namespace argot::receiver::graphviz
-}  // namespace argot::receiver
-}  // namespace argot
+} // namespace argot::receiver::graphviz::graph_property
+} // namespace argot::receiver::graphviz
+} // namespace argot::receiver
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_GRAPHVIZ_GRAPH_PROPERTY_HPP_

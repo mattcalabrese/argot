@@ -55,7 +55,7 @@ struct persistent_return_value_reducer_of
       >;
 };
 
-}  // namespace argot::reducer_traits(::persistent_reduce_detail)
+} // namespace argot::reducer_traits(::persistent_reduce_detail)
 
 struct persistent_reduce_t
 {
@@ -119,6 +119,6 @@ using result_of_persistent_reduce_t
 
 // TODO(mattcalabrese) Make a result of unbound reduce.
 
-}  // namespace (argot::reducer_traits)
+} // namespace (argot::reducer_traits)
 
 #endif  // ARGOT_REDUCER_TRAITS_PERSISTENT_REDUCE_HPP_

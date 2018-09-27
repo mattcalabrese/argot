@@ -34,7 +34,7 @@ struct return_types_of_call_impl
       < call_detail::result_of_call_with_t< Fun, InvocationArgumentLists >... >;
 };
 
-}  // namespace argot::reducer_traits(::detail_return_types_of_call)
+} // namespace argot::reducer_traits(::detail_return_types_of_call)
 
 template< class Fun, class... P >
 using return_types_of_call_t

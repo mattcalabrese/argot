@@ -33,6 +33,6 @@ using concurrent_expansion_operator::operator ~;
 
 } // namespace argot(::operators)
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONC_EXPAND_EXPANSION_OPERATOR_HPP_

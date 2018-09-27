@@ -251,7 +251,7 @@ class graphviz_dot_t
   };
 };
 
-}  // namespace argot::reducer::graphviz_dot_detail
+} // namespace argot::reducer::graphviz_dot_detail
 
 struct demangled_type_output
 {
@@ -339,7 +339,7 @@ graphviz_dot
   );
 }
 
-}  // namespace argot::reducer
-}  // namespace argot
+} // namespace argot::reducer
+} // namespace argot
 
 #endif  // ARGOT_REDUCER_GRAPHVIZ_DOT_HPP_

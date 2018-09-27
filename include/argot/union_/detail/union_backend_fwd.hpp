@@ -113,7 +113,7 @@ using union_impl
     , union_impl_variadic< Index >
     >;
 
-}  // namespace argot(::detail_union)
-}  // namespace argot
+} // namespace argot(::detail_union)
+} // namespace argot
 
 #endif  // ARGOT_UNION_DETAIL_UNION_BACKEND_FWD_HPP_

@@ -18,6 +18,6 @@ namespace argot {
 template< class ConceptForm >
 struct access_raw_concept_map : make_concept_map< ConceptForm >{};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_GEN_ACCESS_RAW_CONCEPT_MAP_HPP_

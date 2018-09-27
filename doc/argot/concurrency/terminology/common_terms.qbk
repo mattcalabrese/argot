@@ -1,0 +1,42 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:common Common Terms]
+
+[h1:executors _Executors]
+
+Colloquially, the notion of an /executor/ is very common when working with
+concurrency, although a precise definition and set of requirements that people
+agree on is very difficult to nail down. This section attempts to summarize the
+high-level idea of an executor and the precise definition of executor that
+=Argot= interacts with.
+
+An /executor/ is a kind of type that is capable of receiving an invocable object
+and executing that invocable on some implementation-specified thread of
+execution. Operations that are intended to perform operations concurrently often
+take an executor as a parameter such that the user has control over where that
+operation is performed.
+
+Put another way, an executor has a similar relationship to concurrent execution
+as an allocator has to dynamic memory allocation.
+
+// TODO(mattcalabrese) Examples
+
+[h1:futures _Futures]
+
+A /future/ is a kind of type that represents a handle to an object that either
+exists or may exist at later point in time. When triggering a concurrent
+operation, it is common for the user to receive such a handle corresponding to
+the result of the operation. The user may then queue up further operations to
+be performed once that result becomes ready.
+
+The concurrency portion of the =Argot= library includes a suite of concepts
+related to futures as well as several models of those concepts.
+
+// TODO(mattcalabrese) Examples
+
+[endsect]

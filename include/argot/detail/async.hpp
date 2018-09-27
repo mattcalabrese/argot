@@ -60,6 +60,6 @@ struct async_fn
 
 } inline constexpr async{};
 
-}  // namespace (argot_detail)
+} // namespace (argot_detail)
 
 #endif  // ARGOT_DETAIL_ASYNC_HPP_

@@ -46,7 +46,7 @@ using key_type_t
   = typename key_type_impl
     < GraphKind, typename GraphvizPropertyTag::kind >::type;
 
-}  // namespace argot::receiver::graphviz::property_map_detail
+} // namespace argot::receiver::graphviz::property_map_detail
 
 // TODO(mattcalabrese) Verify that the tag is one of the graphviz tags.
 template< graph_kind GraphKind, class GraphvizPropertyTag >
@@ -78,8 +78,8 @@ put( property_map< GraphKind, GraphvizPropertyTag > const& graph
   ::agsafeset( key.raw(), GraphvizPropertyTag::name(), value, "" );
 }
 
-}  // namespace argot::receiver::graphviz
-}  // namespace argot::receiver
-}  // namespace argot
+} // namespace argot::receiver::graphviz
+} // namespace argot::receiver
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_GRAPHVIZ_PROPERTY_MAP_HPP_

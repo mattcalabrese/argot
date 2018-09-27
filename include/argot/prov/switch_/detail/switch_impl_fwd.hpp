@@ -13,6 +13,6 @@ namespace argot::prov::switch_detail {
 template< class ValueType, class... Bodies >
 struct switch_impl;
 
-}  // namespace (argot::prov::switch_detail)
+} // namespace (argot::prov::switch_detail)
 
 #endif  // ARGOT_PROV_SWITCH_DETAIL_SWITCH_IMPL_FWD_HPP_

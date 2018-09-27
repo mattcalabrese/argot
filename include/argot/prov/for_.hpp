@@ -124,7 +124,7 @@ struct loop_requirements
       >;
 };
 
-}  // namespace argot::prov(::for_detail)
+} // namespace argot::prov(::for_detail)
 
 struct for_fn
 {
@@ -173,6 +173,6 @@ using result_of_for_t
   = basic_result_of_t
     < for_fn const&, State, Condition, Step, ProviderGenerator >;
 
-}  // namespace (argot::prov)
+} // namespace (argot::prov)
 
 #endif  // ARGOT_PROV_FOR_HPP_

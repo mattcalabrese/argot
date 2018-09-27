@@ -92,6 +92,6 @@ using result_of_persistent_provide_default
   = basic_result_of
     < persistent_provide_default_t const&, Body&&, ValueType&&, Receiver&& >;
 
-}  // namespace (argot::switch_traits)
+} // namespace (argot::switch_traits)
 
 #endif  // ARGOT_SWITCH_TRAITS_PERSISTENT_PROVIDE_DEFAULT_HPP_

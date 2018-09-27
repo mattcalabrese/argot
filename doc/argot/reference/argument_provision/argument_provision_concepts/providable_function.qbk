@@ -1,0 +1,45 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section ProvidableFunction]
+
+[h1 Description]
+
+A =ProvidableFunction= is a =function object= that, in addition to a function
+call operator, also declares member functions that aid in the specification of
+branching argument_provisionQ. The associated `provide` function template of
+all ArgumentProviderQ types takes a =Providable= as its first parameter.
+
+[h1 Requirements]
+
+[table Associated Member Function Templates
+  [[[*Declaration]][[*Semantics]]]
+  [[ `template< class... P >`[br]
+    [~unspecified] `operator ()( P&&... args ) &&`]
+  []]
+  [[ `template< std::size_t NumBranches, class Brancher >`[br]
+    [~unspecified] `branch( Brancher&& brancher, std::size_t branch_index ) &&`]
+  []]
+  [[ `template< std::size_t NumBranches, class Brancher, std::size_t BranchIndex >`[br]
+    [~unspecified] `branch( Brancher&& brancher`[br]
+       `                  , std::integral_constant< std::size_t, BranchIndex > branch_index`[br]
+       `                  ) &&`]
+  []]
+]
+
+[h2 Requirement Details]
+
+[h1 Modeled by]
+
+There are no publically documented =ProvidableFunction= types in this library,
+although several are used in the implementation of callQ.
+
+[h1 Related Tutorials]
+
+* __tutorial_argument_provider__
+
+[endsect]

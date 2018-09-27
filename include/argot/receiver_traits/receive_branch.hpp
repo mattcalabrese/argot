@@ -102,7 +102,7 @@ template< class Receiver, class P >
 using result_of_unbound_receive_branch
   = call_detail::lazy_expand< result_of_unbound_receive_branch_t, P >;
 
-}  // namespace argot::receiver_traits
-}  // namespace argot
+} // namespace argot::receiver_traits
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_TRAITS_RECEIVE_BRANCH_HPP_

@@ -1,0 +1,26 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:to_variant reducer::to_variant]
+
+[heading Description]
+
+This ReturnValueReductionSpecifierQ always yields a `boost::variant` of types,
+where each type contains the compile-time index of the overload along with the
+corresponding result of the invocation of that overload.
+
+[header_spec reducer..to_variant]
+
+[heading Model of]
+
+* ReturnValueReductionSpecifierQ
+
+[heading Basic Usage]
+
+[heading Related Tutorials]
+
+[endsect]

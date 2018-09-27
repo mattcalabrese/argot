@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2018 Matt Calabrese
+  Copyright (c) 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,17 @@
 
 #ifndef ARGOT_CONCEPTS_INEQUALITY_COMPARABLE_HPP_
 #define ARGOT_CONCEPTS_INEQUALITY_COMPARABLE_HPP_
+
+//[description
+/*`
+InequalityComparable is an [argot_gen_concept] that is satisfied by types `T`
+for which two lvalue expressions of type `T const` are valid operands to
+`operator !=` and such an invocation returns a type that is
+[contextually_convertible_to_bool]. Types that satisfy this requirement are also
+expected to be a proper inequality relation, that is to say the operation
+should be:
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/object.hpp>
@@ -59,6 +70,6 @@ struct make_concept_map
   >::void_
 > {};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_INEQUALITY_COMPARABLE_HPP_

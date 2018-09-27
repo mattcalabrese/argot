@@ -198,7 +198,7 @@ struct argument_pack_as_values_t
   }
 } inline constexpr argument_pack_as_values{};
 
-}  // namespace argot::call_detail
-}  // namespace argot
+} // namespace argot::call_detail
+} // namespace argot
 
 #endif  // ARGOT_DETAIL_ARGUMENT_PACK_HPP_

@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -61,6 +61,6 @@ struct immediate_boost_executor_t
   static constexpr bool reschedule_until( Pred&& predicate ) { return false; }
 } inline immediate_boost_executor{}; // Purposely not constexpr
 
-}  // namespace (argot::detail_immediate_boost_executor)
+} // namespace (argot::detail_immediate_boost_executor)
 
 #endif  // ARGOT_CONCEPTS_FUTURE_DETAIL_IMMEDIATE_BOOST_EXECUTOR_HPP_

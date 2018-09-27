@@ -81,7 +81,6 @@ struct make_concept_map
   >::void_
 > {};
 
-
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_NOTHROW_CONVERTIBLE_HPP_

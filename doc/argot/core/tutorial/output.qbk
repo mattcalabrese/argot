@@ -1,0 +1,34 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:output 1. Unpacking a Tuple]
+
+The =Argot= library, at its core, is about the ability to take an expression and
+expand it out into a series of arguments to be passed to a function. Though this
+is notionally a very simple idea, it enables some surprisingly powerful
+techniques and even operations that some developers may not have thought were
+possible in C++.
+
+Before exploring the more advanced uses, let's see what a "Hello, World!"
+application can look like in =Argot=.
+
+[topics_explored_heading]
+
+* argot::output
+* ArgumentProvider
+* prov::unpack
+* TupleLike
+* The expansion operator
+
+[include output/hello_world.qbk]
+[include output/hello_world_variadic.qbk]
+[include output/error_tuple_output.qbk]
+[include output/unpack.qbk]
+[include output/tuple_expansion_operator.qbk]
+[include output/multiple_expansions.qbk]
+
+[endsect:output]

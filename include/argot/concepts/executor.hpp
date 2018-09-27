@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,14 @@
 
 #ifndef ARGOT_CONCEPTS_EXECUTOR_HPP_
 #define ARGOT_CONCEPTS_EXECUTOR_HPP_
+
+//[description
+/*`
+Executor is an [argot_gen_concept] for types that support an `execute`
+operation, which is a higher-order function that executes a nullary Invocable on
+some thread of execution.
+*/
+//]
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/copy_constructible.hpp>
@@ -37,6 +45,6 @@ ARGOT_EXPLICIT_CONCEPT( Executor )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_EXECUTOR_HPP_

@@ -87,7 +87,7 @@ inline std::string xml_sanitize( std::string const& source )
   return std::string( result.data() );
 }
 
-}  // namespace argot::call_detail
-}  // namespace argot
+} // namespace argot::call_detail
+} // namespace argot
 
 #endif  // ARGOT_DETAIL_XML_SANITIZE_HPP_

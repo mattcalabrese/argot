@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -24,7 +24,7 @@ namespace argument_type_detail {
 template< class P >
 void function( P&& );
 
-}  // namespace argot(::argument_type_detail)
+} // namespace argot(::argument_type_detail)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
 s/argument_type.h
@@ -52,6 +52,6 @@ struct make_concept_map
 , decltype( argument_type_detail::function( ARGOT_DECLVAL( P&& ) ) )
 > {};
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_ARGUMENT_TYPE_HPP_

@@ -215,6 +215,6 @@ struct constexpr_invoke_t
   }
 } inline constexpr constexpr_invoke{};
 
-}  // namespace (argot::argot_detail)
+} // namespace (argot::argot_detail)
 
 #endif  // ARGOT_DETAIL_CONSTEXPR_INVOKE_HPP_

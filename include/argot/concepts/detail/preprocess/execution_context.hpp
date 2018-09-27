@@ -4,7 +4,7 @@
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-# line 40 "../../concepts/execution_context.hpp"
+# line 47 "../../concepts/execution_context.hpp"
 template< class ExecContext >
 struct ExecutionContext { using ArgotDetailConceptSpec = ExecutionContext ; static bool constexpr argot_gen_detail_is_auto_concept_v = false; template< class ArgotDetailSelf > using argot_gen_detail_is_modeled_impl = ::argot::concept_detail::is_modeled_impl< ArgotDetailSelf >; using requirements = typename ::argot::requires_detail::requires_impl< UnqualifiedObject< ExecContext > , Destructible< ExecContext > , Convertible< ExecContext*, boost::asio::execution_context* > 
 >::type; struct assertion : ::argot::deduced_concept_assertion< ArgotDetailConceptSpec > {}; };

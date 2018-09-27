@@ -1,0 +1,15 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[h1 A First Attempt at Outputting a Variant]
+
+Let's start by attempting to output a `std::variant` and understanding what
+happens. The following code will not compile, because `std::variant` does not
+overload `operator <<`:
+
+[import ../../../../../example/tutorial/fundamentals/visitation/error_variant_output.cpp]
+[example]

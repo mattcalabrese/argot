@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2018 Matt Calabrese
+  Copyright (c) 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -9,23 +9,38 @@
 #define ARGOT_PACKAGER_STLAB_HPP_
 
 // TODO(mattcalabrese)
-// Make it an error to include this file if stlab support isn't enabled.
+// Possibly make it an error to include this file if stlab support isn't enabled.
+
+//[description
+/*`
+packager::stlab is a FuturePackager that generates stlab::future objects.
+
+[note This facility depends on the [stlab]. If it is not installed then the
+      facilities specified in this header will not exist.
+]
+*/
+//]
 
 #include <argot/basic_result_of.hpp>
-#include <argot/executor_traits/execute.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
+#include <argot/executor_traits/execute.hpp>
+#include <argot/fut_traits/config.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/packager/packager_base.hpp>
-#include <argot/detail/forward.hpp>
-#include <argot/fut_traits/config.hpp>
-#include <argot/detail/remove_cvref.hpp>
 
 #ifdef ARGOT_HAS_STLAB_FUTURE
 #include <stlab/concurrency/future.hpp>
 #endif
 
-namespace argot {
-namespace packager {
+//[docs
+/*`
+[synopsis_heading]
+*/
+
+namespace argot::packager {
+//<-
 namespace stlab_packager_detail {
 
 template< class Exec >
@@ -58,10 +73,14 @@ struct lvalue_callable
 };
 
 } // namespace argot::packager(::stlab_packager_detail)
-
+//->
 struct stlab {};
 
-} // namespace argot(::packager)
+} // namespace (argot::packager)
+
+//]
+
+namespace argot {
 
 template<>
 struct make_concept_map< FuturePackager< packager::stlab > >
@@ -71,11 +90,14 @@ struct make_concept_map< FuturePackager< packager::stlab > >
   {
     auto [ task, fut ]
       = stlab::package
-        < basic_result_of_t< detail_argot::remove_cvref_t< Fun >&&, P&&... >( P&&... ) >
+        < basic_result_of_t
+          < detail_argot::remove_cvref_t< Fun >&&, P&&... >( P&&... ) >
         ( packager::stlab_packager_detail::stlab_executor_from_executor  // TODO(mattcalabrese) More sophisticated conversion, see Thenable
-          < detail_argot::remove_cvref_t< Exec > >{ ARGOT_FORWARD( Exec )( exec ) }
+          < detail_argot::remove_cvref_t< Exec > >
+          { ARGOT_FORWARD( Exec )( exec ) }
         , packager::stlab_packager_detail::lvalue_callable
-          < detail_argot::remove_cvref_t< Fun > >{ ARGOT_FORWARD( Fun )( fun ) }
+          < detail_argot::remove_cvref_t< Fun > >
+          { ARGOT_FORWARD( Fun )( fun ) }
         );
 
     using task_t = decltype( task );

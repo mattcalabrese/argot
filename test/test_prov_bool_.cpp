@@ -41,7 +41,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_integral_constant_false )
   ARGOT_CONCEPT_ENSURE
   ( SameType
     < provider_type
-    , prov::result_of_bool< std::integral_constant< bool, false > >::type
+    , prov::result_of_bool_< std::integral_constant< bool, false > >::type
     >
   );
 
@@ -105,7 +105,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_integral_constant_true )
   ARGOT_CONCEPT_ENSURE
   ( SameType
     < provider_type
-    , prov::result_of_bool< std::integral_constant< bool, true > >::type
+    , prov::result_of_bool_< std::integral_constant< bool, true > >::type
     >
   );
 
@@ -168,7 +168,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_false )
   ARGOT_CONCEPT_ENSURE
   ( SameType
     < provider_type
-    , prov::result_of_bool< bool >::type
+    , prov::result_of_bool_< bool >::type
     >
   );
 
@@ -237,7 +237,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_true )
   ARGOT_CONCEPT_ENSURE
   ( SameType
     < provider_type
-    , prov::result_of_bool< bool >::type
+    , prov::result_of_bool_< bool >::type
     >
   );
 

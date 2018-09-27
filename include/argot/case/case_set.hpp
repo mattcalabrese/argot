@@ -48,6 +48,6 @@ struct make_concept_map< CaseLabels< case_set_t< Values... > > >
   using expand_case_values_t = Template< Values... >;
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CASE_CASE_SET_HPP_

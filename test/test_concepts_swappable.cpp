@@ -19,8 +19,6 @@ using argot::Swappable;
 
 ARGOT_CONCEPT_ENSURE( Swappable< int > );
 ARGOT_CONCEPT_ENSURE( Not< Swappable< int const > > );
-ARGOT_CONCEPT_ENSURE( Swappable< int volatile > );
-ARGOT_CONCEPT_ENSURE( Not< Swappable< int volatile const > > );
 
 ARGOT_CONCEPT_ENSURE( Swappable< int[5] > );
 ARGOT_CONCEPT_ENSURE( Not< Swappable< int const[5] > > );

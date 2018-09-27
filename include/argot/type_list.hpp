@@ -14,6 +14,6 @@ namespace argot {
 
 using call_detail::type_list;
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_TYPE_LIST_HPP_

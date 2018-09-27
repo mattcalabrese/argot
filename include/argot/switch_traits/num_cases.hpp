@@ -29,7 +29,7 @@ struct num_cases_impl< value_list_t< Values... > >
   using type = std::integral_constant< std::size_t, sizeof...( Values ) >;
 };
 
-}  // namespace argot::switch_traits(::num_cases_detail)
+} // namespace argot::switch_traits(::num_cases_detail)
 
 template< class Body >
 using num_cases_t
@@ -45,6 +45,6 @@ using num_cases
 template< class Body >
 num_cases_t< Body > constexpr num_cases_v{};
 
-}  // namespace (argot::switch_traits)
+} // namespace (argot::switch_traits)
 
 #endif  // ARGOT_SWITCH_TRAITS_NUM_CASES_HPP_

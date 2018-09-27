@@ -19,8 +19,6 @@ using argot::NothrowSwappable;
 
 ARGOT_CONCEPT_ENSURE( NothrowSwappable< int > );
 ARGOT_CONCEPT_ENSURE( Not< NothrowSwappable< int const > > );
-ARGOT_CONCEPT_ENSURE( NothrowSwappable< int volatile > );
-ARGOT_CONCEPT_ENSURE( Not< NothrowSwappable< int volatile const > > );
 
 ARGOT_CONCEPT_ENSURE( NothrowSwappable< int[5] > );
 ARGOT_CONCEPT_ENSURE( Not< NothrowSwappable< int const[5] > > );

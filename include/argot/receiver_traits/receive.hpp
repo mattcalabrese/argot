@@ -78,7 +78,7 @@ using result_of_receive
 
 #endif
 
-}  // namespace argot::receiver_traits
-}  // namespace argot
+} // namespace argot::receiver_traits
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_TRAITS_RECEIVE_HPP_

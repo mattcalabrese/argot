@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2018 Matt Calabrese
+  Copyright (c) 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -38,7 +38,7 @@ struct argument_receiver_of
       >;
 };
 
-}  // namespace argot(::detail_persistent_concurrent_argument_provider_to)
+} // namespace argot(::detail_persistent_concurrent_argument_provider_to)
 
 #define ARGOT_DETAIL_PREPROCESSED_CONCEPT_HEADER_NAME()                        \
 s/persistent_concurrent_argument_provider_to.h
@@ -65,6 +65,6 @@ ARGOT_AUTO_CONCEPT( PersistentConcurrentArgumentProviderTo )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_PERSISTENT_CONCURRENT_ARGUMENT_PROVIDER_TO_HPP_

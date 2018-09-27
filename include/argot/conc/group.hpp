@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2018 Matt Calabrese
+  Copyright (c) 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -8,13 +8,22 @@
 #ifndef ARGOT_CONC_GROUP_HPP_
 #define ARGOT_CONC_GROUP_HPP_
 
+//[description
+/*`
+conc::group is used to logically concatenate a series of
+ConcurrentArgumentProviders together into a single ConcurrentArgumentProvider.
+*/
+//]
+
 #include <argot/conc/nothing.hpp>
 #include <argot/conc_traits/as_future.hpp>
 //#include <argot/conc_traits/destructive_then_provide.hpp>
 //#include <argot/concepts/concurrent_argument_provider.hpp>
 #include <argot/concepts/sinkable.hpp>
-#include <argot/detail/sink.hpp>
 #include <argot/detail/forward.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
+#include <argot/detail/sink.hpp>
 #include <argot/fut/augment.hpp>
 #include <argot/fut/squash.hpp>
 #include <argot/fut_traits/destructive_then.hpp>
@@ -22,14 +31,17 @@
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/group.hpp>
 #include <argot/receiver/with_trailing_concurrent_provider.hpp>
-#include <argot/detail/remove_cvref.hpp>
 
-namespace argot {
-namespace conc {
+//[docs
+/*`
+[synopsis_heading]
+*/
+
+namespace argot::conc {
+//<-
 namespace group_detail {
 
 template< class ExpandedHead >
@@ -67,11 +79,13 @@ struct primary_continuation
   ARGOT_NO_UNIQUE_ADDRESS Tail tail_provider;
 };
 
-}  // namespace argot::conc(::group_detail)
+} // namespace argot::conc(::group_detail)
+//->
 
 struct group_fn
 {
- // TODO(mattcalabrese) Skip over every instance of conc::nothing_t and
+  //<-
+  // TODO(mattcalabrese) Skip over every instance of conc::nothing_t and
   //                     reference to conc::nothing_t.
   //                     Collapse groups of groups.
   template< class... T >
@@ -133,22 +147,31 @@ struct group_fn
   }
  private:
  public:
+  //->
   template< class... ConcProvs
           , ARGOT_REQUIRES
-            ( ConcurrentArgumentProvider< detail_argot::remove_cvref_t< ConcProvs > >... )
+            ( ConcurrentArgumentProvider
+              < detail_argot::remove_cvref_t< ConcProvs > >...
+            )
             ( Sinkable< ConcProvs&& >... )
             ()
           >
-  [[nodiscard]] constexpr auto operator()( ConcProvs&&... conc_provs ) const
+  [[nodiscard]]
+  constexpr auto operator()( ConcProvs&&... conc_provs ) const//=;
+  //<-
   {
     if constexpr( sizeof...( ConcProvs ) == 0 ) return conc::nothing;
     else
       return make_impl
       ( call_detail::forward_and_sink< ConcProvs >( conc_provs )... );
-  }
+  } //->
 } inline constexpr group{};
 
-} // namespace argot(::conc)
+} // namespace (argot::conc)
+
+//]
+
+namespace argot {
 
 template< class... ConcProvs >
 struct make_concept_map

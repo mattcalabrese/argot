@@ -1,0 +1,17 @@
+[/==============================================================================
+    Copyright (C) 2016 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:spec Return Value Reducers]
+
+[include return_value_reducers/provide_result_to.qbk]
+[include return_value_reducers/same_type_or_fail.qbk]
+[include return_value_reducers/to.qbk]
+[include return_value_reducers/to_boost_variant.qbk]
+[include return_value_reducers/to_variant.qbk]
+[include return_value_reducers/transform.qbk]
+
+[endsect]

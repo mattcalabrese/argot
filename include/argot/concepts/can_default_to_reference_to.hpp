@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +7,16 @@
 
 #ifndef ARGOT_CONCEPTS_CAN_DEFAULT_TO_REFERENCE_TO_HPP_
 #define ARGOT_CONCEPTS_CAN_DEFAULT_TO_REFERENCE_TO_HPP_
+
+//[description
+/*`
+CanDefaultToReferenceTo is an [argot_gen_concept] that is satisfied when either
+one of the following two cases holds for the specified type `T`:
+
+* `T` is not an ArgumentProvider.
+* `T` is Sinkable.
+*/
+//]
 
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
@@ -35,11 +45,8 @@ ARGOT_AUTO_CONCEPT( CanDefaultToReferenceTo )
   // TODO(mattcalabrese) Possibly just make this a callability constraint
   //                     instead of having to use the logical operators.
   Or
-  < And
-    < ArgumentProvider< detail_argot::remove_cvref_t< P > >
-    , Sinkable< P >
-    >
-  , Not< ArgumentProvider< detail_argot::remove_cvref_t< P > > >
+  < Not< ArgumentProvider< detail_argot::remove_cvref_t< P > > >
+  , Sinkable< P >
   >
 );
 
@@ -47,6 +54,6 @@ ARGOT_AUTO_CONCEPT( CanDefaultToReferenceTo )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_CAN_DEFAULT_TO_REFERENCE_TO_HPP_

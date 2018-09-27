@@ -55,7 +55,6 @@ struct make_concept_map
   < noexcept( ::new( std::nothrow ) U( ARGOT_DECLVAL( T ) ) ) >::void_
 > {};
 
-
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_NOTHROW_EXPLICITLY_CONVERTIBLE_HPP_

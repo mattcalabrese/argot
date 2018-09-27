@@ -44,6 +44,6 @@ struct cases_base
   }
 };
 
-}  // namespace (argot::case_detail)
+} // namespace (argot::case_detail)
 
 #endif  // ARGOT_CASE_DETAIL_CASES_BASE_HPP_

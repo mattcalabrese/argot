@@ -26,6 +26,6 @@ ARGOT_REQUIRES( SwitchBodyForType< Body, ValueType > )
 
 // TODO(mattcalabrese) Make non-eager form
 
-}  // namespace (argot::switch_traits)
+} // namespace (argot::switch_traits)
 
 #endif  // ARGOT_SWITCH_TRAITS_CASE_VALUE_FOR_TYPE_AT_HPP_

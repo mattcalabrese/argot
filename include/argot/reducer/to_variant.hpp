@@ -23,7 +23,7 @@ namespace reducer {
 
 struct to_variant_t {} inline constexpr to_variant{};
 
-}  // namespace argot::reducer
+} // namespace argot::reducer
 
 // TODO(mattcalabrese) Replace old-style SFINAE constraints.
 template<>
@@ -91,6 +91,6 @@ struct make_concept_map< PersistentReturnValueReducer< reducer::to_variant_t > >
   }
 };
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_REDUCER_TO_VARIANT_HPP_

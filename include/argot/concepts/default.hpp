@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -32,7 +32,7 @@ struct no_case_values
     = Reqs< SameType< switch_traits::case_values_t< Body >, value_list_t<> > >;
 };
 
-}  // namespace argot(::default_concept_detail)
+} // namespace argot(::default_concept_detail)
 
 // TODO(mattcalabrese) DefaultForType
 
@@ -58,6 +58,6 @@ ARGOT_AUTO_CONCEPT( Default )
 
 #endif  // ARGOT_CONCEPTS_DETAIL_SHOULD_INCLUDE_PREPROCESSED_HEADER
 
-}  // namespace argot
+} // namespace argot
 
 #endif  // ARGOT_CONCEPTS_DEFAULT_HPP_

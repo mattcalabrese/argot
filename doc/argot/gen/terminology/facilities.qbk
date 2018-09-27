@@ -1,0 +1,30 @@
+[/==============================================================================
+    Copyright (C) 2019 Matt Calabrese
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================/]
+
+[section:facilities Kinds of Facilities]
+
+=Argot.Gen= defines a variety of /kinds/ of facilities, following certain
+patterns.
+
+[heading:gen_concept =Argot.Gen= Concept]
+
+When the docs describe some facility called /Foo/ that is defined by =Argot.Gen=
+as an ['=Argot.Gen= concept], it implies several things.
+
+* There is a type-template called `Foo` in the specified namespace.
+* Specializations of `Foo` describe a mapping of the template argument types to
+  the corresponding concept.
+* ARGOT_IS_MODELED may be used to check if the corresponding concept is modeled
+  for the given argument types.
+* ARGOT_REQUIRES may be used to specify the corresponding concept as a
+  template constraint.
+* ARGOT_CONCEPT_ASSERT and ARGOT_CONCEPT_ENSURE may be used to trigger a
+  compile-time error if the corresponding concept is not modeled.
+
+// TODO(mattcalabrese) Finish description
+
+[endsect:facilities]

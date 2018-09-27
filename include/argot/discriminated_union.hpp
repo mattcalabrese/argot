@@ -98,7 +98,7 @@ namespace detail_discriminated_union_adl {
 template< class Child >
 struct adl_base {};
 
-}  // namespace argot(::detail_discriminated_union_adl)
+} // namespace argot(::detail_discriminated_union_adl)
 
 // TODO(mattcalabrese) Possibly optimize the nullary and unary cases.
 
@@ -450,7 +450,7 @@ struct discriminated_union_core_access
       ( [ &lhs, &rhs ]( auto const index )
         {
           // If the same index is active in each operand...
-          if( lhs.index == rhs.index_value )
+          if( index.value == rhs.index_value )
           {
             detail_argot_swap::constexpr_swap
             ( union_traits::get< index.value >( lhs.alternatives )

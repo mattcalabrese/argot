@@ -58,7 +58,7 @@ template< class... ArgumentTypeLists >
 using combine_argument_types_t
   = typename combine_argument_types< ArgumentTypeLists... >::type;
 
-}  // namespace argot::receiver_traits
-}  // namespace argot
+} // namespace argot::receiver_traits
+} // namespace argot
 
 #endif  // ARGOT_RECEIVER_TRAITS_ARGUMENT_TYPES_HPP_
