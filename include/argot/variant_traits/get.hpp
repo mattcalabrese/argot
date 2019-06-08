@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2016, 2017, 2018 Matt Calabrese
+  Copyright (c) 2016, 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -17,6 +17,9 @@
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/remove_cvref.hpp>
+#include <argot/variant_traits/index_of.hpp>
+
+#include <boost/assert.hpp>
 
 namespace argot {
 namespace variant_traits {
@@ -31,6 +34,7 @@ struct get_t
           >
   constexpr decltype( auto ) operator ()( Variant&& var ) const
   {
+    BOOST_ASSERT( ( index_of )( var ) == Index );
     return access_raw_concept_map< UnionLike< remove_cvref_t< Variant > > >
     ::template get< Index >( ARGOT_FORWARD( Variant )( var ) );
   }

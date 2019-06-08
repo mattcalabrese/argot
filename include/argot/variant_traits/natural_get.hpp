@@ -16,12 +16,15 @@
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/remove_cvref.hpp>
+#include <argot/variant_traits/index_of.hpp>
+
+#include <boost/assert.hpp>
 
 namespace argot::variant_traits {
 
 struct natural_get_t
 {
-  // TODO(mattcalabrese) Constrain that the index is convertible to the index type
+  // TODO(mattcalabrese) Constrain that the index is convertible to index type
   // TODO(mattcalabrese) Cast to the index type when calling get
   template< class Variant, class Index
           , ARGOT_REQUIRES
@@ -31,10 +34,11 @@ struct natural_get_t
             ()
           >
   constexpr decltype( auto )
-  operator ()( Variant&& variant_like, Index ) const
+  operator ()( Variant&& var, Index ) const
   {
+    BOOST_ASSERT( ( index_of )( var ) == Index::value );
     return access_raw_concept_map< UnionLike< remove_cvref_t< Variant > > >
-    ::template get< Index::value >( ARGOT_FORWARD( Variant )( variant_like ) );
+    ::template get< Index::value >( ARGOT_FORWARD( Variant )( var ) );
   }
 } inline constexpr natural_get{};
 

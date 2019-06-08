@@ -20,17 +20,17 @@
 #include <argot/detail/give_qualifiers_to.hpp>
 #include <argot/opt_traits/nil.hpp>
 
+#include <boost/mpl/assert.hpp>
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/size.hpp>
 #include <boost/optional.hpp>
 #include <boost/variant/variant_fwd.hpp>  // TODO(mattcalabrese) Is fwd enough?
 #include <boost/variant/get.hpp>
 
-// TODO(mattcalabrese) concept map boost::optional
-
 #include <cstddef>
 #include <optional>
 #include <type_traits>
+#include <utility>
 #include <variant>
 
 #endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS
@@ -88,6 +88,8 @@ struct make_concept_map< UnionLike< boost::variant< T... > > >
                           , std::remove_reference_t< return_type >
                           >;
 
+    BOOST_ASSERT( Index == var.which() );
+
     // TODO(mattcalabrese) Possibly std::forward
     return static_cast< return_type >( boost::strict_get< get_arg >( var ) );
   }
@@ -113,6 +115,7 @@ struct make_concept_map< UnionLike< std::variant< T... > > >
   static constexpr qualified_alternative_type_t< Index, Self >
   get( Self&& var )
   {
+    BOOST_ASSERT( Index == var.index() );
     return static_cast< qualified_alternative_type_t< Index, Self > >
     ( std::get< Index >( var ) );
   }
@@ -159,6 +162,8 @@ struct make_concept_map
   get( Self&& opt )
   {
     if constexpr( Index == 0 )
+    {
+      BOOST_ASSERT( !map::has_value( std::as_const( opt ) ) );
       if constexpr( std::is_lvalue_reference_v< Self&& > )
         if constexpr( std::is_const_v< std::remove_reference_t< Self > > )
           return detail_union_like::nil_instance< element_type_t >;
@@ -172,8 +177,12 @@ struct make_concept_map
         else
           return const_cast< nil_t&& >
           ( ARGOT_MOVE( detail_union_like::nil_instance< element_type_t > ) );
+    }
     else
+    {
+      BOOST_ASSERT( map::has_value( std::as_const( opt ) ) );
       return map::get( ARGOT_FORWARD( Opt )( opt ) );
+    }
   }
 };
 

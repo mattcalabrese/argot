@@ -17,9 +17,8 @@
 #include <argot/detail/give_qualifiers_to.hpp>
 #include <argot/forward.hpp>
 
+#include <boost/assert.hpp>
 #include <boost/optional.hpp>
-
-// TODO(mattcalabrese) concept map boost::optional
 
 #include <cstddef>
 #include <optional>
@@ -57,16 +56,16 @@ struct make_concept_map< OptionalLike< boost::optional< T > > >
 
   static constexpr bool has_value( boost::optional< T > const& opt )
   {
-    return opt.has_value();
+    return static_cast< bool >( opt );
   }
 
   template< class Self >
   static constexpr
   typename call_detail::give_qualifiers_to_t < Self&&, element_type_t >
-  get( Self&& var )
+  get( Self&& opt )
   {
-    // TODO(mattcalabrese) assert has value
-    return *ARGOT_FORWARD( Self )( var );
+    BOOST_ASSERT( static_cast< bool >( opt ) );
+    return *ARGOT_FORWARD( Self )( opt );
   }
 };
 
@@ -83,10 +82,10 @@ struct make_concept_map< OptionalLike< std::optional< T > > >
   template< class Self >
   static constexpr
   typename call_detail::give_qualifiers_to_t< Self&&, element_type_t >
-  get( Self&& var )
+  get( Self&& opt )
   {
-    // TODO(mattcalabrese) assert has value
-    return *ARGOT_FORWARD( Self )( var );
+    BOOST_ASSERT( opt.has_value() );
+    return *ARGOT_FORWARD( Self )( opt );
   }
 };
 

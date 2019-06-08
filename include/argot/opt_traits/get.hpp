@@ -15,7 +15,10 @@
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/not.hpp>
 #include <argot/gen/requires.hpp>
+#include <argot/opt_traits/has_value.hpp>
 #include <argot/remove_cvref.hpp>
+
+#include <boost/assert.hpp>
 
 namespace argot::opt_traits {
 
@@ -36,6 +39,7 @@ struct get_fn
     )
   )
   {
+    BOOST_ASSERT( ( has_value )( opt ) );
     return access_raw_concept_map< OptionalLike< remove_cvref_t< Opt > > >
     ::get( ARGOT_FORWARD( Opt )( opt ) );
   }

@@ -19,6 +19,7 @@
 
 #include <argot/union_traits/index_type.hpp>
 
+#include <boost/assert.hpp>
 #include <boost/optional.hpp>
 #include <boost/variant/variant_fwd.hpp>
 
@@ -69,6 +70,7 @@ struct make_concept_map< VariantLike< std::variant< T... > > >
   [[nodiscard]] static
   constexpr index_type index_of( std::variant< T... > const& self ) noexcept
   {
+    BOOST_ASSERT( !self.valueless_by_exception() );
     return static_cast< index_type >( self.index() );
   }
 };

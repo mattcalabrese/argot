@@ -10,31 +10,21 @@
 
 #include <argot/detail/unreachable.hpp>
 
+#include <boost/config.hpp>
+
 namespace argot {
-namespace unreachable_function_detail {
-
-struct unreachable_parameter_t {};
-
-}  // namespace argot(::unreachable_function_detail)
 
 template< class ReturnType >
-struct unreachable_function_t
+struct unreachable_function_fn
 {
-  // TODO(mattcalabrese)
-  //   Possibly come up with a way to do the parameter trick without comma.
-  [[noreturn]] constexpr ReturnType operator()
-  ( unreachable_function_detail::unreachable_parameter_t
-      = ( static_cast< void >( ARGOT_DETAIL_UNREACHABLE() )
-        , unreachable_function_detail::unreachable_parameter_t{}
-        )
-  ) const noexcept
+  [[noreturn]] BOOST_FORCEINLINE constexpr ReturnType operator()() const
   {
     ARGOT_DETAIL_UNREACHABLE();
   }
 };
 
 template< class ReturnType >
-unreachable_function_t< ReturnType > constexpr unreachable_function{};
+unreachable_function_fn< ReturnType > constexpr unreachable_function{};
 
 }  // namespace argot
 

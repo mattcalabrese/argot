@@ -21,7 +21,7 @@ namespace argot::union_traits {
 
 struct natural_get_t
 {
-  // TODO(mattcalabrese) Constrain that the index is convertible to the index type
+  // TODO(mattcalabrese) Constrain that the index is convertible to index type
   // TODO(mattcalabrese) Cast to the index type when calling get
   template< class Union, class Index
           , ARGOT_REQUIRES
@@ -30,8 +30,7 @@ struct natural_get_t
             ( UnionIndex< remove_cvref_t< Union >, Index::value > )
             ()
           >
-  constexpr decltype( auto )
-  operator ()( Union&& variant_like, Index ) const
+  constexpr decltype( auto ) operator ()( Union&& variant_like, Index ) const
   {
     return access_raw_concept_map< UnionLike< remove_cvref_t< Union > > >
     ::template get< Index::value >( ARGOT_FORWARD( Union )( variant_like ) );
