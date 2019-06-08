@@ -20,6 +20,14 @@ struct has_value_fn
 {
   template< class T, ARGOT_REQUIRES( OptionalLike< T > )() >
   constexpr bool operator ()( T const& opt ) const
+  noexcept
+  ( noexcept
+    (   access_raw_concept_map< OptionalLike< remove_cvref_t< T > > >
+        ::has_value( opt )
+      ? true
+      : false
+    )
+  )
   {
     return access_raw_concept_map< OptionalLike< remove_cvref_t< T > > >
     ::has_value( opt );

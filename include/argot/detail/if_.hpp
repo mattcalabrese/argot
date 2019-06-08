@@ -78,7 +78,7 @@ struct if_< true >
     template< template< class... > class TMetafunction
             , template< class... > class /*FMetafunction*/, class... P
             >
-    using _ = Metafunction< TMetafunction< P... > >;
+    using _ = TMetafunction< P... >;
   };
 };
 
@@ -146,7 +146,7 @@ struct if_< false >
     template< template< class... > class /*TMetafunction*/
             , template< class... > class FMetafunction, class... P
             >
-    using _ = Metafunction< FMetafunction< P... > >;
+    using _ = FMetafunction< P... >;
   };
 };
 

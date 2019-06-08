@@ -86,6 +86,10 @@ run test_discriminated_union_binary.cpp ;
 # TODO(mattcalabrese) Test std::optional, etc.
 run test_opt_traits_nil.cpp ;
 
+# opaque_optional
+run test_opaque_optional_opaque_optional.cpp ;
+run test_opaque_optional_copyable_opaque_optional.cpp ;
+
 # ArgumentReceivers useful for testing
 run test_receiver_return_single_argument_value.cpp ;
 run test_receiver_return_argument_values.cpp ;

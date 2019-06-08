@@ -38,10 +38,13 @@
 #include <argot/gen.hpp>
 #include <argot/identity.hpp>
 #include <argot/impossible.hpp>
+#include <argot/in_place_default_init.hpp>
+#include <argot/in_place_with_result.hpp>
 #include <argot/invocable_reference.hpp>
 #include <argot/lazy_expand.hpp>
 #include <argot/move.hpp>
 #include <argot/no_unique_address.hpp>
+#include <argot/opaque_optional.hpp>
 #include <argot/operators.hpp>
 #include <argot/opt_traits.hpp>
 #include <argot/packager.hpp>

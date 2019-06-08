@@ -21,12 +21,20 @@ namespace argot::opt_traits {
 
 struct get_fn
 {
+  // TODO(mattcalabrese) Make sure a reference is returned.
   template< class Opt
           , ARGOT_REQUIRES( OptionalLike< remove_cvref_t< Opt > > )
                           ( Not< VolatileObject< remove_cvref_t< Opt > > > )
                           ()
           >
   constexpr decltype( auto ) operator ()( Opt&& opt ) const
+  noexcept
+  ( noexcept
+    (
+      access_raw_concept_map< OptionalLike< remove_cvref_t< Opt > > >
+      ::get( ARGOT_FORWARD( Opt )( opt ) )
+    )
+  )
   {
     return access_raw_concept_map< OptionalLike< remove_cvref_t< Opt > > >
     ::get( ARGOT_FORWARD( Opt )( opt ) );

@@ -53,6 +53,7 @@
 #include <argot/concepts/copy_constructible.hpp>
 #include <argot/concepts/core_union.hpp>
 #include <argot/concepts/decay_sinkable.hpp>
+#include <argot/concepts/decayed_type.hpp>
 #include <argot/concepts/default.hpp>
 #include <argot/concepts/default_constructible.hpp>
 #include <argot/concepts/default_for_type.hpp>
@@ -115,6 +116,7 @@
 #include <argot/concepts/nothrow_assignable.hpp>
 #include <argot/concepts/nothrow_assignable_when_contained.hpp>
 #include <argot/concepts/nothrow_constructible.hpp>
+#include <argot/concepts/nothrow_convertible.hpp>
 #include <argot/concepts/nothrow_copy_assignable.hpp>
 #include <argot/concepts/nothrow_copy_constructible.hpp>
 #include <argot/concepts/nothrow_default_constructible.hpp>
@@ -122,6 +124,7 @@
 #include <argot/concepts/nothrow_emplaceable_when_contained.hpp>
 #include <argot/concepts/nothrow_emplaceable_with_result_when_contained.hpp>
 #include <argot/concepts/nothrow_equality_comparable.hpp>
+#include <argot/concepts/nothrow_explicitly_convertible.hpp>
 #include <argot/concepts/nothrow_greater_equal_comparable.hpp>
 #include <argot/concepts/nothrow_greater_than_comparable.hpp>
 #include <argot/concepts/nothrow_hashable.hpp>

@@ -142,6 +142,7 @@ int main()
   create_convenience_header( include_root, path( "argot/fut_traits" ) );
   create_convenience_header( include_root, path( "argot/gen" ) );
   create_convenience_header( include_root, path( "argot/packager" ) );
+  create_convenience_header( include_root, path( "argot/opaque_optional" ) );
   create_convenience_header( include_root, path( "argot/opt_traits" ) );
   create_convenience_header( include_root, path( "argot/packager_traits" ) );
 
