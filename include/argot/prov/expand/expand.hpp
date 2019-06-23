@@ -10,7 +10,7 @@
 
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/expandable.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 

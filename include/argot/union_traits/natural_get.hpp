@@ -12,10 +12,10 @@
 #include <argot/concepts/std_integral_constant.hpp>
 #include <argot/concepts/union_index.hpp>
 #include <argot/concepts/union_like.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot::union_traits {
 
@@ -25,14 +25,14 @@ struct natural_get_t
   // TODO(mattcalabrese) Cast to the index type when calling get
   template< class Union, class Index
           , ARGOT_REQUIRES
-            ( UnionLike< remove_cvref_t< Union > > )
+            ( UnionLike< detail_argot::remove_cvref_t< Union > > )
             ( StdIntegralConstant< Index > )
-            ( UnionIndex< remove_cvref_t< Union >, Index::value > )
+            ( UnionIndex< detail_argot::remove_cvref_t< Union >, Index::value > )
             ()
           >
   constexpr decltype( auto ) operator ()( Union&& variant_like, Index ) const
   {
-    return access_raw_concept_map< UnionLike< remove_cvref_t< Union > > >
+    return access_raw_concept_map< UnionLike< detail_argot::remove_cvref_t< Union > > >
     ::template get< Index::value >( ARGOT_FORWARD( Union )( variant_like ) );
   }
 } inline constexpr natural_get{};

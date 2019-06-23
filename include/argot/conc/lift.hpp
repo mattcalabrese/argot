@@ -16,9 +16,9 @@
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot {
 namespace conc {
@@ -37,13 +37,13 @@ struct lift_fn
   };
 
   template< class Provider
-          , ARGOT_REQUIRES( ArgumentProvider< remove_cvref_t< Provider > > )
+          , ARGOT_REQUIRES( ArgumentProvider< detail_argot::remove_cvref_t< Provider > > )
                           ( Sinkable< Provider&& > )
                           ()
           >
   [[nodiscard]] constexpr auto operator()( Provider&& provider ) const
   {
-    return impl< remove_cvref_t< Provider > >
+    return impl< detail_argot::remove_cvref_t< Provider > >
     { fut::ready( call_detail::forward_and_sink< Provider >( provider ) ) };
   }
 } inline constexpr lift{};

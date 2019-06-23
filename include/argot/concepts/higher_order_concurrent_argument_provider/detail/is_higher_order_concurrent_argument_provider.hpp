@@ -19,7 +19,7 @@
 #include <argot/prov_traits/provide.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -39,7 +39,7 @@ struct all_are_concurrent_argument_providers_impl
 {
   static bool constexpr value
     = ( is_modeled_v
-        < ConcurrentArgumentProvider< remove_cvref_t< T > > > && ...
+        < ConcurrentArgumentProvider< detail_argot::remove_cvref_t< T > > > && ...
       );
 };
 
@@ -51,7 +51,7 @@ template< class T >
 using is_higher_order_concurrent_argument_provider_result
   = prov_traits::result_of_provide_t
     < fut_traits::value_type_t
-      < remove_cvref_t< conc_traits::result_of_as_future< T > > >
+      < detail_argot::remove_cvref_t< conc_traits::result_of_as_future< T > > >
     , is_higher_order_concurrent_argument_provider_impl_t
     >;
 
@@ -100,7 +100,7 @@ struct make_concept_map
             < TrailingArgumentListKinds >
          && ...
        )
-    && (    is_modeled_v< ConcurrentArgumentProvider< remove_cvref_t< P > > >
+    && (    is_modeled_v< ConcurrentArgumentProvider< detail_argot::remove_cvref_t< P > > >
          && ...
        )
   >

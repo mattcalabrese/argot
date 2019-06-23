@@ -14,7 +14,7 @@
 #include <argot/concepts/emplaceable_when_contained.hpp>
 #include <argot/concepts/emplaceable_with_result_when_contained.hpp>
 #include <argot/concepts/optional_like.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/is_modeled.hpp>

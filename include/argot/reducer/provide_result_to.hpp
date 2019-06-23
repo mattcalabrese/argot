@@ -10,7 +10,7 @@
 
 #include <argot/concepts/return_value_reducer.hpp>
 #include <argot/contained.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>

@@ -10,7 +10,7 @@
 
 #include <argot/impossible.hpp>
 #include <argot/concepts/persistent_argument_provider.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/detection.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>

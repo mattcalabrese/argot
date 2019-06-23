@@ -12,12 +12,12 @@
 #include <argot/concepts/sinkable.hpp>
 #include <argot/concepts/stlab_executor.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/no_unique_address.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot {
 namespace executor {
@@ -33,13 +33,13 @@ struct stlab_fn
   };
 
   template< class StlabExec
-          , ARGOT_REQUIRES( StlabExecutor< remove_cvref_t< StlabExec > > )
+          , ARGOT_REQUIRES( StlabExecutor< detail_argot::remove_cvref_t< StlabExec > > )
                           ( Sinkable< StlabExec&& > )
                           <>
           >
   constexpr auto operator ()( StlabExec&& stlab_exec ) const
   {
-    return impl< remove_cvref_t< StlabExec > >
+    return impl< detail_argot::remove_cvref_t< StlabExec > >
     { call_detail::forward_and_sink< StlabExec >( stlab_exec ) };
   }
 

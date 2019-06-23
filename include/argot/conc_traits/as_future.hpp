@@ -12,7 +12,7 @@
 #include <argot/concepts/concurrent_argument_provider.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 
 namespace argot::conc_traits {
 

@@ -13,7 +13,7 @@
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/concepts/future_packager.hpp>
 #include <argot/concepts/then_providable.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/detection.hpp>
 #include <argot/executor/immediate.hpp>
@@ -117,7 +117,7 @@ struct make_concept_map
   template< class... P, class Exec, class Fun >
   static constexpr std::pair
   < conc_traits::argument_list_kinds_of_destructive_detail::dummy_function
-  , ready_fn::impl< basic_result_of_t< remove_cvref_t< Fun >&&, P&&... > >
+  , ready_fn::impl< basic_result_of_t< detail_argot::remove_cvref_t< Fun >&&, P&&... > >
   >
   package( Exec&& exec, Fun&& fun ) noexcept
   {

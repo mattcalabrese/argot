@@ -10,8 +10,8 @@
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/valid.hpp>
-#include <argot/declval.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/declval.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/explicit_concept.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>

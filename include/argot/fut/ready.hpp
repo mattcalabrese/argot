@@ -17,13 +17,13 @@
 #include <argot/concepts/unqualified_object.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/executor/immediate.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot {
 namespace fut {
@@ -70,7 +70,7 @@ struct ready_fn
   [[nodiscard]] constexpr auto operator ()( T&& source ) const
   {
     // TODO(mattcalabrese) Don't use forward and sink, allow conversions.
-    return impl< remove_cvref_t< T > >
+    return impl< detail_argot::remove_cvref_t< T > >
     { call_detail::forward_and_sink< T >( source ) };
   }
 

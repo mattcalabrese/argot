@@ -18,9 +18,9 @@
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/fut_traits/value_type.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot {
 namespace conc {
@@ -42,14 +42,14 @@ struct bless_fn
   template
   < class FutProv
   , ARGOT_REQUIRES
-    ( Future< remove_cvref_t< FutProv > > )
+    ( Future< detail_argot::remove_cvref_t< FutProv > > )
     ( ArgumentProvider
-      < fut_traits::value_type_t< remove_cvref_t< FutProv > > >
+      < fut_traits::value_type_t< detail_argot::remove_cvref_t< FutProv > > >
     )
     ( Sinkable< FutProv&& > )
     ()
   >
-  [[nodiscard]] constexpr impl< remove_cvref_t< FutProv > >
+  [[nodiscard]] constexpr impl< detail_argot::remove_cvref_t< FutProv > >
   operator ()( FutProv&& fut_prov ) const
   {
     return { call_detail::forward_and_sink< FutProv >( fut_prov ) };

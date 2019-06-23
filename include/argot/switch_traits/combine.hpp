@@ -13,13 +13,13 @@
 #include <argot/concepts/persistent_switch_body_for_type.hpp>
 #include <argot/concepts/switch_body.hpp>
 #include <argot/concepts/switch_body_default.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/empty_switch_body.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/prov_traits/provide.hpp>
 #include <argot/switch_traits/argument_list_kinds_of_body_destructive.hpp>
 #include <argot/switch_traits/argument_list_kinds_of_body_persistent.hpp>
@@ -36,7 +36,7 @@
 #include <argot/switch_traits/trailing_argument_list_kinds_of_case_persistent.hpp>
 #include <argot/switch_traits/trailing_argument_list_kinds_of_default_destructive.hpp>
 #include <argot/switch_traits/trailing_argument_list_kinds_of_default_persistent.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -73,15 +73,15 @@ struct combine_t
   };
 
   template< class Body >
-  static constexpr remove_cvref_t< Body > make_impl( Body&& body )
+  static constexpr detail_argot::remove_cvref_t< Body > make_impl( Body&& body )
   {
     return ARGOT_FORWARD( Body )( body );
   }
 
   template< class HeadBody, class NextBody, class... TailBodies >
   static constexpr impl
-  < remove_cvref_t< HeadBody >, remove_cvref_t< NextBody >
-  , remove_cvref_t< TailBodies >...
+  < detail_argot::remove_cvref_t< HeadBody >, detail_argot::remove_cvref_t< NextBody >
+  , detail_argot::remove_cvref_t< TailBodies >...
   >
   make_impl( HeadBody&& head, NextBody&& next, TailBodies&&... tail )
   {
@@ -96,7 +96,7 @@ struct combine_t
  public:
   // TODO(mattcalabrese) Constraints: no overlapping values or defaults, sinkable, etc.
   template< class... Bodies
-          , ARGOT_REQUIRES( SwitchBody< remove_cvref_t< Bodies > >... )()
+          , ARGOT_REQUIRES( SwitchBody< detail_argot::remove_cvref_t< Bodies > >... )()
           >
   constexpr auto operator()( Bodies&&... bodies ) const
   {

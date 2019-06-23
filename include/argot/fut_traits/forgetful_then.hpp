@@ -23,7 +23,7 @@
 #include <argot/fut_traits/value_type.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -41,16 +41,16 @@ struct forgetful_then_fn
         < call_detail::result_of_sinklike_cast_t< Fut&& > >
       >::template meta_apply
       < Future, PersistentFuture
-      , remove_cvref_t< Fut >
+      , detail_argot::remove_cvref_t< Fut >
       >
     )
-    ( Executor< remove_cvref_t< Exec > > )
+    ( Executor< detail_argot::remove_cvref_t< Exec > > )
     ( typename argot_detail::conditional
       < std::is_rvalue_reference_v
         < call_detail::result_of_sinklike_cast_t< Fut&& > >
       >::template meta_apply
       < ForgetfulThenable, PersistentForgetfulThenable
-      , remove_cvref_t< Fut >, remove_cvref_t< Exec >
+      , detail_argot::remove_cvref_t< Fut >, detail_argot::remove_cvref_t< Exec >
       >
     )
     ( Sinkable< Exec&& > )
@@ -64,7 +64,7 @@ struct forgetful_then_fn
   >
   constexpr void operator ()( Fut&& provider, Exec&& exec, Fun&& fun ) const
   {
-    using RawFut = remove_cvref_t< Fut >;
+    using RawFut = detail_argot::remove_cvref_t< Fut >;
 
     using QualifiedFut
       = call_detail::result_of_sinklike_cast_t< Fut&& >;
@@ -72,14 +72,14 @@ struct forgetful_then_fn
     // TODO(mattcalabrese) Perform the decay_sink as a cast to avoid moves
     if constexpr( std::is_rvalue_reference_v< QualifiedFut > )
       return access_raw_concept_map
-      < ForgetfulThenable< RawFut, remove_cvref_t< Exec > > >
+      < ForgetfulThenable< RawFut, detail_argot::remove_cvref_t< Exec > > >
       ::forgetful_then( static_cast< QualifiedFut >( provider )
                       , call_detail::forward_and_sink< Exec >( exec )
                       , call_detail::forward_and_decay_sink< Fun >( fun )
                       );
     else
       return access_raw_concept_map
-      < PersistentForgetfulThenable< RawFut, remove_cvref_t< Exec > > >
+      < PersistentForgetfulThenable< RawFut, detail_argot::remove_cvref_t< Exec > > >
       ::forgetful_then( static_cast< QualifiedFut >( provider )
                       , call_detail::forward_and_sink< Exec >( exec )
                       , call_detail::forward_and_decay_sink< Fun >( fun )

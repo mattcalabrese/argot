@@ -12,10 +12,10 @@
 #include <argot/concepts/std_integral_constant.hpp>
 #include <argot/concepts/variant_index.hpp>
 #include <argot/concepts/variant_like.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/variant_traits/index_of.hpp>
 
 #include <boost/assert.hpp>
@@ -28,16 +28,16 @@ struct natural_get_t
   // TODO(mattcalabrese) Cast to the index type when calling get
   template< class Variant, class Index
           , ARGOT_REQUIRES
-            ( VariantLike< remove_cvref_t< Variant > > )
+            ( VariantLike< detail_argot::remove_cvref_t< Variant > > )
             ( StdIntegralConstant< Index > )
-            ( VariantIndex< remove_cvref_t< Variant >, Index::value > )
+            ( VariantIndex< detail_argot::remove_cvref_t< Variant >, Index::value > )
             ()
           >
   constexpr decltype( auto )
   operator ()( Variant&& var, Index ) const
   {
     BOOST_ASSERT( ( index_of )( var ) == Index::value );
-    return access_raw_concept_map< UnionLike< remove_cvref_t< Variant > > >
+    return access_raw_concept_map< UnionLike< detail_argot::remove_cvref_t< Variant > > >
     ::template get< Index::value >( ARGOT_FORWARD( Variant )( var ) );
   }
 } inline constexpr natural_get{};

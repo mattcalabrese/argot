@@ -19,7 +19,7 @@
 #include <argot/prov_traits/argument_list_kinds_of_persistent.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 

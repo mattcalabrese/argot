@@ -14,17 +14,17 @@
 #include <argot/concepts/argument_receiver_of_kinds.hpp>
 #include <argot/concepts/reference.hpp>
 #include <argot/concepts/sinkable.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/concatenate.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/receiver/with_leading_arguments/detail/with_leading_arguments_invoker.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 #include <utility>
@@ -61,12 +61,12 @@ struct with_leading_arguments_t
   , class LeadingKinds, class TrailingKinds, class... P
   >
   constexpr ARGOT_REQUIRES
-  ( ArgumentReceiver< remove_cvref_t< Receiver > > )
+  ( ArgumentReceiver< detail_argot::remove_cvref_t< Receiver > > )
   ( ArgumentListKinds< LeadingKinds > )
   ( ArgumentListKinds< TrailingKinds > )
   ( Sinkable< Receiver&& > )
   < impl
-    < remove_cvref_t< Receiver >
+    < detail_argot::remove_cvref_t< Receiver >
     , LeadingKinds
     , TrailingKinds
     , P&&...

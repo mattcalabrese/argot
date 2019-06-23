@@ -10,7 +10,7 @@
 #else
 
 #include <argot/detail/hash.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 
 #include <boost/preprocessor/arithmetic/dec.hpp>
 #include <boost/preprocessor/arithmetic/inc.hpp>

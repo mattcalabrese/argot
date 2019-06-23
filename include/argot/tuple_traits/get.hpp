@@ -10,12 +10,12 @@
 
 #include <argot/concepts/tuple_index.hpp>
 #include <argot/concepts/tuple_like.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/detection.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot::tuple_traits {
 
@@ -23,13 +23,13 @@ template< auto Index >
 struct get_t
 {
   template< class Tuple
-          , ARGOT_REQUIRES( TupleLike< remove_cvref_t< Tuple > > )
-                          ( TupleIndex< remove_cvref_t< Tuple >, Index > )
+          , ARGOT_REQUIRES( TupleLike< detail_argot::remove_cvref_t< Tuple > > )
+                          ( TupleIndex< detail_argot::remove_cvref_t< Tuple >, Index > )
                           ()
           >
   constexpr decltype( auto ) operator ()( Tuple&& tup ) const
   {
-    return access_raw_concept_map< TupleLike< remove_cvref_t< Tuple > > >
+    return access_raw_concept_map< TupleLike< detail_argot::remove_cvref_t< Tuple > > >
     ::template get< Index >( ARGOT_FORWARD( Tuple )( tup ) );
   }
 };

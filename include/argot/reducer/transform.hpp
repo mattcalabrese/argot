@@ -13,12 +13,12 @@
 #include <argot/concepts/sinkable.hpp>
 #include <argot/concepts/return_value_reducer.hpp>
 #include <argot/detail/give_qualifiers_to.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/reducer_traits/return_types.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 #include <utility>
@@ -39,7 +39,7 @@ struct transform_t
   template< class Conversion, ARGOT_REQUIRES( Sinkable< Conversion&& > )() >
   [[nodiscard]] constexpr auto operator ()( Conversion&& conversion ) const
   {
-    return impl< remove_cvref_t< Conversion > >
+    return impl< detail_argot::remove_cvref_t< Conversion > >
     { ARGOT_FORWARD( Conversion )( conversion ) };
   }
 } inline constexpr transform{};

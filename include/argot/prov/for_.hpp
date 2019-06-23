@@ -51,7 +51,7 @@ struct invocation_returns_sinkable_argument_provider
 
   template< template< class... > class Req >
   using expand_requirements
-    = Req< ArgumentProvider< remove_cvref_t< result_type > >
+    = Req< ArgumentProvider< detail_argot::remove_cvref_t< result_type > >
          , Sinkable< result_type&& >
          >;
 };

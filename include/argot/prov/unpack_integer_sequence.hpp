@@ -14,7 +14,7 @@
 #include <argot/concepts/persistent_argument_provider.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/prov/nothing.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/receiver_traits/receive.hpp>

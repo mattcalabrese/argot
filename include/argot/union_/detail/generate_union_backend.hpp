@@ -8,7 +8,7 @@
 #ifndef ARGOT_UNION_DETAIL_GENERATE_UNION_BACKEND_HPP_
 #define ARGOT_UNION_DETAIL_GENERATE_UNION_BACKEND_HPP_
 
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/union_/detail/config.hpp>

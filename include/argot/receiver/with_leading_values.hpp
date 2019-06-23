@@ -14,17 +14,17 @@
 #include <argot/concepts/argument_receiver_of_kinds.hpp>
 #include <argot/concepts/unqualified_object.hpp>
 #include <argot/concepts/sinkable.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/concatenate.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/receiver/with_leading_values/detail/with_leading_values_invoker.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 #include <utility>
@@ -60,7 +60,7 @@ struct with_leading_values_t
   < class Receiver
   , class LeadingKinds, class TrailingKinds, class... P
   , ARGOT_REQUIRES
-    ( ArgumentReceiver< remove_cvref_t< Receiver > > )
+    ( ArgumentReceiver< detail_argot::remove_cvref_t< Receiver > > )
     ( ArgumentListKinds< LeadingKinds > )
     ( ArgumentListKinds< TrailingKinds > )
     ( Sinkable< Receiver&& > )
@@ -74,10 +74,10 @@ struct with_leading_values_t
   ) const
   {
     return impl
-    < remove_cvref_t< Receiver >
+    < detail_argot::remove_cvref_t< Receiver >
     , LeadingKinds
     , TrailingKinds
-    , remove_cvref_t< P >...
+    , detail_argot::remove_cvref_t< P >...
     >{ ARGOT_FORWARD( Receiver )( receiver )
      , with_leading_values_detail::make_receive_branch_invoker
        ( LeadingKinds(), TrailingKinds()

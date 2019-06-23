@@ -18,13 +18,13 @@
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/fut_traits/value_type.hpp>
 #include <argot/gen/make_concept_map.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/packager/boost_shared_future.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/void_.hpp>
 
 #include <boost/thread/future.hpp>
@@ -79,7 +79,7 @@ struct make_concept_map
     return ARGOT_MOVE( self ).then
     ( boost::launch::sync
     , detail_future_boost_shared_future::continuation
-      < remove_cvref_t< Fun >
+      < detail_argot::remove_cvref_t< Fun >
       , fut_traits::value_type_t< boost::shared_future< T > >
       >{ ARGOT_FORWARD( Fun )( fun ) }
     );

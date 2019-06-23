@@ -12,7 +12,7 @@
 #include <argot/concepts/optional_like.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot::opt_traits {
 
@@ -22,14 +22,14 @@ struct has_value_fn
   constexpr bool operator ()( T const& opt ) const
   noexcept
   ( noexcept
-    (   access_raw_concept_map< OptionalLike< remove_cvref_t< T > > >
+    (   access_raw_concept_map< OptionalLike< detail_argot::remove_cvref_t< T > > >
         ::has_value( opt )
       ? true
       : false
     )
   )
   {
-    return access_raw_concept_map< OptionalLike< remove_cvref_t< T > > >
+    return access_raw_concept_map< OptionalLike< detail_argot::remove_cvref_t< T > > >
     ::has_value( opt );
   }
 } inline constexpr has_value{};

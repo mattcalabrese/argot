@@ -17,7 +17,7 @@
 #include <argot/concepts/true.hpp>
 #include <argot/detail/constant.hpp>
 #include <argot/detail/unreachable.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
@@ -108,7 +108,7 @@ struct make_concept_map
   {
     return receiver_traits::receive
     ( ARGOT_FORWARD( Receiver )( rec )
-    , std::integral_constant< remove_cvref_t< decltype( Value ) >, Value >()
+    , std::integral_constant< detail_argot::remove_cvref_t< decltype( Value ) >, Value >()
     );
   }
 };
@@ -143,7 +143,7 @@ struct make_concept_map
     // TODO(mattcalabrese) Use constant
     return receiver_traits::receive
     ( ARGOT_FORWARD( Receiver )( rec )
-    , std::integral_constant< remove_cvref_t< decltype( Value ) >, Value >()
+    , std::integral_constant< detail_argot::remove_cvref_t< decltype( Value ) >, Value >()
     );
   }
 };

@@ -19,7 +19,7 @@
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/invoker.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/fut_traits/then.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
@@ -44,7 +44,7 @@ struct async_call_to_fn
   template
   < class Exec, class Fun, class... P
   , ARGOT_REQUIRES
-    ( Executor< remove_cvref_t< Exec > > )
+    ( Executor< detail_argot::remove_cvref_t< Exec > > )
 //    ( ArgotInvocableWithPersistentReduction
 //      < reducer::to_t< Ret >, Fun&&, P&&... >
 //    )

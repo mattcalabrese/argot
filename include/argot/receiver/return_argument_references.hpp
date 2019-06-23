@@ -9,7 +9,7 @@
 #define ARGOT_RECEIVER_RETURN_ARGUMENT_REFERENCES_HPP_
 
 #include <argot/concepts/argument_receiver.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>

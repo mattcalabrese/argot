@@ -13,7 +13,7 @@
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/concepts/persistent_switch_body_case.hpp>
 #include <argot/concepts/switch_body_case.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/detection.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>

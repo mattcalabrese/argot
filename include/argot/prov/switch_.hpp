@@ -19,18 +19,18 @@
 #include <argot/concepts/switch_body.hpp>
 #include <argot/concepts/switchable.hpp>
 #include <argot/concepts/unhandled_switchable_value.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/is_modeled.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/switch_/detail/provision_kind.hpp>
 #include <argot/prov/switch_/detail/switch_impl_fwd.hpp>
 #include <argot/prov/switch_/detail/switch_provision.hpp>
 #include <argot/prov/unreachable.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/switch_traits/combine.hpp>
 #include <argot/switch_traits/num_cases.hpp>
 #include <argot/switch_traits/provider_of_isolated.hpp>
@@ -61,7 +61,7 @@ struct switch_fn
   // TODO(mattcalabrese) Special-case the simple cases, like with group.
   template< class ValueType, class... Bodies
           , ARGOT_REQUIRES
-            ( Switchable< ValueType, remove_cvref_t< Bodies >... > )
+            ( Switchable< ValueType, detail_argot::remove_cvref_t< Bodies >... > )
             ( Sinkable< Bodies&& >... )
             ()
           >
@@ -73,7 +73,7 @@ struct switch_fn
       bool constexpr is_unhandled_case_with_no_default
         = is_modeled_v
           < UnhandledSwitchableValue
-            < ValueType::value, remove_cvref_t< Bodies >... >
+            < ValueType::value, detail_argot::remove_cvref_t< Bodies >... >
           >;
 
       if constexpr( is_unhandled_case_with_no_default )
@@ -89,7 +89,7 @@ struct switch_fn
     }
     else
       return switch_detail::switch_impl
-      < ValueType, remove_cvref_t< Bodies >... >
+      < ValueType, detail_argot::remove_cvref_t< Bodies >... >
       { value
       , switch_traits::combine
         ( call_detail::forward_and_sink< Bodies >( bodies )... )
@@ -149,7 +149,7 @@ struct make_concept_map
   )
   {
     return prov::switch_detail::switch_provision
-    < (   switch_traits::num_cases_v< remove_cvref_t< Bodies > > + ...
+    < (   switch_traits::num_cases_v< detail_argot::remove_cvref_t< Bodies > > + ...
         + std::size_t{ 0 }
       )
     , prov::switch_detail::provision_kind::destructive
@@ -184,7 +184,7 @@ struct make_concept_map
   )
   {
     return prov::switch_detail::switch_provision
-    < (   switch_traits::num_cases_v< remove_cvref_t< Bodies > > + ...
+    < (   switch_traits::num_cases_v< detail_argot::remove_cvref_t< Bodies > > + ...
         + std::size_t{ 0 }
       )
     , prov::switch_detail::provision_kind::persistent

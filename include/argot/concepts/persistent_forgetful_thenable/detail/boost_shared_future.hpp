@@ -24,11 +24,11 @@
 #include <argot/detail/constexpr_invoke.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/executor/immediate.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/void_.hpp>
 
 #include <boost/thread/future.hpp>

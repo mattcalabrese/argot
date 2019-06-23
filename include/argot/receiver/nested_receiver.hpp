@@ -14,14 +14,14 @@
 #include <argot/concepts/argument_receiver_of.hpp>
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/prov_traits/provide.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/receive_branch.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 #include <utility>
@@ -119,7 +119,7 @@ struct nested_receiver_t
   };
  public:
   template< class Receiver, class LeadingArgLists, class TrailingArgLists
-          , ARGOT_REQUIRES( ArgumentReceiver< remove_cvref_t< Receiver > > )
+          , ARGOT_REQUIRES( ArgumentReceiver< detail_argot::remove_cvref_t< Receiver > > )
                           ( ArgumentListKinds< LeadingArgLists > )
                           ( ArgumentListKinds< TrailingArgLists > )
                           ( Sinkable< Receiver&& > )
@@ -129,7 +129,7 @@ struct nested_receiver_t
   operator ()( Receiver&& rec, LeadingArgLists, TrailingArgLists ) const
   {
     return impl_maker
-    < remove_cvref_t< Receiver >, LeadingArgLists , TrailingArgLists >
+    < detail_argot::remove_cvref_t< Receiver >, LeadingArgLists , TrailingArgLists >
     ::run( ARGOT_FORWARD( Receiver )( rec ) );  // TODO(mattcalabrese) forward_and_sink
   }
 } inline constexpr nested_receiver{};

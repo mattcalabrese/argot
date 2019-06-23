@@ -10,8 +10,8 @@
 
 #include <argot/detail/concatenate.hpp>
 #include <argot/detail/permute.hpp>
-#include <argot/forward.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/forward.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/receiver_traits/receive_branch.hpp>

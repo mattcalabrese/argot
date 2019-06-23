@@ -47,7 +47,7 @@ struct default_to_value_of_t
     // TODO(mattcalabrese) Use if constepxr
     return conc::group
     ( argot_detail::conditional
-      < is_modeled_v< ConcurrentArgumentProvider< remove_cvref_t< P > > > >
+      < is_modeled_v< ConcurrentArgumentProvider< detail_argot::remove_cvref_t< P > > > >
       ::template apply< provider_forwarder, provider_maker >
       ::run( call_detail::forward_and_sink< P >( args ) )...
     );

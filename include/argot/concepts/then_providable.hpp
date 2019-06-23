@@ -31,8 +31,8 @@
 #include <argot/fut_traits/then.hpp>
 #include <argot/fut_traits/value_type.hpp>
 #include <argot/packager_traits/package.hpp>
-#include <argot/move.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 

@@ -14,7 +14,7 @@
 #include <argot/concepts/instantiation_of.hpp>
 #include <argot/concepts/reference.hpp>
 #include <argot/concepts/valid.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/auto_concept.hpp>
 #include <argot/gen/transparent_requirement.hpp>

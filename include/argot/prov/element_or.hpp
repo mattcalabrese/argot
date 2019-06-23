@@ -16,17 +16,17 @@
 #include <argot/concepts/persistent_argument_provider.hpp>
 #include <argot/concepts/reference.hpp>
 #include <argot/concepts/volatile_object.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/gen/not.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/opt_traits/get.hpp>
 #include <argot/opt_traits/has_value.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/receiver_traits/receive_branch.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <memory>
 
@@ -38,8 +38,8 @@ struct element_or_fn
   template< class Opt, class Otherwise >
   struct impl
   {
-    ARGOT_CONCEPT_ASSERT( OptionalLike< remove_cvref_t< Opt > > );
-    ARGOT_CONCEPT_ASSERT( Not< VolatileObject< remove_cvref_t< Opt > > > );
+    ARGOT_CONCEPT_ASSERT( OptionalLike< detail_argot::remove_cvref_t< Opt > > );
+    ARGOT_CONCEPT_ASSERT( Not< VolatileObject< detail_argot::remove_cvref_t< Opt > > > );
     ARGOT_CONCEPT_ASSERT( Reference< Opt > );
     ARGOT_CONCEPT_ASSERT( Reference< Otherwise > );
 

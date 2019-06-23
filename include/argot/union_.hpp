@@ -23,7 +23,7 @@
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
 #include <argot/detail/construct.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/is_modeled.hpp>
 #include <argot/gen/requires.hpp>

@@ -13,14 +13,14 @@
 #include <argot/concepts/tuple_like.hpp>
 #include <argot/concepts/volatile_object.hpp>
 #include <argot/default_.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/not.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/prov/lift_call.hpp>
 #include <argot/prov/reference_to.hpp>
 #include <argot/prov/tuple_index.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/tuple_traits/index_type.hpp>
 #include <argot/tuple_traits/natural_get.hpp>
 
@@ -33,10 +33,10 @@ struct access_tuple_fn
   template
   < class Tuple, class Index, class Def = default_unreachable_t
   , ARGOT_REQUIRES
-    ( TupleLike< remove_cvref_t< Tuple > > )
+    ( TupleLike< detail_argot::remove_cvref_t< Tuple > > )
     ( Not< VolatileObject< std::remove_reference_t< Tuple > > > )
     ( ConvertibleToTypeOrConstant
-      < Index, tuple_traits::index_type_t< remove_cvref_t< Tuple > > >
+      < Index, tuple_traits::index_type_t< detail_argot::remove_cvref_t< Tuple > > >
     )
     ( Default< Def > )
     ()
@@ -48,7 +48,7 @@ struct access_tuple_fn
     return prov::lift_call
     ( tuple_traits::natural_get
     , prov::reference_to( ARGOT_FORWARD( Tuple )( tuple_to_access ) )
-    , prov::tuple_index< remove_cvref_t< Tuple > >
+    , prov::tuple_index< detail_argot::remove_cvref_t< Tuple > >
       ( ARGOT_FORWARD( Index )( index ), ARGOT_MOVE( def ) )
     );
   }

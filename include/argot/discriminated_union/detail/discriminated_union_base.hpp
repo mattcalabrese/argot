@@ -17,14 +17,14 @@
 #include <argot/contained.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/regular_bases.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/index_of.hpp>
 #include <argot/prov_traits/destructive_provide.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/union_.hpp>
 #include <argot/union_traits/alternative_type.hpp>
 #include <argot/union_traits/get.hpp>

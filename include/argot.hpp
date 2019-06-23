@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2018 Matt Calabrese
+  Copyright (c) 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -22,14 +22,12 @@
 #include <argot/contained.hpp>
 #include <argot/contextually_convert_to_bool.hpp>
 #include <argot/convert_future.hpp>
-#include <argot/declval.hpp>
 #include <argot/default_.hpp>
 #include <argot/discriminated_union.hpp>
 #include <argot/empty_switch_body.hpp>
 #include <argot/executor.hpp>
 #include <argot/executor_traits.hpp>
 #include <argot/forgetful_async_call.hpp>
-#include <argot/forward.hpp>
 #include <argot/forward_arguments_as_tuple.hpp>
 #include <argot/fut.hpp>
 #include <argot/fut_traits.hpp>
@@ -42,7 +40,6 @@
 #include <argot/in_place_with_result.hpp>
 #include <argot/invocable_reference.hpp>
 #include <argot/lazy_expand.hpp>
-#include <argot/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/opaque_optional.hpp>
 #include <argot/operators.hpp>
@@ -55,7 +52,6 @@
 #include <argot/receiver_traits.hpp>
 #include <argot/reducer.hpp>
 #include <argot/reducer_traits.hpp>
-#include <argot/remove_cvref.hpp>
 #include <argot/state_traits.hpp>
 #include <argot/switch_traits.hpp>
 #include <argot/tag.hpp>

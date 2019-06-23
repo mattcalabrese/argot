@@ -16,14 +16,14 @@ template< class Tag >
 struct packager_template
 {
   template< class Exec
-          , ARGOT_REQUIRES( Executor< remove_cvref_t< Exec > > )
+          , ARGOT_REQUIRES( Executor< detail_argot::remove_cvref_t< Exec > > )
                           ( Sinkable< Exec&& > )
                           ()
           >
   constexpr auto operator []( Exec&& exec ) const
   {
     return future_spawner
-    < packager_template, remove_cvref_t< Exec > >
+    < packager_template, detail_argot::remove_cvref_t< Exec > >
     { call_detail::forward_and_sink< Exec >( exec ) };
   }
 };

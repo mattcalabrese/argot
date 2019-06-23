@@ -18,14 +18,14 @@
 #include <argot/contained.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/or.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/void_.hpp>
 
 #include <atomic>
@@ -93,12 +93,12 @@ class moveonly_continuation_type
                 , ReferenceToConstObject< FunParam >
                 >
             )  // TODO(mattcalabrese) Make a concept for this
-            ( NothrowInvocableObjectWith< remove_cvref_t< FunParam > > )
+            ( NothrowInvocableObjectWith< detail_argot::remove_cvref_t< FunParam > > )
             ()
           >
   void store( FunParam&& fun )
   {
-    using fun_type = remove_cvref_t< FunParam >;
+    using fun_type = detail_argot::remove_cvref_t< FunParam >;
 
     if constexpr( is_inlinable< fun_type >() )
       ::new( static_cast< void* >( &storage ) )

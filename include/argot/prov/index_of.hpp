@@ -12,7 +12,7 @@
 #include <argot/concepts/variant_like.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/prov/variant_index.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/variant_traits/index_of.hpp>
 
 namespace argot::prov {
@@ -20,11 +20,11 @@ namespace argot::prov {
 struct index_of_fn
 {
   template< class Variant
-          , ARGOT_REQUIRES( VariantLike< remove_cvref_t< Variant > > )()
+          , ARGOT_REQUIRES( VariantLike< detail_argot::remove_cvref_t< Variant > > )()
           >
   [[nodiscard]] constexpr auto operator ()( Variant const& variant_like ) const
   {
-    return variant_index< remove_cvref_t< Variant > >
+    return variant_index< detail_argot::remove_cvref_t< Variant > >
     ( variant_traits::index_of( variant_like ) );
   }
 } inline constexpr index_of{};

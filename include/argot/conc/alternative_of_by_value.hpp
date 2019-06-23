@@ -13,7 +13,7 @@
 #include <argot/concepts/variant_like.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/prov/alternative_of_by_value.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot::conc {
 
@@ -21,7 +21,7 @@ struct alternative_of_by_value_fn
 {
   // TODO(mattcalabrese) Define by lifting the result.
   template< class Var
-          , ARGOT_REQUIRES( VariantLike< remove_cvref_t< Var > > )
+          , ARGOT_REQUIRES( VariantLike< detail_argot::remove_cvref_t< Var > > )
                           ( Sinkable< Var&& > )
                           ()
           >

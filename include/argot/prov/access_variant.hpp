@@ -12,15 +12,15 @@
 #include <argot/concepts/variant_like.hpp>
 #include <argot/concepts/volatile_object.hpp>
 #include <argot/default_.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/not.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/prov/lift_call.hpp>
 #include <argot/prov/reference_to.hpp>
 #include <argot/prov/union_index.hpp>
 #include <argot/prov/value_of.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/union_traits/natural_get.hpp>
 #include <argot/variant_traits/index_type.hpp>
 
@@ -32,11 +32,11 @@ struct access_variant_fn
 {
   template< class Variant, class Index, class Def = default_unreachable_t
           , ARGOT_REQUIRES
-            ( VariantLike< remove_cvref_t< Variant > > )
+            ( VariantLike< detail_argot::remove_cvref_t< Variant > > )
             ( Not< VolatileObject< std::remove_reference_t< Variant > > > )
             ( ConvertibleToTypeOrConstant
               < Index
-              , variant_traits::index_type_t< remove_cvref_t< Variant > >
+              , variant_traits::index_type_t< detail_argot::remove_cvref_t< Variant > >
               >
             )
             ( Default< Def > )
@@ -48,7 +48,7 @@ struct access_variant_fn
     return prov::lift_call
     ( union_traits::natural_get
     , prov::reference_to( ARGOT_FORWARD( Variant )( variant_to_access ) )
-    , prov::union_index< remove_cvref_t< Variant > >
+    , prov::union_index< detail_argot::remove_cvref_t< Variant > >
       ( ARGOT_FORWARD( Index )( index ), ARGOT_MOVE( def ) )
     );
   }

@@ -22,8 +22,8 @@ then_provide( ConcProv&& self, ExecP&& exec, Fun&& fun )
 {
 fut_traits::then< FutPackager >
 ( conc_traits::as_future( ARGOT_MOVE( self ) )
-, static_cast< ::argot::forward_detail::direct_identity_t< ExecP >&& >( exec )
-, static_cast< ::argot::forward_detail::direct_identity_t< Fun >&& >( fun ) 
+, static_cast< ::argot::detail_forward::direct_identity_t< ExecP >&& >( exec )
+, static_cast< ::argot::detail_forward::direct_identity_t< Fun >&& >( fun ) 
 );
 }
 };

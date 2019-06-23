@@ -9,7 +9,7 @@
 #define ARGOT_DETAIL_CONSTEXPR_SWAP_HPP_
 
 #include <argot/detail/detection.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 
 #include <type_traits>
 

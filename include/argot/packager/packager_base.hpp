@@ -14,7 +14,7 @@
 #include <argot/detail/sink.hpp>
 #include <argot/future_spawner.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot::packager {
 
@@ -22,14 +22,14 @@ template< class Child >
 struct packager_base
 {
   template< class Exec
-          , ARGOT_REQUIRES( Executor< remove_cvref_t< Exec > > )
+          , ARGOT_REQUIRES( Executor< detail_argot::remove_cvref_t< Exec > > )
                           ( FuturePackager< Child > )
                           ( Sinkable< Exec&& > )
                           ()
           >
   constexpr auto operator []( Exec&& exec ) const
   {
-    return future_spawner< Child, remove_cvref_t< Exec > >
+    return future_spawner< Child, detail_argot::remove_cvref_t< Exec > >
     { call_detail::forward_and_sink< Exec >( exec ) };
   }
 };

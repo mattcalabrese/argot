@@ -20,8 +20,8 @@ forgetful_then_provide( ConcProv const& self, ExecP&& exec, Fun&& fun )
 {
 fut_traits::forgetful_then
 ( conc_traits::as_future( self )
-, static_cast< ::argot::forward_detail::direct_identity_t< ExecP >&& >( exec )
-, static_cast< ::argot::forward_detail::direct_identity_t< Fun >&& >( fun ) 
+, static_cast< ::argot::detail_forward::direct_identity_t< ExecP >&& >( exec )
+, static_cast< ::argot::detail_forward::direct_identity_t< Fun >&& >( fun ) 
 );
 }
 };

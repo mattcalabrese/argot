@@ -55,7 +55,7 @@ ARGOT_CONCEPTS_DETAIL_CREATE_LINE_DIRECTIVE( __LINE__ )
 template< class Invocable, class Provider >
 ARGOT_AUTO_CONCEPT( InvocableFromProvisionWithoutReduction )
 (
-  ArgumentProvider< remove_cvref_t< Provider > >
+  ArgumentProvider< detail_argot::remove_cvref_t< Provider > >
 , Sinkable< Provider&& >
 , TransparentRequirement
   < invocable_from_provision_without_reduction_detail

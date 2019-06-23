@@ -12,10 +12,10 @@
 #include <argot/concepts/argument_receiver_of_kinds.hpp>
 #include <argot/concepts/exceptional_switch_body_default_for_type.hpp>
 #include <argot/concepts/switch_body_default_for_type.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/receiver/nested_receiver.hpp>
 #include <argot/receiver/receiver_reference.hpp>
 #include <argot/switch_traits/destructive_provide_isolated_default.hpp>
@@ -23,7 +23,7 @@
 #include <argot/switch_traits/trailing_argument_list_kinds_of_default_destructive.hpp>
 #include <argot/switch_traits/argument_list_kinds_of_body_destructive.hpp>
 #include <argot/unreachable_function.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot::switch_traits {
 

@@ -20,11 +20,11 @@
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov_traits/argument_list_kinds_of_destructive.hpp>
 #include <argot/receiver_traits/branch_to_provision.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -46,8 +46,8 @@ struct conditional_fn
 
   template< class Bool, class IfTrue, class IfFalse
           , ARGOT_REQUIRES( BoolOrConstant< Bool > )
-                          ( ArgumentProvider< remove_cvref_t< IfTrue > > )
-                          ( ArgumentProvider< remove_cvref_t< IfFalse > > )
+                          ( ArgumentProvider< detail_argot::remove_cvref_t< IfTrue > > )
+                          ( ArgumentProvider< detail_argot::remove_cvref_t< IfFalse > > )
                           ( Sinkable< IfTrue&& > )
                           ( Sinkable< IfFalse&& > )
                           ()
@@ -58,7 +58,7 @@ struct conditional_fn
                             ) const
   {
     if constexpr( std::is_same_v< Bool, bool > )
-      return impl< remove_cvref_t< IfTrue >, remove_cvref_t< IfFalse > >
+      return impl< detail_argot::remove_cvref_t< IfTrue >, detail_argot::remove_cvref_t< IfFalse > >
       { call_detail::forward_and_sink< IfTrue >( if_true )
       , call_detail::forward_and_sink< IfFalse >( if_false )
       , condition

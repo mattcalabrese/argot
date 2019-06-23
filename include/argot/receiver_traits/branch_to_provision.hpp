@@ -25,7 +25,7 @@
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/receive_branch.hpp>
 #include <argot/unreachable_function.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot::receiver_traits {
 namespace branch_to_provision_detail {
@@ -56,7 +56,7 @@ struct branch_to_provision_t
   < class Receiver, class... L, class... T, class Provider
   , ARGOT_REQUIRES
     ( ArgumentReceiver< Receiver > )
-    ( ArgumentProvider< remove_cvref_t< Provider > > )
+    ( ArgumentProvider< detail_argot::remove_cvref_t< Provider > > )
     ( TransparentRequirement
       < branch_to_provision_detail::argument_receiver_of
         < Receiver

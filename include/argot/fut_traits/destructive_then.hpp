@@ -19,9 +19,9 @@
 #include <argot/future_spawner.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/packager_traits/package.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -38,8 +38,8 @@ struct destructive_then_fn
   template< class Fut, class Exec, class Fun
           , ARGOT_REQUIRES
             ( Future< Fut > )
-            ( Executor< remove_cvref_t< Exec > > )
-            ( Thenable< Fut, FPackager, remove_cvref_t< Exec > > )
+            ( Executor< detail_argot::remove_cvref_t< Exec > > )
+            ( Thenable< Fut, FPackager, detail_argot::remove_cvref_t< Exec > > )
             ( InvocableWith< std::decay_t< Fun&& >, value_type_t< Fut >&& > )
             ( Sinkable< Exec&& > )
             ( DecaySinkable< Fun&& > )
@@ -49,7 +49,7 @@ struct destructive_then_fn
   {
     // TODO(mattcalabrese) Perform the decay sink as a cast to avoid moves.
     return access_raw_concept_map
-    < Thenable< Fut, FPackager, remove_cvref_t< Exec > > >
+    < Thenable< Fut, FPackager, detail_argot::remove_cvref_t< Exec > > >
     ::then( ARGOT_MOVE( self )
           , call_detail::forward_and_sink< Exec >( exec )
           , call_detail::forward_and_decay_sink< Fun >( fun )

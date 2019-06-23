@@ -17,7 +17,7 @@
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/receiver_traits/receive_branch.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <tuple>
 #include <utility>
@@ -48,7 +48,7 @@ struct argument_types_to_tuple {};
 template< class... T >
 struct argument_types_to_tuple< receiver_traits::argument_types_t< T... > >
 {
-  using type = std::tuple< remove_cvref_t< T >... >;
+  using type = std::tuple< detail_argot::remove_cvref_t< T >... >;
 };
 
 template< class ArgumentTypes >
@@ -98,7 +98,7 @@ struct make_concept_map
     return std::variant
     < receiver::return_argument_values_detail::argument_types_to_tuple_t
       < LeadingPs >...
-    , std::tuple< remove_cvref_t< P >... >
+    , std::tuple< detail_argot::remove_cvref_t< P >... >
     , receiver::return_argument_values_detail::argument_types_to_tuple_t
       < TrailingPs >...
     >( std::in_place_index< sizeof...( LeadingPs ) >

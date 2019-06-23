@@ -24,14 +24,14 @@
 #include <argot/detail/constexpr_invoke.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/detail/unreachable.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/group.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/value_list.hpp>
 
 #include <type_traits>
@@ -49,7 +49,7 @@ struct bound_default
 struct default_t
 {
   template< class... Providers
-          , ARGOT_REQUIRES( ArgumentProvider< remove_cvref_t< Providers > >... )
+          , ARGOT_REQUIRES( ArgumentProvider< detail_argot::remove_cvref_t< Providers > >... )
                           ( Sinkable< Providers&& >... )
                           ()
           >
@@ -142,7 +142,7 @@ struct make_concept_map
   // TODO(mattcalabrese) constexpr?
   // TODO(mattcalabrese) Unqualify Receiver?
   template< class Receiver >
-  static ARGOT_REQUIRES( ArgumentReceiver< remove_cvref_t< Receiver > > )
+  static ARGOT_REQUIRES( ArgumentReceiver< detail_argot::remove_cvref_t< Receiver > > )
   < impossible > provide_isolated_default
   ( default_t::unreachable_impl, ValueType, Receiver&& rec )
   {
@@ -166,7 +166,7 @@ struct make_concept_map
   // TODO(mattcalabrese) constexpr?
   // TODO(mattcalabrese) Unqualify Receiver?
   template< class Receiver >
-  static ARGOT_REQUIRES( ArgumentReceiver< remove_cvref_t< Receiver > > )
+  static ARGOT_REQUIRES( ArgumentReceiver< detail_argot::remove_cvref_t< Receiver > > )
   < impossible > provide_isolated_default
   ( default_t::unreachable_impl, ValueType, Receiver&& rec )
   {
@@ -199,7 +199,7 @@ struct make_concept_map
     = receiver_traits::argument_list_kinds_t<>;
 
   template< class Receiver
-          , ARGOT_REQUIRES( ArgumentReceiver< remove_cvref_t< Receiver > > )()
+          , ARGOT_REQUIRES( ArgumentReceiver< detail_argot::remove_cvref_t< Receiver > > )()
           >
   static impossible
   provide_isolated_default( default_t::fail_impl< Fun >&& self, ValueType value
@@ -229,7 +229,7 @@ struct make_concept_map
     = receiver_traits::argument_list_kinds_t<>;
 
   template< class Receiver
-          , ARGOT_REQUIRES( ArgumentReceiver< remove_cvref_t< Receiver > > )()
+          , ARGOT_REQUIRES( ArgumentReceiver< detail_argot::remove_cvref_t< Receiver > > )()
           >
   static impossible provide_isolated_default
   ( default_t::fail_impl< Fun > const& self, ValueType value, Receiver&& rec )
@@ -264,7 +264,7 @@ struct make_concept_map
 
   template< class Receiver
           , ARGOT_REQUIRES
-            ( ArgumentProviderTo< Provider, remove_cvref_t< Receiver > > )()
+            ( ArgumentProviderTo< Provider, detail_argot::remove_cvref_t< Receiver > > )()
           >
   static constexpr decltype( auto ) provide_isolated_default
   ( bound_default< Provider >&& self, ValueType, Receiver&& rec )
@@ -293,7 +293,7 @@ struct make_concept_map
   template
   < class Receiver
   , ARGOT_REQUIRES
-    ( PersistentArgumentProviderTo< Provider, remove_cvref_t< Receiver > > )()
+    ( PersistentArgumentProviderTo< Provider, detail_argot::remove_cvref_t< Receiver > > )()
   >
   static constexpr decltype( auto ) provide_isolated_default
   ( bound_default< Provider > const& self, ValueType, Receiver&& rec )
@@ -335,7 +335,7 @@ struct make_concept_map
   , ARGOT_REQUIRES
     ( ArgumentProviderTo
       < argot_detail::result_of_constexpr_invoke_t< Generator&&, ValueType&& >
-      , remove_cvref_t< Receiver >
+      , detail_argot::remove_cvref_t< Receiver >
       >
     )
     ()
@@ -375,7 +375,7 @@ struct make_concept_map
     ( ArgumentProviderTo
       < argot_detail::result_of_constexpr_invoke_t
         < Generator const&, ValueType&& >
-      , remove_cvref_t< Receiver >
+      , detail_argot::remove_cvref_t< Receiver >
       >
     )
     ()

@@ -34,13 +34,13 @@ struct future_spawner_fn
   ARGOT_CONCEPT_ASSERT( FuturePackager< FPackager > );
 
   template< class Exec
-          , ARGOT_REQUIRES( Executor< remove_cvref_t< Exec > > )
+          , ARGOT_REQUIRES( Executor< detail_argot::remove_cvref_t< Exec > > )
                           ( Sinkable< Exec&& > )
                           ()
           >
   constexpr auto operator()( Exec&& exec ) const
   {
-    return future_spawner< FPackager, remove_cvref_t< Exec > >
+    return future_spawner< FPackager, detail_argot::remove_cvref_t< Exec > >
     { call_detail::forward_and_sink< Exec >( exec ) };
   }
 };

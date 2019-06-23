@@ -17,10 +17,10 @@
 #include <argot/concepts/forgetful_thenable/detail/stlab_future.hpp>
 #include <argot/concepts/persistent_forgetful_thenable.hpp>
 #include <argot/executor/immediate.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/fut_traits/value_type.hpp>
 #include <argot/gen/make_concept_map.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 
 #include <stlab/concurrency/future.hpp>
 #include <stlab/concurrency/immediate_executor.hpp>

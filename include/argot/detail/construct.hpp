@@ -11,7 +11,7 @@
 #include <argot/concepts/constructible.hpp>
 #include <argot/concepts/object.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 
 #include <type_traits>
 

@@ -20,7 +20,7 @@
 #include <argot/detail/constexpr_invoke.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/gen/make_concept_map.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/void_.hpp>
 
 #include <stlab/concurrency/future.hpp>

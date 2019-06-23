@@ -9,7 +9,7 @@
 #define ARGOT_CONC_EXPAND_EXPANSION_OPERATOR_HPP_
 
 #include <argot/concepts/concurrent_expandable.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 

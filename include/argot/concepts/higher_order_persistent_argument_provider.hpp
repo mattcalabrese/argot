@@ -45,7 +45,7 @@ ARGOT_CONCEPTS_DETAIL_CREATE_LINE_DIRECTIVE( __LINE__ )
 template< class Provider >
 ARGOT_EXPLICIT_CONCEPT( HigherOrderPersistentArgumentProvider )
 (/*
-  ArgumentProvider< remove_cvref_t< Provider > >
+  ArgumentProvider< detail_argot::remove_cvref_t< Provider > >
 , TransparentRequirement
   < higher_order_persistent_argument_provider_detail
     ::all_provisions_are_providers

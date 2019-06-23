@@ -16,7 +16,7 @@
 #include <argot/gen/requires.hpp>
 #include <argot/impossible.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <boost/assert.hpp>
 

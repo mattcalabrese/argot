@@ -14,15 +14,15 @@
 #include <argot/concepts/switch_body_for_type.hpp>
 #include <argot/concepts/switchable.hpp>
 #include <argot/concepts/true.hpp>
-#include <argot/declval.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/declval.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/auto_concept.hpp>
 #include <argot/gen/transparent_requirement.hpp>
 
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
 #include <argot/detail/sink.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/switch_traits/provider_of_isolated.hpp>
 
 #include <type_traits>
@@ -47,12 +47,12 @@ constexpr auto
 nary_provider_of_isolated( Def&& def, HeadBody&& head, TailBodies&&... tail )
 {
   if constexpr
-  ( is_modeled_v< SwitchBodyCase< remove_cvref_t< HeadBody >, Value > > )
+  ( is_modeled_v< SwitchBodyCase< detail_argot::remove_cvref_t< HeadBody >, Value > > )
     return switch_traits::provider_of_isolated< Value >
     ( ARGOT_FORWARD( HeadBody )( head ) );
   else
     if constexpr
-    ( is_modeled_v< SwitchBodyDefault< remove_cvref_t< HeadBody > > > )
+    ( is_modeled_v< SwitchBodyDefault< detail_argot::remove_cvref_t< HeadBody > > > )
       return (nary_provider_of_isolated< Value >)
       ( ARGOT_FORWARD( HeadBody )( head )
       , ARGOT_FORWARD( TailBodies )( tail )...

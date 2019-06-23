@@ -15,12 +15,12 @@
 #include <argot/concepts/net_executor.hpp>
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/no_unique_address.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <memory>
 
@@ -40,8 +40,8 @@ struct defer_to_fn
   };
 
   template< class NetExec, class Alloc = std::allocator< void >
-          , ARGOT_REQUIRES( NetExecutor< remove_cvref_t< NetExec > > )
-                          ( Allocator< remove_cvref_t< Alloc > > )
+          , ARGOT_REQUIRES( NetExecutor< detail_argot::remove_cvref_t< NetExec > > )
+                          ( Allocator< detail_argot::remove_cvref_t< Alloc > > )
                           ( Sinkable< NetExec&& > )
                           ( Sinkable< Alloc&& > )
                           ()
@@ -50,11 +50,11 @@ struct defer_to_fn
   ( NetExec&& net_exec
   , Alloc&& alloc
       = ARGOT_REQUIRES
-        ( DefaultConstructible< remove_cvref_t< Alloc > > )
-        < remove_cvref_t< Alloc > >()
+        ( DefaultConstructible< detail_argot::remove_cvref_t< Alloc > > )
+        < detail_argot::remove_cvref_t< Alloc > >()
   ) const
   {
-    return impl< remove_cvref_t< NetExec >, remove_cvref_t< Alloc > >
+    return impl< detail_argot::remove_cvref_t< NetExec >, detail_argot::remove_cvref_t< Alloc > >
     { call_detail::forward_and_sink< NetExec >( net_exec )
     , call_detail::forward_and_sink< Alloc >( alloc )
     };

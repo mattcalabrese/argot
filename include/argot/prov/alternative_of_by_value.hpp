@@ -17,14 +17,14 @@
 #include <argot/prov/lift_call.hpp>
 #include <argot/prov/value_of.hpp>
 #include <argot/union_traits/natural_get.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot::prov {
 
 struct alternative_of_by_value_fn
 {
   template< class Var
-          , ARGOT_REQUIRES( VariantLike< remove_cvref_t< Var > > )
+          , ARGOT_REQUIRES( VariantLike< detail_argot::remove_cvref_t< Var > > )
                           ( Sinkable< Var&& > )
                           ()
           >

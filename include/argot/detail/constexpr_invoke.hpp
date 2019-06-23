@@ -9,11 +9,11 @@
 #define ARGOT_DETAIL_CONSTEXPR_INVOKE_HPP_
 
 #include <argot/basic_result_of.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/conditional.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/lazy_expand.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <functional>
 #include <type_traits>
@@ -171,14 +171,14 @@ struct invoke_impl_member {};
 
 template< class T, class Head, class... Tail >
 struct invoke_impl_member< T, Head, Tail... >
-  : conditional< std::is_member_object_pointer_v< remove_cvref_t< T > > >
+  : conditional< std::is_member_object_pointer_v< detail_argot::remove_cvref_t< T > > >
     ::template apply< invoke_impl_member_object< T, Head, Tail... >
                     , invoke_impl_member_function< T, Head, Tail... >
                     > {};
 
 template< class T, class... P >
 struct invoke_impl
-  : conditional< std::is_member_pointer_v< remove_cvref_t< T > > >
+  : conditional< std::is_member_pointer_v< detail_argot::remove_cvref_t< T > > >
     ::template apply< invoke_impl_member< T, P... >
                     , invoke_impl_basic< T, P... >
                     > {};

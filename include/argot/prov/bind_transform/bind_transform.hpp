@@ -64,7 +64,7 @@ struct bind_transform_t
   < class Provider, class... Transformations
   , ARGOT_REQUIRES
     ( ComposableWithProvision
-      < remove_cvref_t< Provider >
+      < detail_argot::remove_cvref_t< Provider >
       , std::decay_t< Transformations >...
       >
     )

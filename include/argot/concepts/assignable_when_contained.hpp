@@ -14,7 +14,7 @@
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
 #include <argot/contained.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/detection.hpp>
 
 #include <type_traits>
@@ -48,7 +48,8 @@ struct make_concept_map
 < AssignableWhenContained< T, P >
 , std::void_t
   < decltype( ARGOT_DECLVAL( assign_contained_fn< T > const& )
-              ( ARGOT_DECLVAL( contained< T >& ), ARGOT_DECLVAL( P ) )
+              ( ARGOT_DECLVAL( contained< T >& ), 
+                ARGOT_DECLVAL( P ) )
             )
   >
 > {};

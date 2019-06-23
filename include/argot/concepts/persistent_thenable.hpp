@@ -28,7 +28,7 @@
 #include <argot/fut_traits/config.hpp>
 #include <argot/fut_traits/value_type.hpp>
 #include <argot/packager_traits/package.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 
 #endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 

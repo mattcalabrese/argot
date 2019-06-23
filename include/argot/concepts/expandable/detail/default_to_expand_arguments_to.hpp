@@ -12,16 +12,16 @@
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/concepts/expandable.hpp>
 #include <argot/concepts/sinkable.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/concatenate.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/group.hpp>
 #include <argot/prov/provider_reference.hpp>
@@ -31,7 +31,7 @@
 #include <argot/receiver/return_argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -51,7 +51,7 @@ template< class P >
 constexpr auto default_to_expand_arguments( P&& arg )
 {
   using param_type_if_provider = call_detail::result_of_sinklike_cast_t< P&& >;
-  using raw_type = remove_cvref_t< P&& >;
+  using raw_type = detail_argot::remove_cvref_t< P&& >;
 
   using argument_provider_concept_instance
     = typename argot_detail::conditional
@@ -99,13 +99,13 @@ struct default_to_expand_arguments_to_t
   };
 
   template< class Receiver
-          , ARGOT_REQUIRES( ArgumentReceiver< remove_cvref_t< Receiver > > )
+          , ARGOT_REQUIRES( ArgumentReceiver< detail_argot::remove_cvref_t< Receiver > > )
                           ( Sinkable< Receiver&& > )
                           ()
           >
   constexpr auto operator ()( Receiver&& receiver ) const
   {
-    return impl< remove_cvref_t< Receiver > >
+    return impl< detail_argot::remove_cvref_t< Receiver > >
     { call_detail::forward_and_sink< Receiver >( receiver ) };
   }
 } inline constexpr default_to_expand_arguments_to{};

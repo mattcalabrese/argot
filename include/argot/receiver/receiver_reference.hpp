@@ -12,10 +12,10 @@
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/concepts/rvalue_reference.hpp>
 #include <argot/contained.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/receive_branch.hpp>
 

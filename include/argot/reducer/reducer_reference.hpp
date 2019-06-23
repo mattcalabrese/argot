@@ -11,14 +11,14 @@
 #include <argot/concepts/reference.hpp>
 #include <argot/concepts/return_value_reducer.hpp>
 #include <argot/contained.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/reducer_traits/is_homogeneous.hpp>
 #include <argot/reducer_traits/reduce.hpp>
 #include <argot/reducer_traits/return_types.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 #include <utility>
@@ -41,7 +41,7 @@ struct reducer_reference_t
   };
 
   template< class Reducer
-          , ARGOT_REQUIRES( ReturnValueReducer< remove_cvref_t< Reducer > > )()
+          , ARGOT_REQUIRES( ReturnValueReducer< detail_argot::remove_cvref_t< Reducer > > )()
           >
   constexpr auto operator ()( Reducer&& red ) const
   {
@@ -66,7 +66,7 @@ struct make_concept_map
 < ReturnValueReducer< reducer::reducer_reference_t::impl< Reducer > > >
 {
   using is_homogeneous
-    = reducer_traits::is_homogeneous< remove_cvref_t< Reducer > >;
+    = reducer_traits::is_homogeneous< detail_argot::remove_cvref_t< Reducer > >;
 
   template
   < class Self

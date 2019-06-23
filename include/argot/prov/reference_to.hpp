@@ -12,10 +12,10 @@
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/argument_receiver_of.hpp>
 #include <argot/detail/argument_pack.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/detail/provide_receiver.hpp>
 #include <argot/prov/nothing.hpp>

@@ -8,7 +8,7 @@
 #ifndef ARGOT_FORWARD_ARGUMENTS_AS_TUPLE_HPP_
 #define ARGOT_FORWARD_ARGUMENTS_AS_TUPLE_HPP_
 
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 
 #include <tuple>
 #include <utility>

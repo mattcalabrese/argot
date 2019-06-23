@@ -15,7 +15,7 @@
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
 #include <argot/detail/give_qualifiers_to.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 
 #include <boost/assert.hpp>
 #include <boost/optional.hpp>

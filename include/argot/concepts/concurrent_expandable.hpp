@@ -29,12 +29,12 @@
 
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/conc/alternative_of_by_value.hpp>
 //#include <argot/conc/squash.hpp>
 #include <argot/conc/unpack_by_value.hpp>
 #include <argot/conc/when_ready.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
@@ -85,7 +85,7 @@ template< class Tup >
 struct make_concept_map
 < ConcurrentExpandable< Tup >
 , ARGOT_REQUIRES( Reference< Tup > )
-                ( TupleLike< remove_cvref_t< Tup > > )
+                ( TupleLike< detail_argot::remove_cvref_t< Tup > > )
                 ( Sinkable< Tup&& > )
                 <>
 >
@@ -101,7 +101,7 @@ template< class Var >
 struct make_concept_map
 < ConcurrentExpandable< Var >
 , ARGOT_REQUIRES( Reference< Var > )
-                ( VariantLike< remove_cvref_t< Var > > )
+                ( VariantLike< detail_argot::remove_cvref_t< Var > > )
                 ( Sinkable< Var&& > )
                 <>
 >
@@ -116,7 +116,7 @@ template< class Fut >
 struct make_concept_map
 < ConcurrentExpandable< Fut >
 , ARGOT_REQUIRES( Reference< Fut > )
-                ( Future< remove_cvref_t< Fut > > )
+                ( Future< detail_argot::remove_cvref_t< Fut > > )
                 ( Sinkable< Fut&& > )
                 <>
 >
@@ -187,18 +187,18 @@ struct make_concept_map
 < ConcurrentExpandable< Provider >
 , ARGOT_REQUIRES
   ( Reference< Provider > )
-  ( HigherOrderConcurrentArgumentProvider< remove_cvref_t< Provider > > )
+  ( HigherOrderConcurrentArgumentProvider< detail_argot::remove_cvref_t< Provider > > )
   ( Or
     < SameType
       < call_detail::result_of_sinklike_cast_t< Provider >
-      , remove_cvref_t< Provider >&
+      , detail_argot::remove_cvref_t< Provider >&
       >
     , And
       < HigherOrderPersistentConcurrentArgumentProvider
-        < remove_cvref_t< Provider > >
+        < detail_argot::remove_cvref_t< Provider > >
       , SameType
         < call_detail::result_of_sinklike_cast_t< Provider >
-        , remove_cvref_t< Provider > const&
+        , detail_argot::remove_cvref_t< Provider > const&
         >
       >
     >
@@ -208,14 +208,14 @@ struct make_concept_map
     < is_modeled_v
       < SameType
         < call_detail::result_of_sinklike_cast_t< Provider >
-        , remove_cvref_t< Provider >&
+        , detail_argot::remove_cvref_t< Provider >&
         >
       >
     >::template meta_apply
     < detail_concurrent_expand_concept_map::argument_provider_concept_map_base
     , detail_concurrent_expand_concept_map
       ::persistent_argument_provider_concept_map_base
-    , remove_cvref_t< Provider >
+    , detail_argot::remove_cvref_t< Provider >
     >
 {
 };

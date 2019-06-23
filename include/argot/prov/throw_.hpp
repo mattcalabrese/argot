@@ -16,12 +16,12 @@
 #include <argot/concepts/persistent_argument_provider.hpp>
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/unreachable.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/impossible.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/group.hpp>
 #include <argot/prov_traits/argument_list_kinds_of_destructive.hpp>
@@ -29,7 +29,7 @@
 #include <argot/receiver/reduced_invoke.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/reducer/same_type_or_fail.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot {
 namespace prov {
@@ -75,7 +75,7 @@ struct throw_fn
   template
   < class... P
   , ARGOT_REQUIRES
-    ( ArgumentProvider< remove_cvref_t< P > >... )
+    ( ArgumentProvider< detail_argot::remove_cvref_t< P > >... )
     ( Sinkable< P&& >... )
     ( ConstructibleWithKinds
       < ExceptionType

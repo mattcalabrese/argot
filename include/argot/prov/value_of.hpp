@@ -19,12 +19,12 @@
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/gen/is_modeled.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/detail/provide_receiver.hpp>
 #include <argot/prov/nothing.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <boost/config.hpp>
 
@@ -76,7 +76,7 @@ struct value_of_fn
   // TODO(mattcalabrese) Constrain
   template< class Head, class... Tail >
   [[nodiscard]]
-  constexpr impl< remove_cvref_t< Head >, remove_cvref_t< Tail >... >
+  constexpr impl< detail_argot::remove_cvref_t< Head >, detail_argot::remove_cvref_t< Tail >... >
   operator ()( Head&& head, Tail&&... tail ) const
   {
     return

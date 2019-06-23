@@ -12,11 +12,11 @@
 #include <argot/concepts/concurrent_argument_provider_to.hpp>
 #include <argot/concepts/executor.hpp>
 #include <argot/concepts/persistent_forgetful_then_providable.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot::conc_traits {
 
@@ -27,7 +27,7 @@ struct persistent_forgetful_then_provide_t
   < class ConcProvider, class Exec, class Receiver
   , ARGOT_REQUIRES
     ( ConcurrentArgumentProviderTo< ConcProvider, Receiver > )
-    ( Executor< remove_cvref_t< Exec > > )
+    ( Executor< detail_argot::remove_cvref_t< Exec > > )
     ( ForgetfulThenProvidable< ConcProvider, Exec > )
     ()
   >
@@ -36,7 +36,7 @@ struct persistent_forgetful_then_provide_t
   {
     return access_raw_concept_map
     < PersistentForgetfulThenProvidable
-      < ConcProvider, remove_cvref_t< Exec > >
+      < ConcProvider, detail_argot::remove_cvref_t< Exec > >
     >::forgetful_then_provide
     ( provider, ARGOT_FORWARD( Exec )( exec ), ARGOT_MOVE( rec ) );
   }

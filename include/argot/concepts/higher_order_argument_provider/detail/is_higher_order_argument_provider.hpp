@@ -17,7 +17,7 @@
 #include <argot/prov_traits/provide.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -36,7 +36,7 @@ struct all_are_argument_providers_impl
 < receiver_traits::argument_types_t< T... > >
 {
   static bool constexpr value
-    = ( is_modeled_v< ArgumentProvider< remove_cvref_t< T > > > && ... );
+    = ( is_modeled_v< ArgumentProvider< detail_argot::remove_cvref_t< T > > > && ... );
 };
 
 template< class T >
@@ -90,7 +90,7 @@ struct make_concept_map
             ::all_are_argument_providers_v< TrailingArgumentListKinds >
          && ...
        )
-    && (    is_modeled_v< ArgumentProvider< remove_cvref_t< P > > >
+    && (    is_modeled_v< ArgumentProvider< detail_argot::remove_cvref_t< P > > >
          && ...
        )
   >

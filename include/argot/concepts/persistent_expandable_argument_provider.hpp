@@ -56,7 +56,7 @@ ARGOT_EXPLICIT_CONCEPT( PersistentExpandableArgumentProvider )
 #include <argot/concepts/persistent_expandable_argument_provider/detail/is_persistent_expandable_argument_provider.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/prov_traits/persistent_provide.hpp>
 #include <argot/receiver/receiver_reference.hpp>
 

@@ -15,13 +15,13 @@
 #include <argot/concepts/sinkable.hpp>
 #include <argot/concepts/tuple_like.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/receiver_traits/receive.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/tuple_traits/get.hpp>
 #include <argot/tuple_traits/index_type.hpp>
 #include <argot/tuple_traits/num_elements.hpp>
@@ -81,13 +81,13 @@ struct unpack_by_value_fn
   };
  public:
   template< class Tup
-          , ARGOT_REQUIRES( TupleLike< remove_cvref_t< Tup > > )
+          , ARGOT_REQUIRES( TupleLike< detail_argot::remove_cvref_t< Tup > > )
                           ( Sinkable< Tup&& > )
                           ()
           >
   [[nodiscard]] constexpr auto operator ()( Tup&& tup ) const
   {
-    return impl< remove_cvref_t< Tup > >{ ARGOT_FORWARD( Tup )( tup ) };
+    return impl< detail_argot::remove_cvref_t< Tup > >{ ARGOT_FORWARD( Tup )( tup ) };
   }
 } inline constexpr unpack_by_value{};
 

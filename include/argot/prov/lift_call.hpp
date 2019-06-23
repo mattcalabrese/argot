@@ -23,7 +23,7 @@
 #include <argot/gen/requires.hpp>
 #include <argot/invocable_reference.hpp>
 #include <argot/lazy_expand.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/prov/group.hpp>
 #include <argot/prov_traits/argument_list_kinds_of_destructive.hpp>
 #include <argot/prov_traits/argument_list_kinds_of_persistent.hpp>
@@ -31,7 +31,7 @@
 #include <argot/prov_traits/persistent_provide.hpp>
 #include <argot/receiver/forward_result_to.hpp>
 #include <argot/receiver/receiver_reference.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -66,7 +66,7 @@ struct lift_call_fn
   < class Invocable, class... Providers
   , ARGOT_REQUIRES
     ( LiftableCall
-      < std::decay_t< Invocable >, remove_cvref_t< Providers >... >
+      < std::decay_t< Invocable >, detail_argot::remove_cvref_t< Providers >... >
     )
     ( DecaySinkable< Invocable&& > )
     ( Sinkable< Providers&& >... )
@@ -75,7 +75,7 @@ struct lift_call_fn
   [[nodiscard]]
   constexpr auto operator ()( Invocable&& invocable, Providers&&... args ) const
   {
-    return impl< std::decay_t< Invocable >, remove_cvref_t< Providers >... >
+    return impl< std::decay_t< Invocable >, detail_argot::remove_cvref_t< Providers >... >
     { call_detail::forward_and_decay_sink< Invocable >( invocable )
     , prov::group( call_detail::forward_and_sink< Providers >( args )... )
     };

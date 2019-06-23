@@ -22,11 +22,11 @@
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/fut_traits/value_type.hpp>
 #include <argot/no_unique_address.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot {
 namespace fut {
@@ -71,7 +71,7 @@ struct augment_t
             ( Future< Fut > )
             ( InvocableObjectWith  // TODO(mattcalabrese) Fix constraint
               < std::decay_t< Augmentation >
-              , fut_traits::value_type_t< remove_cvref_t< Fut > >
+              , fut_traits::value_type_t< detail_argot::remove_cvref_t< Fut > >
               >
             )
             ( Sinkable< Fut&& > )
@@ -82,7 +82,7 @@ struct augment_t
   constexpr auto operator()( Fut&& fut, Augmentation&& augmentation ) const
   {
     return augment_detail::impl
-    < remove_cvref_t< Fut >, std::decay_t< Augmentation > >
+    < detail_argot::remove_cvref_t< Fut >, std::decay_t< Augmentation > >
     { call_detail::forward_and_sink< Fut >( fut )
     , call_detail::forward_and_decay_sink< Augmentation >( augmentation )
     };
@@ -120,7 +120,7 @@ struct make_concept_map
     ( ARGOT_MOVE( self.fut )
     , ARGOT_FORWARD( ExecP )( exec )
     , fut::augment_detail::continuation
-      < Augmentation, remove_cvref_t< Fun > >
+      < Augmentation, detail_argot::remove_cvref_t< Fun > >
       { ARGOT_MOVE( self.augmentation ), ARGOT_FORWARD( Fun )( fun ) }
     );
   }
@@ -152,7 +152,7 @@ struct make_concept_map
     ( self.fut
     , ARGOT_FORWARD( ExecP )( exec )
     , fut::augment_detail::continuation
-      < Augmentation, remove_cvref_t< Fun > >
+      < Augmentation, detail_argot::remove_cvref_t< Fun > >
       { ARGOT_MOVE( self.augmentation ), ARGOT_FORWARD( Fun )( fun ) }
     );
   }
@@ -176,7 +176,7 @@ struct make_concept_map
     ( ARGOT_MOVE( self.fut )
     , ARGOT_FORWARD( ExecP )( exec )
     , fut::augment_detail::continuation
-      < Augmentation, remove_cvref_t< Fun > >
+      < Augmentation, detail_argot::remove_cvref_t< Fun > >
       { ARGOT_MOVE( self.augmentation ), ARGOT_FORWARD( Fun )( fun ) }
     );
   }
@@ -200,7 +200,7 @@ struct make_concept_map
     ( self.fut
     , ARGOT_FORWARD( ExecP )( exec )
     , fut::augment_detail::continuation
-      < Augmentation, remove_cvref_t< Fun > >
+      < Augmentation, detail_argot::remove_cvref_t< Fun > >
       { ARGOT_MOVE( self.augmentation ), ARGOT_FORWARD( Fun )( fun ) }
     );
   }

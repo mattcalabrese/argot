@@ -11,7 +11,7 @@
 #include <argot/concepts/convertible.hpp>
 #include <argot/concepts/move_constructible.hpp>
 #include <argot/detail/argument_pack.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>

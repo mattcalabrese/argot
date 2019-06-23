@@ -19,7 +19,7 @@
 #include <argot/prov/lift_call.hpp>
 #include <argot/prov/squash.hpp>
 #include <argot/prov_traits/argument_list_kinds_of_destructive.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -30,7 +30,7 @@ struct bind_call_fn
   // TODO(mattcalabrese) Fully constrain
   template< class ProviderGenerator, class... Providers
           , ARGOT_REQUIRES
-            ( ArgumentProvider< remove_cvref_t< Providers > >... )
+            ( ArgumentProvider< detail_argot::remove_cvref_t< Providers > >... )
             ( ArgumentProviderGeneratorWithKinds
               < std::decay_t< ProviderGenerator >
               , prov_traits::argument_list_kinds_of_destructive_t

@@ -57,13 +57,13 @@ ARGOT_EXPLICIT_CONCEPT( Expandable )
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/or.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/alternative_of.hpp>
 #include <argot/prov/unpack.hpp>
 #include <argot/prov/value_of.hpp>
 #include <argot/prov_traits/destructive_provide.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
@@ -73,7 +73,7 @@ template< class Tup >
 struct make_concept_map
 < Expandable< Tup >
 , ARGOT_REQUIRES( Reference< Tup > )
-                ( TupleLike< remove_cvref_t< Tup > > )
+                ( TupleLike< detail_argot::remove_cvref_t< Tup > > )
                 <>
 >
 {
@@ -87,7 +87,7 @@ template< class Var >
 struct make_concept_map
 < Expandable< Var >
 , ARGOT_REQUIRES( Reference< Var > )
-                ( VariantLike< remove_cvref_t< Var > > )
+                ( VariantLike< detail_argot::remove_cvref_t< Var > > )
                 <>
 >
 {
@@ -158,20 +158,20 @@ struct make_concept_map
 < Expandable< Provider >
 , ARGOT_REQUIRES
   ( Reference< Provider > )
-  ( ExpandableArgumentProvider< remove_cvref_t< Provider > > )
+  ( ExpandableArgumentProvider< detail_argot::remove_cvref_t< Provider > > )
   ( Sinkable< Provider > )
   <>
 > : argot_detail::conditional
     < ARGOT_IS_MODELED
       ( SameType
         < call_detail::result_of_sinklike_cast_t< Provider >
-        , remove_cvref_t< Provider >&&
+        , detail_argot::remove_cvref_t< Provider >&&
         >
       )
     >::template meta_apply
     < detail_expand_concept_map::higher_order_concept_map_move_base
     , detail_expand_concept_map::higher_order_concept_map_copy_base
-    , remove_cvref_t< Provider >
+    , detail_argot::remove_cvref_t< Provider >
     >
 {
 };

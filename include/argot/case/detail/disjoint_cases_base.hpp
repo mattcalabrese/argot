@@ -16,7 +16,7 @@
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot::case_detail {
 
@@ -31,9 +31,9 @@ struct disjoint_cases_base
 
   template< class Provider >
   constexpr
-  ARGOT_REQUIRES( ArgumentProvider< remove_cvref_t< Provider > > )
+  ARGOT_REQUIRES( ArgumentProvider< detail_argot::remove_cvref_t< Provider > > )
                 ( Sinkable< Provider&& > )
-  < disjoint_provided_t< remove_cvref_t< Provider > > >
+  < disjoint_provided_t< detail_argot::remove_cvref_t< Provider > > >
   operator()( Provider&& provider ) const
   {
     return { call_detail::forward_and_sink< Provider >( provider ) };

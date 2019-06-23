@@ -17,7 +17,7 @@
 #include <argot/detail/sink.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -36,7 +36,7 @@ struct provide_t
       >
       ::template meta_apply
       < ArgumentProviderTo, PersistentArgumentProviderTo
-      , remove_cvref_t< Provider >, Receiver
+      , detail_argot::remove_cvref_t< Provider >, Receiver
       >
     )
     ()
@@ -44,7 +44,7 @@ struct provide_t
   constexpr decltype( auto )
   operator ()( Provider&& provider, Receiver&& receiver ) const
   {
-    using RawProvider = remove_cvref_t< Provider >;
+    using RawProvider = detail_argot::remove_cvref_t< Provider >;
 
     using QualifiedProvider
       = call_detail::result_of_sinklike_cast_t< Provider&& >;

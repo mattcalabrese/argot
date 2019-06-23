@@ -11,7 +11,7 @@
 #include <argot/concepts/argot_invocable_with_persistent_reduction.hpp>
 #include <argot/concepts/return_type.hpp>
 #include <argot/detail/invoker.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/prov/default_to_reference_to.hpp>

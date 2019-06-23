@@ -15,7 +15,7 @@
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/nothing.hpp>
 #include <argot/prov/provider_reference.hpp>
@@ -25,7 +25,7 @@
 #include <argot/prov_traits/persistent_provide.hpp>
 #include <argot/receiver/receiver_reference.hpp>
 #include <argot/receiver/with_trailing_provider.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 #include <utility>
@@ -72,7 +72,7 @@ struct group_fn
   };
 
   template< class Provider >
-  static constexpr remove_cvref_t< Provider >
+  static constexpr detail_argot::remove_cvref_t< Provider >
   make_impl( Provider&& provider )
   {
     return call_detail::forward_and_sink< Provider >( provider );
@@ -80,9 +80,9 @@ struct group_fn
 
   template< class HeadProvider, class NextProvider, class... TailProviders >
   static constexpr impl_of_t  // TODO(mattcalabrese) Replace with impl directly
-  < remove_cvref_t< HeadProvider >
-  , remove_cvref_t< NextProvider >
-  , remove_cvref_t< TailProviders >...
+  < detail_argot::remove_cvref_t< HeadProvider >
+  , detail_argot::remove_cvref_t< NextProvider >
+  , detail_argot::remove_cvref_t< TailProviders >...
   >
   make_impl( HeadProvider&& head_provider, NextProvider&& next_provider
            , TailProviders&&... tail_providers
@@ -99,7 +99,7 @@ struct group_fn
  public:
   template< class... Providers
           , ARGOT_REQUIRES
-            ( ArgumentProvider< remove_cvref_t< Providers > >... )
+            ( ArgumentProvider< detail_argot::remove_cvref_t< Providers > >... )
             ( Sinkable< Providers&& >... )
             ()
           >

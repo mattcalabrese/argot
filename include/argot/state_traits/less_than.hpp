@@ -9,7 +9,7 @@
 #define ARGOT_STATE_TRAITS_LESS_THAN_HPP_
 
 #include <argot/concepts/comparable.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/gen/requires.hpp>

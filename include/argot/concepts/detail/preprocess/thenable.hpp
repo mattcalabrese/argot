@@ -21,12 +21,12 @@ then( Fut&& self, ExecP&& exec, Fun&& fun )
 auto [ task, fut ]
 = packager_traits::package
 < FutPackager, fut_traits::value_type_t< Fut >&& > 
-( static_cast< ::argot::forward_detail::direct_identity_t< ExecP >&& >( exec )
-, static_cast< ::argot::forward_detail::direct_identity_t< Fun >&& >( fun )
+( static_cast< ::argot::detail_forward::direct_identity_t< ExecP >&& >( exec )
+, static_cast< ::argot::detail_forward::direct_identity_t< Fun >&& >( fun )
 );
 access_raw_concept_map< ForgetfulThenable< Fut, Exec > >::forgetful_then
 ( ARGOT_MOVE( self )
-, static_cast< ::argot::forward_detail::direct_identity_t< ExecP >&& >( exec )
+, static_cast< ::argot::detail_forward::direct_identity_t< ExecP >&& >( exec )
 , ARGOT_MOVE( task )
 );
 return ARGOT_MOVE( fut );
@@ -44,8 +44,8 @@ then( Fut&& self, ExecP&& exec, Fun&& fun )
 {
 return access_raw_concept_map< IntrinsicThenable< Fut, FutPackager, Exec > >
 ::then( ARGOT_MOVE( self )
-, static_cast< ::argot::forward_detail::direct_identity_t< ExecP >&& >( exec )
-, static_cast< ::argot::forward_detail::direct_identity_t< Fun >&& >( fun )
+, static_cast< ::argot::detail_forward::direct_identity_t< ExecP >&& >( exec )
+, static_cast< ::argot::detail_forward::direct_identity_t< Fun >&& >( fun )
 );
 }
 };

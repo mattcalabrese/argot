@@ -14,10 +14,10 @@
 #include <argot/concepts/return_value_reducer.hpp>
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 
 #include <functional>
 #include <type_traits>

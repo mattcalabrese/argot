@@ -10,7 +10,7 @@
 
 #include <argot/detail/xml_sanitize.hpp>
 #include <argot/reducer_traits/return_types.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <boost/core/demangle.hpp>
 
@@ -140,7 +140,7 @@ void generate_dot_impl_untaken
     << "  Branch" << IDOffset << "[label=\"{" << IDOffset
     << "|{";
 
-  output_params< remove_cvref_t< HeadBranch > >
+  output_params< detail_argot::remove_cvref_t< HeadBranch > >
   ::run( os, type_output );
 
   os

@@ -16,16 +16,16 @@
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/invoker.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/fut_traits/forgetful_then.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov_traits/destructive_provide.hpp>
 #include <argot/receiver/reduced_invoke.hpp>
 #include <argot/reducer/to.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -60,8 +60,8 @@ struct forgetful_async_call_t
   // TODO(mattcalabrese) Check callability
   template
   < class Exec, class Fun, class... P
-  , ARGOT_REQUIRES( Executor< remove_cvref_t< Exec > > )
-                  ( ConcurrentArgumentProvider< remove_cvref_t< P >... > )
+  , ARGOT_REQUIRES( Executor< detail_argot::remove_cvref_t< Exec > > )
+                  ( ConcurrentArgumentProvider< detail_argot::remove_cvref_t< P >... > )
                   ( Sinkable< Exec&& > )
                   ( Sinkable< P&& >... )
                   ()

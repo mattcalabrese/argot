@@ -20,14 +20,14 @@
 #include <argot/detail/constexpr_invoke.hpp>
 #include <argot/detail/give_qualifiers_to.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/is_modeled.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/identity.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/void_.hpp>
 
 #include <functional>
@@ -612,7 +612,7 @@ struct state_impl< containment_wrapper< T > >
 template< class T >
 constexpr decltype( auto ) contained_state( T&& object ) noexcept
 {
-  return state_impl< remove_cvref_t< T > >::run( ARGOT_FORWARD( T )( object ) );
+  return state_impl< detail_argot::remove_cvref_t< T > >::run( ARGOT_FORWARD( T )( object ) );
 }
 
 } // namespace argot(::detail_contained)
@@ -623,7 +623,7 @@ struct access_contained_fn
   template< class T >
   constexpr decltype( auto ) operator()( T&& object ) const noexcept
   {
-    return detail_contained::access_impl< remove_cvref_t< T > >
+    return detail_contained::access_impl< detail_argot::remove_cvref_t< T > >
     ::run( ARGOT_FORWARD( T )( object ) );
   }
 } inline constexpr access_contained{};

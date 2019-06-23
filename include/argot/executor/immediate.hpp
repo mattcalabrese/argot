@@ -9,7 +9,7 @@
 #define ARGOT_EXECUTOR_IMMEDIATE_HPP_
 
 #include <argot/concepts/executor.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/make_concept_map.hpp>
 
 namespace argot {

@@ -10,12 +10,12 @@
 
 #include <argot/concepts/union_index.hpp>
 #include <argot/concepts/union_like.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/detection.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/union_traits/num_alternatives.hpp>
 
 namespace argot::union_traits {
@@ -24,13 +24,13 @@ template< auto Index >
 struct get_t
 {
   template< class Union
-          , ARGOT_REQUIRES( UnionLike< remove_cvref_t< Union > > )
-                          ( UnionIndex< remove_cvref_t< Union >, Index > )
+          , ARGOT_REQUIRES( UnionLike< detail_argot::remove_cvref_t< Union > > )
+                          ( UnionIndex< detail_argot::remove_cvref_t< Union >, Index > )
                           ()
           >
   constexpr decltype( auto ) operator ()( Union&& union_like ) const
   {
-    return access_raw_concept_map< UnionLike< remove_cvref_t< Union > > >
+    return access_raw_concept_map< UnionLike< detail_argot::remove_cvref_t< Union > > >
     ::template get< Index >( ARGOT_FORWARD( Union )( union_like ) );
   }
 };

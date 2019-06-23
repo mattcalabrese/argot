@@ -15,17 +15,17 @@
 #include <argot/concepts/persistent_future.hpp>
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/fut/augment.hpp>
 #include <argot/fut_traits/destructive_then.hpp>
 #include <argot/fut_traits/value_type.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/as.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot {
 namespace conc {
@@ -41,7 +41,7 @@ struct when_ready_fn
     template< class ValueType >
     constexpr auto operator()( ValueType&& value ) &&
     {
-      return prov::as< fut_traits::value_type_t< remove_cvref_t< Fut > > >
+      return prov::as< fut_traits::value_type_t< detail_argot::remove_cvref_t< Fut > > >
       ( ARGOT_FORWARD( ValueType )( value ) );
     }
   };
@@ -55,7 +55,7 @@ struct when_ready_fn
   };
  public:
   template< class Fut
-          , ARGOT_REQUIRES( Future< remove_cvref_t< Fut > > )
+          , ARGOT_REQUIRES( Future< detail_argot::remove_cvref_t< Fut > > )
                           ( Sinkable< Fut&& > )
                           ()
           >
@@ -65,7 +65,7 @@ struct when_ready_fn
     return conc::bless_result
     ( fut::augment
     , ARGOT_FORWARD( Fut )( fut )
-    , to_argument_provider< remove_cvref_t< Fut > >()
+    , to_argument_provider< detail_argot::remove_cvref_t< Fut > >()
     );
   }
 } inline constexpr when_ready{};

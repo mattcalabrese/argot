@@ -9,10 +9,10 @@
 #define ARGOT_DETAIL_ARGUMENT_PACK_HPP_
 
 #include <argot/contained.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/detection.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/no_unique_address.hpp>
 
 #include <memory>
@@ -129,7 +129,7 @@ struct argument_pack_t< Head, Tail... >
 
 template< class Self >
 using result_of_make_invoker_t
-  = decltype( remove_cvref_t< Self >::make_invoker( ARGOT_DECLVAL( Self ) ) );
+  = decltype( detail_argot::remove_cvref_t< Self >::make_invoker( ARGOT_DECLVAL( Self ) ) );
 
 // TODO(mattcalabrese) Possibly just encapsulate (I don't think this can fail)
 template< class Self >

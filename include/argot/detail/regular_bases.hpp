@@ -8,7 +8,7 @@
 #ifndef ARGOT_DETAIL_REGULAR_BASES_HPP_
 #define ARGOT_DETAIL_REGULAR_BASES_HPP_
 
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/detection.hpp>
 

@@ -20,13 +20,13 @@
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/fut_traits/forgetful_then.hpp>
 #include <argot/fut_traits/then.hpp>
 #include <argot/fut_traits/value_type.hpp>
 #include <argot/no_unique_address.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot {
 namespace fut {
@@ -90,7 +90,7 @@ struct squash_t
   [[nodiscard]]
   constexpr auto operator()( FutFut&& futfut ) const
   {
-    return impl< remove_cvref_t< FutFut > >
+    return impl< detail_argot::remove_cvref_t< FutFut > >
     { call_detail::forward_and_sink< FutFut >( futfut ) };
   }
 } inline constexpr squash{};
@@ -128,7 +128,7 @@ struct make_concept_map
     < ForgetfulThenable< FutFut, executor::immediate_t > >::forgetful_then
     ( ARGOT_MOVE( self.futfut )
     , executor::immediate
-    , fut::squash_detail::forgetful_continuation< Exec, remove_cvref_t< Fun > >
+    , fut::squash_detail::forgetful_continuation< Exec, detail_argot::remove_cvref_t< Fun > >
       { ARGOT_FORWARD( ExecP )( exec ), ARGOT_FORWARD( Fun )( fun ) }
     );
   }
@@ -168,7 +168,7 @@ struct make_concept_map
     ::forgetful_then
     ( self.futfut
     , executor::immediate
-    , fut::squash_detail::forgetful_continuation< Exec, remove_cvref_t< Fun > >
+    , fut::squash_detail::forgetful_continuation< Exec, detail_argot::remove_cvref_t< Fun > >
       { ARGOT_FORWARD( ExecP )( exec ), ARGOT_FORWARD( Fun )( fun ) }
     );
   }
@@ -193,7 +193,7 @@ struct make_concept_map
     return fut::squash
     ( fut_traits::then
       ( ARGOT_MOVE( self.futfut )
-      , fut::squash_detail::continuation< remove_cvref_t< Fun > >
+      , fut::squash_detail::continuation< detail_argot::remove_cvref_t< Fun > >
         { ARGOT_FORWARD( Fun )( fun ) }
       )
     );

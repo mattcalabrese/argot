@@ -16,8 +16,8 @@
 
 #include <argot/detail/detection.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/forward.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
@@ -54,7 +54,7 @@ struct make_concept_map
 {
   static constexpr decltype( auto ) sink( T&& source ) noexcept
   {
-    return call_detail::sink_impl< remove_cvref_t< T > >
+    return call_detail::sink_impl< detail_argot::remove_cvref_t< T > >
     ::run( ARGOT_FORWARD( T )( source ) );
   }
 };

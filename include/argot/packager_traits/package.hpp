@@ -27,7 +27,7 @@ struct package_fn
   ARGOT_CONCEPT_ASSERT( FuturePackager< FPackager > );
 
   template< class Exec, class Fun
-          , ARGOT_REQUIRES( Executor< remove_cvref_t< Exec > > )
+          , ARGOT_REQUIRES( Executor< detail_argot::remove_cvref_t< Exec > > )
                           ( InvocableWith< std::decay_t< Fun >, P... > )
                           ( Sinkable< Exec&& > )
                           ( DecaySinkable< Fun&& > )

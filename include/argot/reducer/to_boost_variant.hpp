@@ -9,7 +9,7 @@
 #define ARGOT_REDUCER_TO_BOOST_VARIANT_HPP_
 
 #include <argot/concepts/return_value_reducer.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/reducer_traits/return_types.hpp>
 #include <boost/variant/variant.hpp>

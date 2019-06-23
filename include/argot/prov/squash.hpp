@@ -20,7 +20,7 @@
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/nothing.hpp>
 #include <argot/prov/value_of.hpp>
@@ -32,7 +32,7 @@
 #include <argot/receiver/nested_receiver.hpp>
 #include <argot/receiver/provide_arguments_to.hpp>
 #include <argot/receiver/receiver_reference.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 #include <utility>
@@ -92,13 +92,13 @@ struct squash_fn
  public:
   template< class Provider
           , ARGOT_REQUIRES
-            ( HigherOrderArgumentProvider< remove_cvref_t< Provider > > )
+            ( HigherOrderArgumentProvider< detail_argot::remove_cvref_t< Provider > > )
             ( Sinkable< Provider&& > )
             ()
           >
   [[nodiscard]] constexpr auto operator ()( Provider&& provider ) const
   {
-    using provider_type = remove_cvref_t< Provider >;
+    using provider_type = detail_argot::remove_cvref_t< Provider >;
 
     // TODO(mattcalabrese) Possibly generalize conditions
     if constexpr( std::is_same_v< provider_type, prov::nothing_t > )
@@ -108,7 +108,7 @@ struct squash_fn
         return prov::value_of_fn::head_value
         ( ARGOT_FORWARD( Provider )( provider ) );
       else
-        return impl< remove_cvref_t< Provider > >
+        return impl< detail_argot::remove_cvref_t< Provider > >
         { call_detail::forward_and_sink< Provider >( provider ) };
   }
 } inline constexpr squash{};

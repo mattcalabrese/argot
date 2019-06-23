@@ -8,7 +8,7 @@
 #ifndef ARGOT_BASIC_RESULT_OF_HPP_
 #define ARGOT_BASIC_RESULT_OF_HPP_
 
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/exact_declval.hpp>
 #include <argot/lazy_expand.hpp>
 
@@ -17,7 +17,7 @@ namespace argot {
 template< class Fun, class... P >
 using basic_result_of_t
   = decltype
-    ( reinterpret_cast< Fun&& >( declval_detail::dummy )  // Expanded declval
+    ( ARGOT_DECLVAL( Fun&& )
       ( argot_detail::exact_declval< P&& >()... )  // TODO(mattcalabrese) Eliminate the &&
     );
 
@@ -27,7 +27,7 @@ using basic_result_of = lazy_expand< basic_result_of_t, Fun, P... >;
 template< class Fun, class... P >
 bool constexpr is_nothrow_basic_callable_v
   = noexcept
-    ( reinterpret_cast< Fun&& >( declval_detail::dummy )  // Expanded declval
+    ( ARGOT_DECLVAL( Fun&& )
       ( argot_detail::exact_declval< P&& >()... )  // TODO(mattcalabrese) Eliminate the &&
     );
 

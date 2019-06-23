@@ -16,12 +16,12 @@
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/executor_traits/execute.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -51,7 +51,7 @@ struct bind_fn
 
   // TODO(mattcalabrese) Potentially invocable function
   template< class Exec, class Fun
-          , ARGOT_REQUIRES( Executor< remove_cvref_t< Exec > > )
+          , ARGOT_REQUIRES( Executor< detail_argot::remove_cvref_t< Exec > > )
                           ( InvocableObjectWith< std::decay_t< Fun > > )
                           ( MoveConstructible< std::decay_t< Fun > > )
                           ( Sinkable< Exec&& > )
@@ -60,7 +60,7 @@ struct bind_fn
           >
   constexpr auto operator()( Exec&& exec, Fun&& fun ) const
   {
-    return impl< remove_cvref_t< Exec >, std::decay_t< Fun > >
+    return impl< detail_argot::remove_cvref_t< Exec >, std::decay_t< Fun > >
     { exec
     , call_detail::forward_and_decay_sink< Fun >( fun )
     };

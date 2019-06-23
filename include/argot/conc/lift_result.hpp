@@ -13,9 +13,9 @@
 #include <argot/concepts/invocable_with.hpp>
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot::conc {
 
@@ -26,7 +26,7 @@ struct lift_result_fn
   , ARGOT_REQUIRES
     ( InvocableWith< Invocable&&, P&&... > )
     ( ArgumentProvider
-      < remove_cvref_t
+      < detail_argot::remove_cvref_t
         < argot_detail::result_of_constexpr_invoke_t< Invocable&&, P&&... > >
       >
     )
@@ -39,7 +39,7 @@ struct lift_result_fn
   operator ()( Invocable&& invocable, P&&... args ) const
   {
     return lift_fn::impl
-    < remove_cvref_t
+    < detail_argot::remove_cvref_t
       < argot_detail::result_of_constexpr_invoke_t< Invocable&&, P&&... > >
     >
     { argot_detail::constexpr_invoke

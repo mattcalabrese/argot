@@ -14,12 +14,12 @@
 #include <argot/concepts/reference.hpp>
 #include <argot/concepts/tuple_like.hpp>
 #include <argot/concepts/volatile_object.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/not.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/receiver_traits/receive.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/tuple_traits/get.hpp>
 #include <argot/tuple_traits/index_type.hpp>
 #include <argot/tuple_traits/num_elements.hpp>
@@ -35,17 +35,17 @@ struct unpack_fn
   template< class Tuple >
   struct impl
   {
-    ARGOT_CONCEPT_ASSERT( TupleLike< remove_cvref_t< Tuple > > );
+    ARGOT_CONCEPT_ASSERT( TupleLike< detail_argot::remove_cvref_t< Tuple > > );
     ARGOT_CONCEPT_ASSERT( Reference< Tuple > );
 
     ARGOT_CONCEPT_ASSERT
     ( Not< VolatileObject< std::remove_reference_t< Tuple > > > );
 
-    using index_type = tuple_traits::index_type_t< remove_cvref_t< Tuple > >;
+    using index_type = tuple_traits::index_type_t< detail_argot::remove_cvref_t< Tuple > >;
     using indices_type
       = std::make_integer_sequence
         < typename prov::unpack_fn::impl< Tuple >::index_type
-        , tuple_traits::num_elements_v< remove_cvref_t< Tuple > >
+        , tuple_traits::num_elements_v< detail_argot::remove_cvref_t< Tuple > >
         >;
 
 // TODO(mattcalabrese) Fill these out
@@ -85,7 +85,7 @@ struct unpack_fn
  public:
   template< class Tuple
           , ARGOT_REQUIRES
-            ( TupleLike< remove_cvref_t< Tuple > > )
+            ( TupleLike< detail_argot::remove_cvref_t< Tuple > > )
             ( Not< VolatileObject< std::remove_reference_t< Tuple > > > )
             ()
           >

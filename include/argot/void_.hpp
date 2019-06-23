@@ -11,7 +11,7 @@
 #ifdef __cpp_regular_void // If Regular Void p0146 is implemented...
 
 #include <argot/detail/constexpr_invoke.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 
 #include <type_traits>
 
@@ -56,7 +56,7 @@ noexcept( argot_detail::is_nothrow_constexpr_invocable_v< Fun&&, P&&... > )
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
 #include <argot/detail/give_qualifiers_to.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 
 #include <cstddef>
 #include <functional>
@@ -108,16 +108,16 @@ template< class T >
 bool constexpr is_regular_void_v = false;
 
 template<>
-bool constexpr is_regular_void_v< void_ > = true;
+inline bool constexpr is_regular_void_v< void_ > = true;
 
 template<>
-bool constexpr is_regular_void_v< void_ const > = true;
+inline bool constexpr is_regular_void_v< void_ const > = true;
 
 template<>
-bool constexpr is_regular_void_v< void_ volatile > = true;
+inline bool constexpr is_regular_void_v< void_ volatile > = true;
 
 template<>
-bool constexpr is_regular_void_v< void_ volatile const > = true;
+inline bool constexpr is_regular_void_v< void_ volatile const > = true;
 
 template< class T >
 using is_regular_void = std::bool_constant< is_regular_void_v< T > >;

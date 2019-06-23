@@ -8,9 +8,9 @@
 #ifndef ARGOT_DETAIL_OPERATOR_BRACKET_HPP_
 #define ARGOT_DETAIL_OPERATOR_BRACKET_HPP_
 
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/detection.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 
 // TODO(mattcalabrese) Properly constrain and deduce return types.
 

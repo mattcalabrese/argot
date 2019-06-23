@@ -13,12 +13,12 @@
 #include <argot/concepts/executor.hpp>
 #include <argot/concepts/future_packager.hpp>
 #include <argot/concepts/persistent_then_providable.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot::conc_traits {
 
@@ -32,7 +32,7 @@ struct persistent_then_provide_fn
   < class ConcProvider, class Exec, class Receiver
   , ARGOT_REQUIRES
     ( PersistentConcurrentArgumentProviderTo< ConcProvider, Receiver > )
-    ( Executor< remove_cvref_t< Exec > > )
+    ( Executor< detail_argot::remove_cvref_t< Exec > > )
     ( PersistentThenProvidable< ConcProvider, FPackager, Exec > )
     ()
   >
@@ -41,7 +41,7 @@ struct persistent_then_provide_fn
   {
     return access_raw_concept_map
     < PersistentThenProvidable
-      < ConcProvider, FPackager, remove_cvref_t< Exec > >
+      < ConcProvider, FPackager, detail_argot::remove_cvref_t< Exec > >
     >
     ::then_provide( provider, ARGOT_FORWARD( Exec )( exec )
                   , ARGOT_MOVE( rec )

@@ -20,17 +20,17 @@
 #include <argot/detail/invoker.hpp>
 #include <argot/detail/operator_bracket.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/fut_traits/then.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov_traits/destructive_provide.hpp>
 #include <argot/receiver/reduced_invoke.hpp>
 #include <argot/reducer/reducer_reference.hpp>
 #include <argot/reducer/same_type_or_fail.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -50,8 +50,8 @@ struct async_call_fn
     // TODO(mattcalabrese) Check callability
     template< class Exec, class Fun, class... P
             , ARGOT_REQUIRES
-              ( Executor< remove_cvref_t< Exec > > )
-              ( ConcurrentCanDefaultToValueOf< remove_cvref_t< P > >... )
+              ( Executor< detail_argot::remove_cvref_t< Exec > > )
+              ( ConcurrentCanDefaultToValueOf< detail_argot::remove_cvref_t< P > >... )
               ( Sinkable< Exec&& > )
               ( DecaySinkable< Fun&& > )
               ( Sinkable< P&& >... )
@@ -77,8 +77,8 @@ struct async_call_fn
     template
     < class Exec, class Fun, class... P
     , ARGOT_REQUIRES
-      ( Executor< remove_cvref_t< Exec > > )
-      ( ConcurrentCanDefaultToValueOf< remove_cvref_t< P > >... )
+      ( Executor< detail_argot::remove_cvref_t< Exec > > )
+      ( ConcurrentCanDefaultToValueOf< detail_argot::remove_cvref_t< P > >... )
       ( Sinkable< Exec&& > )
       ( DecaySinkable< Fun&& > )
       ( Sinkable< P&& >... )
@@ -129,8 +129,8 @@ struct async_call_fn
   // TODO(mattcalabrese) Check callability
   template
   < class Exec, class Fun, class... P
-  , ARGOT_REQUIRES( Executor< remove_cvref_t< Exec > > )
-                  ( ConcurrentCanDefaultToValueOf< remove_cvref_t< P > >... )
+  , ARGOT_REQUIRES( Executor< detail_argot::remove_cvref_t< Exec > > )
+                  ( ConcurrentCanDefaultToValueOf< detail_argot::remove_cvref_t< P > >... )
                   ( Sinkable< Exec&& > )
                   ( DecaySinkable< Fun&& > )
                   ( Sinkable< P&& >... )
@@ -149,13 +149,13 @@ struct async_call_fn
   }
 
   template< class Reducer
-          , ARGOT_REQUIRES( ReturnValueReducer< remove_cvref_t< Reducer > > )
+          , ARGOT_REQUIRES( ReturnValueReducer< detail_argot::remove_cvref_t< Reducer > > )
                           ( Sinkable< Reducer&& > )
                           ()
           >
   [[nodiscard]] constexpr auto operator []( Reducer&& reducer ) const
   {
-    return with_reducer< remove_cvref_t< Reducer > >
+    return with_reducer< detail_argot::remove_cvref_t< Reducer > >
     { call_detail::forward_and_sink< Reducer >( reducer ) };
   }
 };

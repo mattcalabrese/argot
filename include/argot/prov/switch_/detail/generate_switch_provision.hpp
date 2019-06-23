@@ -12,7 +12,7 @@
 
 #include <argot/concepts/switch_body_default.hpp>
 #include <argot/detail/unreachable.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/is_modeled.hpp>
 #include <argot/prov/switch_/detail/config.hpp>
 #include <argot/prov/switch_/detail/switch_impl_fwd.hpp>

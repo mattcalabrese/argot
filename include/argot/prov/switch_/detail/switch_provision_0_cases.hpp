@@ -10,7 +10,7 @@
 
 #include <argot/impossible.hpp>
 #include <argot/concepts/switch_body_default.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/is_modeled.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/prov/switch_/detail/switch_impl_fwd.hpp>
@@ -20,7 +20,7 @@
 #include <argot/switch_traits/argument_list_kinds_of_body_persistent.hpp>
 #include <argot/switch_traits/destructive_provide_default.hpp>
 #include <argot/switch_traits/persistent_provide_default.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/unreachable_function.hpp>
 
 namespace argot::prov::switch_detail {

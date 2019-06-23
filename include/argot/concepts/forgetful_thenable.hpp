@@ -53,11 +53,11 @@ ARGOT_EXPLICIT_CONCEPT( ForgetfulThenable )
 #include <argot/detail/constexpr_invoke.hpp>
 #include <argot/executor/immediate.hpp>
 #include <argot/executor_traits/execute.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/fut_traits/value_type.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -147,7 +147,7 @@ struct make_concept_map
     ( ARGOT_MOVE( self )
     , executor::immediate
     , detail_forgetful_thenable::continuation
-      < remove_cvref_t< Exec >, remove_cvref_t< Fun >
+      < detail_argot::remove_cvref_t< Exec >, detail_argot::remove_cvref_t< Fun >
       , fut_traits::value_type_t< Fut >
       >
       { ARGOT_FORWARD( ExecP )( exec )

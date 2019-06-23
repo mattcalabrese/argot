@@ -16,7 +16,7 @@
 
 #include <argot/concepts/convertible.hpp>
 #include <argot/concepts/nothrow_explicitly_convertible.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/detection.hpp>
 #include <argot/detail/if_.hpp>
 

@@ -16,13 +16,13 @@
 #include <argot/concepts/std_integral_constant.hpp>
 #include <argot/concepts/switch_condition.hpp>
 #include <argot/default_.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/is_modeled.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/prov/switch_.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -39,7 +39,7 @@ struct value_in_set_fn
   template< class Type, class Def = default_unreachable_t
           , ARGOT_REQUIRES
             ( ConvertibleToTypeOrConstant< Type, ValueType > )
-            ( Default< remove_cvref_t< Def > > )
+            ( Default< detail_argot::remove_cvref_t< Def > > )
             ( Sinkable< Def&& > )
             ()
           >
@@ -47,9 +47,9 @@ struct value_in_set_fn
   constexpr auto operator ()( Type&& value, Def&& def = {} ) const
   {
     if constexpr
-    ( is_modeled_v< StdIntegralConstant< remove_cvref_t< Type > > > )
+    ( is_modeled_v< StdIntegralConstant< detail_argot::remove_cvref_t< Type > > > )
       return prov::switch_
-      ( std::integral_constant< ValueType, remove_cvref_t< Type >::value >()
+      ( std::integral_constant< ValueType, detail_argot::remove_cvref_t< Type >::value >()
       , argot::case_set< Values... >.as_constant
       , ARGOT_FORWARD( Def )( def )
       );

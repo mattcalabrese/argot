@@ -19,9 +19,9 @@
 #include <argot/future_spawner.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/packager_traits/package.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <boost/config.hpp>
 
@@ -46,7 +46,7 @@ struct persistent_then_fn
   template
   < class Fut, class Exec, class Fun
   , ARGOT_REQUIRES
-    ( PersistentThenable< Fut, FPackager, remove_cvref_t< Exec > > )
+    ( PersistentThenable< Fut, FPackager, detail_argot::remove_cvref_t< Exec > > )
     ( InvocableWith< std::decay_t< Fun&& >, value_type_t< Fut >&& > )
     ( InvocableWith< std::decay_t< Fun&& >, const_t< value_type_t< Fut > >& > )
     ( Sinkable< Exec&& > )
@@ -57,7 +57,7 @@ struct persistent_then_fn
   {
     // TODO(mattcalabrese) Perform the decay sink as a cast to avoid moves.
     return access_raw_concept_map
-    < PersistentThenable< Fut, FPackager, remove_cvref_t< Exec > > >
+    < PersistentThenable< Fut, FPackager, detail_argot::remove_cvref_t< Exec > > >
     ::then( self
           , call_detail::forward_and_sink< Exec >( exec )
           , call_detail::forward_and_decay_sink< Fun >( fun )

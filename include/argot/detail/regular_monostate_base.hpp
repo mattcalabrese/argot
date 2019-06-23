@@ -8,7 +8,7 @@
 #ifndef ARGOT_DETAIL_REGULAR_MONOSTATE_BASE_HPP_
 #define ARGOT_DETAIL_REGULAR_MONOSTATE_BASE_HPP_
 
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 
 #include <cstddef>
 #include <functional>
@@ -69,7 +69,7 @@ struct hash< __VA_ARGS__ >                                                     \
   static_assert( ::std::is_same_v< hash, ::std::hash< __VA_ARGS__ > > );       \
                                                                                \
   constexpr ::std::size_t operator()                                           \
-  ( ::argot::forward_detail::direct_identity_t< __VA_ARGS__ > const& )         \
+  ( ::argot::detail_forward::direct_identity_t< __VA_ARGS__ > const& )         \
   const noexcept                                                               \
   {                                                                            \
     return 0;                                                                  \

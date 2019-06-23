@@ -10,7 +10,7 @@
 
 #include <argot/concepts/expandable.hpp>
 #include <argot/concepts/argument_receiver.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/detection.hpp>
 #include <argot/gen/is_modeled.hpp>

@@ -16,9 +16,9 @@
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/fut_traits/value_type.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot::conc {
 
@@ -30,13 +30,13 @@ struct bless_result_fn
   , ARGOT_REQUIRES
     ( InvocableWith< Invocable&&, P&&... > )
     ( Future
-      < remove_cvref_t
+      < detail_argot::remove_cvref_t
         < argot_detail::result_of_constexpr_invoke_t< Invocable&&, P&&... > >
       >
     )
     ( ArgumentProvider
       < fut_traits::value_type_t
-        < remove_cvref_t
+        < detail_argot::remove_cvref_t
           < argot_detail::result_of_constexpr_invoke_t< Invocable&&, P&&... > >
         >
       >
@@ -50,7 +50,7 @@ struct bless_result_fn
   operator ()( Invocable&& invocable, P&&... args ) const
   {
     return bless_fn::impl
-    < remove_cvref_t
+    < detail_argot::remove_cvref_t
       < argot_detail::result_of_constexpr_invoke_t< Invocable&&, P&&... > >
     >
     { argot_detail::constexpr_invoke

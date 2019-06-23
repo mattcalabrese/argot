@@ -15,7 +15,7 @@
 #include <argot/detail/sink.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/prov/bind_transform/bind_transform.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -25,7 +25,7 @@ namespace prov::bind_transform_pipe {
 template< class Provider, class Transformation
         , ARGOT_REQUIRES
           ( ComposableWithProvision
-            < remove_cvref_t< Provider >
+            < detail_argot::remove_cvref_t< Provider >
             , std::decay_t< Transformation >
             >
           )

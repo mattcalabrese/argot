@@ -16,17 +16,17 @@
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/reducer_traits/is_homogeneous.hpp>
 #include <argot/reducer_traits/reduce.hpp>
 #include <argot/reducer_traits/return_types.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -73,7 +73,7 @@ struct reduced_invoke_t
   template< class Reducer, class Invocable >
   struct impl
   {
-    ARGOT_CONCEPT_ASSERT( ReturnValueReducer< remove_cvref_t< Reducer > > );
+    ARGOT_CONCEPT_ASSERT( ReturnValueReducer< detail_argot::remove_cvref_t< Reducer > > );
     ARGOT_CONCEPT_ASSERT( PotentiallyInvocableObject< Invocable > );
 
     Reducer reducer;
@@ -82,7 +82,7 @@ struct reduced_invoke_t
 
   template
   < class Reducer, class Invocable
-  , ARGOT_REQUIRES( ReturnValueReducer< remove_cvref_t< Reducer > > )
+  , ARGOT_REQUIRES( ReturnValueReducer< detail_argot::remove_cvref_t< Reducer > > )
                   ( PotentiallyInvocableObject< std::decay_t< Invocable > > )
                   ( Sinkable< Reducer&& > )
                   ( DecaySinkable< Invocable&& > )
@@ -91,7 +91,7 @@ struct reduced_invoke_t
   [[nodiscard]]
   constexpr auto operator ()( Reducer&& reducer, Invocable&& invocable ) const
   {
-    return impl< remove_cvref_t< Reducer >, std::decay_t< Invocable > >
+    return impl< detail_argot::remove_cvref_t< Reducer >, std::decay_t< Invocable > >
     { call_detail::forward_and_sink< Reducer >( reducer )
     , call_detail::forward_and_decay_sink< Invocable >( invocable )
     };

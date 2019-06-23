@@ -1,3 +1,4 @@
+
 /*==============================================================================
   Copyright (c) 2017, 2018 Matt Calabrese
 
@@ -16,7 +17,7 @@
 
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/detection.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -60,7 +61,7 @@ struct make_concept_map
 < ConvertibleToTypeOrConstant< Type, ExpectedValueType >
 , typename call_detail::detached_fast_enable_if
   < !convertible_to_type_or_constant_detail
-    ::is_std_integral_constant< remove_cvref_t< Type > >::value
+    ::is_std_integral_constant< detail_argot::remove_cvref_t< Type > >::value
   >
   ::_::template and_< std::is_convertible_v< Type, ExpectedValueType > >
   ::_::template apply<>
@@ -71,11 +72,11 @@ struct make_concept_map
 < ConvertibleToTypeOrConstant< Type, ExpectedValueType >
 , typename call_detail::detached_fast_enable_if
   < convertible_to_type_or_constant_detail
-    ::is_std_integral_constant< remove_cvref_t< Type > >::value
+    ::is_std_integral_constant< detail_argot::remove_cvref_t< Type > >::value
   >
   ::_::template and_
     < std::is_convertible_v
-      < typename remove_cvref_t< Type >::value_type, ExpectedValueType >
+      < typename detail_argot::remove_cvref_t< Type >::value_type, ExpectedValueType >
     >
   ::_::template apply<>
 > {};

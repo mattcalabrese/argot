@@ -8,7 +8,7 @@
 #ifndef ARGOT_DETAIL_NO_DUPLICATES_HPP_
 #define ARGOT_DETAIL_NO_DUPLICATES_HPP_
 
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/value_list.hpp>
 
 #include <type_traits>

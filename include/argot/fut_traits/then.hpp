@@ -22,7 +22,7 @@
 #include <argot/fut_traits/value_type.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -43,10 +43,10 @@ struct then_fn
         < call_detail::result_of_sinklike_cast_t< Fut&& > >
       >::template meta_apply
       < Future, PersistentFuture
-      , remove_cvref_t< Fut >
+      , detail_argot::remove_cvref_t< Fut >
       >
     )
-    ( Executor< remove_cvref_t< Exec > > )
+    ( Executor< detail_argot::remove_cvref_t< Exec > > )
     ( InvocableWith  // TODO(mattcalabrese) Fix constraint
       < std::decay_t< Fun&& >
       , value_type_t< std::remove_reference_t< Fut > >
@@ -60,7 +60,7 @@ struct then_fn
   operator ()( Fut&& self, Exec&& exec, Fun&& fun ) const
   {
     // TODO(mattcalabrese) Remove
-    // using RawFut = remove_cvref_t< Fut >;
+    // using RawFut = detail_argot::remove_cvref_t< Fut >;
 
     using QualifiedFut
       = call_detail::result_of_sinklike_cast_t< Fut&& >;

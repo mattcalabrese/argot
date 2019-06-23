@@ -15,7 +15,7 @@
 #include <argot/concepts/return_type.hpp>
 #include <argot/concepts/return_value_reducer.hpp>
 #include <argot/detail/detection.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>

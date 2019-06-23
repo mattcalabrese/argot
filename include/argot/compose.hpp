@@ -16,11 +16,11 @@
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/identity.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/void_.hpp>
 

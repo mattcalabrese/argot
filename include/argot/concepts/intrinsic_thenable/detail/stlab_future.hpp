@@ -21,7 +21,7 @@
 #include <argot/executor/stlab.hpp>
 #include <argot/executor_traits/execute.hpp>
 #include <argot/gen/make_concept_map.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/packager/stlab.hpp>
 #include <argot/void_.hpp>
@@ -102,10 +102,10 @@ constexpr bool const& is_wrapped_stlab_executor_v
 template< class Exec >
 auto to_stlab_executor( Exec&& exec )
 {
-  if constexpr( is_wrapped_stlab_executor_v< remove_cvref_t< Exec > > )
+  if constexpr( is_wrapped_stlab_executor_v< detail_argot::remove_cvref_t< Exec > > )
     return ARGOT_FORWARD( Exec )( exec ).stlab_exec;
   else
-    return stlab_executor< remove_cvref_t< Exec > >
+    return stlab_executor< detail_argot::remove_cvref_t< Exec > >
     { call_detail::forward_and_sink< Exec >( exec ) };
 }
 

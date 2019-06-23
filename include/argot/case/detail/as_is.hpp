@@ -15,11 +15,11 @@
 #include <argot/concepts/switch_body.hpp>
 #include <argot/concepts/switch_body_case.hpp>
 #include <argot/concepts/true.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/receive.hpp>
 #include <argot/value_list.hpp>

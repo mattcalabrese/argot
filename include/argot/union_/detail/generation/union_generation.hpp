@@ -35,7 +35,7 @@ struct union_impl_preprocessed< ARGOT_DETAIL_UNION_CURR_IMPL_INDEX >
     using qualified_alt
       = call_detail::give_qualifiers_to_t
         < Self&&
-        , typename access_raw_concept_map< UnionLike< remove_cvref_t< Self > > >
+        , typename access_raw_concept_map< UnionLike< detail_argot::remove_cvref_t< Self > > >
           ::template alternative_type_t< ARGOT_DETAIL_UNION_CURR_IMPL_INDEX >
         >;
 

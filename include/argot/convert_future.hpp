@@ -13,13 +13,13 @@
 #include <argot/concepts/persistent_thenable.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/executor/immediate.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/fut_traits/then.hpp>
 #include <argot/fut_traits/value_type.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -60,7 +60,7 @@ struct convert_future_fn
     return fut_traits::then< FPackager >
     ( ARGOT_FORWARD( Fut )( self )
     , executor::immediate
-    , []( auto&& value ) -> fut_traits::value_type_t< remove_cvref_t< Fut > >
+    , []( auto&& value ) -> fut_traits::value_type_t< detail_argot::remove_cvref_t< Fut > >
       {
         return ARGOT_FORWARD( decltype( value ) )( value );
       }

@@ -11,13 +11,13 @@
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/argument_receiver_of_kinds.hpp>
 #include <argot/concepts/switch_body_case.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/prov_traits/provide.hpp>
 #include <argot/switch_traits/argument_list_kinds_of_case_persistent.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 

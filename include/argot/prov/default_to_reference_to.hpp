@@ -14,7 +14,7 @@
 #include <argot/concepts/true.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/is_modeled.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/prov/group.hpp>
@@ -47,7 +47,7 @@ struct default_to_reference_to_fn
   < class... P
   , ARGOT_REQUIRES
     ( typename argot_detail::conditional
-      < is_modeled_v< ArgumentProvider< remove_cvref_t< P > > > >
+      < is_modeled_v< ArgumentProvider< detail_argot::remove_cvref_t< P > > > >
       ::template half_meta_apply< Sinkable, True< true >, P&& >...
     )
     ()
@@ -56,7 +56,7 @@ struct default_to_reference_to_fn
   {
     return prov::group
     ( argot_detail::conditional
-      < is_modeled_v< ArgumentProvider< remove_cvref_t< P > > > >
+      < is_modeled_v< ArgumentProvider< detail_argot::remove_cvref_t< P > > > >
       ::template apply< provider_forwarder, provider_maker >
       ::run( ARGOT_FORWARD( P )( args ) )...
     );

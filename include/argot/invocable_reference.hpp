@@ -14,10 +14,10 @@
 #include <argot/concepts/reference.hpp>
 #include <argot/contained.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 
 namespace argot {
 

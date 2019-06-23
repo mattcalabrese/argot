@@ -12,7 +12,7 @@
 #include <argot/concepts/return_type.hpp>
 #include <argot/concepts/return_value_reducer.hpp>
 #include <argot/concepts/valid.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/auto_concept.hpp>
 
@@ -20,7 +20,7 @@
 
 #include <argot/detail/unreachable.hpp>
 #include <argot/reducer_traits/return_types.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 

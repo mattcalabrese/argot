@@ -13,12 +13,12 @@
 #include <argot/concepts/executor.hpp>
 #include <argot/concepts/future_packager.hpp>
 #include <argot/concepts/then_providable.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot::conc_traits {
 
@@ -32,7 +32,7 @@ struct destructive_then_provide_fn
   < class ConcProvider, class Exec, class Receiver
   , ARGOT_REQUIRES
     //( ConcurrentArgumentProviderTo< ConcProvider, Receiver > ) // TODO(mattcalabrese) Constrain
-    ( Executor< remove_cvref_t< Exec > > )
+    ( Executor< detail_argot::remove_cvref_t< Exec > > )
     ( ThenProvidable< ConcProvider, FPackager, Exec > )
     ()
   >
@@ -40,7 +40,7 @@ struct destructive_then_provide_fn
   operator ()( ConcProvider&& provider, Exec&& exec, Receiver&& rec ) const
   {
     return access_raw_concept_map
-    < ThenProvidable< ConcProvider, FPackager, remove_cvref_t< Exec > > >
+    < ThenProvidable< ConcProvider, FPackager, detail_argot::remove_cvref_t< Exec > > >
     ::then_provide( ARGOT_MOVE( provider ), ARGOT_FORWARD( Exec )( exec )
                   , ARGOT_MOVE( rec )
                   );

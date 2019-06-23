@@ -11,12 +11,12 @@
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/future_packager.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/fut_traits/config.hpp>
 #include <argot/gen/make_concept_map.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <exception>
 
@@ -78,7 +78,7 @@ struct make_concept_map< FuturePackager< packager::boost_shared_future > >
   static constexpr auto package( Exec&& exec, Fun&& fun )
   {
     return packager::detail_boost_shared_future_packager::packaged_t
-    < remove_cvref_t< Fun >, P... >( ARGOT_FORWARD( Fun )( fun ) );
+    < detail_argot::remove_cvref_t< Fun >, P... >( ARGOT_FORWARD( Fun )( fun ) );
   }
 };
 

@@ -13,7 +13,7 @@
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/is_modeled.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/prov/group.hpp>
@@ -47,7 +47,7 @@ struct default_to_value_of_fn
   {
     return prov::group
     ( argot_detail::conditional
-      < is_modeled_v< ArgumentProvider< remove_cvref_t< P > > > >
+      < is_modeled_v< ArgumentProvider< detail_argot::remove_cvref_t< P > > > >
       ::template apply< provider_forwarder, provider_maker >
       ::run( ARGOT_FORWARD( P )( args ) )...
     );

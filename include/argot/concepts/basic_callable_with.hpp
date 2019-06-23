@@ -9,7 +9,7 @@
 #define ARGOT_CONCEPTS_BASIC_CALLABLE_WITH_HPP_
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/gen/explicit_concept.hpp>
 #include <argot/gen/make_concept_map.hpp>
 

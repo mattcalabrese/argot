@@ -16,7 +16,7 @@
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/receive_branch.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 #include <utility>
@@ -64,9 +64,9 @@ struct make_concept_map
   )
   {
     return std::variant
-    < remove_cvref_t< LeadingPs >...
-    , remove_cvref_t< P >
-    , remove_cvref_t< TrailingPs >...
+    < detail_argot::remove_cvref_t< LeadingPs >...
+    , detail_argot::remove_cvref_t< P >
+    , detail_argot::remove_cvref_t< TrailingPs >...
     >( std::in_place_index< sizeof...( LeadingPs ) >
      , call_detail::forward_and_sink< P >( arg )
      );

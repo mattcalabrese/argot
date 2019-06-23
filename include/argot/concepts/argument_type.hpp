@@ -14,7 +14,7 @@
 
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 
 #endif  // ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 

@@ -12,13 +12,13 @@
 #include <argot/concepts/reference.hpp>
 #include <argot/concepts/return_value_reducer.hpp>
 #include <argot/concepts/unqualified_object.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <memory>
 #include <type_traits>
@@ -30,7 +30,7 @@ namespace detail_call_object_base {
 template< class Fun, class... P >
 using result_of_run_t
   = decltype
-    ( remove_cvref_t< Fun >::run
+    ( detail_argot::remove_cvref_t< Fun >::run
       ( ARGOT_DECLVAL( Fun ), ARGOT_DECLVAL( P )... )
     );
 

@@ -11,8 +11,8 @@
 #include <argot/detail/argument_pack.hpp>
 #include <argot/detail/concatenate.hpp>
 #include <argot/detail/permute.hpp>
-#include <argot/forward.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/forward.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/receiver_traits/receive_branch.hpp>
@@ -153,7 +153,7 @@ constexpr auto make_receive_branch_invoker
     ( static_cast
        < forward_if_t
          < decltype( as_rvalue )::value
-         , remove_cvref_t< decltype( arg_pack ) >
+         , detail_argot::remove_cvref_t< decltype( arg_pack ) >
          >
        >( arg_pack )
     )

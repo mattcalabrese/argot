@@ -13,7 +13,7 @@
 #include <argot/concepts/persistent_argument_provider_to.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot::prov_traits {
 

@@ -71,7 +71,7 @@ template< class Inv  /*TODO(mattcalabrese) Constrain*/ >
 constexpr
 decltype( auto ) invocable_to_basic_callable_by_reference( Inv&& invocable )
 {
-  using raw_type = remove_cvref_t< Inv >;
+  using raw_type = detail_argot::remove_cvref_t< Inv >;
 
   if constexpr( std::is_member_pointer_v< raw_type > )
     return invoker_by_reference< Inv&& >{ ARGOT_FORWARD( Inv )( invocable ) };
@@ -85,7 +85,7 @@ decltype( auto ) invocable_to_basic_callable_by_reference( Inv&& invocable )
 template< class Inv  /*TODO(mattcalabrese) Constrain*/ >
 constexpr auto invocable_to_basic_callable_by_value( Inv&& invocable )
 {
-  if constexpr( std::is_member_pointer_v< remove_cvref_t< Inv > > )
+  if constexpr( std::is_member_pointer_v< detail_argot::remove_cvref_t< Inv > > )
     return invoker_by_value< std::decay_t< Inv > >
     { ARGOT_FORWARD( Inv )( invocable ) };
   else

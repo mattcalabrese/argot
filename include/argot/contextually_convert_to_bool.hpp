@@ -9,7 +9,7 @@
 #define ARGOT_CONTEXTUALLY_CONVERT_TO_BOOL_HPP_
 
 #include <argot/concepts/contextually_convertible_to_bool.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/requires.hpp>
 
 namespace argot {

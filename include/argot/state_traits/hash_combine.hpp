@@ -10,7 +10,7 @@
 
 #include <argot/concepts/hashable.hpp>
 #include <argot/concepts/nothrow_hashable.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/gen/is_modeled.hpp>

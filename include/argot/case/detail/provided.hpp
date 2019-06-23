@@ -17,10 +17,10 @@
 #include <argot/concepts/switch_body.hpp>
 #include <argot/concepts/switch_body_case.hpp>
 #include <argot/concepts/true.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/prov_traits/destructive_provide.hpp>
 #include <argot/prov_traits/persistent_provide.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>

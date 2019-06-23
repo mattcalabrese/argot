@@ -8,7 +8,7 @@
 #ifndef ARGOT_PROV_DETAIL_PROVIDE_RECEIVER_HPP_
 #define ARGOT_PROV_DETAIL_PROVIDE_RECEIVER_HPP_
 
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/receiver_traits/receive.hpp>
 
 namespace argot::prov::prov_detail {

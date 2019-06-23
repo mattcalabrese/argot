@@ -15,19 +15,19 @@
 #include <argot/concepts/persistent_argument_provider.hpp>
 #include <argot/concepts/reference.hpp>
 #include <argot/concepts/volatile_object.hpp>
-#include <argot/declval.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/declval.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/not.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/opt_traits/get.hpp>
 #include <argot/opt_traits/has_value.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/receiver_traits/receive_branch.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <memory>
 #include <type_traits>
@@ -40,16 +40,16 @@ struct element_or_nothing_fn
   template< class Opt >
   struct impl
   {
-    ARGOT_CONCEPT_ASSERT( OptionalLike< remove_cvref_t< Opt > > );
-    ARGOT_CONCEPT_ASSERT( Not< VolatileObject< remove_cvref_t< Opt > > > );
+    ARGOT_CONCEPT_ASSERT( OptionalLike< detail_argot::remove_cvref_t< Opt > > );
+    ARGOT_CONCEPT_ASSERT( Not< VolatileObject< detail_argot::remove_cvref_t< Opt > > > );
     ARGOT_CONCEPT_ASSERT( Reference< Opt > );
 
     std::remove_reference_t< Opt >* opt;
   };
 
   template< class Opt
-          , ARGOT_REQUIRES( OptionalLike< remove_cvref_t< Opt > > )
-                          ( Not< VolatileObject< remove_cvref_t< Opt > > > )
+          , ARGOT_REQUIRES( OptionalLike< detail_argot::remove_cvref_t< Opt > > )
+                          ( Not< VolatileObject< detail_argot::remove_cvref_t< Opt > > > )
                           ()
           >
   [[nodiscard]] constexpr auto operator ()( Opt&& opt ) const

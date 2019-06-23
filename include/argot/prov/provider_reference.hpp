@@ -12,12 +12,12 @@
 #include <argot/concepts/argument_provider.hpp>
 #include <argot/concepts/reference.hpp>
 #include <argot/contained.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/prov_traits/provide.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot {
 namespace prov {
@@ -29,7 +29,7 @@ struct provider_reference_fn
   struct impl
   {
     ARGOT_CONCEPT_ASSERT
-    ( ArgumentProvider< remove_cvref_t< ProviderReference > > );
+    ( ArgumentProvider< detail_argot::remove_cvref_t< ProviderReference > > );
 
     ARGOT_CONCEPT_ASSERT( Reference< ProviderReference > );
 
@@ -37,7 +37,7 @@ struct provider_reference_fn
   };
 public:
   template< class Provider
-          , ARGOT_REQUIRES( ArgumentProvider< remove_cvref_t< Provider > > )()
+          , ARGOT_REQUIRES( ArgumentProvider< detail_argot::remove_cvref_t< Provider > > )()
           >
   [[nodiscard]] constexpr auto operator ()( Provider&& provider ) const noexcept
   {

@@ -13,7 +13,7 @@
 #include <argot/concepts/tuple_like.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/prov/unpack_by_value.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot::conc {
 
@@ -21,7 +21,7 @@ struct unpack_by_value_fn
 {
   // TODO(mattcalabrese) Define by lifting the result.
   template< class Tup
-          , ARGOT_REQUIRES( TupleLike< remove_cvref_t< Tup > > )
+          , ARGOT_REQUIRES( TupleLike< detail_argot::remove_cvref_t< Tup > > )
                           ( Sinkable< Tup&& > )
                           ()
           >

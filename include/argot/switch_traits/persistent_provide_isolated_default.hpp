@@ -11,11 +11,11 @@
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/concepts/persistent_switch_body_default_for_type.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot::switch_traits {
 
@@ -25,7 +25,7 @@ struct persistent_provide_isolated_default_t
   template< class Body, class ValueType, class Receiver
           , ARGOT_REQUIRES
             ( PersistentSwitchBodyDefaultForType< Body, ValueType > )
-            ( ArgumentReceiver< remove_cvref_t< Receiver > > )
+            ( ArgumentReceiver< detail_argot::remove_cvref_t< Receiver > > )
             ()
           >
   constexpr decltype( auto )

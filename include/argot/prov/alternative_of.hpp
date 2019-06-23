@@ -11,7 +11,7 @@
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/variant_like.hpp>
 #include <argot/concepts/volatile_object.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/not.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/prov/index_of.hpp>
@@ -28,7 +28,7 @@ struct alternative_of_fn
 {
   template< class Var
           , ARGOT_REQUIRES
-            ( VariantLike< remove_cvref_t< Var > > )
+            ( VariantLike< detail_argot::remove_cvref_t< Var > > )
             ( Not< VolatileObject< std::remove_reference_t< Var > > > )
             ()
           >

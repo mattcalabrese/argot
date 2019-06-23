@@ -8,11 +8,11 @@
 #ifndef ARGOT_DETAIL_SINK_HPP_
 #define ARGOT_DETAIL_SINK_HPP_
 
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/detection.hpp>
-#include <argot/forward.hpp>
-#include <argot/move.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/forward.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 #include <utility>
@@ -39,7 +39,7 @@ struct unconstrained_sink_impl
 template< class T >
 using result_of_unconstrained_sink_t
   = decltype
-    ( unconstrained_sink_impl< remove_cvref_t< T > >
+    ( unconstrained_sink_impl< detail_argot::remove_cvref_t< T > >
       ::run( ARGOT_DECLVAL( T ) )
     );
 
@@ -70,7 +70,7 @@ struct unconstrained_sink_t
   constexpr result_of_unconstrained_sink_t< result_of_forward_t< P, T& > >
   operator ()( T&& source ) const
   {
-    return unconstrained_sink_impl< remove_cvref_t< P > >::run
+    return unconstrained_sink_impl< detail_argot::remove_cvref_t< P > >::run
     ( ARGOT_FORWARD( P )( source ) );
   }
 };
@@ -84,7 +84,7 @@ struct sink_impl
   static_assert( std::is_object_v< T > );
   static_assert( !std::is_const_v< T > );
 
-  using value_type = remove_cvref_t< T >;
+  using value_type = detail_argot::remove_cvref_t< T >;
 
   template< class LazyT = T >
   static constexpr fast_enable_if_t
@@ -105,7 +105,7 @@ struct sink_impl
 
 template< class T >
 using result_of_sink_t
-  = decltype( sink_impl< remove_cvref_t< T > >::run( ARGOT_DECLVAL( T ) ) );
+  = decltype( sink_impl< detail_argot::remove_cvref_t< T > >::run( ARGOT_DECLVAL( T ) ) );
 
 template< class T >
 using result_of_sink = lazy_expand< result_of_sink_t, T >;
@@ -126,7 +126,7 @@ struct is_sinkable : std::bool_constant< is_sinkable_v< T... > >{};
 template< class... T >
 bool constexpr is_nothrow_sinkable_v
   = (    std::is_nothrow_constructible_v
-         < remove_cvref_t< T >, result_of_sink_t< T > >
+         < detail_argot::remove_cvref_t< T >, result_of_sink_t< T > >
       && ...
     );
 
@@ -139,7 +139,7 @@ struct sink_t
   template< class T >
   constexpr result_of_sink_t< T > operator ()( T&& source ) const noexcept
   {
-    return sink_impl< remove_cvref_t< T > >
+    return sink_impl< detail_argot::remove_cvref_t< T > >
     ::run( ARGOT_FORWARD( T )( source ) );
   }
 } inline constexpr sink{};
@@ -151,7 +151,7 @@ struct forward_and_sink_t
   constexpr result_of_sink_t< result_of_forward_t< P, T& > >
   operator ()( T&& source ) const noexcept
   {
-    return sink_impl< remove_cvref_t< P > >::run
+    return sink_impl< detail_argot::remove_cvref_t< P > >::run
     ( ARGOT_FORWARD( P )( source ) );
   }
 };
@@ -166,7 +166,7 @@ struct sinklike_cast_impl
   static_assert( std::is_object_v< T > );
   static_assert( !std::is_const_v< T > );
 
-  using value_type = remove_cvref_t< T >;
+  using value_type = detail_argot::remove_cvref_t< T >;
 
   static constexpr T&& run( T&& source ) noexcept
   {
@@ -179,7 +179,7 @@ struct sinklike_cast_impl
 template< class T >
 using result_of_sinklike_cast_t
   = decltype
-    ( sinklike_cast_impl< remove_cvref_t< T > >::run( ARGOT_DECLVAL( T ) ) );
+    ( sinklike_cast_impl< detail_argot::remove_cvref_t< T > >::run( ARGOT_DECLVAL( T ) ) );
 
 template< class T >
 using result_of_sinklike_cast = lazy_expand< result_of_sinklike_cast_t, T >;
@@ -190,7 +190,7 @@ struct sinklike_cast_t
   constexpr result_of_sinklike_cast_t< T >
   operator ()( T&& source ) const noexcept
   {
-    return sinklike_cast_impl< remove_cvref_t< T > >
+    return sinklike_cast_impl< detail_argot::remove_cvref_t< T > >
     ::run( ARGOT_FORWARD( T )( source ) );
   }
 } inline constexpr sinklike_cast{};
@@ -219,7 +219,7 @@ struct decay_sink_impl
 
 template< class T >
 using result_of_decay_sink_t
-  = decltype( decay_sink_impl< remove_cvref_t< T > >::run( ARGOT_DECLVAL( T ) ) );
+  = decltype( decay_sink_impl< detail_argot::remove_cvref_t< T > >::run( ARGOT_DECLVAL( T ) ) );
 
 template< class T >
 using result_of_decay_sink = lazy_expand< result_of_decay_sink_t, T >;
@@ -242,7 +242,7 @@ struct is_decay_sinkable : std::bool_constant< is_decay_sinkable_v< T... > >{};
 template< class... T >
 bool constexpr is_nothrow_decay_sinkable_v
   = (    std::is_nothrow_constructible_v
-         < remove_cvref_t< T >, result_of_decay_sink_t< T > >
+         < detail_argot::remove_cvref_t< T >, result_of_decay_sink_t< T > >
       && ...
     );
 
@@ -255,7 +255,7 @@ struct decay_sink_t
   template< class T >
   constexpr result_of_decay_sink_t< T > operator ()( T&& source ) const noexcept
   {
-    return decay_sink_impl< remove_cvref_t< T > >
+    return decay_sink_impl< detail_argot::remove_cvref_t< T > >
     ::run( ARGOT_FORWARD( T )( source ) );
   }
 } inline constexpr decay_sink{};
@@ -267,7 +267,7 @@ struct forward_and_decay_sink_t
   constexpr result_of_decay_sink_t< result_of_forward_t< P, T& > >
   operator ()( T&& source ) const noexcept
   {
-    return decay_sink_impl< remove_cvref_t< P > >::run
+    return decay_sink_impl< detail_argot::remove_cvref_t< P > >::run
     ( ARGOT_FORWARD( P )( source ) );
   }
 };

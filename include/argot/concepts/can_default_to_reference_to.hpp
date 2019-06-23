@@ -36,10 +36,10 @@ ARGOT_AUTO_CONCEPT( CanDefaultToReferenceTo )
   //                     instead of having to use the logical operators.
   Or
   < And
-    < ArgumentProvider< remove_cvref_t< P > >
+    < ArgumentProvider< detail_argot::remove_cvref_t< P > >
     , Sinkable< P >
     >
-  , Not< ArgumentProvider< remove_cvref_t< P > > >
+  , Not< ArgumentProvider< detail_argot::remove_cvref_t< P > > >
   >
 );
 

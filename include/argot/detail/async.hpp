@@ -14,9 +14,9 @@
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/executor_traits/execute.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/prov/value_of.hpp>
 #include <argot/prov_traits/destructive_provide.hpp>
 #include <argot/prov_traits/value_of.hpp>

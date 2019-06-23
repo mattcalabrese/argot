@@ -15,13 +15,13 @@
 #include <argot/concepts/return_value_reducer.hpp>
 #include <argot/concepts/return_value_reducer_of.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/reducer_traits/return_types.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 #include <utility>
@@ -45,7 +45,7 @@ struct reduce_t
       >
       ::template meta_apply
       < ReturnValueReducerOf, PersistentReturnValueReducerOf
-      , remove_cvref_t< Reducer >
+      , detail_argot::remove_cvref_t< Reducer >
       , LeadingReturnTypes...
       , basic_result_of_t< Fun&& >
       , TrailingReturnTypes...
@@ -60,7 +60,7 @@ struct reduce_t
              , Fun&& fun
              ) const
   {
-    using RawReducer = remove_cvref_t< Reducer >;
+    using RawReducer = detail_argot::remove_cvref_t< Reducer >;
 
     using QualifiedReducer
       = call_detail::result_of_sinklike_cast_t< Reducer&& >;

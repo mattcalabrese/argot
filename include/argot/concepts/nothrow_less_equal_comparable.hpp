@@ -10,7 +10,7 @@
 
 #include <argot/concepts/detail/concepts_preprocessing_helpers.hpp>
 #include <argot/concepts/less_equal_comparable.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/gen/explicit_concept.hpp>
 #include <argot/gen/make_concept_map.hpp>
 

@@ -13,11 +13,11 @@
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/concepts/argument_receiver_of_kinds.hpp>
 #include <argot/detail/detection.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/impossible.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
 

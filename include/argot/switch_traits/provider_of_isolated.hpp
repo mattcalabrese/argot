@@ -18,12 +18,12 @@
 #include <argot/concepts/switch_body_default.hpp>
 #include <argot/concepts/switch_body_for_type.hpp>
 #include <argot/concepts/switch_condition.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/or.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/switch_traits/argument_list_kinds_of_case_destructive.hpp>
 #include <argot/switch_traits/argument_list_kinds_of_case_persistent.hpp>
 #include <argot/switch_traits/argument_list_kinds_of_default_destructive.hpp>
@@ -32,7 +32,7 @@
 #include <argot/switch_traits/destructive_provide_isolated_default.hpp>
 #include <argot/switch_traits/persistent_provide_isolated_case.hpp>
 #include <argot/switch_traits/persistent_provide_isolated_default.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 #include <type_traits>
 
@@ -68,10 +68,10 @@ struct provider_of_isolated_t
   template
   < class Body
   , ARGOT_REQUIRES
-    ( SwitchBodyForType< remove_cvref_t< Body >, decltype( Value ) > )
+    ( SwitchBodyForType< detail_argot::remove_cvref_t< Body >, decltype( Value ) > )
     ( Or
-      < SwitchBodyCase< remove_cvref_t< Body >, Value >
-      , SwitchBodyDefault< remove_cvref_t< Body > >
+      < SwitchBodyCase< detail_argot::remove_cvref_t< Body >, Value >
+      , SwitchBodyDefault< detail_argot::remove_cvref_t< Body > >
       >
     )
     ( Sinkable< Body&& > )
@@ -79,7 +79,7 @@ struct provider_of_isolated_t
   >
   constexpr auto operator ()( Body&& body ) const
   {
-    using body_t = remove_cvref_t< Body >;
+    using body_t = detail_argot::remove_cvref_t< Body >;
 
     if constexpr( is_modeled_v< SwitchBodyCase< body_t, Value > > )
       return provider_of_isolated_detail::provider_of_isolated_case_t

@@ -10,13 +10,13 @@
 
 #include <argot/conc/lift.hpp>
 #include <argot/prov/nothing.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot::conc {
 
 inline constexpr auto nothing = conc::lift( prov::nothing );
 
-using nothing_t = remove_cvref_t< decltype( nothing ) >;
+using nothing_t = detail_argot::remove_cvref_t< decltype( nothing ) >;
 
 }  // namespace (argot::conc)
 

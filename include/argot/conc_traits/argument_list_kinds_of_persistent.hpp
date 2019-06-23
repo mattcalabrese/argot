@@ -11,7 +11,7 @@
 #include <argot/conc_traits/as_future.hpp>
 #include <argot/concepts/persistent_concurrent_argument_provider.hpp>
 #include <argot/concepts/persistent_then_providable.hpp>
-#include <argot/declval.hpp>
+#include <argot/detail/declval.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/detection.hpp>
 #include <argot/executor/immediate.hpp>

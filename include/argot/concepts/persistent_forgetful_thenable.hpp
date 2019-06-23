@@ -50,9 +50,9 @@ ARGOT_EXPLICIT_CONCEPT( PersistentForgetfulThenable )
 // This preprocessor block includes concept maps for all detected future-likes.
 #ifndef ARGOT_GENERATE_PREPROCESSED_CONCEPTS
 
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/fut_traits/value_type.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 
 namespace argot {
 
@@ -74,7 +74,7 @@ struct make_concept_map
     ( self
     , executor::immediate
     , detail_forgetful_thenable::continuation
-      < remove_cvref_t< Exec >, remove_cvref_t< Fun >
+      < detail_argot::remove_cvref_t< Exec >, detail_argot::remove_cvref_t< Fun >
       , fut_traits::value_type_t< Fut >
       >
       { ARGOT_FORWARD( ExecP )( exec )

@@ -13,9 +13,9 @@
 #include <argot/concepts/tuple_index.hpp>
 #include <argot/concepts/tuple_like.hpp>
 #include <argot/detail/detection.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 #include <argot/tuple_traits/get.hpp>
 
 namespace argot::tuple_traits {
@@ -26,14 +26,14 @@ struct natural_get_t
   // TODO(mattcalabrese) Cast to the index type when calling get
   template< class Tuple, class Index
           , ARGOT_REQUIRES
-            ( TupleLike< remove_cvref_t< Tuple > > )
+            ( TupleLike< detail_argot::remove_cvref_t< Tuple > > )
             ( StdIntegralConstant< Index > )
-            ( TupleIndex< remove_cvref_t< Tuple >, Index::value > )
+            ( TupleIndex< detail_argot::remove_cvref_t< Tuple >, Index::value > )
             ()
           >
   constexpr decltype( auto ) operator ()( Tuple&& tuple_like, Index ) const
   {
-    return access_raw_concept_map< TupleLike< remove_cvref_t< Tuple > > >
+    return access_raw_concept_map< TupleLike< detail_argot::remove_cvref_t< Tuple > > >
     ::template get< Index::value >( ARGOT_FORWARD( Tuple )( tuple_like ) );
   }
 } inline constexpr natural_get{};

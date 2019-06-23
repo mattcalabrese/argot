@@ -14,7 +14,7 @@
 #include <argot/detail/constexpr_invoke.hpp>
 #include <argot/detail/sink.hpp>
 #include <argot/detail/unreachable.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/gen/requires.hpp>
 
 #include <type_traits>

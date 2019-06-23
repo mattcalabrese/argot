@@ -14,7 +14,7 @@
 //#include <argot/concepts/concurrent_argument_provider.hpp>
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/sink.hpp>
-#include <argot/forward.hpp>
+#include <argot/detail/forward.hpp>
 #include <argot/fut/augment.hpp>
 #include <argot/fut/squash.hpp>
 #include <argot/fut_traits/destructive_then.hpp>
@@ -22,11 +22,11 @@
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/move.hpp>
+#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov/group.hpp>
 #include <argot/receiver/with_trailing_concurrent_provider.hpp>
-#include <argot/remove_cvref.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
 namespace argot {
 namespace conc {
@@ -59,7 +59,7 @@ struct primary_continuation
   {
     return fut::augment
     ( conc_traits::as_future( ARGOT_MOVE( tail_provider ) )
-    , secondary_continuation< remove_cvref_t< ExpandedHead > >
+    , secondary_continuation< detail_argot::remove_cvref_t< ExpandedHead > >
       { ARGOT_FORWARD( ExpandedHead )( expanded_head ) }
     );
   }
@@ -107,7 +107,7 @@ struct group_fn
   };
 
   template< class Provider >
-  static constexpr remove_cvref_t< Provider >
+  static constexpr detail_argot::remove_cvref_t< Provider >
   make_impl( Provider&& provider )
   {
     return call_detail::forward_and_sink< Provider >( provider );
@@ -115,9 +115,9 @@ struct group_fn
 
   template< class HeadProvider, class NextProvider, class... TailProviders >
   static constexpr impl_of_t  // TODO(mattcalabrese) Replace with impl directly
-  < remove_cvref_t< HeadProvider >
-  , remove_cvref_t< NextProvider >
-  , remove_cvref_t< TailProviders >...
+  < detail_argot::remove_cvref_t< HeadProvider >
+  , detail_argot::remove_cvref_t< NextProvider >
+  , detail_argot::remove_cvref_t< TailProviders >...
   >
   make_impl( HeadProvider&& head_provider, NextProvider&& next_provider
            , TailProviders&&... tail_providers
@@ -135,7 +135,7 @@ struct group_fn
  public:
   template< class... ConcProvs
           , ARGOT_REQUIRES
-            ( ConcurrentArgumentProvider< remove_cvref_t< ConcProvs > >... )
+            ( ConcurrentArgumentProvider< detail_argot::remove_cvref_t< ConcProvs > >... )
             ( Sinkable< ConcProvs&& >... )
             ()
           >
