@@ -8,6 +8,7 @@
 #ifndef ARGOT_RECEIVER_HPP_
 #define ARGOT_RECEIVER_HPP_
 
+#include <argot/receiver/forgetful_invoke.hpp>
 #include <argot/receiver/forward_result_to.hpp>
 #include <argot/receiver/forward_transformed_arguments.hpp>
 #include <argot/receiver/graphviz_dot.hpp>

@@ -28,6 +28,7 @@
 #include <argot/executor.hpp>
 #include <argot/executor_traits.hpp>
 #include <argot/forgetful_async_call.hpp>
+#include <argot/forgetful_call.hpp>
 #include <argot/forward_arguments_as_tuple.hpp>
 #include <argot/fut.hpp>
 #include <argot/fut_traits.hpp>

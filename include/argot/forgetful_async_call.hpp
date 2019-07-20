@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2018 Matt Calabrese
+  Copyright (c) 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -12,20 +12,19 @@
 #include <argot/conc/group.hpp>
 #include <argot/conc_traits/as_future.hpp>
 #include <argot/concepts/concurrent_argument_provider.hpp>
+#include <argot/concepts/decay_sinkable.hpp>
 #include <argot/concepts/executor.hpp>
 #include <argot/concepts/sinkable.hpp>
-#include <argot/detail/invoker.hpp>
-#include <argot/detail/sink.hpp>
 #include <argot/detail/forward.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
+#include <argot/detail/sink.hpp>
 #include <argot/fut_traits/forgetful_then.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/prov_traits/destructive_provide.hpp>
-#include <argot/receiver/reduced_invoke.hpp>
-#include <argot/reducer/to.hpp>
-#include <argot/detail/remove_cvref.hpp>
+#include <argot/receiver/forgetful_invoke.hpp>
 
 #include <type_traits>
 
@@ -46,11 +45,7 @@ struct forgetful_async_call_t
     {
       prov_traits::destructive_provide
       ( ARGOT_MOVE( provider )
-      , receiver::reduced_invoke
-        ( reducer::to< void >
-        , argot_detail::invocable_to_basic_callable_by_reference
-          ( ARGOT_FORWARD( Fun )( fun ) )
-        )
+      , receiver::forgetful_invoke( ARGOT_FORWARD( Fun )( fun ) )
       );
     }
 
@@ -60,11 +55,13 @@ struct forgetful_async_call_t
   // TODO(mattcalabrese) Check callability
   template
   < class Exec, class Fun, class... P
-  , ARGOT_REQUIRES( Executor< detail_argot::remove_cvref_t< Exec > > )
-                  ( ConcurrentArgumentProvider< detail_argot::remove_cvref_t< P >... > )
-                  ( Sinkable< Exec&& > )
-                  ( Sinkable< P&& >... )
-                  ()
+  , ARGOT_REQUIRES
+    ( Executor< detail_argot::remove_cvref_t< Exec > > )
+    ( ConcurrentArgumentProvider< detail_argot::remove_cvref_t< P >... > )
+    ( Sinkable< Exec&& > )
+    ( DecaySinkable< Fun&& > )
+    ( Sinkable< P&& >... )
+    ()
   >
   constexpr void operator ()( Exec&& exec, Fun&& fun, P&&... args ) const
   {
