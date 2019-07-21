@@ -53,6 +53,7 @@
 #include <argot/receiver_traits.hpp>
 #include <argot/reducer.hpp>
 #include <argot/reducer_traits.hpp>
+#include <argot/side_effect.hpp>
 #include <argot/state_traits.hpp>
 #include <argot/switch_traits.hpp>
 #include <argot/tag.hpp>

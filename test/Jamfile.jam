@@ -95,6 +95,12 @@ run test_receiver_return_single_argument_value.cpp ;
 run test_receiver_return_argument_values.cpp ;
 run test_receiver_return_argument_references.cpp ;
 
+# Simple ArgumentReceivers
+run test_receiver_do_nothing.cpp ;
+
+# Provision Side-Effect Utility 
+run test_side_effect.cpp ;
+
 # Monoidal ArgumentProvider (unit)
 run test_prov_nothing.cpp ;
 
