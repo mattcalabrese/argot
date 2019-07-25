@@ -18,6 +18,7 @@
 #include <argot/concepts/argument_provider_generator_with.hpp>
 #include <argot/concepts/argument_provider_generator_with_each.hpp>
 #include <argot/concepts/argument_provider_generator_with_kinds.hpp>
+#include <argot/concepts/argument_provider_generator_with_provision.hpp>
 #include <argot/concepts/argument_provider_to.hpp>
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/concepts/argument_receiver_of.hpp>

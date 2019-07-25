@@ -10,7 +10,7 @@
 
 #include <argot/basic_result_of.hpp>
 #include <argot/concepts/argument_provider.hpp>
-#include <argot/concepts/argument_provider_generator_with_kinds.hpp>
+#include <argot/concepts/argument_provider_generator_with_provision.hpp>
 #include <argot/concepts/decay_sinkable.hpp>
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/sink.hpp>
@@ -30,11 +30,9 @@ struct bind_call_fn
   // TODO(mattcalabrese) Fully constrain
   template< class ProviderGenerator, class... Providers
           , ARGOT_REQUIRES
-            ( ArgumentProvider< detail_argot::remove_cvref_t< Providers > >... )
-            ( ArgumentProviderGeneratorWithKinds
+            ( ArgumentProviderGeneratorWithProvision
               < std::decay_t< ProviderGenerator >
-              , prov_traits::argument_list_kinds_of_destructive_t
-                < result_of_group_t< Providers&&... > >
+              , detail_argot::remove_cvref_t< Providers >...
               >
             )
             ( DecaySinkable< ProviderGenerator&& > )
