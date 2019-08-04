@@ -65,6 +65,9 @@ compile test_permute.cpp ;
 # compile test_tuple_traits_result_of_get.cpp ;
 run test_tuple_traits_get.cpp ;
 
+# struct_
+run test_struct_.cpp ;
+
 # union_
 run test_union_nullary.cpp ;
 run test_union_unary.cpp ;

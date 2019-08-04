@@ -16,8 +16,6 @@
 #include <argot/gen/is_modeled.hpp>
 #include <argot/gen/requires.hpp>
 
-#include <boost/container_hash/hash.hpp>
-
 #include <cstddef>
 #include <memory>
 
@@ -33,11 +31,12 @@ struct hash_combine_fn
   noexcept( ARGOT_IS_MODELED( NothrowHashable< T > ) )//=;
   //<-
   {
-    // TODO(mattcalabrese) Also possibly special-case arrays?
-    if constexpr( std::is_reference_v< T > )
-      boost::hash_combine( curr, std::addressof( state ) );
-    else
-      boost::hash_combine( curr, state );
+    std::size_t old_hash = curr;
+
+    curr ^=   access_raw_concept_map< Hashable< T > >::hash( state )
+            + 0x9e3779b9
+            + ( old_hash << 6 )
+            + ( old_hash >> 2 );
   } //->
 };
 
