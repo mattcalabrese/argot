@@ -230,12 +230,15 @@ compile test_concepts_can_default_to_reference_to.cpp ;
 compile test_concepts_can_default_to_value_of.cpp ;
 compile test_concepts_argot_invocable_with_before_reduction.cpp ;
 
-#Forgetful Call
+# Forgetful Call
 run test_forgetful_call_basic.cpp /boost//unit_test_framework ;
 
 # Call
 run test_call_basic.cpp /boost//unit_test_framework ;
 run test_call_branch.cpp /boost//unit_test_framework ;
+
+# Argument-Based Algorithms
+run test_accumulate.cpp ;
 
 # Callable Object
 run test_as_callable_object_basic.cpp /boost//unit_test_framework ;
