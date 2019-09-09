@@ -21,6 +21,7 @@ This header includes all of the facilities of the `argot` directory.
 //[docs
 //]
 
+#include <argot/accumulate.hpp>
 #include <argot/as_call_object.hpp>
 #include <argot/async_call.hpp>
 #include <argot/basic_result_of.hpp>

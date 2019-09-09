@@ -8,6 +8,7 @@
 #ifndef ARGOT_RECEIVER_TRAITS_ARGUMENT_TYPES_HPP_
 #define ARGOT_RECEIVER_TRAITS_ARGUMENT_TYPES_HPP_
 
+#include <cstddef>
 #include <type_traits>
 
 namespace argot {
@@ -17,6 +18,8 @@ template< class... Arguments >
 struct argument_types_t
 {
   static_assert( ( std::is_reference_v< Arguments > && ... ) );
+
+  static constexpr std::size_t length_v = sizeof...( Arguments );
 };
 
 template< class... Arguments >

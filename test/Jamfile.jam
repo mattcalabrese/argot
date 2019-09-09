@@ -176,6 +176,10 @@ run test_prov_switch_.cpp ;
 run test_prov_value_in_range.cpp ;
 run test_prov_value_in_set.cpp ;
 
+# Basic Argument List Trimming
+run test_prov_drop.cpp ;
+run test_prov_drop_while.cpp ;
+
 # Nonbranching TupleLike ArgumentProviders
 run test_prov_tuple_indices.cpp ;
 run test_prov_unpack.cpp ;

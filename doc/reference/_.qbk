@@ -11,6 +11,7 @@
 
 [section:argot Top-Level Facilities]
 
+[include ./accumulate.qbk]
 [include ./as_call_object.qbk]
 [include ./async_call.qbk]
 [include ./basic_result_of.qbk]

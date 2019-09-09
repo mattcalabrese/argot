@@ -76,7 +76,9 @@ struct make_concept_map
   >
   ::_::template and_
     < std::is_convertible_v
-      < typename detail_argot::remove_cvref_t< Type >::value_type, ExpectedValueType >
+      < typename detail_argot::remove_cvref_t< Type >::value_type
+      , ExpectedValueType
+      >
     >
   ::_::template apply<>
 > {};

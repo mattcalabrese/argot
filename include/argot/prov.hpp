@@ -36,6 +36,8 @@ This header includes all of the facilities of the `prov` directory.
 #include <argot/prov/conditional.hpp>
 #include <argot/prov/default_to_reference_to.hpp>
 #include <argot/prov/default_to_value_of.hpp>
+#include <argot/prov/drop.hpp>
+#include <argot/prov/drop_while.hpp>
 #include <argot/prov/eat.hpp>
 #include <argot/prov/element_or.hpp>
 #include <argot/prov/element_or_nothing.hpp>

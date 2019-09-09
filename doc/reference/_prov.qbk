@@ -26,6 +26,8 @@
 [include prov/conditional.qbk]
 [include prov/default_to_reference_to.qbk]
 [include prov/default_to_value_of.qbk]
+[include prov/drop.qbk]
+[include prov/drop_while.qbk]
 [include prov/eat.qbk]
 [include prov/element_or.qbk]
 [include prov/element_or_nothing.qbk]
