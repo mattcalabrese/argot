@@ -10,6 +10,7 @@
 
 #include <argot/concepts/assignable_when_contained.hpp>
 #include <argot/concepts/comparable.hpp>
+#include <argot/concepts/decay_sinkable.hpp>
 #include <argot/concepts/destructible.hpp>
 #include <argot/concepts/emplaceable_when_contained.hpp>
 #include <argot/concepts/emplaceable_with_result_when_contained.hpp>
@@ -17,6 +18,7 @@
 #include <argot/concepts/move_assignable.hpp>
 #include <argot/concepts/move_constructible.hpp>
 #include <argot/concepts/nothrow_assignable_when_contained.hpp>
+#include <argot/concepts/nothrow_decay_sinkable.hpp>
 #include <argot/concepts/nothrow_emplaceable_when_contained.hpp>
 #include <argot/concepts/nothrow_emplaceable_with_result_when_contained.hpp>
 #include <argot/concepts/nothrow_swappable.hpp>
@@ -462,6 +464,23 @@ class struct_
   struct_() = default;
 
   template
+  < class... P
+  , ARGOT_REQUIRES
+    ( EmplaceableWhenContained< T, P&& >... )
+    ()
+  >
+  constexpr struct_( std::in_place_t, P&&... args )
+  noexcept
+  ( ( ARGOT_IS_MODELED( NothrowEmplaceableWhenContained< T, P&& > ) && ... ) )
+    : elements( in_place_with_result
+              , [&]() -> decltype( auto )
+                {
+                  return argot::make_contained< T >
+                         ( ARGOT_FORWARD( P )( args ) );
+                }...
+              ) {}
+
+  template
   < class... Funs
   , ARGOT_REQUIRES
     ( InvocableWith< Funs&& >... )
@@ -589,6 +608,33 @@ struct make_concept_map< TupleLike< struct_< T... > > >
       );
   }
 };
+
+struct make_struct_fn
+{
+  template
+  < class... T
+  , ARGOT_REQUIRES
+    ( DecaySinkable< T&& >... )
+    ()
+  >
+  [[nodiscard]]
+  constexpr struct_< std::decay_t< T >... > operator ()( T&&... args ) const
+  noexcept( ( ARGOT_IS_MODELED( NothrowDecaySinkable< T&& > ) && ... ) )
+  {
+    return struct_< std::decay_t< T >... >
+    ( std::in_place, ARGOT_FORWARD( T )( args )... );
+  }
+} inline constexpr make_struct{};
+
+struct make_referential_struct_fn
+{
+  template< class... T >
+  [[nodiscard]]
+  constexpr struct_< T&&... > operator ()( T&&... args ) const noexcept
+  {
+    return struct_< T&&... >( std::in_place, ARGOT_FORWARD( T )( args )... );
+  }
+} inline constexpr make_referential_struct{};
 
 } // namespace argot
 

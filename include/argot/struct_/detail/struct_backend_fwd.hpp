@@ -14,6 +14,7 @@
 
 #include <cstddef>
 #include <type_traits>
+#include <utility>
 
 namespace argot {
 
@@ -26,6 +27,7 @@ template<>
 struct struct_base<>
 {
   struct_base() = default;
+  explicit constexpr struct_base( std::in_place_t ) noexcept {}
   explicit constexpr struct_base( in_place_with_result_t ) noexcept {}
 };
 

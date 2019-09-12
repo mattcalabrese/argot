@@ -24,9 +24,12 @@ namespace tuple_traits = argot::tuple_traits;
 using argot_test::syntactic_regularity_profile_of_t;
 using argot_test::trivially_complete_profile;
 using argot::SameType;
+using argot::struct_;
+using argot::make_struct;
+using argot::make_referential_struct;
 
 struct a{}; struct b{}; struct c{};
-using tuple_type = argot::struct_< a, b, c >;
+using tuple_type = struct_< a, b, c >;
 
 ARGOT_REGISTER_CONSTEXPR_TEST( test_get_lvalue )
 {
@@ -121,6 +124,72 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_get_rvalue )
   return 0;
 }
 
+ARGOT_REGISTER_CONSTEXPR_TEST( test_make_struct )
+{
+  float zero = 0.f;
+  char x = 'x';
+  const int three = 3;
+
+  decltype( auto ) tup
+    = make_struct( zero
+                 , std::move( x )
+                 , three
+                 );
+
+  ARGOT_CONCEPT_ENSURE
+  ( SameType< decltype( tup ), struct_< float, char, int > > );
+
+  ARGOT_TEST_EQ
+  ( tuple_traits::get< 0 >( tup )
+  , 0.f
+  );
+
+  ARGOT_TEST_EQ
+  ( tuple_traits::get< 1 >( tup )
+  , 'x'
+  );
+
+  ARGOT_TEST_EQ
+  ( tuple_traits::get< 2 >( tup )
+  , 3
+  );
+
+  return 0;
+}
+
+ARGOT_REGISTER_CONSTEXPR_TEST( test_make_referential_struct )
+{
+  float zero = 0.f;
+  char x = 'x';
+  const int three = 3;
+
+  decltype( auto ) tup
+    = make_referential_struct( zero
+                             , std::move( x )
+                             , three
+                             );
+
+  ARGOT_CONCEPT_ENSURE
+  ( SameType< decltype( tup ), struct_< float&, char&&, int const& > > );
+
+  ARGOT_TEST_EQ
+  ( &tuple_traits::get< 0 >( tup )
+  , &zero
+  );
+
+  ARGOT_TEST_EQ
+  ( &tuple_traits::get< 1 >( tup )
+  , &x
+  );
+
+  ARGOT_TEST_EQ
+  ( &tuple_traits::get< 2 >( tup )
+  , &three
+  );
+
+  return 0;
+}
+
 ARGOT_REGISTER_CONSTEXPR_TEST( test_get_compatible_index_type )
 {
   tuple_type tup( argot::in_place_with_result
@@ -159,7 +228,7 @@ test_struct_of_archetypes_regularity( std::index_sequence< Values... >)
 
   {
     using tup
-      = argot::struct_
+      = struct_
         < argot_test::regularity_archetype< ElementProfiles >... >;
 
     ARGOT_CONCEPT_ENSURE
