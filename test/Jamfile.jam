@@ -184,6 +184,9 @@ run test_prov_drop.cpp ;
 run test_prov_drop_while.cpp ;
 run test_prov_at.cpp ;
 
+# Higher-Order Argument Grouping
+run test_prov_chunk.cpp ;
+
 # Nonbranching TupleLike ArgumentProviders
 run test_prov_tuple_indices.cpp ;
 run test_prov_unpack.cpp ;
