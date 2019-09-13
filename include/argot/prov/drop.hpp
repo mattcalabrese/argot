@@ -23,7 +23,9 @@ of a series of ArgumentProviders.
 #include <argot/concepts/convertible_to_type_or_constant.hpp>
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/forward.hpp>
+#include <argot/detail/max_argument_list_length.hpp>
 #include <argot/detail/remove_cvref.hpp>
+#include <argot/detail/variadic_take.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/prov/bind_call.hpp>
 #include <argot/prov/reference_to.hpp>
@@ -42,328 +44,8 @@ of a series of ArgumentProviders.
 */
 
 namespace argot::prov {
-
 //<-
 namespace detail_drop {
-
-#define ARGOT_DETAIL_MAX_PREPROCESSED_DROP 10
-
-template< std::size_t I >
-struct variadic_drop;
-
-template<>
-struct variadic_drop< 0 >
-{
-  template< template< class... > class Result, class... P >
-  using apply = Result< P... >;
-};
-
-template<>
-struct variadic_drop< 1 >
-{
-  template< template< class... > class Result, class D0, class... P >
-  using apply = Result< P... >;
-};
-
-template<>
-struct variadic_drop< 2 >
-{
-  template< template< class... > class Result, class D0, class D1, class... P >
-  using apply = Result< P... >;
-};
-
-template<>
-struct variadic_drop< 3 >
-{
-  template
-  < template< class... > class Result
-  , class D0, class D1, class D2
-  , class... P
-  >
-  using apply = Result< P... >;
-};
-
-template<>
-struct variadic_drop< 4 >
-{
-  template
-  < template< class... > class Result
-  , class D0, class D1, class D2, class D3
-  , class... P
-  >
-  using apply = Result< P... >;
-};
-
-template<>
-struct variadic_drop< 5 >
-{
-  template
-  < template< class... > class Result
-  , class D0, class D1, class D2, class D3, class D4
-  , class... P
-  >
-  using apply = Result< P... >;
-};
-
-template<>
-struct variadic_drop< 6 >
-{
-  template
-  < template< class... > class Result
-  , class D0, class D1, class D2, class D3, class D4, class D5
-  , class... P
-  >
-  using apply = Result< P... >;
-};
-
-template<>
-struct variadic_drop< 7 >
-{
-  template
-  < template< class... > class Result
-  , class D0, class D1, class D2, class D3, class D4, class D5, class D6
-  , class... P
-  >
-  using apply = Result< P... >;
-};
-
-template<>
-struct variadic_drop< 8 >
-{
-  template
-  < template< class... > class Result
-  , class D0, class D1, class D2, class D3, class D4, class D5, class D6
-  , class D7
-  , class... P
-  >
-  using apply = Result< P... >;
-};
-
-template<>
-struct variadic_drop< 9 >
-{
-  template
-  < template< class... > class Result
-  , class D0, class D1, class D2, class D3, class D4, class D5, class D6
-  , class D7, class D8
-  , class... P
-  >
-  using apply = Result< P... >;
-};
-
-template<>
-struct variadic_drop< 10 >
-{
-  static_assert( 10 == ARGOT_DETAIL_MAX_PREPROCESSED_DROP );
-
-  template
-  < template< class... > class Result
-  , class D0, class D1, class D2, class D3, class D4, class D5, class D6
-  , class D7, class D8, class D9
-  , class... P
-  >
-  using apply = Result< P... >;
-
-  template
-  < std::size_t AmountToDrop
-  , template< class... > class Result
-  , class D0, class D1, class D2, class D3, class D4, class D5, class D6
-  , class D7, class D8, class D9, class... P
-  >
-  using apply_recursive
-    = typename variadic_drop
-      < AmountToDrop - ARGOT_DETAIL_MAX_PREPROCESSED_DROP >
-      ::template apply< Result, P... >;
-};
-
-template< std::size_t I >
-struct variadic_drop
-{
-  template
-  < template< class... > class Result
-  , class D0, class D1, class D2, class D3, class D4, class D5, class D6
-  , class D7, class D8, class D9
-  , class... P
-  >
-  using apply
-    = variadic_drop< ARGOT_DETAIL_MAX_PREPROCESSED_DROP >
-      ::template apply_recursive
-      < I - ARGOT_DETAIL_MAX_PREPROCESSED_DROP, Result
-      , D0, D1, D2, D3, D4, D5, D6, D7, D8, D9, P...
-      >;
-};
-
-#undef ARGOT_DETAIL_MAX_PREPROCESSED_DROP
-
-#define ARGOT_DETAIL_MAX_PREPROCESSED_TAKE 10
-
-template< std::size_t I >
-struct variadic_take;
-
-template<>
-struct variadic_take< 0 >
-{
-  template< template< class... > class Result, class... P >
-  using apply = Result<>;
-};
-
-template<>
-struct variadic_take< 1 >
-{
-  template< template< class... > class Result, class D0, class... P >
-  using apply = Result< D0 >;
-};
-
-template<>
-struct variadic_take< 2 >
-{
-  template< template< class... > class Result, class D0, class D1, class... P >
-  using apply = Result< D0, D1 >;
-};
-
-template<>
-struct variadic_take< 3 >
-{
-  template
-  < template< class... > class Result
-  , class D0, class D1, class D2
-  , class... P
-  >
-  using apply = Result< D0, D1, D2 >;
-};
-
-template<>
-struct variadic_take< 4 >
-{
-  template
-  < template< class... > class Result
-  , class D0, class D1, class D2, class D3
-  , class... P
-  >
-  using apply = Result< D0, D1, D2, D3 >;
-};
-
-template<>
-struct variadic_take< 5 >
-{
-  template
-  < template< class... > class Result
-  , class D0, class D1, class D2, class D3, class D4
-  , class... P
-  >
-  using apply = Result< D0, D1, D2, D3, D4 >;
-};
-
-template<>
-struct variadic_take< 6 >
-{
-  template
-  < template< class... > class Result
-  , class D0, class D1, class D2, class D3, class D4, class D5
-  , class... P
-  >
-  using apply = Result< D0, D1, D2, D3, D4, D5 >;
-};
-
-template<>
-struct variadic_take< 7 >
-{
-  template
-  < template< class... > class Result
-  , class D0, class D1, class D2, class D3, class D4, class D5, class D6
-  , class... P
-  >
-  using apply = Result< D0, D1, D2, D3, D4, D5, D6 >;
-};
-
-template<>
-struct variadic_take< 8 >
-{
-  template
-  < template< class... > class Result
-  , class D0, class D1, class D2, class D3, class D4, class D5, class D6
-  , class D7
-  , class... P
-  >
-  using apply = Result< D0, D1, D2, D3, D4, D5, D6, D7 >;
-};
-
-template<>
-struct variadic_take< 9 >
-{
-  template
-  < template< class... > class Result
-  , class D0, class D1, class D2, class D3, class D4, class D5, class D6
-  , class D7, class D8
-  , class... P
-  >
-  using apply = Result< D0, D1, D2, D3, D4, D5, D6, D7, D8 >;
-};
-
-template<>
-struct variadic_take< 10 >
-{
-  static_assert( 10 == ARGOT_DETAIL_MAX_PREPROCESSED_TAKE );
-
-  template
-  < template< class... > class Result
-  , class D0, class D1, class D2, class D3, class D4, class D5, class D6
-  , class D7, class D8, class D9
-  , class... P
-  >
-  using apply = Result< D0, D1, D2, D3, D4, D5, D6, D7, D8, D9 >;
-
-  // TODO(mattcalabrese) Optimize so that further recursion concatenates these
-  template< template< class... > class Result, class... AlreadyTaken >
-  struct result_with_leading_parameters
-  {
-    template< class... P >
-    using apply = Result< AlreadyTaken..., P... >;
-  };
-
-  template< std::size_t AmountToTake
-          , template< class... > class Result
-          , class D0, class D1, class D2, class D3, class D4, class D5, class D6
-          , class D7, class D8, class D9
-          , class... P
-          >
-  using apply_recursive
-    = typename variadic_take
-      < AmountToTake - ARGOT_DETAIL_MAX_PREPROCESSED_TAKE >
-      ::template apply
-      < result_with_leading_parameters
-        < Result, D0, D1, D2, D3, D4, D5, D6, D7, D8, D9 >::template apply
-      , P...
-      >;
-};
-
-template< std::size_t I >
-struct variadic_take
-{
-  template
-  < template< class... > class Result
-  , class D0, class D1, class D2, class D3, class D4, class D5, class D6
-  , class D7, class D8, class D9
-  , class... P
-  >
-  using apply
-    = variadic_take< ARGOT_DETAIL_MAX_PREPROCESSED_TAKE >
-      ::template apply_recursive
-      < I - ARGOT_DETAIL_MAX_PREPROCESSED_TAKE, Result
-      , D0, D1, D2, D3, D4, D5, D6, D7, D8, D9, P...
-      >;
-};
-
-#undef ARGOT_DETAIL_MAX_PREPROCESSED_TAKE
-
-template< class Kinds >
-inline ARGOT_REQUIRES( ArgumentListKinds< Kinds > )
-< std::size_t > constexpr max_argument_list_length_v;
-
-template< class... Lists >
-inline std::size_t constexpr max_argument_list_length_v
-< receiver_traits::argument_list_kinds_t< Lists... > >
-  = std::max( { Lists::length_v... } );
 
 template< class... Leading >
 struct drop_leading_impl
@@ -395,8 +77,8 @@ struct drop_fn
 
       if constexpr( I <= sizeof...( P ) )
         return prov::bind_call
-        ( typename detail_drop::variadic_take< I >
-          ::template apply< detail_drop::drop_leading_impl, P... >()
+        ( detail_argot::variadic_take
+          < I, detail_drop::drop_leading_impl, P... >()
         , prov::reference_to( ARGOT_FORWARD( P )( args )... )
         );
       else // Otherwise, the amount to drop is too large...
@@ -421,7 +103,7 @@ struct drop_fn
     , prov::value_in_range
       < std::size_t
       , 0
-      , (   detail_drop::max_argument_list_length_v
+      , (   detail_argot::max_argument_list_length_v
             < prov_traits::argument_list_kinds_of_t< Providers&& > >
           + ...
           + 1
@@ -449,8 +131,8 @@ struct drop_v_fn
 
       if constexpr( AmountToDrop <= sizeof...( P ) )
         return prov::bind_call
-        ( typename detail_drop::variadic_take< AmountToDrop >
-          ::template apply< detail_drop::drop_leading_impl, P... >()
+        ( detail_argot::variadic_take
+          < AmountToDrop, detail_drop::drop_leading_impl, P... >()
         , prov::reference_to( ARGOT_FORWARD( P )( args )... )
         );
       else // Otherwise, the amount to drop is too large...

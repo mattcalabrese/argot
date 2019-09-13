@@ -23,10 +23,11 @@ after provision.
 #include <argot/concepts/convertible_to_type_or_constant.hpp>
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/forward.hpp>
+#include <argot/detail/max_argument_list_length.hpp>
 #include <argot/detail/remove_cvref.hpp>
+#include <argot/detail/variadic_range.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/prov/bind_call.hpp>
-#include <argot/prov/drop.hpp>
 #include <argot/prov/reference_to.hpp>
 #include <argot/prov/unreachable.hpp>
 #include <argot/prov/value_in_range.hpp>
@@ -45,23 +46,6 @@ after provision.
 
 namespace argot::prov {
 
-//<-
-namespace detail_at {
-
-template< class... Leading >
-struct drop_leading_and_trailing_impl
-{
-  template< class P, class... Trailing >
-  constexpr auto
-  operator()( Leading&&... /*head*/, P&& arg, Trailing&&... /*tail*/ ) const
-  {
-    return prov::reference_to( ARGOT_FORWARD( P )( arg ) );
-  }
-};
-
-} // namespace argot::prov(::detail_at)
-//->
-
 struct at_fn
 {
   //<-
@@ -79,10 +63,9 @@ struct at_fn
       // for some branches and yet not for others.
 
       if constexpr( I < sizeof...( P ) )
-        return prov::bind_call
-        ( typename detail_drop::variadic_take< I >
-          ::template apply< detail_at::drop_leading_and_trailing_impl, P... >()
-        , prov::reference_to( ARGOT_FORWARD( P )( args )... )
+        return detail_argot::variadic_sized_range_run< I, 1 >
+        ( prov::reference_to
+        , ARGOT_FORWARD( P )( args )...
         );
       else // Otherwise, the index is too large...
         return prov::unreachable;
@@ -106,11 +89,11 @@ struct at_fn
     , prov::value_in_range
       < std::size_t
       , 0
-      , (   detail_drop::max_argument_list_length_v
+      , (   detail_argot::max_argument_list_length_v
             < prov_traits::argument_list_kinds_of_t< Providers&& > >
           + ...
         )
-      >( i )
+      >( ARGOT_FORWARD( SizeT )( i ) )
     , ARGOT_FORWARD( Providers )( provs )...
     );
   } //->
@@ -133,10 +116,9 @@ struct at_v_fn
       // for some branches and yet not for others.
 
       if constexpr( ArgumentIndex < sizeof...( P ) )
-        return prov::bind_call
-        ( typename detail_drop::variadic_take< ArgumentIndex >
-          ::template apply< detail_at::drop_leading_and_trailing_impl, P... >()
-        , prov::reference_to( ARGOT_FORWARD( P )( args )... )
+        return detail_argot::variadic_sized_range_run< ArgumentIndex, 1 >
+        ( prov::reference_to
+        , ARGOT_FORWARD( P )( args )...
         );
       else // Otherwise, the index is too large...
         return prov::unreachable;
