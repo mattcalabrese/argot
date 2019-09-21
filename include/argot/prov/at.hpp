@@ -25,7 +25,7 @@ after provision.
 #include <argot/detail/forward.hpp>
 #include <argot/detail/max_argument_list_length.hpp>
 #include <argot/detail/remove_cvref.hpp>
-#include <argot/detail/variadic_range.hpp>
+#include <argot/detail/variadic_at.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/prov/bind_call.hpp>
 #include <argot/prov/reference_to.hpp>
@@ -63,10 +63,8 @@ struct at_fn
       // for some branches and yet not for others.
 
       if constexpr( I < sizeof...( P ) )
-        return detail_argot::variadic_sized_range_run< I, 1 >
-        ( prov::reference_to
-        , ARGOT_FORWARD( P )( args )...
-        );
+        return detail_argot::variadic_at_impl< I >::run
+        ( prov::reference_to, ARGOT_FORWARD( P )( args )... );
       else // Otherwise, the index is too large...
         return prov::unreachable;
     }
@@ -116,10 +114,8 @@ struct at_v_fn
       // for some branches and yet not for others.
 
       if constexpr( ArgumentIndex < sizeof...( P ) )
-        return detail_argot::variadic_sized_range_run< ArgumentIndex, 1 >
-        ( prov::reference_to
-        , ARGOT_FORWARD( P )( args )...
-        );
+        return detail_argot::variadic_at_impl< ArgumentIndex >::run
+        ( prov::reference_to, ARGOT_FORWARD( P )( args )... );
       else // Otherwise, the index is too large...
         return prov::unreachable;
     }

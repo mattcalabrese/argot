@@ -7,4 +7,7 @@
 ==============================================================================*/
 #endif // ARGOT_PREPROCESSING_MODE
 
-, ARGOT_FORWARD( Self )( self ).BOOST_PP_CAT( member, BOOST_PP_ITERATION() )
+::detail_argot_swap::constexpr_swap
+( BOOST_PP_CAT( member, BOOST_PP_ITERATION() )
+, other.BOOST_PP_CAT( member, BOOST_PP_ITERATION() )
+);

@@ -7,14 +7,7 @@
 ==============================================================================*/
 #endif // ARGOT_PREPROCESSING_MODE
 
-, prov::reference_to
-  ( static_cast
-    < call_detail::give_qualifiers_to_t
-      < Selves&&
-      , typename access_raw_concept_map
-        < TupleLike< detail_argot::remove_cvref_t< Selves > > >
-        ::template element_type_t< BOOST_PP_ITERATION() >
-      >
-    >
-    ( selves.elements.BOOST_PP_CAT( member, BOOST_PP_ITERATION() ) )...
-  )
+&& state_traits::equal_to< BOOST_PP_CAT( member_type, BOOST_PP_ITERATION() ) >
+   ( lhs.BOOST_PP_CAT( member, BOOST_PP_ITERATION() )
+   , rhs.BOOST_PP_CAT( member, BOOST_PP_ITERATION() )
+   )

@@ -552,6 +552,7 @@ template<>
 struct emplace_contained_with_result_fn< void volatile const >
   : emplace_contained_with_result_fn< void > {};
 
+// TODO(mattcalabrese) Resolve to non-template identity when able.
 template< class T >
 constexpr emplace_contained_with_result_fn< T > emplace_contained_with_result{};
 

@@ -32,8 +32,7 @@ template< std::size_t Size, template< class... > class Result >
 struct bind_variadic_take
 {
   template< class... P >
-  using apply
-    = typename variadic_take_impl< Size >::template apply< Result, P... >;
+  using apply = variadic_take< Size, Result, P... >;
 };
 
 template< std::size_t Start, std::size_t Size, class F, class... P >

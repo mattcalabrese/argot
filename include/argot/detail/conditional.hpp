@@ -8,6 +8,8 @@
 #ifndef ARGOT_DETAIL_CONDITIONAL_HPP_
 #define ARGOT_DETAIL_CONDITIONAL_HPP_
 
+#include <cstddef>
+
 namespace argot::argot_detail {
 
 template< bool Condition >
@@ -23,6 +25,17 @@ struct conditional
 
   template< template< class... > class T, class U, class... P >
   using half_meta_apply = T< P... >;
+
+  template< template< template< class... > class, class... > class T
+          , template< class... > class R, class... P
+          >
+  using continue_ = T< R, P... >;
+
+  template< template< std::size_t, template< class... > class, class... >
+            class T
+          , std::size_t I, template< class... > class R, class... P
+          >
+  using continue_with_index = T< I, R, P... >;
 };
 
 template<>

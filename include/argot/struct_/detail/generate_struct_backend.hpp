@@ -11,7 +11,6 @@
 #include <argot/detail/forward.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/no_unique_address.hpp>
-#include <argot/prov/reference_to.hpp>
 #include <argot/struct_/detail/config.hpp>
 #include <argot/struct_/detail/struct_backend_fwd.hpp>
 #include <argot/void_.hpp>

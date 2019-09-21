@@ -11,12 +11,14 @@
 // dependencies change.
 #if 0
 #include <argot/struct_/detail/generation/struct_constructor_generation.hpp>
+#include <argot/struct_/detail/generation/struct_equal_to_generation.hpp>
 #include <argot/struct_/detail/generation/struct_in_place_constructor_generation.hpp>
 #include <argot/struct_/detail/generation/struct_in_place_with_result_constructor_generation.hpp>
+#include <argot/struct_/detail/generation/struct_less_than_generation.hpp>
 #include <argot/struct_/detail/generation/struct_member_generation.hpp>
 #include <argot/struct_/detail/generation/struct_member_typedef_generation.hpp>
+#include <argot/struct_/detail/generation/struct_swap_generation.hpp>
 #include <argot/struct_/detail/generation/struct_unpack_generation.hpp>
-#include <argot/struct_/detail/generation/struct_zipped_unpack_generation.hpp>
 #endif
 
 #define ARGOT_DETAIL_STRUCT_CURR_NUM_MEMBERS                                  \
@@ -28,26 +30,14 @@ BOOST_PP_DEC( BOOST_PP_ITERATION() )
 template<>
 struct struct_impl_preprocessed< ARGOT_DETAIL_STRUCT_CURR_IMPL_INDEX >
 {
-  template< class... T >
-  using member_type_t
-    = typename struct_base< T... >
-      ::BOOST_PP_CAT( member_type, ARGOT_DETAIL_STRUCT_CURR_IMPL_INDEX );
-
-  template< class Self >
-  static constexpr auto&& get( Self&& self ) noexcept
+  template< class ElementType, class StructBase >
+  static constexpr auto&& get( StructBase&& self ) noexcept
   {
     using qualified_alt
-      = call_detail::give_qualifiers_to_t
-        < Self&&
-        , typename access_raw_concept_map
-          < TupleLike< detail_argot::remove_cvref_t< Self > > >
-          ::template element_type_t< ARGOT_DETAIL_STRUCT_CURR_IMPL_INDEX >
-        >;
+      = call_detail::give_qualifiers_to_t< StructBase&&, ElementType >;
 
     return static_cast< qualified_alt >
-    ( self.elements
-      .BOOST_PP_CAT( member, ARGOT_DETAIL_STRUCT_CURR_IMPL_INDEX )
-    );
+    ( self.BOOST_PP_CAT( member, ARGOT_DETAIL_STRUCT_CURR_IMPL_INDEX ) );
   }
 };
 
@@ -56,6 +46,13 @@ template
 struct struct_base
 < BOOST_PP_ENUM_PARAMS( ARGOT_DETAIL_STRUCT_CURR_NUM_MEMBERS, T ) >
 {
+  static constexpr std::size_t num_members_v
+    = ARGOT_DETAIL_STRUCT_CURR_NUM_MEMBERS;
+
+  template< template< class... > class Result >
+  using expand_members_t
+    = Result< BOOST_PP_ENUM_PARAMS( ARGOT_DETAIL_STRUCT_CURR_NUM_MEMBERS, T ) >;
+
   struct_base() = default;
   ~struct_base() = default;
 
@@ -110,6 +107,7 @@ explicit constexpr struct_base
 
   // TODO(mattcalabrese) Checker for unpack constraints in tuple traits
 
+  // TODO(mattcalabrese) Move to the helper template
   template< class Inv, class Self >
   static constexpr decltype( auto ) unpack( Inv&& inv, Self&& self )
   {
@@ -124,19 +122,42 @@ explicit constexpr struct_base
     );
   }
 
-  template< class Inv, class... Selves >
-  static constexpr decltype( auto )
-  zipped_unpack( Inv&& inv, Selves&&... selves )
+  // TODO(mattcalabrese) noexcept
+  friend
+  constexpr bool operator ==( struct_base const& lhs, struct_base const& rhs )
   {
-    return argot_detail::constexpr_invoke
-    ( ARGOT_FORWARD( Inv )( inv )
+    return true
 #define BOOST_PP_ITERATION_PARAMS_2                                            \
 ( 3, ( 0, ARGOT_DETAIL_STRUCT_CURR_NUM_MEMBERS - 1                             \
-     , <argot/struct_/detail/generation/struct_zipped_unpack_generation.hpp>   \
+     , <argot/struct_/detail/generation/struct_equal_to_generation.hpp>          \
      )                                                                         \
 )
 #include BOOST_PP_ITERATE()
-    );
+    ;
+  }
+
+  // TODO(mattcalabrese) noexcept
+  friend
+  constexpr bool operator <( struct_base const& lhs, struct_base const& rhs )
+  {
+#define BOOST_PP_ITERATION_PARAMS_2                                            \
+( 3, ( 0, ARGOT_DETAIL_STRUCT_CURR_NUM_MEMBERS - 1                             \
+     , <argot/struct_/detail/generation/struct_less_than_generation.hpp>          \
+     )                                                                         \
+)
+#include BOOST_PP_ITERATE()
+    return false;
+  }
+
+  // TODO(mattcalabrese) noexcept
+  constexpr void swap( struct_base& other )
+  {
+#define BOOST_PP_ITERATION_PARAMS_2                                            \
+( 3, ( 0, ARGOT_DETAIL_STRUCT_CURR_NUM_MEMBERS - 1                             \
+     , <argot/struct_/detail/generation/struct_swap_generation.hpp>          \
+     )                                                                         \
+)
+#include BOOST_PP_ITERATE()
   }
 };
 

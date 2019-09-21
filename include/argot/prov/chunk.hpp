@@ -155,7 +155,7 @@ struct chunk_v_fn
   template
   < class... Providers
   , ARGOT_REQUIRES
-    ( ArgumentProvider< detail_argot::remove_cvref_t< Providers >... > )
+    ( ArgumentProvider< detail_argot::remove_cvref_t< Providers > >... )
     ( Sinkable< Providers&& >... )
     ()
   >

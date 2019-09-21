@@ -31,6 +31,7 @@
 #include <argot/detail/construct.hpp>
 #include <argot/detail/forward.hpp>
 #include <argot/detail/regular_bases.hpp>
+#include <argot/detail/variadic_at.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/is_modeled.hpp>
 #include <argot/gen/requires.hpp>
@@ -71,42 +72,6 @@ namespace detail_struct {
 
 struct struct_core_access
 {
-  struct equal_to_impl
-  {
-    template< class T >
-    constexpr bool operator()( T const& l, T const& r ) const
-    noexcept
-    ( noexcept
-      ( state_traits::equal_to< T >
-        ( ARGOT_DECLVAL( T const& )
-        , ARGOT_DECLVAL( T const& )
-        )
-      )
-    )
-    {
-      return state_traits::equal_to< T >( l, r );
-    }
-  };
-
-  struct equal_to_expander
-  {
-    template< class... ElementPairs >
-    constexpr bool operator ()( ElementPairs&&... elem_pairs ) const
-    // TODO(mattcalabrese) Noexcept
-    {
-      return
-      (    prov_traits::provide
-           ( ARGOT_FORWARD( ElementPairs )( elem_pairs )
-           , receiver::reduced_invoke
-             ( reducer::to< bool >
-             , equal_to_impl()
-             )
-           )
-        && ...
-      );
-    }
-  };
-
   template< class... T
           , ARGOT_REQUIRES( Equatable< contained< T > >... )()
           >
@@ -125,73 +90,8 @@ struct struct_core_access
     )
   )
   {
-    return lhs.pure().elements.zipped_unpack
-    ( equal_to_expander()
-    , lhs, rhs
-    );
+    return lhs.pure().elements == rhs.pure().elements;
   }
-
-  struct less_than_impl_impl
-  {
-    template< class T >
-    constexpr bool operator()( T const& l, T const& r ) const
-    noexcept
-    ( noexcept
-      ( state_traits::less_than< T >
-        ( ARGOT_DECLVAL( T const& )
-        , ARGOT_DECLVAL( T const& )
-        )
-      )
-    )
-    {
-      if( state_traits::less_than< T >( l, r ) )
-      {
-        *result = true;
-        return false;
-      }
-      else
-        return !state_traits::less_than< T >( r, l );
-    }
-
-    bool* result;
-  };
-
-  struct less_than_impl
-  {
-    template< class ElementPair >
-    constexpr bool operator()( ElementPair&& elem_pair ) const
-    // TODO(mattcalabrese) noexcept
-    {
-      return prov_traits::provide
-      ( ARGOT_FORWARD( ElementPair )( elem_pair )
-      , receiver::reduced_invoke
-        ( reducer::to< bool >
-        , less_than_impl_impl{ result }
-        )
-      );
-    }
-
-    bool* result;
-  };
-
-  struct less_than_expander
-  {
-    template< class... ElementPairs >
-    constexpr bool operator ()( ElementPairs&&... elem_pairs ) const
-    // TODO(mattcalabrese) Noexcept
-    {
-      bool result = false;
-
-      argot::side_effect
-      ( prov::drop_while // TODO(mattcalabrese) Use something simpler
-        ( less_than_impl{ &result }
-        , prov::value_of( ARGOT_FORWARD( ElementPairs )( elem_pairs )... )
-        )
-      );
-
-      return result;
-    }
-  };
 
   template< class... T
           , ARGOT_REQUIRES( Comparable< contained< T > >... )()
@@ -211,32 +111,8 @@ struct struct_core_access
     )
   )
   {
-    return lhs.pure().elements.zipped_unpack( less_than_expander(), lhs, rhs );
+    return lhs.pure().elements < rhs.pure().elements;
   }
-
-  struct swap_impl
-  {
-    template< class T >
-    constexpr void operator()( T& lhs, T& rhs ) const
-    {
-      detail_argot_swap::constexpr_swap( lhs, rhs );
-    }
-  };
-
-  struct swap_expander
-  {
-    template< class... ElementPairs >
-    constexpr void operator ()( ElementPairs&&... elem_pairs ) const
-    // TODO(mattcalabrese) Noexcept
-    {
-      ( prov_traits::provide
-        ( ARGOT_FORWARD( ElementPairs )( elem_pairs )
-        , receiver::forgetful_invoke( swap_impl() )
-        )
-      , ...
-      );
-    }
-  };
 
   template< class... T
           , ARGOT_REQUIRES
@@ -247,10 +123,7 @@ struct struct_core_access
   constexpr void swap_fun( struct_< T... >& lhs, struct_< T... >& rhs )
   noexcept( ( ARGOT_IS_MODELED( NothrowSwappable< contained< T > > ) && ... ) )
   {
-    return lhs.pure().elements.zipped_unpack
-    ( swap_expander()
-    , lhs, rhs
-    );
+    return lhs.pure().elements.swap( rhs.pure().elements );
   };
 
   // TODO(mattcalabrese) Put this in state_traits.
@@ -278,7 +151,7 @@ struct struct_core_access
     ( (    ARGOT_IS_MODELED( NothrowHashable< contained< T > > ) && ... ) )
     {
       return self.pure().elements.unpack
-      ( hash_combiner< contained< T >... >(), self );
+      ( hash_combiner< contained< T >... >(), self.pure().elements );
     }
   };
 };
@@ -417,6 +290,70 @@ noexcept
   return struct_core_access::less_than_fun( rhs, lhs );
 }
 
+template< class... T >
+using pure_struct_of = struct_< contained< T >... >;
+
+struct referential_identity
+{
+  template< class T >
+  static constexpr T&& run( T&& arg ) noexcept
+  {
+    return ARGOT_FORWARD( T )( arg );
+  }
+};
+
+template< class T >
+struct make_contained_with_result
+{
+  template< class Fun >
+  static constexpr auto run( Fun&& fun ) noexcept
+  {
+    return [ & ]
+    {
+      return emplace_contained_with_result< T >( ARGOT_FORWARD( Fun )( fun ) );
+    };
+  }
+};
+
+template< class... T, class... P >
+constexpr auto make_elements( P&&... args )
+{
+  if constexpr( struct_< T... >::is_pure_v )
+    return detail_struct::struct_base< T... >
+    ( std::in_place
+    , ARGOT_FORWARD( P )( args )...
+    );
+  else
+    return struct_< contained< T >... >
+    ( in_place_with_result
+    , [ & ]() -> decltype( auto )
+      {
+        return argot::make_contained< T >
+               ( ARGOT_FORWARD( P )( args ) );
+      }...
+    );
+}
+
+template< class... T, class... Funs >
+constexpr auto make_elements_with_result( Funs&&... funs )
+{
+  if constexpr( struct_< T... >::is_pure_v )
+    return detail_struct::struct_base< T... >
+    ( in_place_with_result
+    , ARGOT_FORWARD( Funs )( funs )...
+    );
+  else
+    return struct_< contained< T >... >
+    ( in_place_with_result
+    , // TODO(mattcalabrese) Use is_same intrinsic
+      typename argot_detail::conditional
+      < !std::is_same_v< T, contained< T > > >
+      ::template half_meta_apply
+      < make_contained_with_result, referential_identity, T >::run
+      ( ARGOT_FORWARD( Funs )( funs ) )...
+    );
+}
+
 } // namespace argot(::detail_struct)
 
 // Note:
@@ -428,28 +365,40 @@ class struct_
   template< std::size_t >
   friend struct detail_struct::struct_impl_preprocessed;
 
+  template< std::size_t >
+  friend struct detail_struct::struct_impl_variadic;
+
   friend detail_struct::struct_core_access;
 
   template< class... >
   friend class struct_;
+
+  // TODO(mattcalabrese) Remove this hack and access through core_access
+  template< class, class >
+  friend struct make_concept_map;
  private:
   template< std::size_t Index >
+  using struct_impl = detail_struct::struct_impl< sizeof...( T ), Index >;
+
+  template< std::size_t Index >
   using element_type_t
-    = typename detail_struct::struct_impl< sizeof...( T ), Index >
-      ::template member_type_t< T... >;
+    = detail_argot::variadic_at
+      < Index, detail_forward::direct_identity_t
+      , T...
+      >;
 
   template< std::size_t Index >
   static constexpr bool const& element_is_pure_v
     = std::is_same_v< contained< element_type_t< Index > >
                     , element_type_t< Index >
                     >;
-
-  static constexpr bool const& is_pure_v
+ public:
+  static constexpr bool is_pure_v
     = std::is_same_v
       < argot::struct_< contained< T >... >
       , struct_
       >;
-
+ private:
   using impl_type
     = typename argot_detail::conditional< is_pure_v >::template meta_apply
       < detail_struct::struct_base
@@ -472,13 +421,9 @@ class struct_
   constexpr struct_( std::in_place_t, P&&... args )
   noexcept
   ( ( ARGOT_IS_MODELED( NothrowEmplaceableWhenContained< T, P&& > ) && ... ) )
-    : elements( in_place_with_result
-              , [&]() -> decltype( auto )
-                {
-                  return argot::make_contained< T >
-                         ( ARGOT_FORWARD( P )( args ) );
-                }...
-              ) {}
+    : elements
+      ( detail_struct::make_elements< T... >( ARGOT_FORWARD( P )( args )... ) )
+  {}
 
   template
   < class... Funs
@@ -489,7 +434,10 @@ class struct_
   >
   constexpr struct_( in_place_with_result_t, Funs&&... funs )
   // TODO(mattcalabrese) noexcept
-    : elements( in_place_with_result, ARGOT_FORWARD( Funs )( funs )... ) {}
+    : elements
+      ( detail_struct::make_elements_with_result< T... >
+        ( ARGOT_FORWARD( Funs )( funs )... )
+      ) {}
 
   template
   < std::size_t I, class P
@@ -505,7 +453,8 @@ class struct_
   )
   {
     return argot::assign_contained< element_type_t< I > >
-    ( detail_struct::struct_impl_preprocessed< I >::get( pure() )
+    ( struct_impl< I >
+      ::template get< contained< element_type_t< I > > >( pure().elements )
     , ARGOT_FORWARD( P )( arg )
     );
   }
@@ -528,7 +477,8 @@ class struct_
   )
   {
     return argot::assign_contained< element_type_t< I > >
-    ( detail_struct::struct_impl_preprocessed< I >::get( pure() )
+    ( struct_impl< I >::template get< contained< element_type_t< I > > >
+      ( pure().elements )
     , ilist
     );
   }
@@ -568,16 +518,6 @@ class struct_
   ARGOT_NO_UNIQUE_ADDRESS impl_type elements;
 };
 
-// TODO(mattcalabrese) Define this. Make a balanced tree of preprocessed structs
-template
-< BOOST_PP_ENUM_PARAMS( ARGOT_MAX_PREPROCESSED_STRUCT_ELEMENTS, class T )
-, class TN, class... U
->
-class struct_
-< BOOST_PP_ENUM_PARAMS( ARGOT_MAX_PREPROCESSED_STRUCT_ELEMENTS, T )
-, TN, U...
->;
-
 template< class... T >
 struct make_concept_map< TupleLike< struct_< T... > > >
 {
@@ -587,24 +527,30 @@ struct make_concept_map< TupleLike< struct_< T... > > >
 
   template< index_type Index >
   using element_type_t
-    = typename detail_struct::struct_impl< sizeof...( T ), Index >
-      ::template member_type_t< T... >;
+    = detail_argot::variadic_at
+      < Index, detail_forward::direct_identity_t
+      , T...
+      >;
 
   template< index_type Index, class Self >
   static constexpr auto&& get( Self&& self ) noexcept
   {
+    using elem_type = element_type_t< Index >;
+
     if constexpr
     ( std::is_same_v
       < element_type_t< Index >
-      , contained< element_type_t< Index > >
+      , contained< elem_type >
       >
     )
       return detail_struct::struct_impl< sizeof...( T ), Index >
-      ::get( ARGOT_FORWARD( Self )( self ) );
+      ::template get< element_type_t< Index > >
+      ( ARGOT_FORWARD( Self )( self ).elements );
     else
       return argot::access_contained
       ( detail_struct::struct_impl< sizeof...( T ), Index >
-        ::get( ARGOT_FORWARD( Self )( self ).pure() )
+        ::template get< contained< elem_type > >
+        ( ARGOT_FORWARD( Self )( self ).pure().elements )
       );
   }
 };

@@ -9,6 +9,7 @@
 #define ARGOT_DETAIL_VARIADIC_TAKE_HPP_
 
 #include <argot/detail/constexpr_invoke.hpp>
+#include <argot/detail/expand.hpp>
 #include <argot/detail/forward.hpp>
 
 #include <cstddef>
@@ -369,29 +370,40 @@ struct variadic_take_impl< 10 >
   , D5&& d5, D6&& d6, D7&& d7, D8&& d8, D9&& d9
   , P&&... args
   )
-  {
+  {    
+    constexpr std::size_t next_i
+      = AmountToTake - ARGOT_DETAIL_MAX_PREPROCESSED_TAKE;
+
     // TODO(mattcalabrese) Possibly don't use a lambda here.
-    return variadic_take_impl
-    < AmountToTake - ARGOT_DETAIL_MAX_PREPROCESSED_TAKE >::run
-    ( [&]( auto&&... next_args ) -> decltype( auto )
-      {
-        return argot_detail::constexpr_invoke
-        ( ARGOT_FORWARD( F )( fun )
-        , ARGOT_FORWARD( D0 )( d0 )
-        , ARGOT_FORWARD( D1 )( d1 )
-        , ARGOT_FORWARD( D2 )( d2 )
-        , ARGOT_FORWARD( D3 )( d3 )
-        , ARGOT_FORWARD( D4 )( d4 )
-        , ARGOT_FORWARD( D5 )( d5 )
-        , ARGOT_FORWARD( D6 )( d6 )
-        , ARGOT_FORWARD( D7 )( d7 )
-        , ARGOT_FORWARD( D8 )( d8 )
-        , ARGOT_FORWARD( D9 )( d9 )
-        , ARGOT_FORWARD( decltype( next_args ) )( next_args )...
-        );
-      }
-    , ARGOT_FORWARD( decltype( args ) )( args )...
-    );
+    auto const call_with_leading_arguments
+      = [ & ]( auto&&... next_args ) -> decltype( auto )
+        {
+          return argot_detail::constexpr_invoke
+          ( ARGOT_FORWARD( F )( fun )
+          , ARGOT_FORWARD( D0 )( d0 )
+          , ARGOT_FORWARD( D1 )( d1 )
+          , ARGOT_FORWARD( D2 )( d2 )
+          , ARGOT_FORWARD( D3 )( d3 )
+          , ARGOT_FORWARD( D4 )( d4 )
+          , ARGOT_FORWARD( D5 )( d5 )
+          , ARGOT_FORWARD( D6 )( d6 )
+          , ARGOT_FORWARD( D7 )( d7 )
+          , ARGOT_FORWARD( D8 )( d8 )
+          , ARGOT_FORWARD( D9 )( d9 )
+          , ARGOT_FORWARD( decltype( next_args ) )( next_args )...
+          );
+        };
+
+    if constexpr( next_i <= ARGOT_DETAIL_MAX_PREPROCESSED_TAKE )
+      return variadic_take_impl< next_i >::run
+      ( call_with_leading_arguments
+      , ARGOT_FORWARD( decltype( args ) )( args )...
+      );
+    else
+      run_recursive< next_i >
+      ( call_with_leading_arguments
+      , ARGOT_FORWARD( decltype( args ) )( args )...
+      );
   }
 
   template
@@ -417,10 +429,11 @@ struct variadic_take_impl< 10 >
           , class... P
           >
   using apply_recursive
-    = typename variadic_take_impl
-      < AmountToTake - ARGOT_DETAIL_MAX_PREPROCESSED_TAKE >
-      ::template apply
-      < result_with_leading_parameters
+    = expand_into
+      < variadic_take_impl
+        < AmountToTake - ARGOT_DETAIL_MAX_PREPROCESSED_TAKE >
+        ::template apply
+      , result_with_leading_parameters
         < Result, D0, D1, D2, D3, D4, D5, D6, D7, D8, D9 >::template apply
       , P...
       >;
@@ -429,47 +442,22 @@ struct variadic_take_impl< 10 >
 template< std::size_t I >
 struct variadic_take_impl
 {
-  template
-  < class F
-  , class D0, class D1, class D2, class D3, class D4
-  , class D5, class D6, class D7, class D8, class D9
-  , class... P
-  >
-  static constexpr decltype( auto ) run
-  ( F&& fun
-  , D0&& d0, D1&& d1, D2&& d2, D3&& d3, D4&& d4
-  , D5&& d5, D6&& d6, D7&& d7, D8&& d8, D9&& d9
-  , P&&...args
-  )
+  template< class F, class... P >
+  static constexpr decltype( auto ) run( F&& fun, P&&...args )
   {
     return variadic_take_impl< ARGOT_DETAIL_MAX_PREPROCESSED_TAKE >
-    ::template run_recursive< I - ARGOT_DETAIL_MAX_PREPROCESSED_TAKE >
-    ( ARGOT_FORWARD( F )( fun )
-    , ARGOT_FORWARD( D0 )( d0 )
-    , ARGOT_FORWARD( D1 )( d1 )
-    , ARGOT_FORWARD( D2 )( d2 )
-    , ARGOT_FORWARD( D3 )( d3 )
-    , ARGOT_FORWARD( D4 )( d4 )
-    , ARGOT_FORWARD( D5 )( d5 )
-    , ARGOT_FORWARD( D6 )( d6 )
-    , ARGOT_FORWARD( D7 )( d7 )
-    , ARGOT_FORWARD( D8 )( d8 )
-    , ARGOT_FORWARD( D9 )( d9 )
-    , ARGOT_FORWARD( P )( args )...
-    );
+    ::template run_recursive< I >( ARGOT_FORWARD( P )( args )... );
   }
 
   template
   < template< class... > class Result
-  , class D0, class D1, class D2, class D3, class D4, class D5, class D6
-  , class D7, class D8, class D9
   , class... P
   >
   using apply
-    = variadic_take_impl< ARGOT_DETAIL_MAX_PREPROCESSED_TAKE >
-      ::template apply_recursive
-      < I - ARGOT_DETAIL_MAX_PREPROCESSED_TAKE, Result
-      , D0, D1, D2, D3, D4, D5, D6, D7, D8, D9, P...
+    = expand_into_with_index
+      < variadic_take_impl< ARGOT_DETAIL_MAX_PREPROCESSED_TAKE >
+        ::template apply_recursive
+      , I, Result, P...
       >;
 };
 
@@ -486,7 +474,10 @@ template< std::size_t AmountToTake
         , template< class... > class Result, class... P
         >
 using variadic_take
-  = typename variadic_take_impl< AmountToTake >::template apply< Result, P... >;
+  = expand_into
+    < variadic_take_impl< AmountToTake >::template apply
+    , Result, P...
+    >;
 
 } // namespace (argot::detail_argot)
 

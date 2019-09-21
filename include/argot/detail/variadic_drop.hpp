@@ -9,6 +9,7 @@
 #define ARGOT_DETAIL_VARIADIC_DROP_HPP_
 
 #include <argot/detail/constexpr_invoke.hpp>
+#include <argot/detail/expand.hpp>
 #include <argot/detail/forward.hpp>
 
 #include <cstddef>
@@ -301,9 +302,15 @@ struct variadic_drop_impl< 10 >
   , P&&... args
   )
   {
-    return variadic_drop_impl
-    < AmountToDrop - ARGOT_DETAIL_MAX_PREPROCESSED_DROP >::run
-    ( ARGOT_FORWARD( F )( fun ), ARGOT_FORWARD( P )( args )... );
+    constexpr std::size_t next_i
+      = AmountToDrop - ARGOT_DETAIL_MAX_PREPROCESSED_DROP;
+
+    if constexpr( next_i <= ARGOT_DETAIL_MAX_PREPROCESSED_DROP )
+      return variadic_drop_impl< next_i >::run
+      ( ARGOT_FORWARD( F )( fun ), ARGOT_FORWARD( P )( args )... );
+    else
+      return run_recursive< next_i >
+      ( ARGOT_FORWARD( F )( fun ), ARGOT_FORWARD( P )( args )... );
   }
 
   template
@@ -321,9 +328,12 @@ struct variadic_drop_impl< 10 >
   , class D7, class D8, class D9, class... P
   >
   using apply_recursive
-    = typename variadic_drop_impl
-      < AmountToDrop - ARGOT_DETAIL_MAX_PREPROCESSED_DROP >
-      ::template apply< Result, P... >;
+    = expand_into
+      < variadic_drop_impl
+        < AmountToDrop - ARGOT_DETAIL_MAX_PREPROCESSED_DROP >
+        ::template apply
+      , Result, P...
+      >;
 };
 
 template< std::size_t I >
@@ -331,32 +341,27 @@ struct variadic_drop_impl
 {
   template
   < class F
-  , class D0, class D1, class D2, class D3, class D4
-  , class D5, class D6, class D7, class D8, class D9
   , class... P
   >
   static constexpr decltype( auto ) run
   ( F&& fun
-  , D0&&, D1&&, D2&&, D3&&, D4&&, D5&&, D6&&, D7&&, D8&&, D9&&
   , P&&... args
   )
   {
     return variadic_drop_impl< ARGOT_DETAIL_MAX_PREPROCESSED_DROP >
-    ::template run< I - ARGOT_DETAIL_MAX_PREPROCESSED_DROP >
+    ::template run_recursive< I >
     ( ARGOT_FORWARD( F )( fun ), ARGOT_FORWARD( P )( args )... );
   }
 
   template
   < template< class... > class Result
-  , class D0, class D1, class D2, class D3, class D4, class D5, class D6
-  , class D7, class D8, class D9
   , class... P
   >
   using apply
-    = variadic_drop_impl< ARGOT_DETAIL_MAX_PREPROCESSED_DROP >
-      ::template apply_recursive
-      < I - ARGOT_DETAIL_MAX_PREPROCESSED_DROP, Result
-      , D0, D1, D2, D3, D4, D5, D6, D7, D8, D9, P...
+    = expand_into_with_index
+      < variadic_drop_impl< ARGOT_DETAIL_MAX_PREPROCESSED_DROP >
+        ::template apply_recursive
+      , I, Result, P...
       >;
 };
 
@@ -373,8 +378,10 @@ template< std::size_t AmountToDrop
         , template< class... > class Result, class... P
         >
 using variadic_drop
-  = typename variadic_drop_impl< AmountToDrop >::template apply< Result, P... >;
-
+  = expand_into
+    < variadic_drop_impl< AmountToDrop >::template apply
+    , Result, P...
+    >;
 
 } // namespace (argot::detail_argot)
 

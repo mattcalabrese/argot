@@ -304,7 +304,7 @@ for local file in $(headers)
     compile test_header.cpp
         : <define>ARGOT_HEADER_TO_TEST=$(file)
           <dependency>$(file)
-        : [ regex.replace [ path.relative-to $(ARGOT_INCLUDE) $(file) ] "/" "_" ] 
+        : [ regex.replace $(file) "/" "_" ] 
         ;
 }
 

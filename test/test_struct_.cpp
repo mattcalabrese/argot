@@ -226,6 +226,8 @@ test_struct_of_archetypes_regularity( std::index_sequence< Values... >)
 {
   static_assert( sizeof...( ElementProfiles ) >= 3 );
 
+  static_assert( sizeof...( ElementProfiles ) == sizeof...( Values ) );
+
   {
     using tup
       = struct_
@@ -283,12 +285,31 @@ test_struct_of_archetypes_regularity( std::index_sequence< Values... >)
   return 0;
 }
 
-// TODO(mattcalabrese) Add a wider variety of test cases.
+ARGOT_REGISTER_TEST // TODO(mattcalabrese) Make constexpr
+( test_empty_struct_regularity )
+{
+  {
+    using tup = struct_<>;
+
+    ARGOT_CONCEPT_ENSURE
+    ( SameType
+      < syntactic_regularity_profile_of_t< tup >
+      , trivially_complete_profile
+      >
+    );
+
+    ARGOT_TEST_SUCCESS
+    ( argot_test::test_regularity< tup, trivially_complete_profile >
+      ( []{ return tup(); } )
+    );
+  }
+
+  return 0;
+}
+
 ARGOT_REGISTER_TEST // TODO(mattcalabrese) Make constexpr
 ( test_struct_regularity )
 {
-  using argot_test::combine_regularity_profiles_t;
-
   ARGOT_TEST_SUCCESS
   ( test_struct_of_archetypes_regularity
     < trivially_complete_profile
@@ -306,6 +327,187 @@ ARGOT_REGISTER_TEST // TODO(mattcalabrese) Make constexpr
     , trivially_complete_profile
     , trivially_complete_profile
     >( std::make_index_sequence< 4 >() )
+  );
+
+  return 0;
+}
+
+ARGOT_REGISTER_TEST // TODO(mattcalabrese) Make constexpr
+( test_large_struct_regularity )
+{
+  ARGOT_TEST_SUCCESS
+  ( test_struct_of_archetypes_regularity
+    < trivially_complete_profile
+
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+
+    , trivially_complete_profile
+    >( std::make_index_sequence< 11 >() )
+  );
+
+  ARGOT_TEST_SUCCESS
+  ( test_struct_of_archetypes_regularity
+    < trivially_complete_profile
+
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    >( std::make_index_sequence< 20 >() )
+  );
+
+  return 0;
+}
+
+template< int I >
+struct i {};
+
+// TODO(mattcalabrese) Add a wider variety of test cases.
+ARGOT_REGISTER_TEST // TODO(mattcalabrese) Make constexpr
+( test_very_large_struct_regularity )
+{
+  ARGOT_TEST_SUCCESS
+  ( test_struct_of_archetypes_regularity
+    < trivially_complete_profile
+
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+    , trivially_complete_profile
+
+    , trivially_complete_profile
+    >( std::make_index_sequence< 101 >() )
   );
 
   return 0;
