@@ -48,6 +48,7 @@
 #include <argot/detail/move.hpp>
 #include <argot/detail/regular_bases.hpp>
 #include <argot/detail/remove_cvref.hpp>
+#include <argot/detail/variadic_at.hpp>
 #include <argot/discriminated_union/detail/discriminated_union_base.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/is_modeled.hpp>
@@ -129,8 +130,8 @@ class discriminated_union
  private:
   template< std::size_t Index >
   using alternative_type_t
-    = typename detail_union::union_impl< sizeof...( T ), Index >
-      ::template alternative_type_t< T... >;
+    = typename detail_argot::variadic_at
+      < Index, detail_forward::direct_identity_t, T... >;
 
   template< std::size_t Index >
   static constexpr bool const& alternative_is_pure_v
@@ -572,8 +573,8 @@ struct make_concept_map< UnionLike< discriminated_union< T... > > >
 
   template< index_type Index >
   using alternative_type_t
-    = typename detail_union::union_impl< sizeof...( T ), Index >
-      ::template alternative_type_t< T... >;
+    = typename detail_argot::variadic_at
+      < Index, detail_forward::direct_identity_t, T... >;
 
   template< index_type Index, class Self >
   static constexpr auto&& get( Self&& self ) noexcept

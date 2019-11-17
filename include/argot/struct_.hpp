@@ -388,7 +388,7 @@ class struct_
       >;
 
   template< std::size_t Index >
-  static constexpr bool const& element_is_pure_v
+  static constexpr bool element_is_pure_v
     = std::is_same_v< contained< element_type_t< Index > >
                     , element_type_t< Index >
                     >;
@@ -537,15 +537,10 @@ struct make_concept_map< TupleLike< struct_< T... > > >
   {
     using elem_type = element_type_t< Index >;
 
-    if constexpr
-    ( std::is_same_v
-      < element_type_t< Index >
-      , contained< elem_type >
-      >
-    )
+    // TODO(mattcalabrese) Use intrinsic
+    if constexpr( std::is_same_v< elem_type, contained< elem_type > > )
       return detail_struct::struct_impl< sizeof...( T ), Index >
-      ::template get< element_type_t< Index > >
-      ( ARGOT_FORWARD( Self )( self ).elements );
+      ::template get< elem_type >( ARGOT_FORWARD( Self )( self ).elements );
     else
       return argot::access_contained
       ( detail_struct::struct_impl< sizeof...( T ), Index >

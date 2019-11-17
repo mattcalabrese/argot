@@ -105,7 +105,7 @@ ARGOT_CONCEPT_ENSURE
 ( InvocableWith< foo_lvalue_const_member_function, foo const&, a, b, c > );
 
 ARGOT_CONCEPT_ENSURE
-( Not< InvocableWith< foo_lvalue_const_member_function, foo&&, a, b, c > > );
+( InvocableWith< foo_lvalue_const_member_function, foo&&, a, b, c > );
 
 ARGOT_CONCEPT_ENSURE
 ( InvocableWith< foo_lvalue_member_function, foo*, a, b, c > );

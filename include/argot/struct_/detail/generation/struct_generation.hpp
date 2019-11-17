@@ -30,13 +30,14 @@ BOOST_PP_DEC( BOOST_PP_ITERATION() )
 template<>
 struct struct_impl_preprocessed< ARGOT_DETAIL_STRUCT_CURR_IMPL_INDEX >
 {
+  // TODO(mattcalabres) Hoist ElementType out of the template
   template< class ElementType, class StructBase >
   static constexpr auto&& get( StructBase&& self ) noexcept
   {
-    using qualified_alt
+    using qualified_elem
       = call_detail::give_qualifiers_to_t< StructBase&&, ElementType >;
 
-    return static_cast< qualified_alt >
+    return static_cast< qualified_elem >
     ( self.BOOST_PP_CAT( member, ARGOT_DETAIL_STRUCT_CURR_IMPL_INDEX ) );
   }
 };

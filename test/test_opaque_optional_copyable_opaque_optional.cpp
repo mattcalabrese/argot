@@ -33,7 +33,7 @@ using argot::copyable_opaque_optional;
 #define REQUIRE_CONSTANT_INITIALIZATION
 #endif
 
-REQUIRE_CONSTANT_INITIALIZATION [[maybe_unused]]
+REQUIRE_CONSTANT_INITIALIZATION
 copyable_opaque_optional< int > constexpr_nullptr;
 
 // Using this prevents warnings about moving temporaries with std::move.
@@ -41,7 +41,7 @@ template< class T >
 constexpr std::remove_reference_t< T >&&
 silenced_warning_move( T&& arg )
 {
-  return std::move( arg );
+  return static_cast< std::remove_reference_t< T >&& >( arg );
 }
 
 template< class T >
@@ -51,13 +51,11 @@ const_lvalue( T&& arg )
   return arg;
 }
 
-REQUIRE_CONSTANT_INITIALIZATION [[maybe_unused]]
 copyable_opaque_optional< int > constexpr_nullptr_move_target
-  = ( silenced_warning_move )( copyable_opaque_optional< int >() );
+  = ( silenced_warning_move )( constexpr_nullptr );
 
-REQUIRE_CONSTANT_INITIALIZATION [[maybe_unused]]
 copyable_opaque_optional< int > constexpr_nullptr_copy_target
-  = ( const_lvalue )( copyable_opaque_optional< int >() );
+  = ( const_lvalue )( constexpr_nullptr );
 
 struct array4_and_int
 {

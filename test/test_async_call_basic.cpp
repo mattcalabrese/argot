@@ -49,6 +49,9 @@ struct make_tuple_fn
 template< class T >
 struct move_only
 {
+  explicit move_only( T&& v ) : value( std::move( v ) ) {}
+  explicit move_only( T const& v ) : value( v ) {}
+
   move_only( move_only&& ) = default;
   move_only& operator=( move_only&& ) = default;
   T value;
@@ -71,7 +74,7 @@ ARGOT_REGISTER_TEST( no_call_arguments )
 ARGOT_REGISTER_TEST( basic_call_arguments_no_then )
 {
   int a = 1;
-  move_only< char > b{ 2 };
+  move_only< char > b( 2 );
   const double c = 3.;
 
   decltype( auto ) res

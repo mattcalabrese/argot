@@ -108,7 +108,7 @@ ARGOT_CONCEPT_ENSURE
 ARGOT_CONCEPT_ENSURE
 ( TransformationWith< foo_lvalue_const_mem_fun, foo const&, a, b, c > );
 ARGOT_CONCEPT_ENSURE
-( Not< TransformationWith< foo_lvalue_const_mem_fun, foo&&, a, b, c > > );
+( TransformationWith< foo_lvalue_const_mem_fun, foo&&, a, b, c > );
 
 ARGOT_CONCEPT_ENSURE
 ( TransformationWith< foo_lvalue_mem_fun, foo*, a, b, c > );

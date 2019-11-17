@@ -9,4 +9,4 @@
 
 ARGOT_NO_UNIQUE_ADDRESS
 void_to_regular_void_t< BOOST_PP_CAT( T, BOOST_PP_ITERATION() ) >
-BOOST_PP_CAT( alternative, BOOST_PP_ITERATION() );
+BOOST_PP_CAT( member, BOOST_PP_ITERATION() );

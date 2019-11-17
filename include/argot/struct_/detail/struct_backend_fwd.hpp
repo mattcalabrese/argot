@@ -131,13 +131,14 @@ struct struct_impl_preprocessed;
 template< std::size_t Index >
 struct struct_impl_variadic;
 
-template< std::size_t NumAlternatives, std::size_t Index >
+template< std::size_t NumElements, std::size_t Index >
 using struct_impl
   = typename argot_detail::conditional
-    < NumAlternatives <= ARGOT_MAX_PREPROCESSED_STRUCT_ELEMENTS >
-    ::template apply
-    < struct_impl_preprocessed< Index >
-    , struct_impl_variadic< Index >
+    < NumElements <= ARGOT_MAX_PREPROCESSED_STRUCT_ELEMENTS >
+    ::template meta_apply_values
+    < struct_impl_preprocessed
+    , struct_impl_variadic
+    , Index
     >;
 
 // TODO(mattcalabrese) Eliminate this form of memoization to increase throughput

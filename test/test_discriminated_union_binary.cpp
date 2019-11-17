@@ -1004,7 +1004,8 @@ ARGOT_REGISTER_TEST( test_union_binary_emplace_ilist )
   return 0;
 }
 
-ARGOT_REGISTER_CONSTEXPR_TEST( test_union_destroy_constexpr )
+// TODO(mattcalabrese) Make constexpr in C++20
+ARGOT_REGISTER_TEST( test_union_destroy_constexpr )
 {
   {
     using alt0_t = trivial_constructor_trivial_destructor< 0 >;

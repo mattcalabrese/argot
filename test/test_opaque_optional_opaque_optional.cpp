@@ -33,7 +33,7 @@ using argot::opaque_optional;
 #define REQUIRE_CONSTANT_INITIALIZATION
 #endif
 
-REQUIRE_CONSTANT_INITIALIZATION [[maybe_unused]]
+REQUIRE_CONSTANT_INITIALIZATION
 opaque_optional< int > constexpr_nullptr;
 
 // Using this prevents warnings about moving temporaries with std::move.
@@ -44,9 +44,8 @@ silenced_warning_move( T&& arg )
   return std::move( arg );
 }
 
-REQUIRE_CONSTANT_INITIALIZATION [[maybe_unused]]
 opaque_optional< int > constexpr_nullptr_move_target
-  = ( silenced_warning_move )( opaque_optional< int >() );
+  = ( silenced_warning_move )( constexpr_nullptr );
 
 struct array4_and_int
 {

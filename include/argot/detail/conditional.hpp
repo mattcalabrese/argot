@@ -18,13 +18,21 @@ struct conditional
   template< class T, class U >
   using apply = T;
 
-  template< template< class... > class T, template< class... > class U
+  template< template< class... > class T, template< class... > class /*U*/
           , class... P
           >
   using meta_apply = T< P... >;
 
-  template< template< class... > class T, class U, class... P >
+  template< template< auto... > class T, template< auto... > class /*U*/
+          , auto... P
+          >
+  using meta_apply_values = T< P... >;
+
+  template< template< class... > class T, class /*U*/, class... P >
   using half_meta_apply = T< P... >;
+
+  template< template< auto... > class T, class /*U*/, auto... P >
+  using half_meta_apply_values = T< P... >;
 
   template< template< template< class... > class, class... > class T
           , template< class... > class R, class... P
@@ -44,13 +52,21 @@ struct conditional< false >
   template< class T, class U >
   using apply = U;
 
-  template< template< class... > class T, template< class... > class U
+  template< template< class... > class /*T*/, template< class... > class U
           , class... P
           >
   using meta_apply = U< P... >;
 
-  template< template< class... > class T, class U, class... P >
+  template< template< auto... > class /*T*/, template< auto... > class U
+          , auto... P
+          >
+  using meta_apply_values = U< P... >;
+
+  template< template< class... > class /*T*/, class U, class... /*P*/ >
   using half_meta_apply = U;
+
+  template< template< auto... > class /*T*/, class U, auto... /*P*/ >
+  using half_meta_apply_values = U;
 };
 
 } // namespace (argot::argot_detail)

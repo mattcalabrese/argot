@@ -153,6 +153,8 @@ struct containment_wrapper< T const >
          )
        ) {}
  private:
+  // TODO(calabrese) swap
+
   ARGOT_NO_UNIQUE_ADDRESS T v;
 };
 
@@ -175,6 +177,13 @@ struct containment_wrapper< T& >
   ( detail_contained::make_contained_tag, T& v ) noexcept
     : v( std::addressof( v ) ) {}
  private:
+  friend constexpr
+  void swap( containment_wrapper& lhs, containment_wrapper& rhs ) noexcept {
+      T* const temp = lhs.v;
+      lhs.v = rhs.v;
+      rhs.v = temp;
+  }
+
   T* v;
 };
 
@@ -199,6 +208,13 @@ struct containment_wrapper< T&& >
   ( detail_contained::make_contained_tag, T&& v ) noexcept
     : v( std::addressof( v ) ) {}
  private:
+  friend constexpr
+  void swap( containment_wrapper& lhs, containment_wrapper& rhs ) noexcept {
+      T* const temp = lhs.v;
+      lhs.v = rhs.v;
+      rhs.v = temp;
+  }
+
   T* v;
 };
 

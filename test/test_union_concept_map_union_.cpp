@@ -120,34 +120,6 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unary_union )
       >
     );
 
-    ARGOT_CONCEPT_ENSURE
-    ( SameType
-      < union_traits::result_of_get_t< 0, union_t volatile& >
-      , alt_t volatile&
-      >
-    );
-
-    ARGOT_CONCEPT_ENSURE
-    ( SameType
-      < union_traits::result_of_get_t< 0, union_t volatile const& >
-      , alt_t volatile const&
-      >
-    );
-
-    ARGOT_CONCEPT_ENSURE
-    ( SameType
-      < union_traits::result_of_get_t< 0, union_t volatile&& >
-      , alt_t volatile&&
-      >
-    );
-
-    ARGOT_CONCEPT_ENSURE
-    ( SameType
-      < union_traits::result_of_get_t< 0, union_t volatile const&& >
-      , alt_t volatile const &&
-      >
-    );
-
     ARGOT_CONCEPT_ENSURE( Constructible< union_t > );
 
     {
@@ -246,34 +218,6 @@ ARGOT_REGISTER_TEST( test_binary_union )
 
     ARGOT_CONCEPT_ENSURE
     ( SameType
-      < union_traits::result_of_get_t< 0, union_t volatile& >
-      , alt0_t volatile&
-      >
-    );
-
-    ARGOT_CONCEPT_ENSURE
-    ( SameType
-      < union_traits::result_of_get_t< 0, union_t volatile const& >
-      , alt0_t volatile const&
-      >
-    );
-
-    ARGOT_CONCEPT_ENSURE
-    ( SameType
-      < union_traits::result_of_get_t< 0, union_t volatile&& >
-      , alt0_t volatile&&
-      >
-    );
-
-    ARGOT_CONCEPT_ENSURE
-    ( SameType
-      < union_traits::result_of_get_t< 0, union_t volatile const&& >
-      , alt0_t volatile const &&
-      >
-    );
-
-    ARGOT_CONCEPT_ENSURE
-    ( SameType
       < union_traits::result_of_get_t< 1, union_t& >
       , alt1_t&
       >
@@ -297,34 +241,6 @@ ARGOT_REGISTER_TEST( test_binary_union )
     ( SameType
       < union_traits::result_of_get_t< 1, union_t const && >
       , alt1_t const&&
-      >
-    );
-
-    ARGOT_CONCEPT_ENSURE
-    ( SameType
-      < union_traits::result_of_get_t< 1, union_t volatile& >
-      , alt1_t volatile&
-      >
-    );
-
-    ARGOT_CONCEPT_ENSURE
-    ( SameType
-      < union_traits::result_of_get_t< 1, union_t volatile const& >
-      , alt1_t volatile const&
-      >
-    );
-
-    ARGOT_CONCEPT_ENSURE
-    ( SameType
-      < union_traits::result_of_get_t< 1, union_t volatile&& >
-      , alt1_t volatile&&
-      >
-    );
-
-    ARGOT_CONCEPT_ENSURE
-    ( SameType
-      < union_traits::result_of_get_t< 1, union_t volatile const&& >
-      , alt1_t volatile const &&
       >
     );
 

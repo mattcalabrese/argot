@@ -830,7 +830,8 @@ ARGOT_REGISTER_TEST( test_discriminated_union_unary_emplace_ilist )
   return 0;
 }
 
-ARGOT_REGISTER_CONSTEXPR_TEST( test_discriminated_union_destroy_constexpr )
+// TODO(mattcalabrese) Make this a constexpr test in C++20
+ARGOT_REGISTER_TEST( test_discriminated_union_destroy_constexpr )
 {
   {
     using alt_t = trivial_constructor_trivial_destructor< 0 >;
@@ -914,7 +915,7 @@ ARGOT_REGISTER_TEST( test_discriminated_union_destroy_not_constexpr )
   return 0;
 }
 
-ARGOT_REGISTER_CONSTEXPR_TEST( test_discriminated_union_reference )
+ARGOT_REGISTER_TEST( test_discriminated_union_reference )
 {
   {
     using alt_t = int const&;

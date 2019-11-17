@@ -66,6 +66,7 @@ struct wrapped_t
 {
   static_assert( std::is_reference_v< T > );
 
+  constexpr wrapped_t( T&& ref ) noexcept : ref( std::forward< T >( ref ) ) {}
   wrapped_t(wrapped_t&&) = default;
   wrapped_t& operator=(wrapped_t&&) = default;
 

@@ -24,29 +24,26 @@ BOOST_PP_DEC( BOOST_PP_ITERATION() )
 template<>
 struct union_impl_preprocessed< ARGOT_DETAIL_UNION_CURR_IMPL_INDEX >
 {
-  template< class... T >
-  using alternative_type_t
-    = typename raw_struct< T... >
-      ::BOOST_PP_CAT( alternative_type, ARGOT_DETAIL_UNION_CURR_IMPL_INDEX );
-
-  template< class Self >
-  static constexpr auto&& get( Self&& self ) noexcept
+  // TODO(mattcalabres) Hoist AlternativeType out of the template
+  template< class AlternativeType, class UnionBase >
+  static constexpr auto&& get( UnionBase&& self ) noexcept
   {
     using qualified_alt
-      = call_detail::give_qualifiers_to_t
-        < Self&&
-        , typename access_raw_concept_map< UnionLike< detail_argot::remove_cvref_t< Self > > >
-          ::template alternative_type_t< ARGOT_DETAIL_UNION_CURR_IMPL_INDEX >
-        >;
+      = call_detail::give_qualifiers_to_t< UnionBase&&, AlternativeType >;
 
     return static_cast< qualified_alt >
-    ( * //std::launder // TODO(mattcalabrese) Uncomment when launder exists.
-       ( std::addressof
-         ( self.alternatives
-           .BOOST_PP_CAT( alternative, ARGOT_DETAIL_UNION_CURR_IMPL_INDEX )
-         )
-       )
-    );
+    ( self.BOOST_PP_CAT( member, ARGOT_DETAIL_UNION_CURR_IMPL_INDEX ) );
+  }
+
+  // TODO(mattcalabrese) Conditional noexcept?
+  template< class UnionBase >
+  static constexpr void destroy( UnionBase& self )
+  {
+    using alt_t
+      = decltype
+        ( self.BOOST_PP_CAT( member, ARGOT_DETAIL_UNION_CURR_IMPL_INDEX ) );
+
+    self.BOOST_PP_CAT( member, ARGOT_DETAIL_UNION_CURR_IMPL_INDEX ).~alt_t();
   }
 };
 

@@ -656,7 +656,8 @@ ARGOT_REGISTER_TEST( test_union_unary_emplace_ilist )
   return 0;
 }
 
-ARGOT_REGISTER_CONSTEXPR_TEST( test_union_destroy_constexpr )
+// TODO(mattcalabrese) Make this constexpr in C++20
+ARGOT_REGISTER_TEST( test_union_destroy_constexpr )
 {
   {
     using alt_t = trivial_constructor_trivial_destructor< 0 >;
@@ -740,7 +741,7 @@ ARGOT_REGISTER_TEST( test_union_destroy_not_constexpr )
   return 0;
 }
 
-ARGOT_REGISTER_CONSTEXPR_TEST( test_union_reference )
+ARGOT_REGISTER_TEST( test_union_reference )
 {
   {
     using alt_t = int const&;
@@ -870,8 +871,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_union_unary_assign_constexpr )
       int const one = 1;
       int two = 2;
 
-      // TODO(mattcalabrese) Initialize to 0th alternative?
-      union_t un{};
+      union_t un( std::in_place_index< 0 > );
 
       decltype( auto ) res
         = un.assign< 0 >( alt_t( zero, one, std::move( two ) ) );
@@ -892,8 +892,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_union_unary_assign_constexpr )
       int const one = 1;
       int two = 2;
 
-      // TODO(mattcalabrese) Initialize to 0th alternative?
-      union_t un{};
+      union_t un( std::in_place_index< 0 > );
 
       decltype( auto ) res
         = un.assign< 0 >( alt_t( zero, one, std::move( two ) ) );

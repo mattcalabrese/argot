@@ -14,7 +14,21 @@ BOOST_PP_ITERATION()
 BOOST_PP_CAT( T, ARGOT_DETAIL_UNION_CURR_ALTERNATIVE_INDEX )
 
 #define ARGOT_DETAIL_UNION_CURR_ALTERNATIVE                                    \
-BOOST_PP_CAT( alternative, ARGOT_DETAIL_UNION_CURR_ALTERNATIVE_INDEX )
+BOOST_PP_CAT( member, ARGOT_DETAIL_UNION_CURR_ALTERNATIVE_INDEX )
+
+template< class... P >
+explicit constexpr union_base
+( std::in_place_index_t< ARGOT_DETAIL_UNION_CURR_ALTERNATIVE_INDEX >
+    const /*in_place_index*/
+, P&&... args
+) noexcept
+  ( ARGOT_IS_MODELED
+    ( NothrowEmplaceableWhenContained
+      < ARGOT_DETAIL_UNION_CURR_ALTERNATIVE_TYPE, P&&... >
+    )
+  )
+  : ARGOT_DETAIL_UNION_CURR_ALTERNATIVE
+    ( ARGOT_FORWARD( P )( args )... ) {}
 
 template< class Fun, class... P >
 explicit constexpr union_base
