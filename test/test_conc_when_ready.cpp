@@ -60,7 +60,7 @@ ARGOT_REGISTER_TEST( no_call_arguments )
       ( executor::immediate, make_tuple );
 
   using expected_res_type
-    = stlab::future< std::variant< std::tuple<> > >;
+    = stlab::future< std::variant< argot::struct_<> > >;
 
   ARGOT_CONCEPT_ENSURE( SameType< decltype( res ), expected_res_type > );
 
@@ -82,7 +82,7 @@ ARGOT_REGISTER_TEST( basic_call_arguments_no_then )
 
   using expected_res_type
     = stlab::future
-      < std::variant< std::tuple< int, move_only< char >, double > > >;
+      < std::variant< argot::struct_< int, move_only< char >, double > > >;
 
   ARGOT_CONCEPT_ENSURE( SameType< decltype( res ), expected_res_type > );
 
@@ -114,7 +114,7 @@ ARGOT_REGISTER_TEST( basic_call_arguments )
 
   using expected_res_type
     = stlab::future
-      < std::variant< std::tuple< int, move_only< char >, double > > >;
+      < std::variant< argot::struct_< int, move_only< char >, double > > >;
 
   ARGOT_CONCEPT_ENSURE( SameType< decltype( res ), expected_res_type > );
 
@@ -147,7 +147,7 @@ ARGOT_REGISTER_TEST( basic_call_arguments_two )
 
   using expected_res_type
     = stlab::future
-      < std::variant< std::tuple< int, move_only< char >, double > > >;
+      < std::variant< argot::struct_< int, move_only< char >, double > > >;
 
   ARGOT_CONCEPT_ENSURE( SameType< decltype( res ), expected_res_type > );
 
@@ -181,7 +181,7 @@ ARGOT_REGISTER_TEST( basic_call_arguments_three )
 
   using expected_res_type
     = stlab::future
-      < std::variant< std::tuple< int, move_only< char >, double > > >;
+      < std::variant< argot::struct_< int, move_only< char >, double > > >;
 
   ARGOT_CONCEPT_ENSURE( SameType< decltype( res ), expected_res_type > );
 
@@ -209,7 +209,7 @@ BOOST_AUTO_TEST_CASE( no_call_arguments )
     = async_call[ argot::reducer::to_boost_variant ]
       ( make_tuple );
 
-  using expected_argument_list = std::tuple<>;
+  using expected_argument_list = argot::struct_<>;
 
   using expected_variant_field
     = to_boost_variant_field< 0, expected_argument_list >;
@@ -231,7 +231,7 @@ BOOST_AUTO_TEST_CASE( basic_call_arguments )
       ( make_tuple, a, std::move( b ), c );
 
   using expected_argument_list
-    = std::tuple< int&, char&&, double const& >;
+    = argot::struct_< int&, char&&, double const& >;
 
   using expected_variant_field
     = to_boost_variant_field< 0, expected_argument_list >;
@@ -303,7 +303,7 @@ BOOST_AUTO_TEST_CASE( sole_expanded_call_arguments )
       );
 
   using expected_argument_list
-    = std::tuple
+    = argot::struct_
       < dummy_provider_type< std::integral_constant< std::size_t, 2 > >&
       , dummy_provider_type< std::integral_constant< std::size_t, 1 > >&
       >;
@@ -331,7 +331,7 @@ BOOST_AUTO_TEST_CASE( trailing_expanded_call_arguments )
       );
 
   using expected_argument_list
-    = std::tuple
+    = argot::struct_
       < std::integral_constant< std::size_t, 3 >&
       , dummy_provider_type< std::integral_constant< std::size_t, 2 > >&
       , dummy_provider_type< std::integral_constant< std::size_t, 1 > >&
@@ -361,7 +361,7 @@ BOOST_AUTO_TEST_CASE( leading_expanded_call_arguments )
       );
 
   using expected_argument_list
-    = std::tuple
+    = argot::struct_
       < dummy_provider_type< std::integral_constant< std::size_t, 2 > >&
       , dummy_provider_type< std::integral_constant< std::size_t, 1 > >&
       , std::integral_constant< std::size_t, 0 >&
@@ -391,7 +391,7 @@ BOOST_AUTO_TEST_CASE( leading_trailing_expanded_call_arguments )
       );
 
   using expected_argument_list
-    = std::tuple
+    = argot::struct_
       < std::integral_constant< std::size_t, 3 >&
       , dummy_provider_type< std::integral_constant< std::size_t, 2 > >&
       , dummy_provider_type< std::integral_constant< std::size_t, 1 > >&
@@ -424,7 +424,7 @@ BOOST_AUTO_TEST_CASE( multiple_expanded_call_arguments )
       );
 
   using expected_argument_list
-    = std::tuple
+    = argot::struct_
       < dummy_provider_type< std::integral_constant< std::size_t, 3 > >&
       , dummy_provider_type< std::integral_constant< std::size_t, 2 > >&
       , dummy_provider_type< std::integral_constant< std::size_t, 1 > >&

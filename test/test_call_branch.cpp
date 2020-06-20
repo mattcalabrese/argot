@@ -16,13 +16,13 @@
 #include <argot/prov/reference_to.hpp>
 #include <argot/prov/value_of.hpp>
 #include <argot/reducer/to_boost_variant.hpp>
+#include <argot/struct_.hpp>
 
 #include <boost/variant/get.hpp>
 #include <boost/variant/variant.hpp>
 
 #include <cstddef>
 #include <type_traits>
-#include <tuple>
 #include <utility>
 
 #define BOOST_TEST_MAIN

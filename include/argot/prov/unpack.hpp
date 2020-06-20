@@ -36,9 +36,7 @@ in-place in an argument list.
 #include <argot/gen/not.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/receiver_traits/receive.hpp>
-#include <argot/tuple_traits/get.hpp>
-#include <argot/tuple_traits/index_type.hpp>
-#include <argot/tuple_traits/num_elements.hpp>
+#include <argot/tuple_traits/apply.hpp>
 
 #include <memory>
 #include <type_traits>
@@ -64,14 +62,6 @@ struct unpack_fn
     ARGOT_CONCEPT_ASSERT
     ( Not< VolatileObject< std::remove_reference_t< Tup > > > );
 
-    using index_type
-      = tuple_traits::index_type_t< detail_argot::remove_cvref_t< Tup > >;
-    using indices_type
-      = std::make_integer_sequence
-        < typename prov::unpack_fn::impl< Tup >::index_type
-        , tuple_traits::num_elements_v< detail_argot::remove_cvref_t< Tup > >
-        >;
-
 // TODO(mattcalabrese) Fill these out
 /*
     using lvalue_unpacked_argument_kinds
@@ -80,30 +70,6 @@ struct unpack_fn
     using rvalue_unpacked_argument_kinds
       =
 */
-    template< class Receiver, index_type... Indices >
-    static constexpr decltype( auto )
-    rvalue_receive( impl self, Receiver&& rec
-                  , std::integer_sequence< index_type, Indices... >
-                  )
-    {
-      return receiver_traits::receive
-      ( ARGOT_FORWARD( Receiver )( rec )
-      , tuple_traits::get< Indices >( ARGOT_FORWARD( Tup )( *self.tup ) )...
-      );
-    }
-
-    template< class Receiver, index_type... Indices >
-    static constexpr decltype( auto )
-    lvalue_receive( impl self, Receiver&& rec
-                  , std::integer_sequence< index_type, Indices... >
-                  )
-    {
-      return receiver_traits::receive
-      ( ARGOT_FORWARD( Receiver )( rec )
-      , tuple_traits::get< Indices >( *self.tup )...
-      );
-    }
-
     std::remove_reference_t< Tup >* tup;
   };
  public:
@@ -176,9 +142,17 @@ struct make_concept_map< ArgumentProvider< prov::unpack_fn::impl< Tup > > >
   static constexpr decltype( auto )
   provide( prov::unpack_fn::impl< Tup > self, Receiver&& rec )
   {
-    return self.rvalue_receive
-    ( self, ARGOT_FORWARD( Receiver )( rec )
-    , typename prov::unpack_fn::impl< Tup >::indices_type()
+    // TODO(calabrese) Hoist the lambda to a detail
+    return tuple_traits::apply
+    ( [ &rec ]( auto&&... args ) -> decltype( auto )
+      {
+        // TODO(calabrese) Use raw concept map
+        return receiver_traits::receive
+        ( ARGOT_FORWARD( Receiver )( rec )
+        , ARGOT_FORWARD( decltype( args ) )( args )...
+        );
+      }
+    , ARGOT_FORWARD( Tup )( *self.tup )
     );
   }
 };
@@ -192,9 +166,17 @@ struct make_concept_map
   static constexpr decltype( auto )
   provide( prov::unpack_fn::impl< Tup > self, Receiver&& rec )
   {
-    return self.lvalue_receive
-    ( self, ARGOT_FORWARD( Receiver )( rec )
-    , typename prov::unpack_fn::impl< Tup >::indices_type()
+    // TODO(calabrese) Hoist the lambda to a detail
+    return tuple_traits::apply
+    ( [ &rec ]( auto&&... args ) -> decltype( auto )
+      {
+        // TODO(calabrese) Use raw concept map
+        return receiver_traits::receive
+        ( ARGOT_FORWARD( Receiver )( rec )
+        , ARGOT_FORWARD( decltype( args ) )( args )...
+        );
+      }
+    , *self.tup
     );
   }
 };

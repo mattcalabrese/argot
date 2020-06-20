@@ -14,8 +14,8 @@
 #include <argot/prov/unpack.hpp>
 #include <argot/prov_traits/provide.hpp>
 #include <argot/receiver/return_argument_references.hpp>
+#include <argot/tuple_traits/get.hpp>
 
-#include <tuple>
 #include <variant>
 
 namespace {
@@ -23,6 +23,7 @@ namespace {
 namespace prov = argot::prov;
 namespace prov_traits = argot::prov_traits;
 namespace receiver = argot::receiver;
+namespace tuple_traits = argot::tuple_traits;
 
 using argot::SameType;
 
@@ -73,16 +74,16 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_drop_0 )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple< a&, b&, c const& > >
+        , std::variant< argot::struct_< a&, b&, c const& > >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &a_ );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &b_ );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &a_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &b_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &c_ );
     }
 
     // lvalue
@@ -99,16 +100,16 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_drop_0 )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple< a&, b&, c const& > >
+        , std::variant< argot::struct_< a&, b&, c const& > >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &a_ );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &b_ );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &a_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &b_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &c_ );
     }
   }
 
@@ -128,16 +129,16 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_drop_0 )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple< a&, b&, c const& > >
+        , std::variant< argot::struct_< a&, b&, c const& > >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &a_ );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &b_ );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &a_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &b_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &c_ );
     }
 
     // rvalue
@@ -154,16 +155,16 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_drop_0 )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple< a&, b&&, c const& > >
+        , std::variant< argot::struct_< a&, b&&, c const& > >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &a_ );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &b_ );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &a_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &b_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &c_ );
     }
   }
 
@@ -199,15 +200,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_drop_1 )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple< b&, c const& > >
+        , std::variant< argot::struct_< b&, c const& > >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &b_ );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &b_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &c_ );
     }
 
     // lvalue
@@ -224,15 +225,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_drop_1 )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple< b&, c const& > >
+        , std::variant< argot::struct_< b&, c const& > >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &b_ );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &b_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &c_ );
     }
   }
 
@@ -252,15 +253,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_drop_1 )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple< b&, c const& > >
+        , std::variant< argot::struct_< b&, c const& > >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &b_ );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &b_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &c_ );
     }
 
     // rvalue
@@ -277,15 +278,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_drop_1 )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple< b&&, c const& > >
+        , std::variant< argot::struct_< b&&, c const& > >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &b_ );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &b_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &c_ );
     }
   }
 
@@ -321,14 +322,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_drop_2 )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple< c const& > >
+        , std::variant< argot::struct_< c const& > >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &c_ );
     }
 
     // lvalue
@@ -345,14 +346,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_drop_2 )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple< c const& > >
+        , std::variant< argot::struct_< c const& > >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &c_ );
     }
   }
 
@@ -372,14 +373,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_drop_2 )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple< c const& > >
+        , std::variant< argot::struct_< c const& > >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &c_ );
     }
 
     // rvalue
@@ -396,14 +397,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_drop_2 )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple< c const& > >
+        , std::variant< argot::struct_< c const& > >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &c_ );
     }
   }
 
@@ -439,7 +440,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_drop_3 )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple<> >
+        , std::variant< argot::struct_<> >
         >
       );
 
@@ -460,7 +461,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_drop_3 )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple<> >
+        , std::variant< argot::struct_<> >
         >
       );
 
@@ -484,7 +485,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_drop_3 )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple<> >
+        , std::variant< argot::struct_<> >
         >
       );
 
@@ -505,7 +506,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_drop_3 )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple<> >
+        , std::variant< argot::struct_<> >
         >
       );
 
@@ -546,10 +547,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_0 )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< a&, b&, c const& >
-          , std::tuple< b&, c const& >
-          , std::tuple< c const& >
-          , std::tuple<>
+          < argot::struct_< a&, b&, c const& >
+          , argot::struct_< b&, c const& >
+          , argot::struct_< c const& >
+          , argot::struct_<>
           >
         >
       );
@@ -557,9 +558,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_0 )
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &a_ );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &b_ );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &a_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &b_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &c_ );
     }
 
     // lvalue
@@ -577,10 +578,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_0 )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< a&, b&, c const& >
-          , std::tuple< b&, c const& >
-          , std::tuple< c const& >
-          , std::tuple<>
+          < argot::struct_< a&, b&, c const& >
+          , argot::struct_< b&, c const& >
+          , argot::struct_< c const& >
+          , argot::struct_<>
           >
         >
       );
@@ -588,9 +589,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_0 )
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &a_ );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &b_ );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &a_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &b_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &c_ );
     }
   }
 
@@ -611,10 +612,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_0 )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< a&, b&, c const& >
-          , std::tuple< b&, c const& >
-          , std::tuple< c const& >
-          , std::tuple<>
+          < argot::struct_< a&, b&, c const& >
+          , argot::struct_< b&, c const& >
+          , argot::struct_< c const& >
+          , argot::struct_<>
           >
         >
       );
@@ -622,9 +623,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_0 )
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &a_ );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &b_ );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &a_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &b_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &c_ );
     }
 
     // rvalue
@@ -642,10 +643,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_0 )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< a&, b&&, c const& >
-          , std::tuple< b&&, c const& >
-          , std::tuple< c const& >
-          , std::tuple<>
+          < argot::struct_< a&, b&&, c const& >
+          , argot::struct_< b&&, c const& >
+          , argot::struct_< c const& >
+          , argot::struct_<>
           >
         >
       );
@@ -653,9 +654,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_0 )
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &a_ );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &b_ );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &a_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &b_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &c_ );
     }
   }
 
@@ -692,10 +693,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_1 )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< a&, b&, c const& >
-          , std::tuple< b&, c const& >
-          , std::tuple< c const& >
-          , std::tuple<>
+          < argot::struct_< a&, b&, c const& >
+          , argot::struct_< b&, c const& >
+          , argot::struct_< c const& >
+          , argot::struct_<>
           >
         >
       );
@@ -703,8 +704,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_1 )
       ARGOT_TEST_EQ( provision_result.index(), 1 );
       auto& tup = std::get< 1 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &b_ );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &b_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &c_ );
     }
 
     // lvalue
@@ -722,10 +723,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_1 )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< a&, b&, c const& >
-          , std::tuple< b&, c const& >
-          , std::tuple< c const& >
-          , std::tuple<>
+          < argot::struct_< a&, b&, c const& >
+          , argot::struct_< b&, c const& >
+          , argot::struct_< c const& >
+          , argot::struct_<>
           >
         >
       );
@@ -733,8 +734,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_1 )
       ARGOT_TEST_EQ( provision_result.index(), 1 );
       auto& tup = std::get< 1 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &b_ );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &b_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &c_ );
     }
   }
 
@@ -755,10 +756,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_1 )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< a&, b&, c const& >
-          , std::tuple< b&, c const& >
-          , std::tuple< c const& >
-          , std::tuple<>
+          < argot::struct_< a&, b&, c const& >
+          , argot::struct_< b&, c const& >
+          , argot::struct_< c const& >
+          , argot::struct_<>
           >
         >
       );
@@ -766,8 +767,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_1 )
       ARGOT_TEST_EQ( provision_result.index(), 1 );
       auto& tup = std::get< 1 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &b_ );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &b_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &c_ );
     }
 
     // rvalue
@@ -785,10 +786,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_1 )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< a&, b&&, c const& >
-          , std::tuple< b&&, c const& >
-          , std::tuple< c const& >
-          , std::tuple<>
+          < argot::struct_< a&, b&&, c const& >
+          , argot::struct_< b&&, c const& >
+          , argot::struct_< c const& >
+          , argot::struct_<>
           >
         >
       );
@@ -796,8 +797,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_1 )
       ARGOT_TEST_EQ( provision_result.index(), 1 );
       auto& tup = std::get< 1 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &b_ );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &b_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &c_ );
     }
   }
 
@@ -834,10 +835,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_2 )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< a&, b&, c const& >
-          , std::tuple< b&, c const& >
-          , std::tuple< c const& >
-          , std::tuple<>
+          < argot::struct_< a&, b&, c const& >
+          , argot::struct_< b&, c const& >
+          , argot::struct_< c const& >
+          , argot::struct_<>
           >
         >
       );
@@ -845,7 +846,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_2 )
       ARGOT_TEST_EQ( provision_result.index(), 2 );
       auto& tup = std::get< 2 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &c_ );
     }
 
     // lvalue
@@ -863,10 +864,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_2 )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< a&, b&, c const& >
-          , std::tuple< b&, c const& >
-          , std::tuple< c const& >
-          , std::tuple<>
+          < argot::struct_< a&, b&, c const& >
+          , argot::struct_< b&, c const& >
+          , argot::struct_< c const& >
+          , argot::struct_<>
           >
         >
       );
@@ -874,7 +875,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_2 )
       ARGOT_TEST_EQ( provision_result.index(), 2 );
       auto& tup = std::get< 2 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &c_ );
     }
   }
 
@@ -895,10 +896,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_2 )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< a&, b&, c const& >
-          , std::tuple< b&, c const& >
-          , std::tuple< c const& >
-          , std::tuple<>
+          < argot::struct_< a&, b&, c const& >
+          , argot::struct_< b&, c const& >
+          , argot::struct_< c const& >
+          , argot::struct_<>
           >
         >
       );
@@ -906,7 +907,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_2 )
       ARGOT_TEST_EQ( provision_result.index(), 2 );
       auto& tup = std::get< 2 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &c_ );
     }
 
     // rvalue
@@ -924,10 +925,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_2 )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< a&, b&&, c const& >
-          , std::tuple< b&&, c const& >
-          , std::tuple< c const& >
-          , std::tuple<>
+          < argot::struct_< a&, b&&, c const& >
+          , argot::struct_< b&&, c const& >
+          , argot::struct_< c const& >
+          , argot::struct_<>
           >
         >
       );
@@ -935,7 +936,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_2 )
       ARGOT_TEST_EQ( provision_result.index(), 2 );
       auto& tup = std::get< 2 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &c_ );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &c_ );
     }
   }
 
@@ -972,10 +973,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_3 )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< a&, b&, c const& >
-          , std::tuple< b&, c const& >
-          , std::tuple< c const& >
-          , std::tuple<>
+          < argot::struct_< a&, b&, c const& >
+          , argot::struct_< b&, c const& >
+          , argot::struct_< c const& >
+          , argot::struct_<>
           >
         >
       );
@@ -998,10 +999,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_3 )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< a&, b&, c const& >
-          , std::tuple< b&, c const& >
-          , std::tuple< c const& >
-          , std::tuple<>
+          < argot::struct_< a&, b&, c const& >
+          , argot::struct_< b&, c const& >
+          , argot::struct_< c const& >
+          , argot::struct_<>
           >
         >
       );
@@ -1027,10 +1028,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_3 )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< a&, b&, c const& >
-          , std::tuple< b&, c const& >
-          , std::tuple< c const& >
-          , std::tuple<>
+          < argot::struct_< a&, b&, c const& >
+          , argot::struct_< b&, c const& >
+          , argot::struct_< c const& >
+          , argot::struct_<>
           >
         >
       );
@@ -1053,10 +1054,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_drop_3 )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< a&, b&&, c const& >
-          , std::tuple< b&&, c const& >
-          , std::tuple< c const& >
-          , std::tuple<>
+          < argot::struct_< a&, b&&, c const& >
+          , argot::struct_< b&&, c const& >
+          , argot::struct_< c const& >
+          , argot::struct_<>
           >
         >
       );

@@ -16,10 +16,10 @@
 #include <argot/prov/reference_to.hpp>
 #include <argot/prov/value_of.hpp>
 #include <argot/reducer/to_heterogeneous_variant.hpp>
+#include <argot/tuple_traits/get.hpp>
 
 #include <cstddef>
 #include <type_traits>
-#include <tuple>
 #include <utility>
 #include <variant>
 
@@ -28,6 +28,7 @@
 
 using argot::call;
 namespace prov = argot::prov;
+namespace tuple_traits = argot::tuple_traits;
 
 // An argument provider that is an error when expanded.
 // This is useful in tests to make sure that argument providers which yield
@@ -139,12 +140,12 @@ BOOST_AUTO_TEST_CASE( branch_call_arguments )
 
   {
     auto& underlying_res0 = std::get< 0 >( res0 );
-    BOOST_TEST( &std::get< 1 >( underlying_res0 ) == &dummy0 );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res0 ) == &dummy0 );
   }
 
   {
     auto& underlying_res1 = std::get< 1 >( res1 );
-    BOOST_TEST( &std::get< 1 >( underlying_res1 ) == &dummy1 );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res1 ) == &dummy1 );
   }
 }
 
@@ -216,26 +217,26 @@ BOOST_AUTO_TEST_CASE( branch_call_nested )
 
   {
     auto& underlying_res0 = std::get< 0 >( res0 );
-    BOOST_TEST( &std::get< 0 >( underlying_res0 ) == &dummy0 );
-    BOOST_TEST( &std::get< 1 >( underlying_res0 ) == &raw0 );
+    BOOST_TEST( &tuple_traits::get< 0 >( underlying_res0 ) == &dummy0 );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res0 ) == &raw0 );
   }
 
   {
     auto& underlying_res1 = std::get< 1 >( res1 );
-    BOOST_TEST( &std::get< 0 >( underlying_res1 ) == &dummy1 );
-    BOOST_TEST( &std::get< 1 >( underlying_res1 ) == &raw1 );
+    BOOST_TEST( &tuple_traits::get< 0 >( underlying_res1 ) == &dummy1 );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res1 ) == &raw1 );
   }
 
   {
     auto& underlying_res2 = std::get< 2 >( res2 );
-    BOOST_TEST( &std::get< 0 >( underlying_res2 ) == &dummy2 );
-    BOOST_TEST( &std::get< 1 >( underlying_res2 ) == &raw2 );
+    BOOST_TEST( &tuple_traits::get< 0 >( underlying_res2 ) == &dummy2 );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res2 ) == &raw2 );
   }
 
   {
     auto& underlying_res3 = std::get< 3 >( res3 );
-    BOOST_TEST( &std::get< 0 >( underlying_res3 ) == &dummy3 );
-    BOOST_TEST( &std::get< 1 >( underlying_res3 ) == &raw3 );
+    BOOST_TEST( &tuple_traits::get< 0 >( underlying_res3 ) == &dummy3 );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res3 ) == &raw3 );
   }
 }
 
@@ -272,23 +273,23 @@ BOOST_AUTO_TEST_CASE( two_branch_call_arguments_ordering )
 
   using argument_list0
     = std::tuple< std::integral_constant< std::size_t, 0 >&&, dummy0_type&
-                , std::integral_constant< std::size_t, 0 >&&, dummya_type&
-                >;
+                    , std::integral_constant< std::size_t, 0 >&&, dummya_type&
+                    >;
 
   using argument_list1
     = std::tuple< std::integral_constant< std::size_t, 0 >&&, dummy0_type&
-                , std::integral_constant< std::size_t, 1 >&&, dummyb_type&
-                >;
+                    , std::integral_constant< std::size_t, 1 >&&, dummyb_type&
+                    >;
 
   using argument_list2
     = std::tuple< std::integral_constant< std::size_t, 1 >&&, dummy1_type&
-                , std::integral_constant< std::size_t, 0 >&&, dummya_type&
-                >;
+                    , std::integral_constant< std::size_t, 0 >&&, dummya_type&
+                    >;
 
   using argument_list3
     = std::tuple< std::integral_constant< std::size_t, 1 >&&, dummy1_type&
-                , std::integral_constant< std::size_t, 1 >&&, dummyb_type&
-                >;
+                    , std::integral_constant< std::size_t, 1 >&&, dummyb_type&
+                    >;
 
   using expected_res_type
     = std::variant
@@ -299,26 +300,26 @@ BOOST_AUTO_TEST_CASE( two_branch_call_arguments_ordering )
 
   {
     auto& underlying_res0 = std::get< 0 >( res0 );
-    BOOST_TEST( &std::get< 1 >( underlying_res0 ) == &dummy0 );
-    BOOST_TEST( &std::get< 3 >( underlying_res0 ) == &dummya );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res0 ) == &dummy0 );
+    BOOST_TEST( &tuple_traits::get< 3 >( underlying_res0 ) == &dummya );
   }
 
   {
     auto& underlying_res1 = std::get< 1 >( res1 );
-    BOOST_TEST( &std::get< 1 >( underlying_res1 ) == &dummy0 );
-    BOOST_TEST( &std::get< 3 >( underlying_res1 ) == &dummyb );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res1 ) == &dummy0 );
+    BOOST_TEST( &tuple_traits::get< 3 >( underlying_res1 ) == &dummyb );
   }
 
   {
     auto& underlying_res2 = std::get< 2 >( res2 );
-    BOOST_TEST( &std::get< 1 >( underlying_res2 ) == &dummy1 );
-    BOOST_TEST( &std::get< 3 >( underlying_res2 ) == &dummya );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res2 ) == &dummy1 );
+    BOOST_TEST( &tuple_traits::get< 3 >( underlying_res2 ) == &dummya );
   }
 
   {
     auto& underlying_res3 = std::get< 3 >( res3 );
-    BOOST_TEST( &std::get< 1 >( underlying_res3 ) == &dummy1 );
-    BOOST_TEST( &std::get< 3 >( underlying_res3 ) == &dummyb );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res3 ) == &dummy1 );
+    BOOST_TEST( &tuple_traits::get< 3 >( underlying_res3 ) == &dummyb );
   }
 }
 
@@ -390,51 +391,51 @@ BOOST_AUTO_TEST_CASE( three_branch_call_arguments_ordering )
 
   using argument_list0
     = std::tuple< std::integral_constant< std::size_t, 0 >&&, dummy0_type&
-                , std::integral_constant< std::size_t, 0 >&&, dummya_type&
-                , std::integral_constant< std::size_t, 0 >&&, dummyA_type&
-                >;
+                    , std::integral_constant< std::size_t, 0 >&&, dummya_type&
+                    , std::integral_constant< std::size_t, 0 >&&, dummyA_type&
+                    >;
 
   using argument_list1
     = std::tuple< std::integral_constant< std::size_t, 0 >&&, dummy0_type&
-                , std::integral_constant< std::size_t, 0 >&&, dummya_type&
-                , std::integral_constant< std::size_t, 1 >&&, dummyB_type&
-                >;
+                    , std::integral_constant< std::size_t, 0 >&&, dummya_type&
+                    , std::integral_constant< std::size_t, 1 >&&, dummyB_type&
+                    >;
 
   using argument_list2
     = std::tuple< std::integral_constant< std::size_t, 0 >&&, dummy0_type&
-                , std::integral_constant< std::size_t, 1 >&&, dummyb_type&
-                , std::integral_constant< std::size_t, 0 >&&, dummyA_type&
-                >;
+                    , std::integral_constant< std::size_t, 1 >&&, dummyb_type&
+                    , std::integral_constant< std::size_t, 0 >&&, dummyA_type&
+                    >;
 
   using argument_list3
     = std::tuple< std::integral_constant< std::size_t, 0 >&&, dummy0_type&
-                , std::integral_constant< std::size_t, 1 >&&, dummyb_type&
-                , std::integral_constant< std::size_t, 1 >&&, dummyB_type&
-                >;
+                    , std::integral_constant< std::size_t, 1 >&&, dummyb_type&
+                    , std::integral_constant< std::size_t, 1 >&&, dummyB_type&
+                    >;
 
   using argument_list4
     = std::tuple< std::integral_constant< std::size_t, 1 >&&, dummy1_type&
-                , std::integral_constant< std::size_t, 0 >&&, dummya_type&
-                , std::integral_constant< std::size_t, 0 >&&, dummyA_type&
-                >;
+                    , std::integral_constant< std::size_t, 0 >&&, dummya_type&
+                    , std::integral_constant< std::size_t, 0 >&&, dummyA_type&
+                    >;
 
   using argument_list5
     = std::tuple< std::integral_constant< std::size_t, 1 >&&, dummy1_type&
-                , std::integral_constant< std::size_t, 0 >&&, dummya_type&
-                , std::integral_constant< std::size_t, 1 >&&, dummyB_type&
-                >;
+                    , std::integral_constant< std::size_t, 0 >&&, dummya_type&
+                    , std::integral_constant< std::size_t, 1 >&&, dummyB_type&
+                    >;
 
   using argument_list6
     = std::tuple< std::integral_constant< std::size_t, 1 >&&, dummy1_type&
-                , std::integral_constant< std::size_t, 1 >&&, dummyb_type&
-                , std::integral_constant< std::size_t, 0 >&&, dummyA_type&
-                >;
+                    , std::integral_constant< std::size_t, 1 >&&, dummyb_type&
+                    , std::integral_constant< std::size_t, 0 >&&, dummyA_type&
+                    >;
 
   using argument_list7
     = std::tuple< std::integral_constant< std::size_t, 1 >&&, dummy1_type&
-                , std::integral_constant< std::size_t, 1 >&&, dummyb_type&
-                , std::integral_constant< std::size_t, 1 >&&, dummyB_type&
-                >;
+                    , std::integral_constant< std::size_t, 1 >&&, dummyb_type&
+                    , std::integral_constant< std::size_t, 1 >&&, dummyB_type&
+                    >;
 
   using expected_res_type
     = std::variant
@@ -447,58 +448,58 @@ BOOST_AUTO_TEST_CASE( three_branch_call_arguments_ordering )
 
   {
     auto& underlying_res0 = std::get< 0 >( res0 );
-    BOOST_TEST( &std::get< 1 >( underlying_res0 ) == &dummy0 );
-    BOOST_TEST( &std::get< 3 >( underlying_res0 ) == &dummya );
-    BOOST_TEST( &std::get< 5 >( underlying_res0 ) == &dummyA );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res0 ) == &dummy0 );
+    BOOST_TEST( &tuple_traits::get< 3 >( underlying_res0 ) == &dummya );
+    BOOST_TEST( &tuple_traits::get< 5 >( underlying_res0 ) == &dummyA );
   }
 
   {
     auto& underlying_res1 = std::get< 1 >( res1 );
-    BOOST_TEST( &std::get< 1 >( underlying_res1 ) == &dummy0 );
-    BOOST_TEST( &std::get< 3 >( underlying_res1 ) == &dummya );
-    BOOST_TEST( &std::get< 5 >( underlying_res1 ) == &dummyB );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res1 ) == &dummy0 );
+    BOOST_TEST( &tuple_traits::get< 3 >( underlying_res1 ) == &dummya );
+    BOOST_TEST( &tuple_traits::get< 5 >( underlying_res1 ) == &dummyB );
   }
 
   {
     auto& underlying_res2 = std::get< 2 >( res2 );
-    BOOST_TEST( &std::get< 1 >( underlying_res2 ) == &dummy0 );
-    BOOST_TEST( &std::get< 3 >( underlying_res2 ) == &dummyb );
-    BOOST_TEST( &std::get< 5 >( underlying_res2 ) == &dummyA );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res2 ) == &dummy0 );
+    BOOST_TEST( &tuple_traits::get< 3 >( underlying_res2 ) == &dummyb );
+    BOOST_TEST( &tuple_traits::get< 5 >( underlying_res2 ) == &dummyA );
   }
 
   {
     auto& underlying_res3 = std::get< 3 >( res3 );
-    BOOST_TEST( &std::get< 1 >( underlying_res3 ) == &dummy0 );
-    BOOST_TEST( &std::get< 3 >( underlying_res3 ) == &dummyb );
-    BOOST_TEST( &std::get< 5 >( underlying_res3 ) == &dummyB );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res3 ) == &dummy0 );
+    BOOST_TEST( &tuple_traits::get< 3 >( underlying_res3 ) == &dummyb );
+    BOOST_TEST( &tuple_traits::get< 5 >( underlying_res3 ) == &dummyB );
   }
 
   {
     auto& underlying_res4 = std::get< 4 >( res4 );
-    BOOST_TEST( &std::get< 1 >( underlying_res4 ) == &dummy1 );
-    BOOST_TEST( &std::get< 3 >( underlying_res4 ) == &dummya );
-    BOOST_TEST( &std::get< 5 >( underlying_res4 ) == &dummyA );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res4 ) == &dummy1 );
+    BOOST_TEST( &tuple_traits::get< 3 >( underlying_res4 ) == &dummya );
+    BOOST_TEST( &tuple_traits::get< 5 >( underlying_res4 ) == &dummyA );
   }
 
   {
     auto& underlying_res5 = std::get< 5 >( res5 );
-    BOOST_TEST( &std::get< 1 >( underlying_res5 ) == &dummy1 );
-    BOOST_TEST( &std::get< 3 >( underlying_res5 ) == &dummya );
-    BOOST_TEST( &std::get< 5 >( underlying_res5 ) == &dummyB );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res5 ) == &dummy1 );
+    BOOST_TEST( &tuple_traits::get< 3 >( underlying_res5 ) == &dummya );
+    BOOST_TEST( &tuple_traits::get< 5 >( underlying_res5 ) == &dummyB );
   }
 
   {
     auto& underlying_res6 = std::get< 6 >( res6 );
-    BOOST_TEST( &std::get< 1 >( underlying_res6 ) == &dummy1 );
-    BOOST_TEST( &std::get< 3 >( underlying_res6 ) == &dummyb );
-    BOOST_TEST( &std::get< 5 >( underlying_res6 ) == &dummyA );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res6 ) == &dummy1 );
+    BOOST_TEST( &tuple_traits::get< 3 >( underlying_res6 ) == &dummyb );
+    BOOST_TEST( &tuple_traits::get< 5 >( underlying_res6 ) == &dummyA );
   }
 
   {
     auto& underlying_res7 = std::get< 7 >( res7 );
-    BOOST_TEST( &std::get< 1 >( underlying_res7 ) == &dummy1 );
-    BOOST_TEST( &std::get< 3 >( underlying_res7 ) == &dummyb );
-    BOOST_TEST( &std::get< 5 >( underlying_res7 ) == &dummyB );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res7 ) == &dummy1 );
+    BOOST_TEST( &tuple_traits::get< 3 >( underlying_res7 ) == &dummyb );
+    BOOST_TEST( &tuple_traits::get< 5 >( underlying_res7 ) == &dummyB );
   }
 }
 
@@ -581,25 +582,25 @@ BOOST_AUTO_TEST_CASE( branch_call_arguments_with_duplicates )
 
   {
     auto& underlying_res0 = std::get< 0 >( res0 );
-    BOOST_TEST( &std::get< 0 >( underlying_res0 ) == &zero );
-    BOOST_TEST( &std::get< 1 >( underlying_res0 ) == &dummya );
+    BOOST_TEST( &tuple_traits::get< 0 >( underlying_res0 ) == &zero );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res0 ) == &dummya );
   }
 
   {
     auto& underlying_res1 = std::get< 1 >( res1 );
-    BOOST_TEST( &std::get< 0 >( underlying_res1 ) == &zero );
-    BOOST_TEST( &std::get< 1 >( underlying_res1 ) == &dummyb );
+    BOOST_TEST( &tuple_traits::get< 0 >( underlying_res1 ) == &zero );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res1 ) == &dummyb );
   }
 
   {
     auto& underlying_res2 = std::get< 0 >( res2 );
-    BOOST_TEST( &std::get< 0 >( underlying_res2 ) == &one );
-    BOOST_TEST( &std::get< 1 >( underlying_res2 ) == &dummya );
+    BOOST_TEST( &tuple_traits::get< 0 >( underlying_res2 ) == &one );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res2 ) == &dummya );
   }
 
   {
     auto& underlying_res3 = std::get< 1 >( res3 );
-    BOOST_TEST( &std::get< 0 >( underlying_res3 ) == &one );
-    BOOST_TEST( &std::get< 1 >( underlying_res3 ) == &dummyb );
+    BOOST_TEST( &tuple_traits::get< 0 >( underlying_res3 ) == &one );
+    BOOST_TEST( &tuple_traits::get< 1 >( underlying_res3 ) == &dummyb );
   }
 }

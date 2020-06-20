@@ -13,6 +13,7 @@
 #include <argot/forward_arguments_as_tuple.hpp>
 #include <argot/prov/reference_to.hpp>
 #include <argot/reducer/to_boost_variant.hpp>
+#include <argot/struct_.hpp>
 
 #include <boost/variant/get.hpp>
 #include <boost/variant/variant.hpp>

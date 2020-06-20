@@ -13,8 +13,8 @@
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
+#include <argot/struct_.hpp>
 
-#include <tuple>
 #include <utility>
 #include <variant>
 
@@ -44,7 +44,7 @@ struct argument_types_to_tuple{};
 template< class... T >
 struct argument_types_to_tuple< receiver_traits::argument_types_t< T... > >
 {
-  using type = std::tuple< T... >;
+  using type = struct_< T... >;
 };
 
 template< class ArgumentTypes >
@@ -62,7 +62,7 @@ struct make_concept_map
   static constexpr std::variant
   < receiver::return_argument_references_detail::argument_types_to_tuple_t
     < LeadingPs >...
-  , std::tuple< P&&... >
+  , struct_< P&&... >
   , receiver::return_argument_references_detail::argument_types_to_tuple_t
     < TrailingPs >...
   >
@@ -76,10 +76,11 @@ struct make_concept_map
     return std::variant
     < receiver::return_argument_references_detail::argument_types_to_tuple_t
       < LeadingPs >...
-    , std::tuple< P&&... >
+    , struct_< P&&... >
     , receiver::return_argument_references_detail::argument_types_to_tuple_t
       < TrailingPs >...
     >( std::in_place_index< sizeof...( LeadingPs ) >
+     , std::in_place
      , ARGOT_FORWARD( P )( args )...
      );
   }

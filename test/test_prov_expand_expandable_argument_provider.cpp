@@ -15,6 +15,8 @@
 #include <argot/prov/nothing.hpp>
 #include <argot/prov/value_of.hpp>
 #include <argot/receiver/return_argument_references.hpp>
+#include <argot/tuple_traits/get.hpp>
+#include <argot/variant_traits/get.hpp>
 
 #include <type_traits>
 #include <tuple>
@@ -25,8 +27,11 @@ namespace {
 namespace prov = argot::prov;
 namespace receiver = argot::receiver;
 namespace prov_traits = argot::prov_traits;
+namespace tuple_traits = argot::tuple_traits;
+namespace variant_traits = argot::variant_traits;
 
 using argot::SameType;
+using argot::make_referential_struct;
 
 using prov::conditional;
 using prov::nothing;
@@ -54,12 +59,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unary_nonbranch_expand )
 
   ARGOT_CONCEPT_ENSURE
   ( argot::ExpandableArgumentProvider
-    < decltype( value_of( std::forward_as_tuple( std::move( one ) ) ) )
+    < decltype( value_of( make_referential_struct( std::move( one ) ) ) )
     >
   );
 
   decltype( auto ) provider
-    = expand( value_of( std::forward_as_tuple( std::move( one ) ) ) );
+    = expand( value_of( make_referential_struct( std::move( one ) ) ) );
 
   using provider_type = decltype( provider );
 
@@ -67,7 +72,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unary_nonbranch_expand )
   ( SameType
     < provider_type
     , result_of_expand_t
-      < result_of_value_of_t< std::tuple< int&& > > >
+      < result_of_value_of_t< argot::struct_< int&& > > >
     >
   );
 
@@ -75,7 +80,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unary_nonbranch_expand )
   ( SameType
     < provider_type
     , result_of_expand
-      < result_of_value_of_t< std::tuple< int&& > > >::type
+      < result_of_value_of_t< argot::struct_< int&& > > >::type
     >
   );
 
@@ -85,8 +90,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unary_nonbranch_expand )
   ARGOT_CONCEPT_ENSURE
   ( SameType
     < result_of_expand_t
-      < result_of_value_of_t< std::tuple< int&& > > >
-    , std::tuple< int&& >
+      < result_of_value_of_t< argot::struct_< int&& > > >
+    , argot::struct_< int&& >
     >
   );*/
 
@@ -103,14 +108,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unary_nonbranch_expand )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple< int&& > >
+      , std::variant< argot::struct_< int&& > >
       >
     );
 
     ARGOT_TEST_EQ( provision_result.index(), 0 );
-    auto& tup = std::get< 0 >( provision_result );
+    auto& tup = variant_traits::get< 0 >( provision_result );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &one );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
   }
 
   // lvalue provision
@@ -126,14 +131,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unary_nonbranch_expand )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple< int& > >
+      , std::variant< argot::struct_< int& > >
       >
     );
 
     ARGOT_TEST_EQ( provision_result.index(), 0 );
-    auto& tup = std::get< 0 >( provision_result );
+    auto& tup = variant_traits::get< 0 >( provision_result );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &one );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
   }
 
   return 0;
@@ -149,8 +154,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_binary_nonbranch_expand )
   decltype( auto ) provider
     = expand
       ( value_of
-        ( std::forward_as_tuple( std::move( one ), two )
-        , std::forward_as_tuple( three, std::move( four ) )
+        ( make_referential_struct( std::move( one ), two )
+        , make_referential_struct( three, std::move( four ) )
         )
       );
 
@@ -161,8 +166,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_binary_nonbranch_expand )
     < provider_type
     , result_of_expand_t
       < result_of_value_of_t
-        < std::tuple< int&&, long& >
-        , std::tuple< char&, short&& >
+        < argot::struct_< int&&, long& >
+        , argot::struct_< char&, short&& >
         >
       >
     >
@@ -173,8 +178,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_binary_nonbranch_expand )
     < provider_type
     , result_of_expand
       < result_of_value_of_t
-        < std::tuple< int&&, long& >
-        , std::tuple< char&, short&& >
+        < argot::struct_< int&&, long& >
+        , argot::struct_< char&, short&& >
         >
       >::type
     >
@@ -193,17 +198,17 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_binary_nonbranch_expand )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple< int&&, long&, char&, short&& > >
+      , std::variant< argot::struct_< int&&, long&, char&, short&& > >
       >
     );
 
     ARGOT_TEST_EQ( provision_result.index(), 0 );
-    auto& tup = std::get< 0 >( provision_result );
+    auto& tup = variant_traits::get< 0 >( provision_result );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &one );
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ), &two );
-    ARGOT_TEST_EQ( &std::get< 2 >( tup ), &three );
-    ARGOT_TEST_EQ( &std::get< 3 >( tup ), &four );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &two );
+    ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &three );
+    ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &four );
   }
 
   // lvalue provision
@@ -219,17 +224,17 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_binary_nonbranch_expand )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple< int&, long&, char&, short& > >
+      , std::variant< argot::struct_< int&, long&, char&, short& > >
       >
     );
 
     ARGOT_TEST_EQ( provision_result.index(), 0 );
-    auto& tup = std::get< 0 >( provision_result );
+    auto& tup = variant_traits::get< 0 >( provision_result );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &one );
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ), &two );
-    ARGOT_TEST_EQ( &std::get< 2 >( tup ), &three );
-    ARGOT_TEST_EQ( &std::get< 3 >( tup ), &four );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &two );
+    ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &three );
+    ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &four );
   }
 
   return 0;
@@ -247,9 +252,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_ternary_nonbranch_expand )
   decltype( auto ) provider
     = expand
       ( value_of
-        ( std::forward_as_tuple( std::move( one ), two )
-        , std::forward_as_tuple( three, std::move( four ) )
-        , std::forward_as_tuple( std::move( five ), six )
+        ( make_referential_struct( std::move( one ), two )
+        , make_referential_struct( three, std::move( four ) )
+        , make_referential_struct( std::move( five ), six )
         )
       );
 
@@ -260,9 +265,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_ternary_nonbranch_expand )
     < provider_type
     , result_of_expand_t
       < result_of_value_of_t
-        < std::tuple< int&&, long& >
-        , std::tuple< char&, short&& >
-        , std::tuple< long long&&, double& >
+        < argot::struct_< int&&, long& >
+        , argot::struct_< char&, short&& >
+        , argot::struct_< long long&&, double& >
         >
       >
     >
@@ -273,9 +278,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_ternary_nonbranch_expand )
     < provider_type
     , result_of_expand
       < result_of_value_of_t
-        < std::tuple< int&&, long& >
-        , std::tuple< char&, short&& >
-        , std::tuple< long long&&, double& >
+        < argot::struct_< int&&, long& >
+        , argot::struct_< char&, short&& >
+        , argot::struct_< long long&&, double& >
         >
       >::type
     >
@@ -295,19 +300,19 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_ternary_nonbranch_expand )
     ( SameType
       < provision_result_type
       , std::variant
-        < std::tuple< int&&, long&, char&, short&&, long long&&, double& > >
+        < argot::struct_< int&&, long&, char&, short&&, long long&&, double& > >
       >
     );
 
     ARGOT_TEST_EQ( provision_result.index(), 0 );
-    auto& tup = std::get< 0 >( provision_result );
+    auto& tup = variant_traits::get< 0 >( provision_result );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &one );
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ), &two );
-    ARGOT_TEST_EQ( &std::get< 2 >( tup ), &three );
-    ARGOT_TEST_EQ( &std::get< 3 >( tup ), &four );
-    ARGOT_TEST_EQ( &std::get< 4 >( tup ), &five );
-    ARGOT_TEST_EQ( &std::get< 5 >( tup ), &six );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &two );
+    ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &three );
+    ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &four );
+    ARGOT_TEST_EQ( &tuple_traits::get< 4 >( tup ), &five );
+    ARGOT_TEST_EQ( &tuple_traits::get< 5 >( tup ), &six );
   }
 
   // lvalue provision
@@ -324,19 +329,19 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_ternary_nonbranch_expand )
     ( SameType
       < provision_result_type
       , std::variant
-        < std::tuple< int&, long&, char&, short&, long long&, double& > >
+        < argot::struct_< int&, long&, char&, short&, long long&, double& > >
       >
     );
 
     ARGOT_TEST_EQ( provision_result.index(), 0 );
-    auto& tup = std::get< 0 >( provision_result );
+    auto& tup = variant_traits::get< 0 >( provision_result );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &one );
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ), &two );
-    ARGOT_TEST_EQ( &std::get< 2 >( tup ), &three );
-    ARGOT_TEST_EQ( &std::get< 3 >( tup ), &four );
-    ARGOT_TEST_EQ( &std::get< 4 >( tup ), &five );
-    ARGOT_TEST_EQ( &std::get< 5 >( tup ), &six );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &two );
+    ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &three );
+    ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &four );
+    ARGOT_TEST_EQ( &tuple_traits::get< 4 >( tup ), &five );
+    ARGOT_TEST_EQ( &tuple_traits::get< 5 >( tup ), &six );
   }
 
   return 0;

@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2019 Matt Calabrese
+  Copyright (c) 2020 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -108,6 +108,7 @@ This header includes all of the facilities of the `concepts` directory.
 #include <argot/concepts/instantiation_of.hpp>
 #include <argot/concepts/intrinsic_persistent_thenable.hpp>
 #include <argot/concepts/intrinsic_thenable.hpp>
+#include <argot/concepts/intrinsic_unpackable.hpp>
 #include <argot/concepts/invocable_from_provision_without_reduction.hpp>
 #include <argot/concepts/invocable_object_with.hpp>
 #include <argot/concepts/invocable_object_with_each.hpp>
@@ -130,6 +131,7 @@ This header includes all of the facilities of the `concepts` directory.
 #include <argot/concepts/nothrow_convertible.hpp>
 #include <argot/concepts/nothrow_copy_assignable.hpp>
 #include <argot/concepts/nothrow_copy_constructible.hpp>
+#include <argot/concepts/nothrow_decay_sinkable.hpp>
 #include <argot/concepts/nothrow_default_constructible.hpp>
 #include <argot/concepts/nothrow_destructible.hpp>
 #include <argot/concepts/nothrow_emplaceable_when_contained.hpp>

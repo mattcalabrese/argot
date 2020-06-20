@@ -79,7 +79,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_provision )
     ( SameType
       < provision_result_type
       , std::variant
-        < std::tuple
+        < argot::struct_
           < std::integral_constant< std::size_t, 0 >
           , std::integral_constant< std::size_t, 1 >
           , std::integral_constant< std::size_t, 2 >
@@ -105,7 +105,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_provision )
     ( SameType
       < provision_result_type
       , std::variant
-        < std::tuple
+        < argot::struct_
           < std::integral_constant< std::size_t, 0 >
           , std::integral_constant< std::size_t, 1 >
           , std::integral_constant< std::size_t, 2 >

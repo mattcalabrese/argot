@@ -70,7 +70,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary_union_indices )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple<> >
+      , std::variant< argot::struct_<> >
       >
     );
 
@@ -90,7 +90,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary_union_indices )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple<> >
+      , std::variant< argot::struct_<> >
       >
     );
 
@@ -137,7 +137,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_ternary_union_indices )
     ( SameType
       < provision_result_type
       , std::variant
-        < std::tuple
+        < argot::struct_
           < std::integral_constant< std::size_t, 0 >
           , std::integral_constant< std::size_t, 1 >
           , std::integral_constant< std::size_t, 2 >
@@ -163,7 +163,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_ternary_union_indices )
     ( SameType
       < provision_result_type
       , std::variant
-        < std::tuple
+        < argot::struct_
           < std::integral_constant< std::size_t, 0 >
           , std::integral_constant< std::size_t, 1 >
           , std::integral_constant< std::size_t, 2 >

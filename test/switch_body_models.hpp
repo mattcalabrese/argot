@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -8,7 +8,6 @@
 #ifndef ARGOT_TEST_SWITCH_BODY_MODELS_HPP_
 #define ARGOT_TEST_SWITCH_BODY_MODELS_HPP_
 
-#include <argot/impossible.hpp>
 #include <argot/case/case_range.hpp>
 #include <argot/case/case_set.hpp>
 #include <argot/case/detail/provided.hpp>
@@ -27,13 +26,14 @@
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/gen/not.hpp>
 #include <argot/gen/requires.hpp>
+#include <argot/impossible.hpp>
 #include <argot/prov/switch_/detail/config.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
+#include <argot/struct_.hpp>
 #include <argot/value_list.hpp>
 #include <argot/zipper.hpp>
 
-#include <tuple>
 #include <type_traits>
 #include <utility>
 #include <variant>
@@ -96,7 +96,7 @@ struct variant_of_argument_references_of_size_impl
 {
   using type
     = std::variant
-      < std::tuple< std::integral_constant< int, Indices >&& >... >;
+      < argot::struct_< std::integral_constant< int, Indices >&& >... >;
 };
 
 template< int Size >
@@ -113,7 +113,7 @@ struct variant_of_argument_references_of_size_persistent_impl
 {
   using type
     = std::variant
-      < std::tuple< std::integral_constant< int, Indices > const& >... >;
+      < argot::struct_< std::integral_constant< int, Indices > const& >... >;
 };
 
 template< int Size >

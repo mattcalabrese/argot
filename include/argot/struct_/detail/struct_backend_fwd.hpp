@@ -10,6 +10,7 @@
 
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/constexpr_swap.hpp>
+#include <argot/detail/give_qualifiers_to.hpp>
 #include <argot/detail/variadic_chunk.hpp>
 #include <argot/detail/variadic_range.hpp>
 #include <argot/in_place_with_result.hpp>
@@ -159,14 +160,22 @@ struct struct_impl_variadic
   static constexpr std::size_t secondary_index
     = Index % ARGOT_MAX_PREPROCESSED_STRUCT_ELEMENTS;
 
+  template< class... T >
+  using member_type
+    = detail_argot::variadic_at
+      < Index, detail_forward::direct_identity_t, T... >;
+
+  // TODO(calabrese) Make this have a constexpr auto&& return type
   template< class ElementType, class StructBase >
-  static constexpr auto&& get( StructBase&& self ) noexcept
+  static constexpr call_detail::give_qualifiers_to_t
+  < StructBase&&, ElementType >
+  get( StructBase&& self ) noexcept
+  //static constexpr auto&& get( StructBase&& self ) noexcept
   {
+    using struct_base_t = std::remove_reference_t< StructBase >;
+
     using primary_struct_base_impl
-      = struct_impl
-        < std::remove_reference_t< StructBase >::num_members_v
-        , primary_index
-        >;
+      = struct_impl< struct_base_t::num_members_v, primary_index >;
 
     using qualified_alt
       = call_detail::give_qualifiers_to_t< StructBase&&, ElementType >;
@@ -177,8 +186,8 @@ struct struct_impl_variadic
       , secondary_index
       >::template get< ElementType >
       ( primary_struct_base_impl::template get
-        < primary_struct_base_impl::template expand_members_t
-          < primary_struct_base_impl::template member_type_t >
+        < typename struct_base_t::template expand_members_t
+          < primary_struct_base_impl::template member_type >
         >
         ( ARGOT_FORWARD( StructBase )( self ).sub_struct_base )
       )

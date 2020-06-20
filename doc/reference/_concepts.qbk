@@ -1,5 +1,5 @@
 [/==============================================================================
-  Copyright (c) 2019 Matt Calabrese
+  Copyright (c) 2020 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -98,6 +98,7 @@
 [include concepts/instantiation_of.qbk]
 [include concepts/intrinsic_persistent_thenable.qbk]
 [include concepts/intrinsic_thenable.qbk]
+[include concepts/intrinsic_unpackable.qbk]
 [include concepts/invocable_from_provision_without_reduction.qbk]
 [include concepts/invocable_object_with.qbk]
 [include concepts/invocable_object_with_each.qbk]
@@ -120,6 +121,7 @@
 [include concepts/nothrow_convertible.qbk]
 [include concepts/nothrow_copy_assignable.qbk]
 [include concepts/nothrow_copy_constructible.qbk]
+[include concepts/nothrow_decay_sinkable.qbk]
 [include concepts/nothrow_default_constructible.qbk]
 [include concepts/nothrow_destructible.qbk]
 [include concepts/nothrow_emplaceable_when_contained.qbk]

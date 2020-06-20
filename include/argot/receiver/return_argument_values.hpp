@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -10,16 +10,16 @@
 
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/concepts/sinkable.hpp>
-#include <argot/gen/transparent_requirement.hpp>
+#include <argot/detail/remove_cvref.hpp>
+#include <argot/detail/sink.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/detail/sink.hpp>
+#include <argot/gen/transparent_requirement.hpp>
+#include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/receiver_traits/receive_branch.hpp>
-#include <argot/receiver_traits/argument_list_kinds.hpp>
-#include <argot/detail/remove_cvref.hpp>
+#include <argot/struct_.hpp>
 
-#include <tuple>
 #include <utility>
 #include <variant>
 
@@ -43,17 +43,17 @@ struct result_of_return_argument_values
 namespace return_argument_values_detail {
 
 template< class ArgumentTypes >
-struct argument_types_to_tuple {};
+struct argument_types_to_struct {};
 
 template< class... T >
-struct argument_types_to_tuple< receiver_traits::argument_types_t< T... > >
+struct argument_types_to_struct< receiver_traits::argument_types_t< T... > >
 {
-  using type = std::tuple< detail_argot::remove_cvref_t< T >... >;
+  using type = struct_< detail_argot::remove_cvref_t< T >... >;
 };
 
 template< class ArgumentTypes >
-using argument_types_to_tuple_t
-  = typename argument_types_to_tuple< ArgumentTypes >::type;
+using argument_types_to_struct_t
+  = typename argument_types_to_struct< ArgumentTypes >::type;
 
 template< class ArgumentTypes >
 struct argument_types_are_sinkable {};
@@ -96,12 +96,13 @@ struct make_concept_map
   )
   {
     return std::variant
-    < receiver::return_argument_values_detail::argument_types_to_tuple_t
+    < receiver::return_argument_values_detail::argument_types_to_struct_t
       < LeadingPs >...
-    , std::tuple< detail_argot::remove_cvref_t< P >... >
-    , receiver::return_argument_values_detail::argument_types_to_tuple_t
+    , struct_< detail_argot::remove_cvref_t< P >... >
+    , receiver::return_argument_values_detail::argument_types_to_struct_t
       < TrailingPs >...
     >( std::in_place_index< sizeof...( LeadingPs ) >
+     , std::in_place
      , call_detail::forward_and_sink< P >( args )...
      );
   }

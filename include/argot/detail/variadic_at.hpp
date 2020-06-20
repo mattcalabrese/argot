@@ -32,7 +32,7 @@ struct variadic_at_impl< 0 >
   }
 
   template< template< class... > class Result, class E, class... P >
-  using apply = Result< E >;
+  using apply = expand< Result, E >;
 };
 
 template<>
@@ -59,7 +59,7 @@ struct variadic_at_impl< 1 >
   < template< class... > class Result
   , class D0, class E, class... Tail
   >
-  using apply = Result< E >;
+  using apply = expand< Result, E >;
 };
 
 template<>
@@ -86,7 +86,7 @@ struct variadic_at_impl< 2 >
   < template< class... > class Result, class D0, class D1
   , class E, class... Tail
   >
-  using apply = Result< E >;
+  using apply = expand< Result, E >;
 };
 
 template<>
@@ -115,7 +115,7 @@ struct variadic_at_impl< 3 >
   , class E
   , class... Tail
   >
-  using apply = Result< E >;
+  using apply = expand< Result, E >;
 };
 
 template<>
@@ -144,7 +144,7 @@ struct variadic_at_impl< 4 >
   , class E
   , class... Tail
   >
-  using apply = Result< E >;
+  using apply = expand< Result, E >;
 };
 
 template<>
@@ -173,7 +173,7 @@ struct variadic_at_impl< 5 >
   , class E
   , class... Tail
   >
-  using apply = Result< E >;
+  using apply = expand< Result, E >;
 };
 
 template<>
@@ -203,7 +203,7 @@ struct variadic_at_impl< 6 >
   , class E
   , class... Tail
   >
-  using apply = Result< E >;
+  using apply = expand< Result, E >;
 };
 
 template<>
@@ -234,7 +234,7 @@ struct variadic_at_impl< 7 >
   , class E
   , class... Tail
   >
-  using apply = Result< E >;
+  using apply = expand< Result, E >;
 };
 
 template<>
@@ -265,7 +265,7 @@ struct variadic_at_impl< 8 >
   , class E
   , class... Tail
   >
-  using apply = Result< E >;
+  using apply = expand< Result, E >;
 };
 
 template<>
@@ -296,7 +296,7 @@ struct variadic_at_impl< 9 >
   , class E
   , class... Tail
   >
-  using apply = Result< E >;
+  using apply = expand< Result, E >;
 };
 
 template<>
@@ -352,7 +352,7 @@ struct variadic_at_impl< 10 >
   , class E
   , class... Tail
   >
-  using apply = Result< E >;
+  using apply = expand< Result, E >;
 
   template
   < std::size_t AmountToDrop

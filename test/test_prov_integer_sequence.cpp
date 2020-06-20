@@ -68,7 +68,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary_integer_sequence )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple<> >
+      , std::variant< argot::struct_<> >
       >
     );
 
@@ -88,7 +88,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary_integer_sequence )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple<> >
+      , std::variant< argot::struct_<> >
       >
     );
 
@@ -134,7 +134,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonzero_integer_sequence )
     ( SameType
       < provision_result_type
       , std::variant
-        < std::tuple
+        < argot::struct_
           < std::integral_constant< short, 0 >
           , std::integral_constant< short, 1 >
           , std::integral_constant< short, 2 >
@@ -164,7 +164,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonzero_integer_sequence )
     ( SameType
       < provision_result_type
       , std::variant
-        < std::tuple
+        < argot::struct_
           < std::integral_constant< short, 0 >
           , std::integral_constant< short, 1 >
           , std::integral_constant< short, 2 >

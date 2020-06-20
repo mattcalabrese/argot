@@ -13,9 +13,9 @@
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/receiver_traits/receive_branch.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
+#include <argot/tuple_traits/get.hpp>
 
 #include <stdexcept>
-#include <tuple>
 
 namespace {
 
@@ -30,6 +30,8 @@ using argot::receiver_traits::argument_list_kinds;
 using argot::receiver_traits::argument_list_kinds_t;
 using argot::receiver_traits::result_of_receive_branch;
 using argot::receiver_traits::result_of_receive_branch_t;
+
+namespace tuple_traits = argot::tuple_traits;
 
 struct move_only_foo {
   explicit constexpr move_only_foo( int const value ) : value( value ) {}
@@ -61,7 +63,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < result_type
-      , std::variant< std::tuple<> >
+      , std::variant< argot::struct_<> >
       >
     );
 
@@ -112,7 +114,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching )
     ( SameType
       < result_type
       , std::variant
-        < std::tuple< foo, foo, foo, foo, move_only_foo > >
+        < argot::struct_< foo, foo, foo, foo, move_only_foo > >
       >
     );
 
@@ -144,11 +146,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching )
 
     decltype( auto ) tup = std::get< 0 >( args );
 
-    ARGOT_TEST_EQ( std::get< 0 >( tup ).value, 1 );
-    ARGOT_TEST_EQ( std::get< 1 >( tup ).value, 1 );
-    ARGOT_TEST_EQ( std::get< 2 >( tup ).value, 1 );
-    ARGOT_TEST_EQ( std::get< 3 >( tup ).value, 1 );
-    ARGOT_TEST_EQ( std::get< 4 >( tup ).value, 1 );
+    ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ).value, 1 );
+    ARGOT_TEST_EQ( tuple_traits::get< 1 >( tup ).value, 1 );
+    ARGOT_TEST_EQ( tuple_traits::get< 2 >( tup ).value, 1 );
+    ARGOT_TEST_EQ( tuple_traits::get< 3 >( tup ).value, 1 );
+    ARGOT_TEST_EQ( tuple_traits::get< 4 >( tup ).value, 1 );
   }
 
   return 0;
@@ -181,11 +183,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
     ( SameType
       < result_type
       , std::variant
-        < std::tuple< foo >
-        , std::tuple< foo >
-        , std::tuple< foo, foo >
-        , std::tuple<>
-        , std::tuple< move_only_foo >
+        < argot::struct_< foo >
+        , argot::struct_< foo >
+        , argot::struct_< foo, foo >
+        , argot::struct_<>
+        , argot::struct_< move_only_foo >
         >
       >
     );
@@ -228,7 +230,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
 
     decltype( auto ) tup = std::get< 0 >( args );
 
-    ARGOT_TEST_EQ( std::get< 0 >( tup ).value, 1 );
+    ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ).value, 1 );
   }
 
   {
@@ -255,11 +257,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
     ( SameType
       < result_type
       , std::variant
-        < std::tuple< foo >
-        , std::tuple< foo >
-        , std::tuple< foo, foo >
-        , std::tuple<>
-        , std::tuple< move_only_foo >
+        < argot::struct_< foo >
+        , argot::struct_< foo >
+        , argot::struct_< foo, foo >
+        , argot::struct_<>
+        , argot::struct_< move_only_foo >
         >
       >
     );
@@ -302,7 +304,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
 
     decltype( auto ) tup = std::get< 1 >( args );
 
-    ARGOT_TEST_EQ( std::get< 0 >( tup ).value, 1 );
+    ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ).value, 1 );
   }
 
   {
@@ -331,11 +333,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
     ( SameType
       < result_type
       , std::variant
-        < std::tuple< foo >
-        , std::tuple< foo >
-        , std::tuple< foo, foo >
-        , std::tuple<>
-        , std::tuple< move_only_foo >
+        < argot::struct_< foo >
+        , argot::struct_< foo >
+        , argot::struct_< foo, foo >
+        , argot::struct_<>
+        , argot::struct_< move_only_foo >
         >
       >
     );
@@ -380,8 +382,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
 
     decltype( auto ) tup = std::get< 2 >( args );
 
-    ARGOT_TEST_EQ( std::get< 0 >( tup ).value, 1 );
-    ARGOT_TEST_EQ( std::get< 1 >( tup ).value, 1 );
+    ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ).value, 1 );
+    ARGOT_TEST_EQ( tuple_traits::get< 1 >( tup ).value, 1 );
   }
 
   {
@@ -408,11 +410,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
     ( SameType
       < result_type
       , std::variant
-        < std::tuple< foo >
-        , std::tuple< foo >
-        , std::tuple< foo, foo >
-        , std::tuple<>
-        , std::tuple< move_only_foo >
+        < argot::struct_< foo >
+        , argot::struct_< foo >
+        , argot::struct_< foo, foo >
+        , argot::struct_<>
+        , argot::struct_< move_only_foo >
         >
       >
     );
@@ -477,11 +479,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
     ( SameType
       < result_type
       , std::variant
-        < std::tuple< foo >
-        , std::tuple< foo >
-        , std::tuple< foo, foo >
-        , std::tuple<>
-        , std::tuple< move_only_foo >
+        < argot::struct_< foo >
+        , argot::struct_< foo >
+        , argot::struct_< foo, foo >
+        , argot::struct_<>
+        , argot::struct_< move_only_foo >
         >
       >
     );
@@ -524,7 +526,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
 
     decltype( auto ) tup = std::get< 4 >( args );
 
-    ARGOT_TEST_EQ( std::get< 0 >( tup ).value, 1 );
+    ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ).value, 1 );
   }
 
   return 0;

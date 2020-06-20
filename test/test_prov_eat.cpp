@@ -77,7 +77,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple<> >
+      , std::variant< argot::struct_<> >
       >
     );
 
@@ -97,7 +97,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple<> >
+      , std::variant< argot::struct_<> >
       >
     );
 
@@ -152,7 +152,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple<> >
+      , std::variant< argot::struct_<> >
       >
     );
 
@@ -172,7 +172,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple<> >
+      , std::variant< argot::struct_<> >
       >
     );
 

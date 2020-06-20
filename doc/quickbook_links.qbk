@@ -1,5 +1,5 @@
 [/==============================================================================
-  Copyright (c) 2019 Matt Calabrese
+  Copyright (c) 2020 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -256,6 +256,14 @@
 [def argot::side_effect [link argot.ref.argot.side_effect `argot::side_effect`]]
 [def argot::result_of_side_effect_t [link argot.ref.argot.side_effect `argot::result_of_side_effect_t`]]
 [def argot::result_of_side_effect [link argot.ref.argot.side_effect `argot::result_of_side_effect`]]
+
+[def argot_struct_ argot::struct_]
+[def argot::struct_fn [link argot.ref.argot.struct_ `argot::struct_fn`]]
+[def argot::struct_t [link argot.ref.argot.struct_ `argot::struct_t`]]
+[def argot::struct_v [link argot.ref.argot.struct_ `argot::struct_v`]]
+[def argot::struct_ [link argot.ref.argot.struct_ `argot::struct_`]]
+[def argot::result_of_struct_t [link argot.ref.argot.struct_ `argot::result_of_struct_t`]]
+[def argot::result_of_struct_ [link argot.ref.argot.struct_ `argot::result_of_struct_`]]
 
 [def argot_tag argot::tag]
 [def argot::tag_fn [link argot.ref.argot.tag `argot::tag_fn`]]
@@ -841,6 +849,14 @@
 [def prov::result_of_assert_t [link argot.ref.prov.assert_ `prov::result_of_assert_t`]]
 [def prov::result_of_assert_ [link argot.ref.prov.assert_ `prov::result_of_assert_`]]
 
+[def prov_at prov::at]
+[def prov::at_fn [link argot.ref.prov.at `prov::at_fn`]]
+[def prov::at_t [link argot.ref.prov.at `prov::at_t`]]
+[def prov::at_v [link argot.ref.prov.at `prov::at_v`]]
+[def prov::at [link argot.ref.prov.at `prov::at`]]
+[def prov::result_of_at_t [link argot.ref.prov.at `prov::result_of_at_t`]]
+[def prov::result_of_at [link argot.ref.prov.at `prov::result_of_at`]]
+
 [def prov_bind_call prov::bind_call]
 [def prov::bind_call_fn [link argot.ref.prov.bind_call `prov::bind_call_fn`]]
 [def prov::bind_call_t [link argot.ref.prov.bind_call `prov::bind_call_t`]]
@@ -872,6 +888,14 @@
 [def prov::boost_assert [link argot.ref.prov.boost_assert `prov::boost_assert`]]
 [def prov::result_of_boost_assert_t [link argot.ref.prov.boost_assert `prov::result_of_boost_assert_t`]]
 [def prov::result_of_boost_assert [link argot.ref.prov.boost_assert `prov::result_of_boost_assert`]]
+
+[def prov_chunk prov::chunk]
+[def prov::chunk_fn [link argot.ref.prov.chunk `prov::chunk_fn`]]
+[def prov::chunk_t [link argot.ref.prov.chunk `prov::chunk_t`]]
+[def prov::chunk_v [link argot.ref.prov.chunk `prov::chunk_v`]]
+[def prov::chunk [link argot.ref.prov.chunk `prov::chunk`]]
+[def prov::result_of_chunk_t [link argot.ref.prov.chunk `prov::result_of_chunk_t`]]
+[def prov::result_of_chunk [link argot.ref.prov.chunk `prov::result_of_chunk`]]
 
 [def prov_conditional prov::conditional]
 [def prov::conditional_fn [link argot.ref.prov.conditional `prov::conditional_fn`]]
@@ -1873,6 +1897,14 @@
 [def tuple_traits::result_of_element_type_t [link argot.ref.tuple_traits.element_type `tuple_traits::result_of_element_type_t`]]
 [def tuple_traits::result_of_element_type [link argot.ref.tuple_traits.element_type `tuple_traits::result_of_element_type`]]
 
+[def tuple_traits_expand_element_types tuple_traits::expand_element_types]
+[def tuple_traits::expand_element_types_fn [link argot.ref.tuple_traits.expand_element_types `tuple_traits::expand_element_types_fn`]]
+[def tuple_traits::expand_element_types_t [link argot.ref.tuple_traits.expand_element_types `tuple_traits::expand_element_types_t`]]
+[def tuple_traits::expand_element_types_v [link argot.ref.tuple_traits.expand_element_types `tuple_traits::expand_element_types_v`]]
+[def tuple_traits::expand_element_types [link argot.ref.tuple_traits.expand_element_types `tuple_traits::expand_element_types`]]
+[def tuple_traits::result_of_expand_element_types_t [link argot.ref.tuple_traits.expand_element_types `tuple_traits::result_of_expand_element_types_t`]]
+[def tuple_traits::result_of_expand_element_types [link argot.ref.tuple_traits.expand_element_types `tuple_traits::result_of_expand_element_types`]]
+
 [def tuple_traits_get tuple_traits::get]
 [def tuple_traits::get_fn [link argot.ref.tuple_traits.get `tuple_traits::get_fn`]]
 [def tuple_traits::get_t [link argot.ref.tuple_traits.get `tuple_traits::get_t`]]
@@ -2452,6 +2484,11 @@
 [def _IntrinsicThenable `IntrinsicThenable`]
 [def IntrinsicThenable [link argot.ref.concepts.intrinsic_thenable `IntrinsicThenable`]]
 
+[def concepts_intrinsic_unpackable `IntrinsicUnpackable`]
+[def _IntrinsicUnpackable_ IntrinsicUnpackable]
+[def _IntrinsicUnpackable `IntrinsicUnpackable`]
+[def IntrinsicUnpackable [link argot.ref.concepts.intrinsic_unpackable `IntrinsicUnpackable`]]
+
 [def concepts_invocable_from_provision_without_reduction `InvocableFromProvisionWithoutReduction`]
 [def _InvocableFromProvisionWithoutReduction_ InvocableFromProvisionWithoutReduction]
 [def _InvocableFromProvisionWithoutReduction `InvocableFromProvisionWithoutReduction`]
@@ -2561,6 +2598,11 @@
 [def _NothrowCopyConstructible_ NothrowCopyConstructible]
 [def _NothrowCopyConstructible `NothrowCopyConstructible`]
 [def NothrowCopyConstructible [link argot.ref.concepts.nothrow_copy_constructible `NothrowCopyConstructible`]]
+
+[def concepts_nothrow_decay_sinkable `NothrowDecaySinkable`]
+[def _NothrowDecaySinkable_ NothrowDecaySinkable]
+[def _NothrowDecaySinkable `NothrowDecaySinkable`]
+[def NothrowDecaySinkable [link argot.ref.concepts.nothrow_decay_sinkable `NothrowDecaySinkable`]]
 
 [def concepts_nothrow_default_constructible `NothrowDefaultConstructible`]
 [def _NothrowDefaultConstructible_ NothrowDefaultConstructible]
@@ -3289,6 +3331,8 @@
 
 [def argot/concepts/intrinsic_thenable.hpp [link argot.ref.concepts.intrinsic_thenable `argot/concepts/intrinsic_thenable.hpp`]]
 
+[def argot/concepts/intrinsic_unpackable.hpp [link argot.ref.concepts.intrinsic_unpackable `argot/concepts/intrinsic_unpackable.hpp`]]
+
 [def argot/concepts/invocable_from_provision_without_reduction.hpp [link argot.ref.concepts.invocable_from_provision_without_reduction `argot/concepts/invocable_from_provision_without_reduction.hpp`]]
 
 [def argot/concepts/invocable_object_with.hpp [link argot.ref.concepts.invocable_object_with `argot/concepts/invocable_object_with.hpp`]]
@@ -3332,6 +3376,8 @@
 [def argot/concepts/nothrow_copy_assignable.hpp [link argot.ref.concepts.nothrow_copy_assignable `argot/concepts/nothrow_copy_assignable.hpp`]]
 
 [def argot/concepts/nothrow_copy_constructible.hpp [link argot.ref.concepts.nothrow_copy_constructible `argot/concepts/nothrow_copy_constructible.hpp`]]
+
+[def argot/concepts/nothrow_decay_sinkable.hpp [link argot.ref.concepts.nothrow_decay_sinkable `argot/concepts/nothrow_decay_sinkable.hpp`]]
 
 [def argot/concepts/nothrow_default_constructible.hpp [link argot.ref.concepts.nothrow_default_constructible `argot/concepts/nothrow_default_constructible.hpp`]]
 
@@ -3697,6 +3743,8 @@
 
 [def argot/prov/assert_.hpp [link argot.ref.prov.assert_ `argot/prov/assert_.hpp`]]
 
+[def argot/prov/at.hpp [link argot.ref.prov.at `argot/prov/at.hpp`]]
+
 [def argot/prov/bind_call.hpp [link argot.ref.prov.bind_call `argot/prov/bind_call.hpp`]]
 
 [def argot/prov/bind_transform/bind_transform.hpp [link argot.ref.bind_transform.bind_transform `argot/prov/bind_transform/bind_transform.hpp`]]
@@ -3708,6 +3756,8 @@
 [def argot/prov/bool_.hpp [link argot.ref.prov.bool_ `argot/prov/bool_.hpp`]]
 
 [def argot/prov/boost_assert.hpp [link argot.ref.prov.boost_assert `argot/prov/boost_assert.hpp`]]
+
+[def argot/prov/chunk.hpp [link argot.ref.prov.chunk `argot/prov/chunk.hpp`]]
 
 [def argot/prov/conditional.hpp [link argot.ref.prov.conditional `argot/prov/conditional.hpp`]]
 
@@ -4037,6 +4087,8 @@
 
 [def argot/state_traits.hpp [link argot.ref.argot.state_traits `argot/state_traits.hpp`]]
 
+[def argot/struct_.hpp [link argot.ref.argot.struct_ `argot/struct_.hpp`]]
+
 [def argot/switch_traits/argument_list_kinds_of_body_destructive.hpp [link argot.ref.switch_traits.argument_list_kinds_of_body_destructive `argot/switch_traits/argument_list_kinds_of_body_destructive.hpp`]]
 
 [def argot/switch_traits/argument_list_kinds_of_body_persistent.hpp [link argot.ref.switch_traits.argument_list_kinds_of_body_persistent `argot/switch_traits/argument_list_kinds_of_body_persistent.hpp`]]
@@ -4102,6 +4154,8 @@
 [def argot/tag.hpp [link argot.ref.argot.tag `argot/tag.hpp`]]
 
 [def argot/tuple_traits/element_type.hpp [link argot.ref.tuple_traits.element_type `argot/tuple_traits/element_type.hpp`]]
+
+[def argot/tuple_traits/expand_element_types.hpp [link argot.ref.tuple_traits.expand_element_types `argot/tuple_traits/expand_element_types.hpp`]]
 
 [def argot/tuple_traits/get.hpp [link argot.ref.tuple_traits.get `argot/tuple_traits/get.hpp`]]
 

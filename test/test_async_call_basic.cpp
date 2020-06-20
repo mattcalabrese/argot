@@ -19,32 +19,27 @@
 #include <argot/packager/stlab.hpp>
 #include <argot/prov/reference_to.hpp>
 #include <argot/reducer/to_variant.hpp>
+#include <argot/struct_.hpp>
+#include <argot/tuple_traits/get.hpp>
 
 #include <cstddef>
 #include <type_traits>
-#include <tuple>
 #include <utility>
 #include <variant>
 
 namespace {
 
 using argot::async_call;
+using argot::make_struct;
 using argot::SameType;
+
 namespace conc = argot::conc;
 namespace executor = argot::executor;
 namespace fut = argot::fut;
 namespace packager = argot::packager;
 namespace prov = argot::prov;
 namespace reducer = argot::reducer;
-
-struct make_tuple_fn
-{
-  template< class... P >
-  constexpr auto operator ()( P&&... args ) const
-  {
-    return std::make_tuple( std::forward< P >( args )... );
-  }
-} inline constexpr make_tuple{};
+namespace tuple_traits = argot::tuple_traits;
 
 template< class T >
 struct move_only
@@ -61,10 +56,10 @@ ARGOT_REGISTER_TEST( no_call_arguments )
 {
   decltype( auto ) res
     = async_call< packager::stlab >[ reducer::to_variant ]
-      ( executor::immediate, make_tuple );
+      ( executor::immediate, make_struct );
 
   using expected_res_type
-    = stlab::future< std::variant< std::tuple<> > >;
+    = stlab::future< std::variant< argot::struct_<> > >;
 
   ARGOT_CONCEPT_ENSURE( SameType< decltype( res ), expected_res_type > );
 
@@ -80,13 +75,13 @@ ARGOT_REGISTER_TEST( basic_call_arguments_no_then )
   decltype( auto ) res
     = async_call< packager::stlab >[ reducer::to_variant ]
       ( executor::immediate
-      , make_tuple
+      , make_struct
       , a, std::move( b ), c
       );
 
   using expected_res_type
     = stlab::future
-      < std::variant< std::tuple< int, move_only< char >, double > > >;
+      < std::variant< argot::struct_< int, move_only< char >, double > > >;
 
   ARGOT_CONCEPT_ENSURE( SameType< decltype( res ), expected_res_type > );
 
@@ -96,9 +91,9 @@ ARGOT_REGISTER_TEST( basic_call_arguments_no_then )
 
   auto& underlying_res = std::get< 0 >( *opt_res );
 
-  ARGOT_TEST_EQ( std::get< 0 >( underlying_res ), 1 );
-  ARGOT_TEST_EQ( std::get< 1 >( underlying_res ).value, 2 );
-  ARGOT_TEST_EQ( std::get< 2 >( underlying_res ), 3. );
+  ARGOT_TEST_EQ( tuple_traits::get< 0 >( underlying_res ), 1 );
+  ARGOT_TEST_EQ( tuple_traits::get< 1 >( underlying_res ).value, 2 );
+  ARGOT_TEST_EQ( tuple_traits::get< 2 >( underlying_res ), 3. );
 
   return 0;
 }
@@ -112,13 +107,13 @@ ARGOT_REGISTER_TEST( basic_call_arguments )
   decltype( auto ) res
     = async_call< packager::stlab >[ reducer::to_variant ]
       ( executor::immediate
-      , make_tuple
+      , make_struct
       , a, conc::when_ready( fut::ready( std::move( b ) ) ), c
       );
 
   using expected_res_type
     = stlab::future
-      < std::variant< std::tuple< int, move_only< char >, double > > >;
+      < std::variant< argot::struct_< int, move_only< char >, double > > >;
 
   ARGOT_CONCEPT_ENSURE( SameType< decltype( res ), expected_res_type > );
 
@@ -128,9 +123,9 @@ ARGOT_REGISTER_TEST( basic_call_arguments )
 
   auto& underlying_res = std::get< 0 >( *opt_res );
 
-  ARGOT_TEST_EQ( std::get< 0 >( underlying_res ), 1 );
-  ARGOT_TEST_EQ( std::get< 1 >( underlying_res ).value, 2 );
-  ARGOT_TEST_EQ( std::get< 2 >( underlying_res ), 3. );
+  ARGOT_TEST_EQ( tuple_traits::get< 0 >( underlying_res ), 1 );
+  ARGOT_TEST_EQ( tuple_traits::get< 1 >( underlying_res ).value, 2 );
+  ARGOT_TEST_EQ( tuple_traits::get< 2 >( underlying_res ), 3. );
 
   return 0;
 }
@@ -144,13 +139,13 @@ ARGOT_REGISTER_TEST( basic_call_arguments_expansion )
   decltype( auto ) res
     = async_call< packager::stlab >[ reducer::to_variant ]
       ( executor::immediate
-      , make_tuple
+      , make_struct
       , a, conc::expand( fut::ready( std::move( b ) ) ), c
       );
 
   using expected_res_type
     = stlab::future
-      < std::variant< std::tuple< int, move_only< char >, double > > >;
+      < std::variant< argot::struct_< int, move_only< char >, double > > >;
 
   ARGOT_CONCEPT_ENSURE( SameType< decltype( res ), expected_res_type > );
 
@@ -160,9 +155,9 @@ ARGOT_REGISTER_TEST( basic_call_arguments_expansion )
 
   auto& underlying_res = std::get< 0 >( *opt_res );
 
-  ARGOT_TEST_EQ( std::get< 0 >( underlying_res ), 1 );
-  ARGOT_TEST_EQ( std::get< 1 >( underlying_res ).value, 2 );
-  ARGOT_TEST_EQ( std::get< 2 >( underlying_res ), 3. );
+  ARGOT_TEST_EQ( tuple_traits::get< 0 >( underlying_res ), 1 );
+  ARGOT_TEST_EQ( tuple_traits::get< 1 >( underlying_res ).value, 2 );
+  ARGOT_TEST_EQ( tuple_traits::get< 2 >( underlying_res ), 3. );
 
   return 0;
 }
@@ -176,14 +171,14 @@ ARGOT_REGISTER_TEST( basic_call_arguments_two )
   decltype( auto ) res
     = async_call< packager::stlab >[ reducer::to_variant ]
       ( executor::immediate
-      , make_tuple
+      , make_struct
       , conc::when_ready( fut::ready( a ) ), std::move( b )
       , conc::when_ready( fut::ready( c ) )
       );
 
   using expected_res_type
     = stlab::future
-      < std::variant< std::tuple< int, move_only< char >, double > > >;
+      < std::variant< argot::struct_< int, move_only< char >, double > > >;
 
   ARGOT_CONCEPT_ENSURE( SameType< decltype( res ), expected_res_type > );
 
@@ -193,9 +188,9 @@ ARGOT_REGISTER_TEST( basic_call_arguments_two )
 
   auto& underlying_res = std::get< 0 >( *opt_res );
 
-  ARGOT_TEST_EQ( std::get< 0 >( underlying_res ), 1 );
-  ARGOT_TEST_EQ( std::get< 1 >( underlying_res ).value, 2 );
-  ARGOT_TEST_EQ( std::get< 2 >( underlying_res ), 3. );
+  ARGOT_TEST_EQ( tuple_traits::get< 0 >( underlying_res ), 1 );
+  ARGOT_TEST_EQ( tuple_traits::get< 1 >( underlying_res ).value, 2 );
+  ARGOT_TEST_EQ( tuple_traits::get< 2 >( underlying_res ), 3. );
 
   return 0;
 }
@@ -209,7 +204,7 @@ ARGOT_REGISTER_TEST( basic_call_arguments_three )
   decltype( auto ) res
     = async_call< packager::stlab >[ reducer::to_variant ]
       ( executor::immediate
-      , make_tuple
+      , make_struct
       , conc::when_ready( fut::ready( a ) )
       , conc::when_ready( fut::ready( std::move( b ) ) )
       , conc::when_ready( fut::ready( c ) )
@@ -217,7 +212,7 @@ ARGOT_REGISTER_TEST( basic_call_arguments_three )
 
   using expected_res_type
     = stlab::future
-      < std::variant< std::tuple< int, move_only< char >, double > > >;
+      < std::variant< argot::struct_< int, move_only< char >, double > > >;
 
   ARGOT_CONCEPT_ENSURE( SameType< decltype( res ), expected_res_type > );
 
@@ -227,9 +222,9 @@ ARGOT_REGISTER_TEST( basic_call_arguments_three )
 
   auto& underlying_res = std::get< 0 >( *opt_res );
 
-  ARGOT_TEST_EQ( std::get< 0 >( underlying_res ), 1 );
-  ARGOT_TEST_EQ( std::get< 1 >( underlying_res ).value, 2 );
-  ARGOT_TEST_EQ( std::get< 2 >( underlying_res ), 3. );
+  ARGOT_TEST_EQ( tuple_traits::get< 0 >( underlying_res ), 1 );
+  ARGOT_TEST_EQ( tuple_traits::get< 1 >( underlying_res ).value, 2 );
+  ARGOT_TEST_EQ( tuple_traits::get< 2 >( underlying_res ), 3. );
 
   return 0;
 }
@@ -243,9 +238,9 @@ BOOST_AUTO_TEST_CASE( no_call_arguments )
 {
   decltype( auto ) res
     = async_call[ argot::reducer::to_boost_variant ]
-      ( make_tuple );
+      ( make_struct );
 
-  using expected_argument_list = std::tuple<>;
+  using expected_argument_list = argot::struct_<>;
 
   using expected_variant_field
     = to_boost_variant_field< 0, expected_argument_list >;
@@ -264,10 +259,10 @@ BOOST_AUTO_TEST_CASE( basic_call_arguments )
 
   decltype( auto ) res
     = async_call[ argot::reducer::to_boost_variant ]
-      ( make_tuple, a, std::move( b ), c );
+      ( make_struct, a, std::move( b ), c );
 
   using expected_argument_list
-    = std::tuple< int&, char&&, double const& >;
+    = argot::struct_< int&, char&&, double const& >;
 
   using expected_variant_field
     = to_boost_variant_field< 0, expected_argument_list >;
@@ -334,12 +329,12 @@ BOOST_AUTO_TEST_CASE( sole_expanded_call_arguments )
 {
   decltype( auto ) res
     = async_call[ argot::reducer::to_boost_variant ]
-      ( make_tuple
+      ( make_struct
       , prov::reference_to( dummy_2, dummy_1 )
       );
 
   using expected_argument_list
-    = std::tuple
+    = argot::struct_
       < dummy_provider_type< std::integral_constant< std::size_t, 2 > >&
       , dummy_provider_type< std::integral_constant< std::size_t, 1 > >&
       >;
@@ -362,12 +357,12 @@ BOOST_AUTO_TEST_CASE( trailing_expanded_call_arguments )
 {
   decltype( auto ) res
     = async_call[ argot::reducer::to_boost_variant ]
-      ( make_tuple
+      ( make_struct
       , raw_3, prov::reference_to( dummy_2, dummy_1 )
       );
 
   using expected_argument_list
-    = std::tuple
+    = argot::struct_
       < std::integral_constant< std::size_t, 3 >&
       , dummy_provider_type< std::integral_constant< std::size_t, 2 > >&
       , dummy_provider_type< std::integral_constant< std::size_t, 1 > >&
@@ -392,12 +387,12 @@ BOOST_AUTO_TEST_CASE( leading_expanded_call_arguments )
 {
   decltype( auto ) res
     = async_call[ argot::reducer::to_boost_variant ]
-      ( make_tuple
+      ( make_struct
       , prov::reference_to( dummy_2, dummy_1 ), raw_0
       );
 
   using expected_argument_list
-    = std::tuple
+    = argot::struct_
       < dummy_provider_type< std::integral_constant< std::size_t, 2 > >&
       , dummy_provider_type< std::integral_constant< std::size_t, 1 > >&
       , std::integral_constant< std::size_t, 0 >&
@@ -422,12 +417,12 @@ BOOST_AUTO_TEST_CASE( leading_trailing_expanded_call_arguments )
 {
   decltype( auto ) res
     = async_call[ argot::reducer::to_boost_variant ]
-      ( make_tuple
+      ( make_struct
       , raw_3, prov::reference_to( dummy_2, dummy_1 ), raw_0
       );
 
   using expected_argument_list
-    = std::tuple
+    = argot::struct_
       < std::integral_constant< std::size_t, 3 >&
       , dummy_provider_type< std::integral_constant< std::size_t, 2 > >&
       , dummy_provider_type< std::integral_constant< std::size_t, 1 > >&
@@ -454,13 +449,13 @@ BOOST_AUTO_TEST_CASE( multiple_expanded_call_arguments )
 {
   decltype( auto ) res
     = async_call[ argot::reducer::to_boost_variant ]
-      ( make_tuple
+      ( make_struct
       , prov::reference_to( dummy_3, dummy_2 )
       , prov::reference_to( dummy_1, dummy_0 )
       );
 
   using expected_argument_list
-    = std::tuple
+    = argot::struct_
       < dummy_provider_type< std::integral_constant< std::size_t, 3 > >&
       , dummy_provider_type< std::integral_constant< std::size_t, 2 > >&
       , dummy_provider_type< std::integral_constant< std::size_t, 1 > >&

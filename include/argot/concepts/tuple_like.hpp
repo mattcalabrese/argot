@@ -37,7 +37,11 @@ opposed to accessing the concept map directly.]
 #include <argot/detail/declval.hpp>
 #include <argot/detail/detection.hpp>
 #include <argot/detail/forward.hpp>
+#include <argot/detail/give_qualifiers_to.hpp>
+#include <argot/detail/if_.hpp>
+#include <argot/detail/remove_cvref.hpp>
 
+#include <array>
 #include <cstddef>
 #include <tuple>
 #include <type_traits>
@@ -72,11 +76,22 @@ namespace tuple_like_detail {
 
 using std::get;
 
+// TODO(calabrese) Remove
 template< class T, std::size_t I, class /*Enabler*/ = void >
 using result_of_get_t = decltype( get< I >( ARGOT_DECLVAL( T ) ) );
 
 template< class Tup >
 using tuple_size_sfinae = decltype( std::tuple_size< Tup >::value );
+
+template< class Tup, auto Index, class = void >
+constexpr bool has_member_get_v = false;
+
+template< class Tup, auto Index >
+constexpr
+bool has_member_get_v
+     < Tup, Index
+     , std::void_t< decltype( ARGOT_DECLVAL( Tup ).template get< Index >() ) >
+     > = true;
 
 } // namespace argot(::tuple_like_detail)
 
@@ -96,11 +111,16 @@ struct make_concept_map
   using element_type_t = std::tuple_element_t< Index, Tup >;
 
   template< index_type Index, class Self >
-  static constexpr tuple_like_detail::result_of_get_t< Self, Index >
+  static constexpr auto&&
   get( Self&& self )
   {
-    using std::get;
-    return get< Index >( ARGOT_FORWARD( Self )( self ) );
+    if constexpr( tuple_like_detail::has_member_get_v< Self, Index > )
+      return ARGOT_FORWARD( Self )( self ).template get< Index >();
+    else
+    {
+      using std::get;
+      return get< Index >( ARGOT_FORWARD( Self )( self ) );
+    }
   }
 };
 

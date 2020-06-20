@@ -26,7 +26,6 @@
 #include <argot/variant_traits/get.hpp>
 #include <argot/variant_traits/num_alternatives.hpp>
 
-#include <tuple>
 #include <variant>
 
 namespace {
@@ -129,13 +128,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a& > >
+          , std::variant< argot::struct_< a& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
       }
 
       {
@@ -151,13 +150,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< std::tuple< b& > >
+          , std::variant< argot::struct_< b& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk1_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &b_ );
       }
 
       {
@@ -173,13 +172,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk2_provision_result_type
-          , std::variant< std::tuple< c const& > >
+          , std::variant< argot::struct_< c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk2_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
     }
 
@@ -235,13 +234,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a& > >
+          , std::variant< argot::struct_< a& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
       }
 
       {
@@ -257,13 +256,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< std::tuple< b& > >
+          , std::variant< argot::struct_< b& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk1_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &b_ );
       }
 
       {
@@ -279,13 +278,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk2_provision_result_type
-          , std::variant< std::tuple< c const& > >
+          , std::variant< argot::struct_< c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk2_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
     }
   }
@@ -344,13 +343,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a& > >
+          , std::variant< argot::struct_< a& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
       }
 
       {
@@ -366,13 +365,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< std::tuple< b& > >
+          , std::variant< argot::struct_< b& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk1_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &b_ );
       }
 
       {
@@ -388,13 +387,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk2_provision_result_type
-          , std::variant< std::tuple< c const& > >
+          , std::variant< argot::struct_< c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk2_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
     }
 
@@ -450,13 +449,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a& > >
+          , std::variant< argot::struct_< a& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
       }
 
       {
@@ -472,13 +471,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< std::tuple< b&& > >
+          , std::variant< argot::struct_< b&& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk1_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &b_ );
       }
 
       {
@@ -494,13 +493,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk2_provision_result_type
-          , std::variant< std::tuple< c const& > >
+          , std::variant< argot::struct_< c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk2_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
     }
   }
@@ -572,14 +571,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b& > >
+          , std::variant< argot::struct_< a&, b& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
       }
 
       {
@@ -595,13 +594,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< std::tuple< c const& > >
+          , std::variant< argot::struct_< c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk1_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
     }
 
@@ -655,14 +654,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b& > >
+          , std::variant< argot::struct_< a&, b& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
       }
 
       {
@@ -678,13 +677,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< std::tuple< c const& > >
+          , std::variant< argot::struct_< c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk1_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
     }
   }
@@ -741,14 +740,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b& > >
+          , std::variant< argot::struct_< a&, b& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
       }
 
       {
@@ -764,13 +763,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< std::tuple< c const& > >
+          , std::variant< argot::struct_< c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk1_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
     }
 
@@ -824,14 +823,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b&& > >
+          , std::variant< argot::struct_< a&, b&& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
       }
 
       {
@@ -847,13 +846,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< std::tuple< c const& > >
+          , std::variant< argot::struct_< c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk1_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
     }
   }
@@ -923,15 +922,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_3 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b&, c const& > >
+          , std::variant< argot::struct_< a&, b&, c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
-        ARGOT_TEST_EQ( &std::get< 2 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 2 >( nested_args ), &c_ );
       }
     }
 
@@ -983,15 +982,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_3 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b&, c const& > >
+          , std::variant< argot::struct_< a&, b&, c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
-        ARGOT_TEST_EQ( &std::get< 2 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 2 >( nested_args ), &c_ );
       }
     }
   }
@@ -1046,15 +1045,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_3 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b&, c const& > >
+          , std::variant< argot::struct_< a&, b&, c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
-        ARGOT_TEST_EQ( &std::get< 2 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 2 >( nested_args ), &c_ );
       }
     }
 
@@ -1116,15 +1115,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_3 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b&&, c const& > >
+          , std::variant< argot::struct_< a&, b&&, c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
-        ARGOT_TEST_EQ( &std::get< 2 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 2 >( nested_args ), &c_ );
       }
     }
   }
@@ -1194,15 +1193,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_4 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b&, c const& > >
+          , std::variant< argot::struct_< a&, b&, c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
-        ARGOT_TEST_EQ( &std::get< 2 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 2 >( nested_args ), &c_ );
       }
     }
 
@@ -1254,15 +1253,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_4 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b&, c const& > >
+          , std::variant< argot::struct_< a&, b&, c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
-        ARGOT_TEST_EQ( &std::get< 2 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 2 >( nested_args ), &c_ );
       }
     }
   }
@@ -1317,15 +1316,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_4 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b&, c const& > >
+          , std::variant< argot::struct_< a&, b&, c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
-        ARGOT_TEST_EQ( &std::get< 2 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 2 >( nested_args ), &c_ );
       }
     }
 
@@ -1387,15 +1386,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_4 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b&&, c const& > >
+          , std::variant< argot::struct_< a&, b&&, c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
-        ARGOT_TEST_EQ( &std::get< 2 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 2 >( nested_args ), &c_ );
       }
     }
   }
@@ -1517,13 +1516,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a& > >
+          , std::variant< argot::struct_< a& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
       }
 
       {
@@ -1539,13 +1538,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< std::tuple< b& > >
+          , std::variant< argot::struct_< b& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk1_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &b_ );
       }
 
       {
@@ -1561,13 +1560,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk2_provision_result_type
-          , std::variant< std::tuple< c const& > >
+          , std::variant< argot::struct_< c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk2_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
     }
 
@@ -1671,13 +1670,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a& > >
+          , std::variant< argot::struct_< a& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
       }
 
       {
@@ -1693,13 +1692,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< std::tuple< b& > >
+          , std::variant< argot::struct_< b& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk1_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &b_ );
       }
 
       {
@@ -1715,13 +1714,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk2_provision_result_type
-          , std::variant< std::tuple< c const& > >
+          , std::variant< argot::struct_< c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk2_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
     }
   }
@@ -1828,13 +1827,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a& > >
+          , std::variant< argot::struct_< a& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
       }
 
       {
@@ -1850,13 +1849,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< std::tuple< b& > >
+          , std::variant< argot::struct_< b& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk1_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &b_ );
       }
 
       {
@@ -1872,13 +1871,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk2_provision_result_type
-          , std::variant< std::tuple< c const& > >
+          , std::variant< argot::struct_< c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk2_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
     }
 
@@ -1982,13 +1981,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a& > >
+          , std::variant< argot::struct_< a& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
       }
 
       {
@@ -2004,13 +2003,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< std::tuple< b&& > >
+          , std::variant< argot::struct_< b&& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk1_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &b_ );
       }
 
       {
@@ -2026,13 +2025,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk2_provision_result_type
-          , std::variant< std::tuple< c const& > >
+          , std::variant< argot::struct_< c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk2_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
     }
   }
@@ -2152,14 +2151,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b& > >
+          , std::variant< argot::struct_< a&, b& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
       }
 
       {
@@ -2175,13 +2174,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< std::tuple< c const& > >
+          , std::variant< argot::struct_< c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk1_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
     }
 
@@ -2283,14 +2282,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b& > >
+          , std::variant< argot::struct_< a&, b& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
       }
 
       {
@@ -2306,13 +2305,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< std::tuple< c const& > >
+          , std::variant< argot::struct_< c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk1_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
     }
   }
@@ -2417,14 +2416,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b& > >
+          , std::variant< argot::struct_< a&, b& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
       }
 
       {
@@ -2440,13 +2439,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< std::tuple< c const& > >
+          , std::variant< argot::struct_< c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk1_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
     }
 
@@ -2548,14 +2547,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b&& > >
+          , std::variant< argot::struct_< a&, b&& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
       }
 
       {
@@ -2571,13 +2570,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< std::tuple< c const& > >
+          , std::variant< argot::struct_< c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk1_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
     }
   }
@@ -2695,15 +2694,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_3 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b&, c const& > >
+          , std::variant< argot::struct_< a&, b&, c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
-        ARGOT_TEST_EQ( &std::get< 2 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 2 >( nested_args ), &c_ );
       }
     }
 
@@ -2803,15 +2802,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_3 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b&, c const& > >
+          , std::variant< argot::struct_< a&, b&, c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
-        ARGOT_TEST_EQ( &std::get< 2 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 2 >( nested_args ), &c_ );
       }
     }
   }
@@ -2914,15 +2913,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_3 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b&, c const& > >
+          , std::variant< argot::struct_< a&, b&, c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
-        ARGOT_TEST_EQ( &std::get< 2 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 2 >( nested_args ), &c_ );
       }
     }
 
@@ -3022,15 +3021,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_3 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b&&, c const& > >
+          , std::variant< argot::struct_< a&, b&&, c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
-        ARGOT_TEST_EQ( &std::get< 2 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 2 >( nested_args ), &c_ );
       }
     }
   }
@@ -3148,15 +3147,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_4 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b&, c const& > >
+          , std::variant< argot::struct_< a&, b&, c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
-        ARGOT_TEST_EQ( &std::get< 2 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 2 >( nested_args ), &c_ );
       }
     }
 
@@ -3256,15 +3255,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_4 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b&, c const& > >
+          , std::variant< argot::struct_< a&, b&, c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
-        ARGOT_TEST_EQ( &std::get< 2 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 2 >( nested_args ), &c_ );
       }
     }
   }
@@ -3367,15 +3366,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_4 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b&, c const& > >
+          , std::variant< argot::struct_< a&, b&, c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
-        ARGOT_TEST_EQ( &std::get< 2 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 2 >( nested_args ), &c_ );
       }
     }
 
@@ -3475,15 +3474,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_4 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< std::tuple< a&, b&&, c const& > >
+          , std::variant< argot::struct_< a&, b&&, c const& > >
           >
         );
 
         auto& nested_args = std::get< 0 >( chunk0_provision_result );
 
-        ARGOT_TEST_EQ( &std::get< 0 >( nested_args ), &a_ );
-        ARGOT_TEST_EQ( &std::get< 1 >( nested_args ), &b_ );
-        ARGOT_TEST_EQ( &std::get< 2 >( nested_args ), &c_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
+        ARGOT_TEST_EQ( &tuple_traits::get< 2 >( nested_args ), &c_ );
       }
     }
   }

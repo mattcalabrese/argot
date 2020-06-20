@@ -187,6 +187,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_make_referential_struct )
   , &three
   );
 
+  auto b = std::move( tup );
+
   return 0;
 }
 

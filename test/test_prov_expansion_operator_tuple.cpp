@@ -13,6 +13,7 @@
 #include <argot/prov/expand/expansion_operator.hpp>
 #include <argot/prov_traits/provide.hpp>
 #include <argot/receiver/return_argument_references.hpp>
+#include <argot/tuple_traits/get.hpp>
 
 #include <tuple>
 #include <type_traits>
@@ -25,6 +26,7 @@ namespace {
 namespace prov = argot::prov;
 namespace prov_traits = argot::prov_traits;
 namespace receiver = argot::receiver;
+namespace tuple_traits = argot::tuple_traits;
 
 using receiver::return_argument_references;
 using argot::ArgumentProvider;
@@ -56,7 +58,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_expand_nullary )
     using provision_result_type = decltype( provision_result );
 
     ARGOT_CONCEPT_ENSURE
-    ( SameType< provision_result_type, std::variant< std::tuple<> > > );
+    ( SameType< provision_result_type, std::variant< argot::struct_<> > > );
 
     ARGOT_TEST_EQ( provision_result.index(), 0 );
   }
@@ -72,7 +74,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_expand_nullary )
     using provision_result_type = decltype( provision_result );
 
     ARGOT_CONCEPT_ENSURE
-    ( SameType< provision_result_type, std::variant< std::tuple<> > > );
+    ( SameType< provision_result_type, std::variant< argot::struct_<> > > );
 
     ARGOT_TEST_EQ( provision_result.index(), 0 );
   }
@@ -105,7 +107,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_expand_nullary_moved )
     using provision_result_type = decltype( provision_result );
 
     ARGOT_CONCEPT_ENSURE
-    ( SameType< provision_result_type, std::variant< std::tuple<> > > );
+    ( SameType< provision_result_type, std::variant< argot::struct_<> > > );
 
     ARGOT_TEST_EQ( provision_result.index(), 0 );
   }
@@ -121,7 +123,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_expand_nullary_moved )
     using provision_result_type = decltype( provision_result );
 
     ARGOT_CONCEPT_ENSURE
-    ( SameType< provision_result_type, std::variant< std::tuple<> > > );
+    ( SameType< provision_result_type, std::variant< argot::struct_<> > > );
 
     ARGOT_TEST_EQ( provision_result.index(), 0 );
   }
@@ -156,7 +158,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_expand_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple< int&, float&, char& > >
+      , std::variant< argot::struct_< int&, float&, char& > >
       >
     );
 
@@ -164,13 +166,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_expand_ternary )
     auto& tup = std::get< 0 >( provision_result );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( tup ), &std::get< 0 >( tup_to_expand ) );
+    ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( tup_to_expand ) );
 
     ARGOT_TEST_EQ
-    ( &std::get< 1 >( tup ), &std::get< 1 >( tup_to_expand ) );
+    ( &tuple_traits::get< 1 >( tup ), &std::get< 1 >( tup_to_expand ) );
 
     ARGOT_TEST_EQ
-    ( &std::get< 2 >( tup ), &std::get< 2 >( tup_to_expand ) );
+    ( &tuple_traits::get< 2 >( tup ), &std::get< 2 >( tup_to_expand ) );
   }
 
   // lvalue provision
@@ -186,7 +188,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_expand_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple< int&, float&, char& > >
+      , std::variant< argot::struct_< int&, float&, char& > >
       >
     );
 
@@ -194,13 +196,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_expand_ternary )
     auto& tup = std::get< 0 >( provision_result );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( tup ), &std::get< 0 >( tup_to_expand ) );
+    ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( tup_to_expand ) );
 
     ARGOT_TEST_EQ
-    ( &std::get< 1 >( tup ), &std::get< 1 >( tup_to_expand ) );
+    ( &tuple_traits::get< 1 >( tup ), &std::get< 1 >( tup_to_expand ) );
 
     ARGOT_TEST_EQ
-    ( &std::get< 2 >( tup ), &std::get< 2 >( tup_to_expand ) );
+    ( &tuple_traits::get< 2 >( tup ), &std::get< 2 >( tup_to_expand ) );
   }
 
   return 0;
@@ -233,7 +235,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_expand_ternary_moved )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple< int&&, float&&, char&& > >
+      , std::variant< argot::struct_< int&&, float&&, char&& > >
       >
     );
 
@@ -241,13 +243,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_expand_ternary_moved )
     auto& tup = std::get< 0 >( provision_result );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( tup ), &std::get< 0 >( tup_to_expand ) );
+    ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( tup_to_expand ) );
 
     ARGOT_TEST_EQ
-    ( &std::get< 1 >( tup ), &std::get< 1 >( tup_to_expand ) );
+    ( &tuple_traits::get< 1 >( tup ), &std::get< 1 >( tup_to_expand ) );
 
     ARGOT_TEST_EQ
-    ( &std::get< 2 >( tup ), &std::get< 2 >( tup_to_expand ) );
+    ( &tuple_traits::get< 2 >( tup ), &std::get< 2 >( tup_to_expand ) );
   }
 
   // lvalue provision
@@ -263,7 +265,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_expand_ternary_moved )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple< int&, float&, char& > >
+      , std::variant< argot::struct_< int&, float&, char& > >
       >
     );
 
@@ -271,13 +273,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_expand_ternary_moved )
     auto& tup = std::get< 0 >( provision_result );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( tup ), &std::get< 0 >( tup_to_expand ) );
+    ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( tup_to_expand ) );
 
     ARGOT_TEST_EQ
-    ( &std::get< 1 >( tup ), &std::get< 1 >( tup_to_expand ) );
+    ( &tuple_traits::get< 1 >( tup ), &std::get< 1 >( tup_to_expand ) );
 
     ARGOT_TEST_EQ
-    ( &std::get< 2 >( tup ), &std::get< 2 >( tup_to_expand ) );
+    ( &tuple_traits::get< 2 >( tup ), &std::get< 2 >( tup_to_expand ) );
   }
 
   return 0;

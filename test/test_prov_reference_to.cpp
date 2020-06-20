@@ -15,10 +15,10 @@
 #include <argot/prov_traits/destructive_provide.hpp>
 #include <argot/prov_traits/persistent_provide.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
-#include <argot/receiver_traits/argument_types.hpp>
 #include <argot/receiver/return_argument_references.hpp>
+#include <argot/receiver_traits/argument_types.hpp>
+#include <argot/tuple_traits/get.hpp>
 
-#include <tuple>
 #include <type_traits>
 #include <utility>
 
@@ -28,6 +28,7 @@ namespace prov = argot::prov;
 namespace prov_traits = argot::prov_traits;
 namespace receiver = argot::receiver;
 namespace receiver_traits = argot::receiver_traits;
+namespace tuple_traits = argot::tuple_traits;
 
 using argot::SameType;
 using receiver_traits::argument_list_kinds_t;
@@ -83,7 +84,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary_reference_to )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < args_type
-      , std::variant< std::tuple<> >
+      , std::variant< argot::struct_<> >
       >
     );
 
@@ -110,7 +111,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary_reference_to )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < args_type
-      , std::variant< std::tuple<> >
+      , std::variant< argot::struct_<> >
       >
     );
 
@@ -163,15 +164,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unary_reference_to )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < args_type
-      , std::variant< std::tuple< bool const& > >
+      , std::variant< argot::struct_< bool const& > >
       >
     );
 
     ARGOT_TEST_EQ( args.index(), 0 );
     auto& tup = std::get< 0 >( args );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &bool_true );
-    ARGOT_TEST_TRUE( std::get< 0 >( tup ) );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &bool_true );
+    ARGOT_TEST_TRUE( tuple_traits::get< 0 >( tup ) );
   }
 
   // rvalue
@@ -194,15 +195,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unary_reference_to )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < args_type
-      , std::variant< std::tuple< bool const& > >
+      , std::variant< argot::struct_< bool const& > >
       >
     );
 
     ARGOT_TEST_EQ( args.index(), 0 );
     auto& tup = std::get< 0 >( args );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &bool_true );
-    ARGOT_TEST_TRUE( std::get< 0 >( tup ) );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &bool_true );
+    ARGOT_TEST_TRUE( tuple_traits::get< 0 >( tup ) );
   }
 
   return 0;
@@ -261,21 +262,21 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nary_reference_to )
     ( SameType
       < args_type
       , std::variant
-        < std::tuple< int&, char const&, bool const& > >
+        < argot::struct_< int&, char const&, bool const& > >
       >
     );
 
     ARGOT_TEST_EQ( args.index(), 0 );
     auto& tup = std::get< 0 >( args );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &int_1 );
-    ARGOT_TEST_EQ( std::get< 0 >( tup ), 1 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &int_1 );
+    ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 1 );
 
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ), &char_a );
-    ARGOT_TEST_EQ( std::get< 1 >( tup ), 'a' );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &char_a );
+    ARGOT_TEST_EQ( tuple_traits::get< 1 >( tup ), 'a' );
 
-    ARGOT_TEST_EQ( &std::get< 2 >( tup ), &bool_true );
-    ARGOT_TEST_TRUE( std::get< 2 >( tup ) );
+    ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &bool_true );
+    ARGOT_TEST_TRUE( tuple_traits::get< 2 >( tup ) );
   }
 
   // rvalue
@@ -300,21 +301,21 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nary_reference_to )
     ( SameType
       < args_type
       , std::variant
-        < std::tuple< int&&, char const&, bool const&& > >
+        < argot::struct_< int&&, char const&, bool const&& > >
       >
     );
 
     ARGOT_TEST_EQ( args.index(), 0 );
     auto& tup = std::get< 0 >( args );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &int_1 );
-    ARGOT_TEST_EQ( std::get< 0 >( tup ), 1 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &int_1 );
+    ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 1 );
 
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ), &char_a );
-    ARGOT_TEST_EQ( std::get< 1 >( tup ), 'a' );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &char_a );
+    ARGOT_TEST_EQ( tuple_traits::get< 1 >( tup ), 'a' );
 
-    ARGOT_TEST_EQ( &std::get< 2 >( tup ), &bool_true );
-    ARGOT_TEST_TRUE( std::get< 2 >( tup ) );
+    ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &bool_true );
+    ARGOT_TEST_TRUE( tuple_traits::get< 2 >( tup ) );
   }
 
   return 0;

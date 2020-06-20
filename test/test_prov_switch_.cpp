@@ -20,6 +20,7 @@
 #include <argot/prov/value_of.hpp>
 #include <argot/prov_traits/destructive_provide.hpp>
 #include <argot/receiver/return_argument_references.hpp>
+#include <argot/tuple_traits/get.hpp>
 #include <argot/value_list.hpp>
 
 #include <tuple>
@@ -34,6 +35,7 @@ namespace prov = argot::prov;
 namespace prov_traits = argot::prov_traits;
 namespace receiver = argot::receiver;
 namespace receiver_traits = argot::receiver_traits;
+namespace tuple_traits = argot::tuple_traits;
 
 using argot::ArgumentProvider;
 using argot::SameType;
@@ -283,9 +285,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple< std::integral_constant< int, 0 >&& >
-          , std::tuple< std::integral_constant< int, 1 >&& >
-          , std::tuple< std::integral_constant< int, 2 >&& >
+          < argot::struct_< std::integral_constant< int, 0 >&& >
+          , argot::struct_< std::integral_constant< int, 1 >&& >
+          , argot::struct_< std::integral_constant< int, 2 >&& >
           >
         >
       );
@@ -294,7 +296,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // 1
@@ -311,9 +313,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple< std::integral_constant< int, 0 >&& >
-          , std::tuple< std::integral_constant< int, 1 >&& >
-          , std::tuple< std::integral_constant< int, 2 >&& >
+          < argot::struct_< std::integral_constant< int, 0 >&& >
+          , argot::struct_< std::integral_constant< int, 1 >&& >
+          , argot::struct_< std::integral_constant< int, 2 >&& >
           >
         >
       );
@@ -322,7 +324,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
       auto& tup = std::get< 1 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 1 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 1 > );
     }
 
     // 2
@@ -339,9 +341,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple< std::integral_constant< int, 0 >&& >
-          , std::tuple< std::integral_constant< int, 1 >&& >
-          , std::tuple< std::integral_constant< int, 2 >&& >
+          < argot::struct_< std::integral_constant< int, 0 >&& >
+          , argot::struct_< std::integral_constant< int, 1 >&& >
+          , argot::struct_< std::integral_constant< int, 2 >&& >
           >
         >
       );
@@ -350,7 +352,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
       auto& tup = std::get< 2 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 2 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 2 > );
     }
   }
 
@@ -370,9 +372,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple< std::integral_constant< int, 0 > const& >
-          , std::tuple< std::integral_constant< int, 1 > const& >
-          , std::tuple< std::integral_constant< int, 2 > const& >
+          < argot::struct_< std::integral_constant< int, 0 > const& >
+          , argot::struct_< std::integral_constant< int, 1 > const& >
+          , argot::struct_< std::integral_constant< int, 2 > const& >
           >
         >
       );
@@ -381,7 +383,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // 1
@@ -398,9 +400,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple< std::integral_constant< int, 0 > const& >
-          , std::tuple< std::integral_constant< int, 1 > const& >
-          , std::tuple< std::integral_constant< int, 2 > const& >
+          < argot::struct_< std::integral_constant< int, 0 > const& >
+          , argot::struct_< std::integral_constant< int, 1 > const& >
+          , argot::struct_< std::integral_constant< int, 2 > const& >
           >
         >
       );
@@ -409,7 +411,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
       auto& tup = std::get< 1 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 1 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 1 > );
     }
 
     // 2
@@ -426,9 +428,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple< std::integral_constant< int, 0 > const& >
-          , std::tuple< std::integral_constant< int, 1 > const& >
-          , std::tuple< std::integral_constant< int, 2 > const& >
+          < argot::struct_< std::integral_constant< int, 0 > const& >
+          , argot::struct_< std::integral_constant< int, 1 > const& >
+          , argot::struct_< std::integral_constant< int, 2 > const& >
           >
         >
       );
@@ -437,7 +439,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
       auto& tup = std::get< 2 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 2 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 2 > );
     }
   }
 
@@ -539,7 +541,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_static )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple< std::integral_constant< int, 0 >&& > >
+          < argot::struct_< std::integral_constant< int, 0 >&& > >
         >
       );
 
@@ -547,7 +549,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // 1
@@ -564,7 +566,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_static )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple< std::integral_constant< int, 1 >&& > >
+          < argot::struct_< std::integral_constant< int, 1 >&& > >
         >
       );
 
@@ -572,7 +574,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 1 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 1 > );
     }
 
     // 2
@@ -589,7 +591,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_static )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple< std::integral_constant< int, 2 >&& > >
+          < argot::struct_< std::integral_constant< int, 2 >&& > >
         >
       );
 
@@ -597,7 +599,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 2 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 2 > );
     }
   }
 
@@ -617,7 +619,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_static )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple< std::integral_constant< int, 0 > const& > >
+          < argot::struct_< std::integral_constant< int, 0 > const& > >
         >
       );
 
@@ -625,7 +627,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // 1
@@ -642,7 +644,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_static )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple< std::integral_constant< int, 1 > const& > >
+          < argot::struct_< std::integral_constant< int, 1 > const& > >
         >
       );
 
@@ -650,7 +652,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 1 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 1 > );
     }
 
     // 2
@@ -667,7 +669,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_static )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple< std::integral_constant< int, 2 > const& > >
+          < argot::struct_< std::integral_constant< int, 2 > const& > >
         >
       );
 
@@ -675,7 +677,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 2 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 2 > );
     }
   }
 
@@ -742,9 +744,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unreachable_case_dynamic )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple< std::integral_constant< int, 0 >&& >
-          , std::tuple< std::integral_constant< int, 1 >&& >
-          , std::tuple< std::integral_constant< int, 2 >&& >
+          < argot::struct_< std::integral_constant< int, 0 >&& >
+          , argot::struct_< std::integral_constant< int, 1 >&& >
+          , argot::struct_< std::integral_constant< int, 2 >&& >
           >
         >
       );
@@ -753,7 +755,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unreachable_case_dynamic )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
   }
 
@@ -773,9 +775,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unreachable_case_dynamic )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple< std::integral_constant< int, 0 > const& >
-          , std::tuple< std::integral_constant< int, 1 > const& >
-          , std::tuple< std::integral_constant< int, 2 > const& >
+          < argot::struct_< std::integral_constant< int, 0 > const& >
+          , argot::struct_< std::integral_constant< int, 1 > const& >
+          , argot::struct_< std::integral_constant< int, 2 > const& >
           >
         >
       );
@@ -784,7 +786,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unreachable_case_dynamic )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
   }
 
@@ -874,7 +876,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unreachable_case_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< std::tuple< std::integral_constant< int, 0 >&& > >
+        , std::variant< argot::struct_< std::integral_constant< int, 0 >&& > >
         >
       );
 
@@ -882,7 +884,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unreachable_case_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
   }
 
@@ -901,7 +903,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unreachable_case_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< std::tuple< std::integral_constant< int, 0 > const& > >
+        , std::variant< argot::struct_< std::integral_constant< int, 0 > const& > >
         >
       );
 
@@ -909,7 +911,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unreachable_case_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
   }
 
@@ -970,7 +972,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_dynamic )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // submax
@@ -996,7 +998,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_dynamic )
       auto& tup = std::get< ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup )
+      ( &tuple_traits::get< 0 >( tup )
       , &integral_constant_v< ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >
       );
     }
@@ -1026,7 +1028,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_dynamic )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // submax
@@ -1052,7 +1054,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_dynamic )
       auto& tup = std::get< ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup )
+      ( &tuple_traits::get< 0 >( tup )
       , &integral_constant_v< ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >
       );
     }
@@ -1136,7 +1138,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< std::tuple< std::integral_constant< int, 0 >&& > >
+        , std::variant< argot::struct_< std::integral_constant< int, 0 >&& > >
         >
       );
 
@@ -1144,7 +1146,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // submax
@@ -1161,7 +1163,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_static )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < std::integral_constant
               < int, ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >&&
             >
@@ -1173,7 +1175,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup )
+      ( &tuple_traits::get< 0 >( tup )
       , &integral_constant_v< ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >
       );
     }
@@ -1194,7 +1196,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< std::tuple< std::integral_constant< int, 0 > const& > >
+        , std::variant< argot::struct_< std::integral_constant< int, 0 > const& > >
         >
       );
 
@@ -1202,7 +1204,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // submax
@@ -1219,7 +1221,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_static )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < std::integral_constant
               < int, ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 > const&
             >
@@ -1231,7 +1233,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup )
+      ( &tuple_traits::get< 0 >( tup )
       , &integral_constant_v< ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >
       );
     }
@@ -1294,7 +1296,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_dynamic )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // submax
@@ -1320,7 +1322,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_dynamic )
       auto& tup = std::get< ARGOT_MAX_PREPROCESSED_SWITCH_CASES >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup )
+      ( &tuple_traits::get< 0 >( tup )
       , &integral_constant_v< ARGOT_MAX_PREPROCESSED_SWITCH_CASES >
       );
     }
@@ -1350,7 +1352,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_dynamic )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // submax
@@ -1376,7 +1378,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_dynamic )
       auto& tup = std::get< ARGOT_MAX_PREPROCESSED_SWITCH_CASES >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup )
+      ( &tuple_traits::get< 0 >( tup )
       , &integral_constant_v< ARGOT_MAX_PREPROCESSED_SWITCH_CASES >
       );
     }
@@ -1460,7 +1462,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< std::tuple< std::integral_constant< int, 0 >&& > >
+        , std::variant< argot::struct_< std::integral_constant< int, 0 >&& > >
         >
       );
 
@@ -1468,7 +1470,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // submax
@@ -1485,7 +1487,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_static )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < std::integral_constant
               < int, ARGOT_MAX_PREPROCESSED_SWITCH_CASES >&&
             >
@@ -1497,7 +1499,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup )
+      ( &tuple_traits::get< 0 >( tup )
       , &integral_constant_v< ARGOT_MAX_PREPROCESSED_SWITCH_CASES >
       );
     }
@@ -1518,7 +1520,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< std::tuple< std::integral_constant< int, 0 > const& > >
+        , std::variant< argot::struct_< std::integral_constant< int, 0 > const& > >
         >
       );
 
@@ -1526,7 +1528,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // submax
@@ -1543,7 +1545,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_static )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < std::integral_constant
               < int, ARGOT_MAX_PREPROCESSED_SWITCH_CASES > const&
             >
@@ -1555,7 +1557,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup )
+      ( &tuple_traits::get< 0 >( tup )
       , &integral_constant_v< ARGOT_MAX_PREPROCESSED_SWITCH_CASES >
       );
     }
@@ -1618,7 +1620,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_dynamic )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // submax
@@ -1645,7 +1647,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_dynamic )
         = std::get< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup )
+      ( &tuple_traits::get< 0 >( tup )
       , &integral_constant_v< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >
       );
     }
@@ -1675,7 +1677,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_dynamic )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // submax
@@ -1702,7 +1704,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_dynamic )
         = std::get< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup )
+      ( &tuple_traits::get< 0 >( tup )
       , &integral_constant_v< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >
       );
     }
@@ -1789,7 +1791,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< std::tuple< std::integral_constant< int, 0 >&& > >
+        , std::variant< argot::struct_< std::integral_constant< int, 0 >&& > >
         >
       );
 
@@ -1797,7 +1799,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // submax
@@ -1814,7 +1816,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_static )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < std::integral_constant
               < int, 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >&&
             >
@@ -1826,7 +1828,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup )
+      ( &tuple_traits::get< 0 >( tup )
       , &integral_constant_v< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >
       );
     }
@@ -1847,7 +1849,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< std::tuple< std::integral_constant< int, 0 > const& > >
+        , std::variant< argot::struct_< std::integral_constant< int, 0 > const& > >
         >
       );
 
@@ -1855,7 +1857,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // submax
@@ -1872,7 +1874,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_static )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < std::integral_constant
               < int, 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 > const&
             >
@@ -1884,7 +1886,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup )
+      ( &tuple_traits::get< 0 >( tup )
       , &integral_constant_v< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >
       );
     }
@@ -1947,7 +1949,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_dynamic )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // submax
@@ -1973,7 +1975,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_dynamic )
       auto& tup = std::get< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup )
+      ( &tuple_traits::get< 0 >( tup )
       , &integral_constant_v< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES >
       );
     }
@@ -2003,7 +2005,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_dynamic )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // submax
@@ -2029,7 +2031,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_dynamic )
       auto& tup = std::get< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup )
+      ( &tuple_traits::get< 0 >( tup )
       , &integral_constant_v< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES >
       );
     }
@@ -2114,7 +2116,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< std::tuple< std::integral_constant< int, 0 >&& > >
+        , std::variant< argot::struct_< std::integral_constant< int, 0 >&& > >
         >
       );
 
@@ -2122,7 +2124,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // submax
@@ -2139,7 +2141,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_static )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < std::integral_constant
               < int, 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES >&&
             >
@@ -2151,7 +2153,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup )
+      ( &tuple_traits::get< 0 >( tup )
       , &integral_constant_v< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES >
       );
     }
@@ -2172,7 +2174,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< std::tuple< std::integral_constant< int, 0 > const& > >
+        , std::variant< argot::struct_< std::integral_constant< int, 0 > const& > >
         >
       );
 
@@ -2180,7 +2182,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup ), &integral_constant_v< 0 > );
+      ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
     }
 
     // submax
@@ -2197,7 +2199,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_static )
       ( SameType
         < args_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < std::integral_constant
               < int, 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES > const&
             >
@@ -2209,7 +2211,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_static )
       auto& tup = std::get< 0 >( args );
 
       ARGOT_TEST_EQ
-      ( &std::get< 0 >( tup )
+      ( &tuple_traits::get< 0 >( tup )
       , &integral_constant_v< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES >
       );
     }

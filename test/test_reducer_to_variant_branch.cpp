@@ -16,10 +16,10 @@
 #include <argot/prov/reference_to.hpp>
 #include <argot/prov/value_of.hpp>
 #include <argot/reducer/to_variant.hpp>
+#include <argot/struct_.hpp>
 
 #include <cstddef>
 #include <type_traits>
-#include <tuple>
 #include <utility>
 #include <variant>
 

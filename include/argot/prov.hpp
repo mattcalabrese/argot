@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2019 Matt Calabrese
+  Copyright (c) 2020 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -29,10 +29,12 @@ This header includes all of the facilities of the `prov` directory.
 #include <argot/prov/alternative_of_by_value.hpp>
 #include <argot/prov/as.hpp>
 #include <argot/prov/assert_.hpp>
+#include <argot/prov/at.hpp>
 #include <argot/prov/bind_call.hpp>
 #include <argot/prov/bind_transform.hpp>
 #include <argot/prov/bool_.hpp>
 #include <argot/prov/boost_assert.hpp>
+#include <argot/prov/chunk.hpp>
 #include <argot/prov/conditional.hpp>
 #include <argot/prov/default_to_reference_to.hpp>
 #include <argot/prov/default_to_value_of.hpp>

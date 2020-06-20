@@ -211,7 +211,7 @@ struct succeed_if< false >
   };
 };
 
-} // namespace argot::call_detail
+} // namespace argot::detail_if_
 } // namespace argot
 
 #endif  // ARGOT_DETAIL_IF_HPP_

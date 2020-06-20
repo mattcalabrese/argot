@@ -22,6 +22,7 @@
 #include <argot/receiver/return_argument_values.hpp>
 #include <argot/receiver/return_single_argument_value.hpp>
 #include <argot/receiver/return_argument_references.hpp>
+#include <argot/tuple_traits/get.hpp>
 
 #include <type_traits>
 #include <utility>
@@ -44,6 +45,7 @@ enum class bar3 { zero, a, b, c };
 namespace prov = argot::prov;
 namespace prov_traits = argot::prov_traits;
 namespace receiver = argot::receiver;
+namespace tuple_traits = argot::tuple_traits;
 
 using argot::ArgumentProvider;
 using argot::PersistentArgumentProvider;
@@ -142,15 +144,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_bind_transform_nullary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple< int&&, double&& > >
+      , std::variant< argot::struct_< int&&, double&& > >
       >
     );
 
     ARGOT_TEST_EQ( provision_result.index(), 0 );
     auto& tup = std::get< 0 >( provision_result );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &a );
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ), &b );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &b );
   }
 
   // lvalue provision
@@ -166,15 +168,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_bind_transform_nullary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple< int&, double& > >
+      , std::variant< argot::struct_< int&, double& > >
       >
     );
 
     ARGOT_TEST_EQ( provision_result.index(), 0 );
     auto& tup = std::get< 0 >( provision_result );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &a );
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ), &b );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &b );
   }
 
   return 0;
@@ -227,26 +229,26 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching_unary_bind_transform )
     ( SameType
       < provision_result_type
       , std::variant
-        < std::tuple< std::tuple< lvalue_call_t const&, foo&& >
-                    , std::tuple< lvalue_call_t const&, bar& >
-                    >
-        , std::tuple< std::tuple< lvalue_call_t const&, foo&& >
-                    , std::tuple< rvalue_call_t const&, bar& >
-                    >
-        , std::tuple< std::tuple< rvalue_call_t const&, foo&& >
-                    , std::tuple< lvalue_call_t const&, bar& >
-                    >
-        , std::tuple< std::tuple< rvalue_call_t const&, foo&& >
-                    , std::tuple< rvalue_call_t const&, bar& >
-                    >
+        < argot::struct_< std::tuple< lvalue_call_t const&, foo&& >
+                        , std::tuple< lvalue_call_t const&, bar& >
+                        >
+        , argot::struct_< std::tuple< lvalue_call_t const&, foo&& >
+                        , std::tuple< rvalue_call_t const&, bar& >
+                        >
+        , argot::struct_< std::tuple< rvalue_call_t const&, foo&& >
+                        , std::tuple< lvalue_call_t const&, bar& >
+                        >
+        , argot::struct_< std::tuple< rvalue_call_t const&, foo&& >
+                        , std::tuple< rvalue_call_t const&, bar& >
+                        >
         >
       >
     );
 
     ARGOT_TEST_EQ( provision_result.index(), 0 );
     auto& top_tup = std::get< 0 >( provision_result );
-    auto& tup0 = std::get< 0 >( top_tup );
-    auto& tup1 = std::get< 1 >( top_tup );
+    auto& tup0 = tuple_traits::get< 0 >( top_tup );
+    auto& tup1 = tuple_traits::get< 1 >( top_tup );
 
     ARGOT_TEST_EQ( &std::get< 0 >( tup0 ), &lvalue_call );
     ARGOT_TEST_EQ( &std::get< 1 >( tup0 ), &foo_a );
@@ -268,26 +270,26 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching_unary_bind_transform )
     ( SameType
       < provision_result_type
       , std::variant
-        < std::tuple< std::tuple< lvalue_call_t const&, foo& >
-                    , std::tuple< lvalue_call_t const&, bar& >
-                    >
-        , std::tuple< std::tuple< lvalue_call_t const&, foo& >
-                    , std::tuple< rvalue_call_t const&, bar& >
-                    >
-        , std::tuple< std::tuple< rvalue_call_t const&, foo& >
-                    , std::tuple< lvalue_call_t const&, bar& >
-                    >
-        , std::tuple< std::tuple< rvalue_call_t const&, foo& >
-                    , std::tuple< rvalue_call_t const&, bar& >
-                    >
+        < argot::struct_< std::tuple< lvalue_call_t const&, foo& >
+                        , std::tuple< lvalue_call_t const&, bar& >
+                        >
+        , argot::struct_< std::tuple< lvalue_call_t const&, foo& >
+                        , std::tuple< rvalue_call_t const&, bar& >
+                        >
+        , argot::struct_< std::tuple< rvalue_call_t const&, foo& >
+                        , std::tuple< lvalue_call_t const&, bar& >
+                        >
+        , argot::struct_< std::tuple< rvalue_call_t const&, foo& >
+                        , std::tuple< rvalue_call_t const&, bar& >
+                        >
         >
       >
     );
 
     ARGOT_TEST_EQ( provision_result.index(), 0 );
     auto& top_tup = std::get< 0 >( provision_result );
-    auto& tup0 = std::get< 0 >( top_tup );
-    auto& tup1 = std::get< 1 >( top_tup );
+    auto& tup0 = tuple_traits::get< 0 >( top_tup );
+    auto& tup1 = tuple_traits::get< 1 >( top_tup );
 
     ARGOT_TEST_EQ( &std::get< 0 >( tup0 ), &lvalue_call );
     ARGOT_TEST_EQ( &std::get< 1 >( tup0 ), &foo_a );
@@ -383,12 +385,12 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_nonbranching_bind_transform )
     ( SameType
       < provision_result_type
       , std::variant
-        < std::tuple
+        < argot::struct_
           < lvalue_call_t const&
           , foo&, foo&&, foo const&, foo const&&
           , bar&, bar&&, bar const&, bar const&&
           >
-        , std::tuple
+        , argot::struct_
           < rvalue_call_t const&
           , foo&, foo&&, foo const&, foo const&&
           , bar&, bar&&, bar const&, bar const&&
@@ -400,15 +402,15 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_nonbranching_bind_transform )
     ARGOT_TEST_EQ( provision_result.index(), 1 );
     auto& tup = std::get< 1 >( provision_result );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &rvalue_call );
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ), &foo_a );
-    ARGOT_TEST_EQ( &std::get< 2 >( tup ), &foo_a );
-    ARGOT_TEST_EQ( &std::get< 3 >( tup ), &const_foo_a );
-    ARGOT_TEST_EQ( &std::get< 4 >( tup ), &const_foo_a );
-    ARGOT_TEST_EQ( &std::get< 5 >( tup ), &bar_a );
-    ARGOT_TEST_EQ( &std::get< 6 >( tup ), &bar_a );
-    ARGOT_TEST_EQ( &std::get< 7 >( tup ), &const_bar_a );
-    ARGOT_TEST_EQ( &std::get< 8 >( tup ), &const_bar_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &rvalue_call );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &foo_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &foo_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &const_foo_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 4 >( tup ), &const_foo_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 5 >( tup ), &bar_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 6 >( tup ), &bar_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 7 >( tup ), &const_bar_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 8 >( tup ) >( tup ), &const_bar_a );
   }
 
   // lvalue provision
@@ -425,12 +427,12 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_nonbranching_bind_transform )
     ( SameType
       < provision_result_type
       , std::variant
-        < std::tuple
+        < argot::struct_
           < lvalue_call_t const&
           , foo&, foo&, foo const&, foo const&
           , bar&, bar&, bar const&, bar const&
           >
-        , std::tuple
+        , argot::struct_
           < rvalue_call_t const&
           , foo&, foo&, foo const&, foo const&
           , bar&, bar&, bar const&, bar const&
@@ -442,15 +444,15 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_nonbranching_bind_transform )
     ARGOT_TEST_EQ( provision_result.index(), 0 );
     auto& tup = std::get< 0 >( provision_result );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &lvalue_call );
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ), &foo_a );
-    ARGOT_TEST_EQ( &std::get< 2 >( tup ), &foo_a );
-    ARGOT_TEST_EQ( &std::get< 3 >( tup ), &const_foo_a );
-    ARGOT_TEST_EQ( &std::get< 4 >( tup ), &const_foo_a );
-    ARGOT_TEST_EQ( &std::get< 5 >( tup ), &bar_a );
-    ARGOT_TEST_EQ( &std::get< 6 >( tup ), &bar_a );
-    ARGOT_TEST_EQ( &std::get< 7 >( tup ), &const_bar_a );
-    ARGOT_TEST_EQ( &std::get< 8 >( tup ), &const_bar_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &lvalue_call );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &foo_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &foo_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &const_foo_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 4 >( tup ), &const_foo_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 5 >( tup ), &bar_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 6 >( tup ), &bar_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 7 >( tup ), &const_bar_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 8 >( tup ) >( tup ), &const_bar_a );
   }
 };
 
@@ -525,10 +527,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_unary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo&& >
-          , std::tuple< rvalue_call_t const&, foo&& >
-          , std::tuple< lvalue_call_t const&, bar& >
-          , std::tuple< rvalue_call_t const&, bar& >
+          < argot::struct_< lvalue_call_t const&, foo&& >
+          , argot::struct_< rvalue_call_t const&, foo&& >
+          , argot::struct_< lvalue_call_t const&, bar& >
+          , argot::struct_< rvalue_call_t const&, bar& >
           >
         >
       );
@@ -536,8 +538,8 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_unary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(), 1 );
       auto& tup = std::get< 1 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &rvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &foo_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &rvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &foo_a );
     }
 
     // bar branch
@@ -554,10 +556,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_unary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo&& >
-          , std::tuple< rvalue_call_t const&, foo&& >
-          , std::tuple< lvalue_call_t const&, bar& >
-          , std::tuple< rvalue_call_t const&, bar& >
+          < argot::struct_< lvalue_call_t const&, foo&& >
+          , argot::struct_< rvalue_call_t const&, foo&& >
+          , argot::struct_< lvalue_call_t const&, bar& >
+          , argot::struct_< rvalue_call_t const&, bar& >
           >
         >
       );
@@ -565,8 +567,8 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_unary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(), 3 );
       auto& tup = std::get< 3 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &rvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &bar_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &rvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &bar_b );
     }
   }
 
@@ -586,10 +588,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_unary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo& >
-          , std::tuple< rvalue_call_t const&, foo& >
-          , std::tuple< lvalue_call_t const&, bar& >
-          , std::tuple< rvalue_call_t const&, bar& >
+          < argot::struct_< lvalue_call_t const&, foo& >
+          , argot::struct_< rvalue_call_t const&, foo& >
+          , argot::struct_< lvalue_call_t const&, bar& >
+          , argot::struct_< rvalue_call_t const&, bar& >
           >
         >
       );
@@ -597,8 +599,8 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_unary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &lvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &foo_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &lvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &foo_a );
     }
 
     // bar branch
@@ -615,10 +617,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_unary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo& >
-          , std::tuple< rvalue_call_t const&, foo& >
-          , std::tuple< lvalue_call_t const&, bar& >
-          , std::tuple< rvalue_call_t const&, bar& >
+          < argot::struct_< lvalue_call_t const&, foo& >
+          , argot::struct_< rvalue_call_t const&, foo& >
+          , argot::struct_< lvalue_call_t const&, bar& >
+          , argot::struct_< rvalue_call_t const&, bar& >
           >
         >
       );
@@ -626,8 +628,8 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_unary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(), 2 );
       auto& tup = std::get< 2 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &lvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &bar_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &lvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &bar_b );
     }
   }
 };
@@ -872,22 +874,22 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo1&&, foo2&&, foo3&& >
-          , std::tuple< rvalue_call_t const&, foo1&&, foo2&&, foo3&& >
-          , std::tuple< lvalue_call_t const&, foo1&&, foo2&&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&&, foo2&&, bar3& >
-          , std::tuple< lvalue_call_t const&, foo1&&, bar2&, foo3&& >
-          , std::tuple< rvalue_call_t const&, foo1&&, bar2&, foo3&& >
-          , std::tuple< lvalue_call_t const&, foo1&&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&&, bar2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&&, foo3&& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&&, foo3&& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, foo3&& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, foo3&& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, bar3& >
+          < argot::struct_< lvalue_call_t const&, foo1&&, foo2&&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, foo2&&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, foo2&&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, foo2&&, bar3& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, bar2&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, bar2&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, bar2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, bar3& >
           >
         >
       );
@@ -895,10 +897,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(), 1 );
       auto& tup = std::get< 1 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &rvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &foo1_a );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &foo2_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ), &foo3_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &rvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &foo1_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &foo2_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &foo3_a );
     }
 
     // branch1
@@ -915,22 +917,22 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo1&&, foo2&&, foo3&& >
-          , std::tuple< rvalue_call_t const&, foo1&&, foo2&&, foo3&& >
-          , std::tuple< lvalue_call_t const&, foo1&&, foo2&&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&&, foo2&&, bar3& >
-          , std::tuple< lvalue_call_t const&, foo1&&, bar2&, foo3&& >
-          , std::tuple< rvalue_call_t const&, foo1&&, bar2&, foo3&& >
-          , std::tuple< lvalue_call_t const&, foo1&&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&&, bar2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&&, foo3&& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&&, foo3&& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, foo3&& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, foo3&& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, bar3& >
+          < argot::struct_< lvalue_call_t const&, foo1&&, foo2&&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, foo2&&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, foo2&&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, foo2&&, bar3& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, bar2&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, bar2&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, bar2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, bar3& >
           >
         >
       );
@@ -938,10 +940,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(), 3 );
       auto& tup = std::get< 3 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &rvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &foo1_a );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &foo2_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ), &bar3_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &rvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &foo1_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &foo2_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &bar3_b );
     }
 
     // branch2
@@ -958,22 +960,22 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo1&&, foo2&&, foo3&& >
-          , std::tuple< rvalue_call_t const&, foo1&&, foo2&&, foo3&& >
-          , std::tuple< lvalue_call_t const&, foo1&&, foo2&&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&&, foo2&&, bar3& >
-          , std::tuple< lvalue_call_t const&, foo1&&, bar2&, foo3&& >
-          , std::tuple< rvalue_call_t const&, foo1&&, bar2&, foo3&& >
-          , std::tuple< lvalue_call_t const&, foo1&&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&&, bar2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&&, foo3&& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&&, foo3&& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, foo3&& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, foo3&& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, bar3& >
+          < argot::struct_< lvalue_call_t const&, foo1&&, foo2&&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, foo2&&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, foo2&&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, foo2&&, bar3& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, bar2&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, bar2&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, bar2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, bar3& >
           >
         >
       );
@@ -981,10 +983,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(), 5 );
       auto& tup = std::get< 5 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &rvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &foo1_a );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &bar2_b );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ), &foo3_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &rvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &foo1_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &bar2_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &foo3_a );
     }
 
     // branch3
@@ -1001,22 +1003,22 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo1&&, foo2&&, foo3&& >
-          , std::tuple< rvalue_call_t const&, foo1&&, foo2&&, foo3&& >
-          , std::tuple< lvalue_call_t const&, foo1&&, foo2&&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&&, foo2&&, bar3& >
-          , std::tuple< lvalue_call_t const&, foo1&&, bar2&, foo3&& >
-          , std::tuple< rvalue_call_t const&, foo1&&, bar2&, foo3&& >
-          , std::tuple< lvalue_call_t const&, foo1&&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&&, bar2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&&, foo3&& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&&, foo3&& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, foo3&& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, foo3&& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, bar3& >
+          < argot::struct_< lvalue_call_t const&, foo1&&, foo2&&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, foo2&&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, foo2&&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, foo2&&, bar3& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, bar2&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, bar2&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, bar2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, bar3& >
           >
         >
       );
@@ -1024,10 +1026,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(), 7 );
       auto& tup = std::get< 7 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &rvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &foo1_a );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &bar2_b );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ), &bar3_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &rvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &foo1_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &bar2_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &bar3_b );
     }
 
     // branch4
@@ -1044,22 +1046,22 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo1&&, foo2&&, foo3&& >
-          , std::tuple< rvalue_call_t const&, foo1&&, foo2&&, foo3&& >
-          , std::tuple< lvalue_call_t const&, foo1&&, foo2&&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&&, foo2&&, bar3& >
-          , std::tuple< lvalue_call_t const&, foo1&&, bar2&, foo3&& >
-          , std::tuple< rvalue_call_t const&, foo1&&, bar2&, foo3&& >
-          , std::tuple< lvalue_call_t const&, foo1&&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&&, bar2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&&, foo3&& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&&, foo3&& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, foo3&& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, foo3&& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, bar3& >
+          < argot::struct_< lvalue_call_t const&, foo1&&, foo2&&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, foo2&&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, foo2&&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, foo2&&, bar3& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, bar2&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, bar2&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, bar2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, bar3& >
           >
         >
       );
@@ -1067,10 +1069,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(),9 );
       auto& tup = std::get< 9 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &rvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &bar1_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &foo2_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ), &foo3_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &rvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &bar1_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &foo2_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &foo3_a );
     }
 
     // branch5
@@ -1087,22 +1089,22 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo1&&, foo2&&, foo3&& >
-          , std::tuple< rvalue_call_t const&, foo1&&, foo2&&, foo3&& >
-          , std::tuple< lvalue_call_t const&, foo1&&, foo2&&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&&, foo2&&, bar3& >
-          , std::tuple< lvalue_call_t const&, foo1&&, bar2&, foo3&& >
-          , std::tuple< rvalue_call_t const&, foo1&&, bar2&, foo3&& >
-          , std::tuple< lvalue_call_t const&, foo1&&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&&, bar2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&&, foo3&& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&&, foo3&& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, foo3&& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, foo3&& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, bar3& >
+          < argot::struct_< lvalue_call_t const&, foo1&&, foo2&&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, foo2&&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, foo2&&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, foo2&&, bar3& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, bar2&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, bar2&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, bar2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, bar3& >
           >
         >
       );
@@ -1110,10 +1112,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(), 11 );
       auto& tup = std::get< 11 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &rvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &bar1_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &foo2_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ), &bar3_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &rvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &bar1_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &foo2_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &bar3_b );
     }
 
     // branch6
@@ -1130,22 +1132,22 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo1&&, foo2&&, foo3&& >
-          , std::tuple< rvalue_call_t const&, foo1&&, foo2&&, foo3&& >
-          , std::tuple< lvalue_call_t const&, foo1&&, foo2&&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&&, foo2&&, bar3& >
-          , std::tuple< lvalue_call_t const&, foo1&&, bar2&, foo3&& >
-          , std::tuple< rvalue_call_t const&, foo1&&, bar2&, foo3&& >
-          , std::tuple< lvalue_call_t const&, foo1&&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&&, bar2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&&, foo3&& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&&, foo3&& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, foo3&& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, foo3&& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, bar3& >
+          < argot::struct_< lvalue_call_t const&, foo1&&, foo2&&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, foo2&&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, foo2&&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, foo2&&, bar3& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, bar2&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, bar2&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, bar2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, bar3& >
           >
         >
       );
@@ -1153,10 +1155,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(), 13 );
       auto& tup = std::get< 13 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &rvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &bar1_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &bar2_b );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ), &foo3_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &rvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &bar1_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &bar2_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &foo3_a );
     }
 
     // branch7
@@ -1173,22 +1175,22 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo1&&, foo2&&, foo3&& >
-          , std::tuple< rvalue_call_t const&, foo1&&, foo2&&, foo3&& >
-          , std::tuple< lvalue_call_t const&, foo1&&, foo2&&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&&, foo2&&, bar3& >
-          , std::tuple< lvalue_call_t const&, foo1&&, bar2&, foo3&& >
-          , std::tuple< rvalue_call_t const&, foo1&&, bar2&, foo3&& >
-          , std::tuple< lvalue_call_t const&, foo1&&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&&, bar2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&&, foo3&& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&&, foo3&& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, foo3&& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, foo3&& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, bar3& >
+          < argot::struct_< lvalue_call_t const&, foo1&&, foo2&&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, foo2&&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, foo2&&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, foo2&&, bar3& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, bar2&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, bar2&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, foo1&&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&&, bar2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, foo3&& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, foo3&& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, bar3& >
           >
         >
       );
@@ -1196,10 +1198,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(), 15 );
       auto& tup = std::get< 15 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &rvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &bar1_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &bar2_b );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ), &bar3_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &rvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &bar1_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &bar2_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &bar3_b );
     }
   }
 
@@ -1219,22 +1221,22 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo1&, foo2&, foo3& >
-          , std::tuple< rvalue_call_t const&, foo1&, foo2&, foo3& >
-          , std::tuple< lvalue_call_t const&, foo1&, foo2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&, foo2&, bar3& >
-          , std::tuple< lvalue_call_t const&, foo1&, bar2&, foo3& >
-          , std::tuple< rvalue_call_t const&, foo1&, bar2&, foo3& >
-          , std::tuple< lvalue_call_t const&, foo1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&, bar2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&, foo3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&, foo3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, foo3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, foo3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, bar3& >
+          < argot::struct_< lvalue_call_t const&, foo1&, foo2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, foo2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, foo2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, foo2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, bar2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, bar2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, bar2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, bar3& >
           >
         >
       );
@@ -1242,10 +1244,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &lvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &foo1_a );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &foo2_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ), &foo3_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &lvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &foo1_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &foo2_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &foo3_a );
     }
 
     // branch1
@@ -1262,22 +1264,22 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo1&, foo2&, foo3& >
-          , std::tuple< rvalue_call_t const&, foo1&, foo2&, foo3& >
-          , std::tuple< lvalue_call_t const&, foo1&, foo2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&, foo2&, bar3& >
-          , std::tuple< lvalue_call_t const&, foo1&, bar2&, foo3& >
-          , std::tuple< rvalue_call_t const&, foo1&, bar2&, foo3& >
-          , std::tuple< lvalue_call_t const&, foo1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&, bar2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&, foo3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&, foo3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, foo3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, foo3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, bar3& >
+          < argot::struct_< lvalue_call_t const&, foo1&, foo2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, foo2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, foo2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, foo2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, bar2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, bar2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, bar2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, bar3& >
           >
         >
       );
@@ -1285,10 +1287,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(), 2 );
       auto& tup = std::get< 2 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &lvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &foo1_a );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &foo2_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ), &bar3_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &lvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &foo1_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &foo2_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &bar3_b );
     }
 
     // branch2
@@ -1305,22 +1307,22 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo1&, foo2&, foo3& >
-          , std::tuple< rvalue_call_t const&, foo1&, foo2&, foo3& >
-          , std::tuple< lvalue_call_t const&, foo1&, foo2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&, foo2&, bar3& >
-          , std::tuple< lvalue_call_t const&, foo1&, bar2&, foo3& >
-          , std::tuple< rvalue_call_t const&, foo1&, bar2&, foo3& >
-          , std::tuple< lvalue_call_t const&, foo1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&, bar2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&, foo3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&, foo3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, foo3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, foo3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, bar3& >
+          < argot::struct_< lvalue_call_t const&, foo1&, foo2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, foo2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, foo2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, foo2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, bar2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, bar2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, bar2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, bar3& >
           >
         >
       );
@@ -1328,10 +1330,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(), 4 );
       auto& tup = std::get< 4 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &lvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &foo1_a );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &bar2_b );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ), &foo3_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &lvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &foo1_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &bar2_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &foo3_a );
     }
 
     // branch3
@@ -1348,22 +1350,22 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo1&, foo2&, foo3& >
-          , std::tuple< rvalue_call_t const&, foo1&, foo2&, foo3& >
-          , std::tuple< lvalue_call_t const&, foo1&, foo2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&, foo2&, bar3& >
-          , std::tuple< lvalue_call_t const&, foo1&, bar2&, foo3& >
-          , std::tuple< rvalue_call_t const&, foo1&, bar2&, foo3& >
-          , std::tuple< lvalue_call_t const&, foo1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&, bar2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&, foo3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&, foo3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, foo3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, foo3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, bar3& >
+          < argot::struct_< lvalue_call_t const&, foo1&, foo2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, foo2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, foo2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, foo2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, bar2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, bar2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, bar2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, bar3& >
           >
         >
       );
@@ -1371,10 +1373,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(), 6 );
       auto& tup = std::get< 6 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &lvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &foo1_a );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &bar2_b );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ), &bar3_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &lvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &foo1_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &bar2_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &bar3_b );
     }
 
     // branch4
@@ -1391,33 +1393,33 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo1&, foo2&, foo3& >
-          , std::tuple< rvalue_call_t const&, foo1&, foo2&, foo3& >
-          , std::tuple< lvalue_call_t const&, foo1&, foo2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&, foo2&, bar3& >
-          , std::tuple< lvalue_call_t const&, foo1&, bar2&, foo3& >
-          , std::tuple< rvalue_call_t const&, foo1&, bar2&, foo3& >
-          , std::tuple< lvalue_call_t const&, foo1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&, bar2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&, foo3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&, foo3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, foo3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, foo3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, bar3& >
+          < argot::struct_< lvalue_call_t const&, foo1&, foo2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, foo2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, foo2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, foo2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, bar2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, bar2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, bar2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, bar3& >
           >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 8 );
-      auto& tup = std::get< 8 >( provision_result );
+      auto& tup = tuple_traits::get< 8 >( tup ) >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &lvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &bar1_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &foo2_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ), &foo3_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &lvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &bar1_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &foo2_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &foo3_a );
     }
 
     // branch5
@@ -1434,22 +1436,22 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo1&, foo2&, foo3& >
-          , std::tuple< rvalue_call_t const&, foo1&, foo2&, foo3& >
-          , std::tuple< lvalue_call_t const&, foo1&, foo2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&, foo2&, bar3& >
-          , std::tuple< lvalue_call_t const&, foo1&, bar2&, foo3& >
-          , std::tuple< rvalue_call_t const&, foo1&, bar2&, foo3& >
-          , std::tuple< lvalue_call_t const&, foo1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&, bar2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&, foo3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&, foo3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, foo3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, foo3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, bar3& >
+          < argot::struct_< lvalue_call_t const&, foo1&, foo2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, foo2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, foo2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, foo2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, bar2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, bar2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, bar2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, bar3& >
           >
         >
       );
@@ -1457,10 +1459,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(), 10 );
       auto& tup = std::get< 10 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &lvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &bar1_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &foo2_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ), &bar3_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &lvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &bar1_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &foo2_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &bar3_b );
     }
 
     // branch6
@@ -1477,22 +1479,22 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo1&, foo2&, foo3& >
-          , std::tuple< rvalue_call_t const&, foo1&, foo2&, foo3& >
-          , std::tuple< lvalue_call_t const&, foo1&, foo2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&, foo2&, bar3& >
-          , std::tuple< lvalue_call_t const&, foo1&, bar2&, foo3& >
-          , std::tuple< rvalue_call_t const&, foo1&, bar2&, foo3& >
-          , std::tuple< lvalue_call_t const&, foo1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&, bar2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&, foo3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&, foo3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, foo3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, foo3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, bar3& >
+          < argot::struct_< lvalue_call_t const&, foo1&, foo2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, foo2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, foo2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, foo2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, bar2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, bar2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, bar2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, bar3& >
           >
         >
       );
@@ -1500,10 +1502,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(), 12 );
       auto& tup = std::get< 12 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &lvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &bar1_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &bar2_b );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ), &foo3_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &lvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &bar1_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &bar2_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &foo3_a );
     }
 
     // branch7
@@ -1520,22 +1522,22 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple< lvalue_call_t const&, foo1&, foo2&, foo3& >
-          , std::tuple< rvalue_call_t const&, foo1&, foo2&, foo3& >
-          , std::tuple< lvalue_call_t const&, foo1&, foo2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&, foo2&, bar3& >
-          , std::tuple< lvalue_call_t const&, foo1&, bar2&, foo3& >
-          , std::tuple< rvalue_call_t const&, foo1&, bar2&, foo3& >
-          , std::tuple< lvalue_call_t const&, foo1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, foo1&, bar2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&, foo3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&, foo3& >
-          , std::tuple< lvalue_call_t const&, bar1&, foo2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, foo2&, bar3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, foo3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, foo3& >
-          , std::tuple< lvalue_call_t const&, bar1&, bar2&, bar3& >
-          , std::tuple< rvalue_call_t const&, bar1&, bar2&, bar3& >
+          < argot::struct_< lvalue_call_t const&, foo1&, foo2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, foo2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, foo2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, foo2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, bar2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, bar2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, foo1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, foo1&, bar2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, foo2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, foo2&, bar3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, foo3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, foo3& >
+          , argot::struct_< lvalue_call_t const&, bar1&, bar2&, bar3& >
+          , argot::struct_< rvalue_call_t const&, bar1&, bar2&, bar3& >
           >
         >
       );
@@ -1543,10 +1545,10 @@ ARGOT_AUTO_CONSTEXPR_TEST( test_branching_ternary_bind_transform )
       ARGOT_TEST_EQ( provision_result.index(), 14 );
       auto& tup = std::get< 14 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &lvalue_call );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ), &bar1_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ), &bar2_b );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ), &bar3_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &lvalue_call );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &bar1_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &bar2_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &bar3_b );
     }
   }
 };

@@ -20,7 +20,6 @@ run generate_visit.cpp ;
 run generate_unparse.cpp ;
 
 # Implementation detail helpers
-# run test_auto_function.cpp /boost//unit_test_framework ;
 run test_cast_value_list_elements.cpp /boost//unit_test_framework ;
 run test_detail_regular_bases.cpp ;
 
@@ -62,7 +61,8 @@ compile test_concatenate.cpp ;
 compile test_permute.cpp ;
 
 # TupleLike
-# compile test_tuple_traits_result_of_get.cpp ;
+run test_tuple_traits_apply.cpp ;
+run test_tuple_traits_expand_element_types.cpp ;
 run test_tuple_traits_get.cpp ;
 
 # struct_

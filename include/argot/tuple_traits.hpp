@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2019 Matt Calabrese
+  Copyright (c) 2020 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -22,6 +22,7 @@ This header includes all of the facilities of the `tuple_traits` directory.
 //]
 
 #include <argot/tuple_traits/element_type.hpp>
+#include <argot/tuple_traits/expand_element_types.hpp>
 #include <argot/tuple_traits/get.hpp>
 #include <argot/tuple_traits/index_constant.hpp>
 #include <argot/tuple_traits/index_type.hpp>

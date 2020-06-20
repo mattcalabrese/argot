@@ -11,8 +11,8 @@
 #include <argot/prov/expand/expand.hpp>
 #include <argot/prov_traits/provide.hpp>
 #include <argot/receiver/return_argument_references.hpp>
+#include <argot/tuple_traits/get.hpp>
 
-#include <tuple>
 #include <type_traits>
 
 #include <variant>
@@ -22,6 +22,7 @@ namespace {
 namespace prov = argot::prov;
 namespace prov_traits = argot::prov_traits;
 namespace receiver = argot::receiver;
+namespace tuple_traits = argot::tuple_traits;
 
 using argot::SameType;
 
@@ -68,14 +69,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_unary )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple< a& > >
+        , std::variant< argot::struct_< a& > >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &std::get< 0 >( var ) );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( var ) );
     }
 
     // const lvalue
@@ -92,14 +93,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_unary )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple< a const& > >
+        , std::variant< argot::struct_< a const& > >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &std::get< 0 >( var ) );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( var ) );
     }
 
     // rvalue
@@ -116,14 +117,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_unary )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple< a& > >
+        , std::variant< argot::struct_< a& > >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &std::get< 0 >( var ) );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( var ) );
     }
   }
 
@@ -143,14 +144,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_unary )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple< a& > >
+        , std::variant< argot::struct_< a& > >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &std::get< 0 >( var ) );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( var ) );
     }
 
     // const lvalue
@@ -167,14 +168,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_unary )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple< a const& > >
+        , std::variant< argot::struct_< a const& > >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &std::get< 0 >( var ) );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( var ) );
     }
 
     // rvalue
@@ -191,14 +192,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_unary )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant< std::tuple< a&& > >
+        , std::variant< argot::struct_< a&& > >
         >
       );
 
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ), &std::get< 0 >( var ) );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( var ) );
     }
   }
 
@@ -245,7 +246,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         ( SameType
           < provision_result_type
           , std::variant
-            < std::tuple< a& >, std::tuple< b& >, std::tuple< c& > >
+            < argot::struct_< a& >, argot::struct_< b& >, argot::struct_< c& > >
           >
         );
 
@@ -253,7 +254,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         auto& tup = std::get< 0 >( provision_result );
 
         ARGOT_TEST_EQ
-        ( &std::get< 0 >( tup ), &std::get< 0 >( var_a ) );
+        ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( var_a ) );
       }
 
       // const lvalue
@@ -271,9 +272,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         ( SameType
           < provision_result_type
           , std::variant
-            < std::tuple< a const& >
-            , std::tuple< b const& >
-            , std::tuple< c const& >
+            < argot::struct_< a const& >
+            , argot::struct_< b const& >
+            , argot::struct_< c const& >
             >
           >
         );
@@ -282,7 +283,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         auto& tup = std::get< 0 >( provision_result );
 
         ARGOT_TEST_EQ
-        ( &std::get< 0 >( tup ), &std::get< 0 >( var_a ) );
+        ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( var_a ) );
       }
 
       // rvalue
@@ -300,7 +301,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         ( SameType
           < provision_result_type
           , std::variant
-            < std::tuple< a& >, std::tuple< b& >, std::tuple< c& > >
+            < argot::struct_< a& >, argot::struct_< b& >, argot::struct_< c& > >
           >
         );
 
@@ -308,7 +309,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         auto& tup = std::get< 0 >( provision_result );
 
         ARGOT_TEST_EQ
-        ( &std::get< 0 >( tup ), &std::get< 0 >( var_a ) );
+        ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( var_a ) );
       }
     }
 
@@ -329,7 +330,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         ( SameType
           < provision_result_type
           , std::variant
-            < std::tuple< a& >, std::tuple< b& >, std::tuple< c& > >
+            < argot::struct_< a& >, argot::struct_< b& >, argot::struct_< c& > >
           >
         );
 
@@ -337,7 +338,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         auto& tup = std::get< 0 >( provision_result );
 
         ARGOT_TEST_EQ
-        ( &std::get< 0 >( tup ), &std::get< 0 >( var_a ) );
+        ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( var_a ) );
       }
 
       // const lvalue
@@ -355,9 +356,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         ( SameType
           < provision_result_type
           , std::variant
-            < std::tuple< a const& >
-            , std::tuple< b const& >
-            , std::tuple< c const& >
+            < argot::struct_< a const& >
+            , argot::struct_< b const& >
+            , argot::struct_< c const& >
             >
           >
         );
@@ -366,7 +367,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         auto& tup = std::get< 0 >( provision_result );
 
         ARGOT_TEST_EQ
-        ( &std::get< 0 >( tup ), &std::get< 0 >( var_a ) );
+        ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( var_a ) );
       }
 
       // rvalue
@@ -384,7 +385,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         ( SameType
           < provision_result_type
           , std::variant
-            < std::tuple< a&& >, std::tuple< b&& >, std::tuple< c&& > >
+            < argot::struct_< a&& >, argot::struct_< b&& >, argot::struct_< c&& > >
           >
         );
 
@@ -392,7 +393,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         auto& tup = std::get< 0 >( provision_result );
 
         ARGOT_TEST_EQ
-        ( &std::get< 0 >( tup ), &std::get< 0 >( var_a ) );
+        ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( var_a ) );
       }
     }
   }
@@ -416,7 +417,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         ( SameType
           < provision_result_type
           , std::variant
-            < std::tuple< a& >, std::tuple< b& >, std::tuple< c& > >
+            < argot::struct_< a& >, argot::struct_< b& >, argot::struct_< c& > >
           >
         );
 
@@ -424,7 +425,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         auto& tup = std::get< 1 >( provision_result );
 
         ARGOT_TEST_EQ
-        ( &std::get< 0 >( tup ), &std::get< 1 >( var_b ) );
+        ( &tuple_traits::get< 0 >( tup ), &std::get< 1 >( var_b ) );
       }
 
       // const lvalue
@@ -442,9 +443,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         ( SameType
           < provision_result_type
           , std::variant
-            < std::tuple< a const& >
-            , std::tuple< b const& >
-            , std::tuple< c const& >
+            < argot::struct_< a const& >
+            , argot::struct_< b const& >
+            , argot::struct_< c const& >
             >
           >
         );
@@ -453,7 +454,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         auto& tup = std::get< 1 >( provision_result );
 
         ARGOT_TEST_EQ
-        ( &std::get< 0 >( tup ), &std::get< 1> ( var_b ) );
+        ( &tuple_traits::get< 0 >( tup ), &std::get< 1> ( var_b ) );
       }
 
       // rvalue
@@ -471,7 +472,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         ( SameType
           < provision_result_type
           , std::variant
-            < std::tuple< a& >, std::tuple< b& >, std::tuple< c& > >
+            < argot::struct_< a& >, argot::struct_< b& >, argot::struct_< c& > >
           >
         );
 
@@ -479,7 +480,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         auto& tup = std::get< 1 >( provision_result );
 
         ARGOT_TEST_EQ
-        ( &std::get< 0 >( tup ), &std::get< 1 >( var_b ) );
+        ( &tuple_traits::get< 0 >( tup ), &std::get< 1 >( var_b ) );
       }
     }
 
@@ -500,7 +501,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         ( SameType
           < provision_result_type
           , std::variant
-            < std::tuple< a& >, std::tuple< b& >, std::tuple< c& > >
+            < argot::struct_< a& >, argot::struct_< b& >, argot::struct_< c& > >
           >
         );
 
@@ -508,7 +509,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         auto& tup = std::get< 1 >( provision_result );
 
         ARGOT_TEST_EQ
-        ( &std::get< 0 >( tup ), &std::get< 1 >( var_b ) );
+        ( &tuple_traits::get< 0 >( tup ), &std::get< 1 >( var_b ) );
       }
 
       // const lvalue
@@ -526,9 +527,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         ( SameType
           < provision_result_type
           , std::variant
-            < std::tuple< a const& >
-            , std::tuple< b const& >
-            , std::tuple< c const& >
+            < argot::struct_< a const& >
+            , argot::struct_< b const& >
+            , argot::struct_< c const& >
             >
           >
         );
@@ -537,7 +538,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         auto& tup = std::get< 1 >( provision_result );
 
         ARGOT_TEST_EQ
-        ( &std::get< 0 >( tup ), &std::get< 1 >( var_b ) );
+        ( &tuple_traits::get< 0 >( tup ), &std::get< 1 >( var_b ) );
       }
 
       // rvalue
@@ -555,7 +556,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         ( SameType
           < provision_result_type
           , std::variant
-            < std::tuple< a&& >, std::tuple< b&& >, std::tuple< c&& > >
+            < argot::struct_< a&& >, argot::struct_< b&& >, argot::struct_< c&& > >
           >
         );
 
@@ -563,7 +564,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         auto& tup = std::get< 1 >( provision_result );
 
         ARGOT_TEST_EQ
-        ( &std::get< 0 >( tup ), &std::get< 1 >( var_b ) );
+        ( &tuple_traits::get< 0 >( tup ), &std::get< 1 >( var_b ) );
       }
     }
   }
@@ -587,7 +588,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         ( SameType
           < provision_result_type
           , std::variant
-            < std::tuple< a& >, std::tuple< b& >, std::tuple< c& > >
+            < argot::struct_< a& >, argot::struct_< b& >, argot::struct_< c& > >
           >
         );
 
@@ -595,7 +596,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         auto& tup = std::get< 2 >( provision_result );
 
         ARGOT_TEST_EQ
-        ( &std::get< 0 >( tup ), &std::get< 2 >( var_c ) );
+        ( &tuple_traits::get< 0 >( tup ), &std::get< 2 >( var_c ) );
       }
 
       // const lvalue
@@ -613,9 +614,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         ( SameType
           < provision_result_type
           , std::variant
-            < std::tuple< a const& >
-            , std::tuple< b const& >
-            , std::tuple< c const& >
+            < argot::struct_< a const& >
+            , argot::struct_< b const& >
+            , argot::struct_< c const& >
             >
           >
         );
@@ -624,7 +625,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         auto& tup = std::get< 2 >( provision_result );
 
         ARGOT_TEST_EQ
-        ( &std::get< 0 >( tup ), &std::get< 2 >( var_c ) );
+        ( &tuple_traits::get< 0 >( tup ), &std::get< 2 >( var_c ) );
       }
 
       // rvalue
@@ -642,7 +643,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         ( SameType
           < provision_result_type
           , std::variant
-            < std::tuple< a& >, std::tuple< b& >, std::tuple< c& > >
+            < argot::struct_< a& >, argot::struct_< b& >, argot::struct_< c& > >
           >
         );
 
@@ -650,7 +651,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         auto& tup = std::get< 2 >( provision_result );
 
         ARGOT_TEST_EQ
-        ( &std::get< 0 >( tup ), &std::get< 2 >( var_c ) );
+        ( &tuple_traits::get< 0 >( tup ), &std::get< 2 >( var_c ) );
       }
     }
 
@@ -671,7 +672,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         ( SameType
           < provision_result_type
           , std::variant
-            < std::tuple< a& >, std::tuple< b& >, std::tuple< c& > >
+            < argot::struct_< a& >, argot::struct_< b& >, argot::struct_< c& > >
           >
         );
 
@@ -679,7 +680,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         auto& tup = std::get< 2 >( provision_result );
 
         ARGOT_TEST_EQ
-        ( &std::get< 0 >( tup ), &std::get< 2 >( var_c ) );
+        ( &tuple_traits::get< 0 >( tup ), &std::get< 2 >( var_c ) );
       }
 
       // const lvalue
@@ -697,9 +698,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         ( SameType
           < provision_result_type
           , std::variant
-            < std::tuple< a const& >
-            , std::tuple< b const& >
-            , std::tuple< c const& >
+            < argot::struct_< a const& >
+            , argot::struct_< b const& >
+            , argot::struct_< c const& >
             >
           >
         );
@@ -708,7 +709,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         auto& tup = std::get< 2 >( provision_result );
 
         ARGOT_TEST_EQ
-        ( &std::get< 0 >( tup ), &std::get< 2 >( var_c ) );
+        ( &tuple_traits::get< 0 >( tup ), &std::get< 2 >( var_c ) );
       }
 
       // rvalue
@@ -726,7 +727,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         ( SameType
           < provision_result_type
           , std::variant
-            < std::tuple< a&& >, std::tuple< b&& >, std::tuple< c&& > >
+            < argot::struct_< a&& >, argot::struct_< b&& >, argot::struct_< c&& > >
           >
         );
 
@@ -734,7 +735,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_access_ternary )
         auto& tup = std::get< 2 >( provision_result );
 
         ARGOT_TEST_EQ
-        ( &std::get< 0 >( tup ), &std::get< 2 >( var_c ) );
+        ( &tuple_traits::get< 0 >( tup ), &std::get< 2 >( var_c ) );
       }
     }
   }

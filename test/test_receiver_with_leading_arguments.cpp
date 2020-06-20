@@ -15,9 +15,9 @@
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/receiver_traits/receive_branch.hpp>
+#include <argot/tuple_traits/get.hpp>
 
 #include <stdexcept>
-#include <tuple>
 
 namespace {
 
@@ -41,6 +41,7 @@ using argot::receiver_traits::result_of_receive_branch_t;
 
 namespace receiver = argot::receiver;
 namespace receiver_traits = argot::receiver_traits;
+namespace tuple_traits = argot::tuple_traits;
 
 // TODO(mattcalabrese) Test SFINAE behavior with call_detail::is_detected_v
 // TODO(mattcalabrese) Test with_leading_arguments of with_leading_arguments
@@ -115,7 +116,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching_nonbranching )
     ( SameType
       < result_type
       , std::variant
-        < std::tuple
+        < argot::struct_
           < char&&, short&, int&&, long&, long long&&, long double& >
         >
       >
@@ -148,23 +149,23 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching_nonbranching )
     ARGOT_TEST_EQ( args.index(), 0 );
     auto& tup = std::get< 0 >( args );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &one );
-    ARGOT_TEST_EQ( std::get< 0 >( tup ), 1 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
+    ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 1 );
 
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ), &two );
-    ARGOT_TEST_EQ( std::get< 1 >( tup ), 2 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &two );
+    ARGOT_TEST_EQ( tuple_traits::get< 1 >( tup ), 2 );
 
-    ARGOT_TEST_EQ( &std::get< 2 >( tup ), &three );
-    ARGOT_TEST_EQ( std::get< 2 >( tup ), 3 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &three );
+    ARGOT_TEST_EQ( tuple_traits::get< 2 >( tup ), 3 );
 
-    ARGOT_TEST_EQ( &std::get< 3 >( tup ), &four );
-    ARGOT_TEST_EQ( std::get< 3 >( tup ), 4 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &four );
+    ARGOT_TEST_EQ( tuple_traits::get< 3 >( tup ), 4 );
 
-    ARGOT_TEST_EQ( &std::get< 4 >( tup ), &five );
-    ARGOT_TEST_EQ( std::get< 4 >( tup ), 5 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 4 >( tup ), &five );
+    ARGOT_TEST_EQ( tuple_traits::get< 4 >( tup ), 5 );
 
-    ARGOT_TEST_EQ( &std::get< 5 >( tup ), &six );
-    ARGOT_TEST_EQ( std::get< 5 >( tup ), 6. );
+    ARGOT_TEST_EQ( &tuple_traits::get< 5 >( tup ), &six );
+    ARGOT_TEST_EQ( tuple_traits::get< 5 >( tup ), 6. );
   }
 
   return 0;
@@ -243,10 +244,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching_branching )
     ( SameType
       < result_type
       , std::variant
-        < std::tuple< char&&, short&, int&&, long&, float&&, wchar_t& >
-        , std::tuple< char&&, short&, int&&, long&, long long&&, long double& >
-        , std::tuple< char&&, short&, int&&, long& >
-        , std::tuple< char&&, short&, int&&, long&, double const& >
+        < argot::struct_< char&&, short&, int&&, long&, float&&, wchar_t& >
+        , argot::struct_< char&&, short&, int&&, long&, long long&&, long double& >
+        , argot::struct_< char&&, short&, int&&, long& >
+        , argot::struct_< char&&, short&, int&&, long&, double const& >
         >
       >
     );
@@ -286,23 +287,23 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching_branching )
     ARGOT_TEST_EQ( args.index(), 1 );
     auto& tup = std::get< 1 >( args );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &one );
-    ARGOT_TEST_EQ( std::get< 0 >( tup ), 1 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
+    ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 1 );
 
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ), &two );
-    ARGOT_TEST_EQ( std::get< 1 >( tup ), 2 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &two );
+    ARGOT_TEST_EQ( tuple_traits::get< 1 >( tup ), 2 );
 
-    ARGOT_TEST_EQ( &std::get< 2 >( tup ), &three );
-    ARGOT_TEST_EQ( std::get< 2 >( tup ), 3 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &three );
+    ARGOT_TEST_EQ( tuple_traits::get< 2 >( tup ), 3 );
 
-    ARGOT_TEST_EQ( &std::get< 3 >( tup ), &four );
-    ARGOT_TEST_EQ( std::get< 3 >( tup ), 4 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &four );
+    ARGOT_TEST_EQ( tuple_traits::get< 3 >( tup ), 4 );
 
-    ARGOT_TEST_EQ( &std::get< 4 >( tup ), &five );
-    ARGOT_TEST_EQ( std::get< 4 >( tup ), 5 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 4 >( tup ), &five );
+    ARGOT_TEST_EQ( tuple_traits::get< 4 >( tup ), 5 );
 
-    ARGOT_TEST_EQ( &std::get< 5 >( tup ), &six );
-    ARGOT_TEST_EQ( std::get< 5 >( tup ), 6. );
+    ARGOT_TEST_EQ( &tuple_traits::get< 5 >( tup ), &six );
+    ARGOT_TEST_EQ( tuple_traits::get< 5 >( tup ), 6. );
   }
 
   return 0;
@@ -386,10 +387,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching_nonbranching )
     ( SameType
       < result_type
       , std::variant
-        < std::tuple< float&&, wchar_t&, char&&, short&, int&&, long& >
-        , std::tuple< long long&&, long double&, char&&, short&, int&&, long& >
-        , std::tuple< char&&, short&, int&&, long& >
-        , std::tuple< double const&, char&&, short&, int&&, long& >
+        < argot::struct_< float&&, wchar_t&, char&&, short&, int&&, long& >
+        , argot::struct_< long long&&, long double&, char&&, short&, int&&, long& >
+        , argot::struct_< char&&, short&, int&&, long& >
+        , argot::struct_< double const&, char&&, short&, int&&, long& >
         >
       >
     );
@@ -421,23 +422,23 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching_nonbranching )
     ARGOT_TEST_EQ( args.index(), 1 );
     auto& tup = std::get< 1 >( args );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &five );
-    ARGOT_TEST_EQ( std::get< 0 >( tup ), 5 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &five );
+    ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 5 );
 
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ), &six );
-    ARGOT_TEST_EQ( std::get< 1 >( tup ), 6. );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &six );
+    ARGOT_TEST_EQ( tuple_traits::get< 1 >( tup ), 6. );
 
-    ARGOT_TEST_EQ( &std::get< 2 >( tup ), &one );
-    ARGOT_TEST_EQ( std::get< 2 >( tup ), 1 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &one );
+    ARGOT_TEST_EQ( tuple_traits::get< 2 >( tup ), 1 );
 
-    ARGOT_TEST_EQ( &std::get< 3 >( tup ), &two );
-    ARGOT_TEST_EQ( std::get< 3 >( tup ), 2 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &two );
+    ARGOT_TEST_EQ( tuple_traits::get< 3 >( tup ), 2 );
 
-    ARGOT_TEST_EQ( &std::get< 4 >( tup ), &three );
-    ARGOT_TEST_EQ( std::get< 4 >( tup ), 3 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 4 >( tup ), &three );
+    ARGOT_TEST_EQ( tuple_traits::get< 4 >( tup ), 3 );
 
-    ARGOT_TEST_EQ( &std::get< 5 >( tup ), &four );
-    ARGOT_TEST_EQ( std::get< 5 >( tup ), 4 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 5 >( tup ), &four );
+    ARGOT_TEST_EQ( tuple_traits::get< 5 >( tup ), 4 );
   }
 
   return 0;
@@ -528,32 +529,32 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching_branching )
     ( SameType
       < result_type
       , std::variant
-        < std::tuple< float&&, wchar_t&, unsigned char&& >
-        , std::tuple< float&&, wchar_t& >
-        , std::tuple< float&&, wchar_t&, unsigned short&, unsigned int&& >
-        , std::tuple< float&&, wchar_t&, char&&, short&, int&&, long& >
-        , std::tuple< float&&, wchar_t&, unsigned long&&, unsigned long long& >
-        , std::tuple< float&&, wchar_t&, signed char& >
-        , std::tuple< long long&&, long double&, unsigned char&& >
-        , std::tuple< long long&&, long double& >
-        , std::tuple
+        < argot::struct_< float&&, wchar_t&, unsigned char&& >
+        , argot::struct_< float&&, wchar_t& >
+        , argot::struct_< float&&, wchar_t&, unsigned short&, unsigned int&& >
+        , argot::struct_< float&&, wchar_t&, char&&, short&, int&&, long& >
+        , argot::struct_< float&&, wchar_t&, unsigned long&&, unsigned long long& >
+        , argot::struct_< float&&, wchar_t&, signed char& >
+        , argot::struct_< long long&&, long double&, unsigned char&& >
+        , argot::struct_< long long&&, long double& >
+        , argot::struct_
           < long long&&, long double&, unsigned short&, unsigned int&& >
-        , std::tuple< long long&&, long double&, char&&, short&, int&&, long& >
-        , std::tuple
+        , argot::struct_< long long&&, long double&, char&&, short&, int&&, long& >
+        , argot::struct_
           < long long&&, long double&, unsigned long&&, unsigned long long& >
-        , std::tuple< long long&&, long double&, signed char& >
-        , std::tuple< unsigned char&& >
-        , std::tuple<>
-        , std::tuple< unsigned short&, unsigned int&& >
-        , std::tuple< char&&, short&, int&&, long& >
-        , std::tuple< unsigned long&&, unsigned long long& >
-        , std::tuple< signed char& >
-        , std::tuple< double const&, unsigned char&& >
-        , std::tuple< double const& >
-        , std::tuple< double const&, unsigned short&, unsigned int&& >
-        , std::tuple< double const&, char&&, short&, int&&, long& >
-        , std::tuple< double const&, unsigned long&&, unsigned long long& >
-        , std::tuple< double const&, signed char& >
+        , argot::struct_< long long&&, long double&, signed char& >
+        , argot::struct_< unsigned char&& >
+        , argot::struct_<>
+        , argot::struct_< unsigned short&, unsigned int&& >
+        , argot::struct_< char&&, short&, int&&, long& >
+        , argot::struct_< unsigned long&&, unsigned long long& >
+        , argot::struct_< signed char& >
+        , argot::struct_< double const&, unsigned char&& >
+        , argot::struct_< double const& >
+        , argot::struct_< double const&, unsigned short&, unsigned int&& >
+        , argot::struct_< double const&, char&&, short&, int&&, long& >
+        , argot::struct_< double const&, unsigned long&&, unsigned long long& >
+        , argot::struct_< double const&, signed char& >
         >
       >
     );
@@ -599,23 +600,23 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching_branching )
     ARGOT_TEST_EQ( args.index(), 9 );
     auto& tup = std::get< 9 >( args );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &five );
-    ARGOT_TEST_EQ( std::get< 0 >( tup ), 5 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &five );
+    ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 5 );
 
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ), &six );
-    ARGOT_TEST_EQ( std::get< 1 >( tup ), 6. );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &six );
+    ARGOT_TEST_EQ( tuple_traits::get< 1 >( tup ), 6. );
 
-    ARGOT_TEST_EQ( &std::get< 2 >( tup ), &one );
-    ARGOT_TEST_EQ( std::get< 2 >( tup ), 1 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &one );
+    ARGOT_TEST_EQ( tuple_traits::get< 2 >( tup ), 1 );
 
-    ARGOT_TEST_EQ( &std::get< 3 >( tup ), &two );
-    ARGOT_TEST_EQ( std::get< 3 >( tup ), 2 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &two );
+    ARGOT_TEST_EQ( tuple_traits::get< 3 >( tup ), 2 );
 
-    ARGOT_TEST_EQ( &std::get< 4 >( tup ), &three );
-    ARGOT_TEST_EQ( std::get< 4 >( tup ), 3 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 4 >( tup ), &three );
+    ARGOT_TEST_EQ( tuple_traits::get< 4 >( tup ), 3 );
 
-    ARGOT_TEST_EQ( &std::get< 5 >( tup ), &four );
-    ARGOT_TEST_EQ( std::get< 5 >( tup ), 4 );
+    ARGOT_TEST_EQ( &tuple_traits::get< 5 >( tup ), &four );
+    ARGOT_TEST_EQ( tuple_traits::get< 5 >( tup ), 4 );
   }
 
   return 0;

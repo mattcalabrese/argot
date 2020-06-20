@@ -60,6 +60,7 @@
 #include <initializer_list>
 #include <memory>
 #include <new>
+#include <tuple>
 #include <type_traits>
 #include <utility>
 
@@ -514,9 +515,86 @@ class struct_
     else
       return ARGOT_MOVE( elements );
   }
+
+  template< std::size_t Index
+          , std::enable_if_t< ( Index < sizeof...( T ) ) >* = nullptr
+          >
+  constexpr auto&& get() & noexcept
+  {
+    using elem_type = element_type_t< Index >;
+
+    // TODO(mattcalabrese) Use intrinsic
+    if constexpr( std::is_same_v< elem_type, contained< elem_type > > )
+      return detail_struct::struct_impl< sizeof...( T ), Index >
+      ::template get< elem_type >( this->elements );
+    else
+      return argot::access_contained
+      ( detail_struct::struct_impl< sizeof...( T ), Index >
+        ::template get< contained< elem_type > >( this->pure().elements )
+      );
+  }
+
+  template< std::size_t Index
+          , std::enable_if_t< ( Index < sizeof...( T ) ) >* = nullptr
+          >
+  constexpr auto&& get() const& noexcept
+  {
+    using elem_type = element_type_t< Index >;
+
+    // TODO(mattcalabrese) Use intrinsic
+    if constexpr( std::is_same_v< elem_type, contained< elem_type > > )
+      return detail_struct::struct_impl< sizeof...( T ), Index >
+      ::template get< elem_type >( this->elements );
+    else
+      return argot::access_contained
+      ( detail_struct::struct_impl< sizeof...( T ), Index >
+        ::template get< contained< elem_type > >( this->pure().elements )
+      );
+  }
+
+  template< std::size_t Index
+          , std::enable_if_t< ( Index < sizeof...( T ) ) >* = nullptr
+          >
+  constexpr auto&& get() && noexcept
+  {
+    using elem_type = element_type_t< Index >;
+
+    // TODO(mattcalabrese) Use intrinsic
+    if constexpr( std::is_same_v< elem_type, contained< elem_type > > )
+      return detail_struct::struct_impl< sizeof...( T ), Index >
+      ::template get< elem_type >( ARGOT_MOVE( *this ).elements );
+    else
+      return argot::access_contained
+      ( detail_struct::struct_impl< sizeof...( T ), Index >
+        ::template get< contained< elem_type > >
+        ( ARGOT_MOVE( *this ).pure().elements )
+      );
+  }
+
+  template< std::size_t Index
+          , std::enable_if_t< ( Index < sizeof...( T ) ) >* = nullptr
+          >
+  constexpr auto&& get() const&& noexcept
+  {
+    using elem_type = element_type_t< Index >;
+
+    // TODO(mattcalabrese) Use intrinsic
+    if constexpr( std::is_same_v< elem_type, contained< elem_type > > )
+      return detail_struct::struct_impl< sizeof...( T ), Index >
+      ::template get< elem_type >( ARGOT_MOVE( *this ).elements );
+    else
+      return argot::access_contained
+      ( detail_struct::struct_impl< sizeof...( T ), Index >
+        ::template get< contained< elem_type > >
+        ( ARGOT_MOVE( *this ).pure().elements )
+      );
+  }
  private:
   ARGOT_NO_UNIQUE_ADDRESS impl_type elements;
 };
+
+// TODO(calabrese) Make this work and not be ambiguous
+#if 0
 
 template< class... T >
 struct make_concept_map< TupleLike< struct_< T... > > >
@@ -549,6 +627,8 @@ struct make_concept_map< TupleLike< struct_< T... > > >
       );
   }
 };
+
+#endif
 
 struct make_struct_fn
 {
@@ -591,6 +671,20 @@ struct hash< ::argot::struct_< T... > >
     , ::argot::detail_regular_bases::tainted_hash
     , T...
     > {};
+
+template< class... T >
+struct tuple_size< ::argot::struct_< T... > >
+  : std::integral_constant< std::size_t, sizeof...( T ) > {};
+
+template< std::size_t Index, class... T >
+struct tuple_element< Index, ::argot::struct_< T... > >
+{
+  using type
+    = ::argot::detail_argot::variadic_at
+      < Index, ::argot::detail_forward::direct_identity_t
+      , T...
+      >;
+};
 
 } // namespace std
 

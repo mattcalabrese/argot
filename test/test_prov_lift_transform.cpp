@@ -17,6 +17,7 @@
 #include <argot/prov/reference_to.hpp>
 #include <argot/receiver/return_argument_references.hpp>
 #include <argot/receiver/return_argument_values.hpp>
+#include <argot/tuple_traits/get.hpp>
 
 #include <type_traits>
 #include <utility>
@@ -46,6 +47,7 @@ class tag3;
 namespace prov = argot::prov;
 namespace prov_traits = argot::prov_traits;
 namespace receiver = argot::receiver;
+namespace tuple_traits = argot::tuple_traits;
 
 using argot::SameType;
 
@@ -135,15 +137,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_nullary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple< foo1&&, bar1& > >
+      , std::variant< argot::struct_< foo1&&, bar1& > >
       >
     );
 
     ARGOT_TEST_EQ( provision_result.index(), 0 );
     auto& tup = std::get< 0 >( provision_result );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &foo_a );
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ), &bar_b );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &foo_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &bar_b );
   }
 
   // lvalue provision
@@ -159,15 +161,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_nullary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< std::tuple< foo1&, bar1& > >
+      , std::variant< argot::struct_< foo1&, bar1& > >
       >
     );
 
     ARGOT_TEST_EQ( provision_result.index(), 0 );
     auto& tup = std::get< 0 >( provision_result );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &foo_a );
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ), &bar_b );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &foo_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &bar_b );
   }
 
   return 0;
@@ -220,15 +222,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_nonbranching )
     ( SameType
       < provision_result_type
       , std::variant
-        < std::tuple< wrapped_t< foo1&&, tag1 >, wrapped_t< bar1&, tag1 > > >
+        < argot::struct_< wrapped_t< foo1&&, tag1 >, wrapped_t< bar1&, tag1 > > >
       >
     );
 
     ARGOT_TEST_EQ( provision_result.index(), 0 );
     auto& tup = std::get< 0 >( provision_result );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo_a );
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar_b );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar_b );
   }
 
   // lvalue provision
@@ -245,15 +247,15 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_nonbranching )
     ( SameType
       < provision_result_type
       , std::variant
-        < std::tuple< wrapped_t< foo1&, tag1 >, wrapped_t< bar1&, tag1 > > >
+        < argot::struct_< wrapped_t< foo1&, tag1 >, wrapped_t< bar1&, tag1 > > >
       >
     );
 
     ARGOT_TEST_EQ( provision_result.index(), 0 );
     auto& tup = std::get< 0 >( provision_result );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo_a );
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar_b );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar_b );
   }
 
   return 0;
@@ -306,7 +308,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_nonbranching_binary )
     ( SameType
       < provision_result_type
       , std::variant
-        < std::tuple
+        < argot::struct_
           < wrapped_t< foo1&&, tag1, tag2 >, wrapped_t< bar1&, tag1, tag2 > >
         >
       >
@@ -315,8 +317,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_nonbranching_binary )
     ARGOT_TEST_EQ( provision_result.index(), 0 );
     auto& tup = std::get< 0 >( provision_result );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo_a );
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar_b );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar_b );
   }
 
   // lvalue provision
@@ -333,7 +335,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_nonbranching_binary )
     ( SameType
       < provision_result_type
       , std::variant
-        < std::tuple
+        < argot::struct_
           < wrapped_t< foo1&, tag1, tag2 >, wrapped_t< bar1&, tag1, tag2 > >
         >
       >
@@ -342,8 +344,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_nonbranching_binary )
     ARGOT_TEST_EQ( provision_result.index(), 0 );
     auto& tup = std::get< 0 >( provision_result );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo_a );
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar_b );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar_b );
   }
 
   return 0;
@@ -396,7 +398,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_nonbranching_ternary )
     ( SameType
       < provision_result_type
       , std::variant
-        < std::tuple
+        < argot::struct_
           < wrapped_t< foo1&&, tag1, tag2, tag3 >
           , wrapped_t< bar1&, tag1, tag2, tag3 >
           >
@@ -407,8 +409,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_nonbranching_ternary )
     ARGOT_TEST_EQ( provision_result.index(), 0 );
     auto& tup = std::get< 0 >( provision_result );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo_a );
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar_b );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar_b );
   }
 
   // lvalue provision
@@ -425,7 +427,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_nonbranching_ternary )
     ( SameType
       < provision_result_type
       , std::variant
-        < std::tuple
+        < argot::struct_
           < wrapped_t< foo1&, tag1, tag2, tag3 >
           , wrapped_t< bar1&, tag1, tag2, tag3 >
           >
@@ -436,8 +438,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_nonbranching_ternary )
     ARGOT_TEST_EQ( provision_result.index(), 0 );
     auto& tup = std::get< 0 >( provision_result );
 
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo_a );
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar_b );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar_b );
   }
 
   return 0;
@@ -588,25 +590,25 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < wrapped_t< foo1&&, tag1 >
             , wrapped_t< bar1&, tag1 >
             , wrapped_t< foo3&&, tag1 >
             , wrapped_t< bar3&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo1&&, tag1 >
             , wrapped_t< bar1&, tag1 >
             , wrapped_t< foo4&&, tag1 >
             , wrapped_t< bar4&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&&, tag1 >
             , wrapped_t< bar2&, tag1 >
             , wrapped_t< foo3&&, tag1 >
             , wrapped_t< bar3&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&&, tag1 >
             , wrapped_t< bar2&, tag1 >
             , wrapped_t< foo4&&, tag1 >
@@ -619,10 +621,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching )
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo1_a );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar1_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ).ref, &foo3_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ).ref, &bar3_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo1_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar1_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ).ref, &foo3_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ).ref, &bar3_b );
     }
 
     // 0_1
@@ -639,25 +641,25 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < wrapped_t< foo1&&, tag1 >
             , wrapped_t< bar1&, tag1 >
             , wrapped_t< foo3&&, tag1 >
             , wrapped_t< bar3&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo1&&, tag1 >
             , wrapped_t< bar1&, tag1 >
             , wrapped_t< foo4&&, tag1 >
             , wrapped_t< bar4&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&&, tag1 >
             , wrapped_t< bar2&, tag1 >
             , wrapped_t< foo3&&, tag1 >
             , wrapped_t< bar3&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&&, tag1 >
             , wrapped_t< bar2&, tag1 >
             , wrapped_t< foo4&&, tag1 >
@@ -670,10 +672,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching )
       ARGOT_TEST_EQ( provision_result.index(), 1 );
       auto& tup = std::get< 1 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo1_a );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar1_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ).ref, &foo4_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ).ref, &bar4_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo1_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar1_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ).ref, &foo4_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ).ref, &bar4_b );
     }
 
     // 1_0
@@ -690,25 +692,25 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < wrapped_t< foo1&&, tag1 >
             , wrapped_t< bar1&, tag1 >
             , wrapped_t< foo3&&, tag1 >
             , wrapped_t< bar3&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo1&&, tag1 >
             , wrapped_t< bar1&, tag1 >
             , wrapped_t< foo4&&, tag1 >
             , wrapped_t< bar4&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&&, tag1 >
             , wrapped_t< bar2&, tag1 >
             , wrapped_t< foo3&&, tag1 >
             , wrapped_t< bar3&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&&, tag1 >
             , wrapped_t< bar2&, tag1 >
             , wrapped_t< foo4&&, tag1 >
@@ -721,10 +723,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching )
       ARGOT_TEST_EQ( provision_result.index(), 2 );
       auto& tup = std::get< 2 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo2_a );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar2_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ).ref, &foo3_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ).ref, &bar3_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo2_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar2_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ).ref, &foo3_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ).ref, &bar3_b );
     }
 
     // 1_1
@@ -741,25 +743,25 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < wrapped_t< foo1&&, tag1 >
             , wrapped_t< bar1&, tag1 >
             , wrapped_t< foo3&&, tag1 >
             , wrapped_t< bar3&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo1&&, tag1 >
             , wrapped_t< bar1&, tag1 >
             , wrapped_t< foo4&&, tag1 >
             , wrapped_t< bar4&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&&, tag1 >
             , wrapped_t< bar2&, tag1 >
             , wrapped_t< foo3&&, tag1 >
             , wrapped_t< bar3&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&&, tag1 >
             , wrapped_t< bar2&, tag1 >
             , wrapped_t< foo4&&, tag1 >
@@ -772,10 +774,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching )
       ARGOT_TEST_EQ( provision_result.index(), 3 );
       auto& tup = std::get< 3 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo2_a );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar2_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ).ref, &foo4_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ).ref, &bar4_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo2_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar2_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ).ref, &foo4_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ).ref, &bar4_b );
     }
   }
 
@@ -795,25 +797,25 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < wrapped_t< foo1&, tag1 >
             , wrapped_t< bar1&, tag1 >
             , wrapped_t< foo3&, tag1 >
             , wrapped_t< bar3&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo1&, tag1 >
             , wrapped_t< bar1&, tag1 >
             , wrapped_t< foo4&, tag1 >
             , wrapped_t< bar4&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&, tag1 >
             , wrapped_t< bar2&, tag1 >
             , wrapped_t< foo3&, tag1 >
             , wrapped_t< bar3&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&, tag1 >
             , wrapped_t< bar2&, tag1 >
             , wrapped_t< foo4&, tag1 >
@@ -826,10 +828,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching )
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo1_a );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar1_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ).ref, &foo3_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ).ref, &bar3_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo1_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar1_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ).ref, &foo3_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ).ref, &bar3_b );
     }
 
     // 0_1
@@ -846,25 +848,25 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < wrapped_t< foo1&, tag1 >
             , wrapped_t< bar1&, tag1 >
             , wrapped_t< foo3&, tag1 >
             , wrapped_t< bar3&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo1&, tag1 >
             , wrapped_t< bar1&, tag1 >
             , wrapped_t< foo4&, tag1 >
             , wrapped_t< bar4&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&, tag1 >
             , wrapped_t< bar2&, tag1 >
             , wrapped_t< foo3&, tag1 >
             , wrapped_t< bar3&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&, tag1 >
             , wrapped_t< bar2&, tag1 >
             , wrapped_t< foo4&, tag1 >
@@ -877,10 +879,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching )
       ARGOT_TEST_EQ( provision_result.index(), 1 );
       auto& tup = std::get< 1 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo1_a );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar1_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ).ref, &foo4_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ).ref, &bar4_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo1_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar1_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ).ref, &foo4_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ).ref, &bar4_b );
     }
 
     // 1_0
@@ -897,25 +899,25 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < wrapped_t< foo1&, tag1 >
             , wrapped_t< bar1&, tag1 >
             , wrapped_t< foo3&, tag1 >
             , wrapped_t< bar3&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo1&, tag1 >
             , wrapped_t< bar1&, tag1 >
             , wrapped_t< foo4&, tag1 >
             , wrapped_t< bar4&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&, tag1 >
             , wrapped_t< bar2&, tag1 >
             , wrapped_t< foo3&, tag1 >
             , wrapped_t< bar3&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&, tag1 >
             , wrapped_t< bar2&, tag1 >
             , wrapped_t< foo4&, tag1 >
@@ -928,10 +930,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching )
       ARGOT_TEST_EQ( provision_result.index(), 2 );
       auto& tup = std::get< 2 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo2_a );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar2_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ).ref, &foo3_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ).ref, &bar3_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo2_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar2_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ).ref, &foo3_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ).ref, &bar3_b );
     }
 
     // 1_1
@@ -948,25 +950,25 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < wrapped_t< foo1&, tag1 >
             , wrapped_t< bar1&, tag1 >
             , wrapped_t< foo3&, tag1 >
             , wrapped_t< bar3&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo1&, tag1 >
             , wrapped_t< bar1&, tag1 >
             , wrapped_t< foo4&, tag1 >
             , wrapped_t< bar4&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&, tag1 >
             , wrapped_t< bar2&, tag1 >
             , wrapped_t< foo3&, tag1 >
             , wrapped_t< bar3&, tag1 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&, tag1 >
             , wrapped_t< bar2&, tag1 >
             , wrapped_t< foo4&, tag1 >
@@ -979,10 +981,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching )
       ARGOT_TEST_EQ( provision_result.index(), 3 );
       auto& tup = std::get< 3 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo2_a );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar2_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ).ref, &foo4_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ).ref, &bar4_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo2_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar2_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ).ref, &foo4_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ).ref, &bar4_b );
     }
   }
 
@@ -1134,25 +1136,25 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching_ternary )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < wrapped_t< foo1&&, tag1, tag2, tag3 >
             , wrapped_t< bar1&, tag1, tag2, tag3 >
             , wrapped_t< foo3&&, tag1, tag2, tag3 >
             , wrapped_t< bar3&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo1&&, tag1, tag2, tag3 >
             , wrapped_t< bar1&, tag1, tag2, tag3 >
             , wrapped_t< foo4&&, tag1, tag2, tag3 >
             , wrapped_t< bar4&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&&, tag1, tag2, tag3 >
             , wrapped_t< bar2&, tag1, tag2, tag3 >
             , wrapped_t< foo3&&, tag1, tag2, tag3 >
             , wrapped_t< bar3&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&&, tag1, tag2, tag3 >
             , wrapped_t< bar2&, tag1, tag2, tag3 >
             , wrapped_t< foo4&&, tag1, tag2, tag3 >
@@ -1165,10 +1167,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching_ternary )
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo1_a );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar1_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ).ref, &foo3_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ).ref, &bar3_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo1_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar1_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ).ref, &foo3_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ).ref, &bar3_b );
     }
 
     // 0_1
@@ -1185,25 +1187,25 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching_ternary )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < wrapped_t< foo1&&, tag1, tag2, tag3 >
             , wrapped_t< bar1&, tag1, tag2, tag3 >
             , wrapped_t< foo3&&, tag1, tag2, tag3 >
             , wrapped_t< bar3&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo1&&, tag1, tag2, tag3 >
             , wrapped_t< bar1&, tag1, tag2, tag3 >
             , wrapped_t< foo4&&, tag1, tag2, tag3 >
             , wrapped_t< bar4&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&&, tag1, tag2, tag3 >
             , wrapped_t< bar2&, tag1, tag2, tag3 >
             , wrapped_t< foo3&&, tag1, tag2, tag3 >
             , wrapped_t< bar3&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&&, tag1, tag2, tag3 >
             , wrapped_t< bar2&, tag1, tag2, tag3 >
             , wrapped_t< foo4&&, tag1, tag2, tag3 >
@@ -1216,10 +1218,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching_ternary )
       ARGOT_TEST_EQ( provision_result.index(), 1 );
       auto& tup = std::get< 1 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo1_a );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar1_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ).ref, &foo4_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ).ref, &bar4_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo1_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar1_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ).ref, &foo4_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ).ref, &bar4_b );
     }
 
     // 1_0
@@ -1236,25 +1238,25 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching_ternary )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < wrapped_t< foo1&&, tag1, tag2, tag3 >
             , wrapped_t< bar1&, tag1, tag2, tag3 >
             , wrapped_t< foo3&&, tag1, tag2, tag3 >
             , wrapped_t< bar3&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo1&&, tag1, tag2, tag3 >
             , wrapped_t< bar1&, tag1, tag2, tag3 >
             , wrapped_t< foo4&&, tag1, tag2, tag3 >
             , wrapped_t< bar4&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&&, tag1, tag2, tag3 >
             , wrapped_t< bar2&, tag1, tag2, tag3 >
             , wrapped_t< foo3&&, tag1, tag2, tag3 >
             , wrapped_t< bar3&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&&, tag1, tag2, tag3 >
             , wrapped_t< bar2&, tag1, tag2, tag3 >
             , wrapped_t< foo4&&, tag1, tag2, tag3 >
@@ -1267,10 +1269,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching_ternary )
       ARGOT_TEST_EQ( provision_result.index(), 2 );
       auto& tup = std::get< 2 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo2_a );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar2_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ).ref, &foo3_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ).ref, &bar3_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo2_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar2_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ).ref, &foo3_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ).ref, &bar3_b );
     }
 
     // 1_1
@@ -1287,25 +1289,25 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching_ternary )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < wrapped_t< foo1&&, tag1, tag2, tag3 >
             , wrapped_t< bar1&, tag1, tag2, tag3 >
             , wrapped_t< foo3&&, tag1, tag2, tag3 >
             , wrapped_t< bar3&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo1&&, tag1, tag2, tag3 >
             , wrapped_t< bar1&, tag1, tag2, tag3 >
             , wrapped_t< foo4&&, tag1, tag2, tag3 >
             , wrapped_t< bar4&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&&, tag1, tag2, tag3 >
             , wrapped_t< bar2&, tag1, tag2, tag3 >
             , wrapped_t< foo3&&, tag1, tag2, tag3 >
             , wrapped_t< bar3&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&&, tag1, tag2, tag3 >
             , wrapped_t< bar2&, tag1, tag2, tag3 >
             , wrapped_t< foo4&&, tag1, tag2, tag3 >
@@ -1318,10 +1320,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching_ternary )
       ARGOT_TEST_EQ( provision_result.index(), 3 );
       auto& tup = std::get< 3 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo2_a );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar2_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ).ref, &foo4_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ).ref, &bar4_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo2_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar2_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ).ref, &foo4_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ).ref, &bar4_b );
     }
   }
 
@@ -1341,25 +1343,25 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching_ternary )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < wrapped_t< foo1&, tag1, tag2, tag3 >
             , wrapped_t< bar1&, tag1, tag2, tag3 >
             , wrapped_t< foo3&, tag1, tag2, tag3 >
             , wrapped_t< bar3&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo1&, tag1, tag2, tag3 >
             , wrapped_t< bar1&, tag1, tag2, tag3 >
             , wrapped_t< foo4&, tag1, tag2, tag3 >
             , wrapped_t< bar4&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&, tag1, tag2, tag3 >
             , wrapped_t< bar2&, tag1, tag2, tag3 >
             , wrapped_t< foo3&, tag1, tag2, tag3 >
             , wrapped_t< bar3&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&, tag1, tag2, tag3 >
             , wrapped_t< bar2&, tag1, tag2, tag3 >
             , wrapped_t< foo4&, tag1, tag2, tag3 >
@@ -1372,10 +1374,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching_ternary )
       ARGOT_TEST_EQ( provision_result.index(), 0 );
       auto& tup = std::get< 0 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo1_a );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar1_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ).ref, &foo3_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ).ref, &bar3_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo1_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar1_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ).ref, &foo3_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ).ref, &bar3_b );
     }
 
     // 0_1
@@ -1392,25 +1394,25 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching_ternary )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < wrapped_t< foo1&, tag1, tag2, tag3 >
             , wrapped_t< bar1&, tag1, tag2, tag3 >
             , wrapped_t< foo3&, tag1, tag2, tag3 >
             , wrapped_t< bar3&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo1&, tag1, tag2, tag3 >
             , wrapped_t< bar1&, tag1, tag2, tag3 >
             , wrapped_t< foo4&, tag1, tag2, tag3 >
             , wrapped_t< bar4&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&, tag1, tag2, tag3 >
             , wrapped_t< bar2&, tag1, tag2, tag3 >
             , wrapped_t< foo3&, tag1, tag2, tag3 >
             , wrapped_t< bar3&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&, tag1, tag2, tag3 >
             , wrapped_t< bar2&, tag1, tag2, tag3 >
             , wrapped_t< foo4&, tag1, tag2, tag3 >
@@ -1423,10 +1425,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching_ternary )
       ARGOT_TEST_EQ( provision_result.index(), 1 );
       auto& tup = std::get< 1 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo1_a );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar1_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ).ref, &foo4_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ).ref, &bar4_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo1_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar1_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ).ref, &foo4_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ).ref, &bar4_b );
     }
 
     // 1_0
@@ -1443,25 +1445,25 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching_ternary )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < wrapped_t< foo1&, tag1, tag2, tag3 >
             , wrapped_t< bar1&, tag1, tag2, tag3 >
             , wrapped_t< foo3&, tag1, tag2, tag3 >
             , wrapped_t< bar3&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo1&, tag1, tag2, tag3 >
             , wrapped_t< bar1&, tag1, tag2, tag3 >
             , wrapped_t< foo4&, tag1, tag2, tag3 >
             , wrapped_t< bar4&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&, tag1, tag2, tag3 >
             , wrapped_t< bar2&, tag1, tag2, tag3 >
             , wrapped_t< foo3&, tag1, tag2, tag3 >
             , wrapped_t< bar3&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&, tag1, tag2, tag3 >
             , wrapped_t< bar2&, tag1, tag2, tag3 >
             , wrapped_t< foo4&, tag1, tag2, tag3 >
@@ -1474,10 +1476,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching_ternary )
       ARGOT_TEST_EQ( provision_result.index(), 2 );
       auto& tup = std::get< 2 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo2_a );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar2_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ).ref, &foo3_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ).ref, &bar3_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo2_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar2_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ).ref, &foo3_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ).ref, &bar3_b );
     }
 
     // 1_1
@@ -1494,25 +1496,25 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching_ternary )
       ( SameType
         < provision_result_type
         , std::variant
-          < std::tuple
+          < argot::struct_
             < wrapped_t< foo1&, tag1, tag2, tag3 >
             , wrapped_t< bar1&, tag1, tag2, tag3 >
             , wrapped_t< foo3&, tag1, tag2, tag3 >
             , wrapped_t< bar3&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo1&, tag1, tag2, tag3 >
             , wrapped_t< bar1&, tag1, tag2, tag3 >
             , wrapped_t< foo4&, tag1, tag2, tag3 >
             , wrapped_t< bar4&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&, tag1, tag2, tag3 >
             , wrapped_t< bar2&, tag1, tag2, tag3 >
             , wrapped_t< foo3&, tag1, tag2, tag3 >
             , wrapped_t< bar3&, tag1, tag2, tag3 >
             >
-          , std::tuple
+          , argot::struct_
             < wrapped_t< foo2&, tag1, tag2, tag3 >
             , wrapped_t< bar2&, tag1, tag2, tag3 >
             , wrapped_t< foo4&, tag1, tag2, tag3 >
@@ -1525,10 +1527,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_lift_transform_branching_ternary )
       ARGOT_TEST_EQ( provision_result.index(), 3 );
       auto& tup = std::get< 3 >( provision_result );
 
-      ARGOT_TEST_EQ( &std::get< 0 >( tup ).ref, &foo2_a );
-      ARGOT_TEST_EQ( &std::get< 1 >( tup ).ref, &bar2_b );
-      ARGOT_TEST_EQ( &std::get< 2 >( tup ).ref, &foo4_a );
-      ARGOT_TEST_EQ( &std::get< 3 >( tup ).ref, &bar4_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ).ref, &foo2_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ).ref, &bar2_b );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ).ref, &foo4_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ).ref, &bar4_b );
     }
   }
 

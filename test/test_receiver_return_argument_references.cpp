@@ -13,9 +13,9 @@
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/receiver_traits/receive_branch.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
+#include <argot/tuple_traits/get.hpp>
 
 #include <stdexcept>
-#include <tuple>
 
 namespace {
 
@@ -31,6 +31,8 @@ using argot::receiver_traits::argument_list_kinds;
 using argot::receiver_traits::argument_list_kinds_t;
 using argot::receiver_traits::result_of_receive_branch;
 using argot::receiver_traits::result_of_receive_branch_t;
+
+namespace tuple_traits = argot::tuple_traits;
 
 enum class foo { zero, a, b, c };
 enum class bar { zero, a, b, c };
@@ -52,7 +54,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < result_type
-      , std::variant< std::tuple<> >
+      , std::variant< argot::struct_<> >
       >
     );
 
@@ -92,108 +94,159 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching )
     bar volatile       volatile_bar_a = bar::a;
     bar volatile const const_volatile_bar_a = bar::a;
 
-    decltype( auto ) args
-      = receive_branch
-        ( return_argument_references()
-        , argument_list_kinds()
-        , argument_list_kinds()
-        , foo_a, const_foo_a, volatile_foo_a, const_volatile_foo_a
-        , std::move( foo_a ), std::move( const_foo_a )
-        , std::move( volatile_foo_a ), std::move( const_volatile_foo_a )
-        , bar_a, const_bar_a, volatile_bar_a, const_volatile_bar_a
-        , std::move( bar_a ), std::move( const_bar_a )
-        , std::move( volatile_bar_a ), std::move( const_volatile_bar_a )
-        );
+    // lvalue
+    {
+      decltype( auto ) args
+        = receive_branch
+          ( return_argument_references()
+          , argument_list_kinds()
+          , argument_list_kinds()
+          , foo_a, const_foo_a, volatile_foo_a, const_volatile_foo_a
+          , bar_a, const_bar_a, volatile_bar_a, const_volatile_bar_a
+          );
 
-    using result_type = decltype( args );
+      using result_type = decltype( args );
 
-    ARGOT_CONCEPT_ENSURE
-    ( SameType
-      < result_type
-      , std::variant
-        < std::tuple
-          < foo&, foo const&, foo volatile&, foo volatile const&
-          , foo&&, foo const&&, foo volatile&&, foo volatile const&&
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < result_type
+        , std::variant
+          < argot::struct_
+            < foo&, foo const&, foo volatile&, foo volatile const&
+            , bar&, bar const&, bar volatile&, bar volatile const&
+            >
+          >
+        >
+      );
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < result_type
+        , result_of_receive_branch_t
+          < result_of_return_argument_references_t&&
+          , argument_list_kinds_t<>
+          , argument_list_kinds_t<>
+          , foo&, foo const&, foo volatile&, foo volatile const&
           , bar&, bar const&, bar volatile&, bar volatile const&
+          >
+        >
+      );
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < result_type
+        , result_of_receive_branch
+          < result_of_return_argument_references_t&&
+          , argument_list_kinds_t<>
+          , argument_list_kinds_t<>
+          , foo&, foo const&, foo volatile&, foo volatile const&
+          , bar&, bar const&, bar volatile&, bar volatile const&
+          >::type
+        >
+      );
+
+      ARGOT_TEST_EQ( args.index(), 0 );
+
+      decltype( auto ) tup = std::get< 0 >( args );
+
+      // lvalue foo value checks
+      ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), foo::a );
+      ARGOT_TEST_EQ( tuple_traits::get< 1 >( tup ), foo::a );
+
+      // lvalue foo address checks
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &foo_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &const_foo_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &volatile_foo_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &const_volatile_foo_a );
+
+      // lvalue bar value checks
+      ARGOT_TEST_EQ( tuple_traits::get< 4 >( tup ), bar::a );
+      ARGOT_TEST_EQ( tuple_traits::get< 5 >( tup ), bar::a );
+
+      // lvalue bar address checks
+      ARGOT_TEST_EQ( &tuple_traits::get< 4 >( tup ), &bar_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 5 >( tup ), &const_bar_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 6 >( tup ), &volatile_bar_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 7 >( tup ), &const_volatile_bar_a );
+    }
+
+    // rvalue
+    {
+      decltype( auto ) args
+        = receive_branch
+          ( return_argument_references()
+          , argument_list_kinds()
+          , argument_list_kinds()
+          , std::move( foo_a ), std::move( const_foo_a )
+          , std::move( volatile_foo_a ), std::move( const_volatile_foo_a )
+          , std::move( bar_a ), std::move( const_bar_a )
+          , std::move( volatile_bar_a ), std::move( const_volatile_bar_a )
+          );
+
+      using result_type = decltype( args );
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < result_type
+        , std::variant
+          < argot::struct_
+            < foo&&, foo const&&, foo volatile&&, foo volatile const&&
+            , bar&&, bar const&&, bar volatile&&, bar volatile const&&
+            >
+          >
+        >
+      );
+
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < result_type
+        , result_of_receive_branch_t
+          < result_of_return_argument_references_t&&
+          , argument_list_kinds_t<>
+          , argument_list_kinds_t<>
+          , foo&&, foo const&&, foo volatile&&, foo volatile const&&
           , bar&&, bar const&&, bar volatile&&, bar volatile const&&
           >
         >
-      >
-    );
+      );
 
-    ARGOT_CONCEPT_ENSURE
-    ( SameType
-      < result_type
-      , result_of_receive_branch_t
-        < result_of_return_argument_references_t&&
-        , argument_list_kinds_t<>
-        , argument_list_kinds_t<>
-        , foo&, foo const&, foo volatile&, foo volatile const&
-        , foo&&, foo const&&, foo volatile&&, foo volatile const&&
-        , bar&, bar const&, bar volatile&, bar volatile const&
-        , bar&&, bar const&&, bar volatile&&, bar volatile const&&
+      ARGOT_CONCEPT_ENSURE
+      ( SameType
+        < result_type
+        , result_of_receive_branch
+          < result_of_return_argument_references_t&&
+          , argument_list_kinds_t<>
+          , argument_list_kinds_t<>
+          , foo&&, foo const&&, foo volatile&&, foo volatile const&&
+          , bar&&, bar const&&, bar volatile&&, bar volatile const&&
+          >::type
         >
-      >
-    );
+      );
 
-    ARGOT_CONCEPT_ENSURE
-    ( SameType
-      < result_type
-      , result_of_receive_branch
-        < result_of_return_argument_references_t&&
-        , argument_list_kinds_t<>
-        , argument_list_kinds_t<>
-        , foo&, foo const&, foo volatile&, foo volatile const&
-        , foo&&, foo const&&, foo volatile&&, foo volatile const&&
-        , bar&, bar const&, bar volatile&, bar volatile const&
-        , bar&&, bar const&&, bar volatile&&, bar volatile const&&
-        >::type
-      >
-    );
+      ARGOT_TEST_EQ( args.index(), 0 );
 
-    ARGOT_TEST_EQ( args.index(), 0 );
+      decltype( auto ) tup = std::get< 0 >( args );
 
-    decltype( auto ) tup = std::get< 0 >( args );
+      // rvalue foo value checks
+      ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), foo::a );
+      ARGOT_TEST_EQ( tuple_traits::get< 1 >( tup ), foo::a );
 
-    // lvalue foo value checks
-    ARGOT_TEST_EQ( std::get< 0 >( tup ), foo::a );
-    ARGOT_TEST_EQ( std::get< 1 >( tup ), foo::a );
+      // rvalue foo address checks
+      ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &foo_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &const_foo_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 2 >( tup ), &volatile_foo_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 3 >( tup ), &const_volatile_foo_a );
 
-    // lvalue foo address checks
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &foo_a );
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ), &const_foo_a );
-    ARGOT_TEST_EQ( &std::get< 2 >( tup ), &volatile_foo_a );
-    ARGOT_TEST_EQ( &std::get< 3 >( tup ), &const_volatile_foo_a );
+      // rvalue bar value checks
+      ARGOT_TEST_EQ( tuple_traits::get< 4 >( tup ), bar::a );
+      ARGOT_TEST_EQ( tuple_traits::get< 5 >( tup ), bar::a );
 
-    // rvalue foo value checks
-    ARGOT_TEST_EQ( std::get< 4 >( tup ), foo::a );
-    ARGOT_TEST_EQ( std::get< 5 >( tup ), foo::a );
-
-    // rvalue foo address checks
-    ARGOT_TEST_EQ( &std::get< 4 >( tup ), &foo_a );
-    ARGOT_TEST_EQ( &std::get< 5 >( tup ), &const_foo_a );
-    ARGOT_TEST_EQ( &std::get< 6 >( tup ), &volatile_foo_a );
-    ARGOT_TEST_EQ( &std::get< 7 >( tup ), &const_volatile_foo_a );
-
-    // lvalue bar value checks
-    ARGOT_TEST_EQ( std::get< 8 >( tup ), bar::a );
-    ARGOT_TEST_EQ( std::get< 9 >( tup ), bar::a );
-
-    // lvalue bar address checks
-    ARGOT_TEST_EQ( &std::get< 8 >( tup ), &bar_a );
-    ARGOT_TEST_EQ( &std::get< 9 >( tup ), &const_bar_a );
-    ARGOT_TEST_EQ( &std::get< 10 >( tup ), &volatile_bar_a );
-    ARGOT_TEST_EQ( &std::get< 11 >( tup ), &const_volatile_bar_a );
-
-    // rvalue bar value checks
-    ARGOT_TEST_EQ( std::get< 12 >( tup ), bar::a );
-    ARGOT_TEST_EQ( std::get< 13 >( tup ), bar::a );
-
-    // rvalue bar address checks
-    ARGOT_TEST_EQ( &std::get< 12 >( tup ), &bar_a );
-    ARGOT_TEST_EQ( &std::get< 13 >( tup ), &const_bar_a );
-    ARGOT_TEST_EQ( &std::get< 14 >( tup ), &volatile_bar_a );
-    ARGOT_TEST_EQ( &std::get< 15 >( tup ), &const_volatile_bar_a );
+      // rvalue bar address checks
+      ARGOT_TEST_EQ( &tuple_traits::get< 4 >( tup ), &bar_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 5 >( tup ), &const_bar_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 6 >( tup ), &volatile_bar_a );
+      ARGOT_TEST_EQ( &tuple_traits::get< 7 >( tup ), &const_volatile_bar_a );
+    }
   }
 
   return 0;
@@ -227,11 +280,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
     ( SameType
       < result_type
       , std::variant
-        < std::tuple< foo&, bar&& >
-        , std::tuple<>
-        , std::tuple<>
-        , std::tuple< foo const& >
-        , std::tuple< bar const&& >
+        < argot::struct_< foo&, bar&& >
+        , argot::struct_<>
+        , argot::struct_<>
+        , argot::struct_< foo const& >
+        , argot::struct_< bar const&& >
         >
       >
     );
@@ -274,10 +327,10 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
 
     decltype( auto ) tup = std::get< 0 >( args );
 
-    ARGOT_TEST_EQ( std::get< 0 >( tup ), foo::a );
-    ARGOT_TEST_EQ( std::get< 1 >( tup ), bar::a );
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &foo_a );
-    ARGOT_TEST_EQ( &std::get< 1 >( tup ), &bar_a );
+    ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), foo::a );
+    ARGOT_TEST_EQ( tuple_traits::get< 1 >( tup ), bar::a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &foo_a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 1 >( tup ), &bar_a );
   }
 
   {
@@ -298,11 +351,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
     ( SameType
       < result_type
       , std::variant
-        < std::tuple< foo&, bar&& >
-        , std::tuple<>
-        , std::tuple<>
-        , std::tuple< foo const& >
-        , std::tuple< bar const&& >
+        < argot::struct_< foo&, bar&& >
+        , argot::struct_<>
+        , argot::struct_<>
+        , argot::struct_< foo const& >
+        , argot::struct_< bar const&& >
         >
       >
     );
@@ -356,11 +409,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
     ( SameType
       < result_type
       , std::variant
-        < std::tuple< foo&, bar&& >
-        , std::tuple<>
-        , std::tuple<>
-        , std::tuple< foo const& >
-        , std::tuple< bar const&& >
+        < argot::struct_< foo&, bar&& >
+        , argot::struct_<>
+        , argot::struct_<>
+        , argot::struct_< foo const& >
+        , argot::struct_< bar const&& >
         >
       >
     );
@@ -421,11 +474,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
     ( SameType
       < result_type
       , std::variant
-        < std::tuple< foo&, bar&& >
-        , std::tuple<>
-        , std::tuple<>
-        , std::tuple< foo const& >
-        , std::tuple< bar const&& >
+        < argot::struct_< foo&, bar&& >
+        , argot::struct_<>
+        , argot::struct_<>
+        , argot::struct_< foo const& >
+        , argot::struct_< bar const&& >
         >
       >
     );
@@ -468,8 +521,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
 
     decltype( auto ) tup = std::get< 3 >( args );
 
-    ARGOT_TEST_EQ( std::get< 0 >( tup ), foo::a );
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &const_foo_a );
+    ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), foo::a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &const_foo_a );
   }
 
   {
@@ -492,11 +545,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
     ( SameType
       < result_type
       , std::variant
-        < std::tuple< foo&, bar&& >
-        , std::tuple<>
-        , std::tuple<>
-        , std::tuple< foo const& >
-        , std::tuple< bar const&& >
+        < argot::struct_< foo&, bar&& >
+        , argot::struct_<>
+        , argot::struct_<>
+        , argot::struct_< foo const& >
+        , argot::struct_< bar const&& >
         >
       >
     );
@@ -539,8 +592,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
 
     decltype( auto ) tup = std::get< 4 >( args );
 
-    ARGOT_TEST_EQ( std::get< 0 >( tup ), bar::a );
-    ARGOT_TEST_EQ( &std::get< 0 >( tup ), &const_bar_a );
+    ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), bar::a );
+    ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &const_bar_a );
   }
 
   return 0;

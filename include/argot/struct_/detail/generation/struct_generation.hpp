@@ -30,6 +30,14 @@ BOOST_PP_DEC( BOOST_PP_ITERATION() )
 template<>
 struct struct_impl_preprocessed< ARGOT_DETAIL_STRUCT_CURR_IMPL_INDEX >
 {
+  template
+  < BOOST_PP_ENUM_PARAMS
+    ( ARGOT_DETAIL_STRUCT_CURR_IMPL_INDEX, class BOOST_PP_INTERCEPT )
+  BOOST_PP_COMMA_IF( ARGOT_DETAIL_STRUCT_CURR_IMPL_INDEX ) class T
+  , class...
+  >
+  using member_type = T;
+
   // TODO(mattcalabres) Hoist ElementType out of the template
   template< class ElementType, class StructBase >
   static constexpr auto&& get( StructBase&& self ) noexcept
@@ -55,6 +63,11 @@ struct struct_base
     = Result< BOOST_PP_ENUM_PARAMS( ARGOT_DETAIL_STRUCT_CURR_NUM_MEMBERS, T ) >;
 
   struct_base() = default;
+  struct_base( struct_base&& ) = default;
+  struct_base( struct_base const& ) = default;
+  struct_base& operator =( struct_base&& ) = default;
+  struct_base& operator =( struct_base const& ) = default;
+
   ~struct_base() = default;
 
 #define BOOST_PP_ITERATION_PARAMS_2                                            \

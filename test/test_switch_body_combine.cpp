@@ -55,6 +55,7 @@
 #include <argot/switch_traits/trailing_argument_list_kinds_of_case_persistent.hpp>
 #include <argot/switch_traits/trailing_argument_list_kinds_of_default_destructive.hpp>
 #include <argot/switch_traits/trailing_argument_list_kinds_of_default_persistent.hpp>
+#include <argot/tuple_traits/get.hpp>
 #include <argot/value_list.hpp>
 
 #include <type_traits>
@@ -66,6 +67,7 @@ namespace prov = argot::prov;
 namespace receiver = argot::receiver;
 namespace receiver_traits = argot::receiver_traits;
 namespace switch_traits = argot::switch_traits;
+namespace tuple_traits = argot::tuple_traits;
 
 using argot::impossible;
 using argot::case_detail::provided_t;
@@ -577,12 +579,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_no_default_with_default )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 0 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 0 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
   }
 
   {
@@ -593,12 +595,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_no_default_with_default )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 1 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 1 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
   }
 
   {
@@ -609,12 +611,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_no_default_with_default )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 2 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 2 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
   }
 
   {
@@ -640,12 +642,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_no_default_with_default )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 0 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 0 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
   }
 
   {
@@ -656,12 +658,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_no_default_with_default )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 1 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 1 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
   }
 
   {
@@ -672,12 +674,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_no_default_with_default )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 2 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 2 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
   }
 
   {
@@ -839,12 +841,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_default_with_no_default )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 0 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 0 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
   }
 
   {
@@ -855,12 +857,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_default_with_no_default )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 1 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 1 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
   }
 
   {
@@ -871,12 +873,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_default_with_no_default )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 2 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 2 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
   }
 
   {
@@ -902,12 +904,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_default_with_no_default )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 0 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 0 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
   }
 
   {
@@ -918,12 +920,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_default_with_no_default )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 1 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 1 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
   }
 
   {
@@ -934,12 +936,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_default_with_no_default )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 2 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 2 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
   }
 
   {
@@ -1123,12 +1125,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_cases_with_unreachable )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 0 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 0 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
   }
 
   {
@@ -1139,12 +1141,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_cases_with_unreachable )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 1 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 1 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
   }
 
   {
@@ -1155,12 +1157,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_cases_with_unreachable )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 2 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 2 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
   }
 
   {
@@ -1181,12 +1183,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_cases_with_unreachable )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 0 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 0 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
   }
 
   {
@@ -1197,12 +1199,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_cases_with_unreachable )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 1 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 1 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
   }
 
   {
@@ -1213,12 +1215,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_cases_with_unreachable )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 2 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 2 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
   }
 
   {
@@ -1496,12 +1498,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_binary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 0 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 0 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
   }
 
   {
@@ -1512,12 +1514,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_binary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 1 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 1 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
   }
 
   {
@@ -1528,12 +1530,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_binary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 2 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 2 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
   }
 
   {
@@ -1544,12 +1546,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_binary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 3 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 3 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 3 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 3 > );
   }
 
   {
@@ -1560,12 +1562,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_binary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 4 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 4 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 4 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 4 > );
   }
 
   {
@@ -1576,12 +1578,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_binary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 5 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 5 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 5 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 5 > );
   }
 
   {
@@ -1592,12 +1594,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_binary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 6 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 6 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 6 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 6 > );
   }
 
   {
@@ -1608,12 +1610,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_binary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 7 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 7 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 7 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 7 > );
   }
 
   {
@@ -1624,12 +1626,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_binary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 0 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 0 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
   }
 
   {
@@ -1640,12 +1642,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_binary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 1 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 1 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
   }
 
   {
@@ -1656,12 +1658,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_binary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 2 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 2 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
   }
 
   {
@@ -1672,12 +1674,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_binary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 3 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 3 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 3 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 3 > );
   }
 
   {
@@ -1688,12 +1690,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_binary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 4 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 4 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 4 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 4 > );
   }
 
   {
@@ -1704,12 +1706,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_binary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 5 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 5 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 5 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 5 > );
   }
 
   {
@@ -1720,12 +1722,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_binary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 6 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 6 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 6 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 6 > );
   }
 
   {
@@ -1736,12 +1738,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_binary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 7 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 7 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 7 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 7 > );
   }
 
   ARGOT_CONCEPT_ENSURE
@@ -2068,12 +2070,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 0 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 0 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
   }
 
   {
@@ -2084,12 +2086,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 1 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 1 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
   }
 
   {
@@ -2100,12 +2102,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 2 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 2 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
   }
 
   {
@@ -2116,12 +2118,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 3 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 3 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 3 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 3 > );
   }
 
   {
@@ -2132,12 +2134,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 4 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 4 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 4 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 4 > );
   }
 
   {
@@ -2148,12 +2150,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 5 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 5 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 5 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 5 > );
   }
 
   {
@@ -2164,12 +2166,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 6 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 6 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 6 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 6 > );
   }
 
   {
@@ -2180,12 +2182,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 7 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 7 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 7 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 7 > );
   }
 
   {
@@ -2196,12 +2198,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 8 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 8 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 8 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 8 > );
   }
 
   {
@@ -2212,12 +2214,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 9 >&& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 9 >&& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 9 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 9 > );
   }
 
   {
@@ -2228,12 +2230,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 0 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 0 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 0 > );
   }
 
   {
@@ -2244,12 +2246,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 1 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 1 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 1 > );
   }
 
   {
@@ -2260,12 +2262,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 2 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 2 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 2 > );
   }
 
   {
@@ -2276,12 +2278,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 3 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 3 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 3 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 3 > );
   }
 
   {
@@ -2292,12 +2294,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 4 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 4 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 4 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 4 > );
   }
 
   {
@@ -2308,12 +2310,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 5 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 5 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 5 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 5 > );
   }
 
   {
@@ -2324,12 +2326,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 6 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 6 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 6 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 6 > );
   }
 
   {
@@ -2340,12 +2342,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 7 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 7 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 7 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 7 > );
   }
 
   {
@@ -2356,12 +2358,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 8 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 8 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 8 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 8 > );
   }
 
   {
@@ -2372,12 +2374,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_combine_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::tuple< std::integral_constant< int, 9 > const& > >
+      , std::variant< argot::struct_< std::integral_constant< int, 9 > const& > >
       >
     );
 
     ARGOT_TEST_EQ
-    ( &std::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 9 > );
+    ( &tuple_traits::get< 0 >( std::get< 0 >( result ) ), &integral_constant_v< 9 > );
   }
 
   ARGOT_CONCEPT_ENSURE
