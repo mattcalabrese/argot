@@ -1,11 +1,15 @@
-#ifndef ARGOT_PREPROCESSING_MODE
 /*==============================================================================
-  Copyright (c) 2018 Matt Calabrese
+  Copyright (c) 2020 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#endif // ARGOT_PREPROCESSING_MODE
 
-using BOOST_PP_CAT( alternative_type, BOOST_PP_ITERATION() )
-  = void_to_regular_void_t< BOOST_PP_CAT( T, BOOST_PP_ITERATION() ) >;
+#ifndef ARGOT_DETAIL_IS_SAME_HPP_
+#define ARGOT_DETAIL_IS_SAME_HPP_
+
+#include <type_traits>
+
+#define ARGOT_IS_SAME( ... ) ( ::std::is_same_v< __VA_ARGS__ > )
+
+#endif  // ARGOT_DETAIL_IS_SAME_HPP_

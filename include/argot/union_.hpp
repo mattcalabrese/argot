@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2018 Matt Calabrese
+  Copyright (c) 2018, 2020 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -35,17 +35,22 @@ Each valid instantiation of argot::union_ is a UnionLike type.
 #include <argot/concepts/union_index.hpp>
 #include <argot/concepts/union_like.hpp>
 #include <argot/contained.hpp>
+#include <argot/detail/addressof.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
 #include <argot/detail/construct.hpp>
 #include <argot/detail/forward.hpp>
+#include <argot/detail/is_const.hpp>
+#include <argot/detail/is_rvalue_reference.hpp>
+#include <argot/detail/is_same.hpp>
+#include <argot/detail/launder.hpp>
 #include <argot/detail/variadic_at.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/is_modeled.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/no_unique_address.hpp>
 #include <argot/union_/detail/config.hpp>
-#include <argot/union_/detail/generate_union_backend.hpp>
+#include <argot/union_/detail/union_backend.hpp>
 
 #include <boost/preprocessor/arithmetic/dec.hpp>
 #include <boost/preprocessor/cat.hpp>
@@ -93,8 +98,6 @@ constexpr void swap( union_< T... >& lhs, union_< T... >& rhs ) noexcept
 
 } // namespace argot(::detail_union_adl)
 
-// Note:
-//   The default definition is used only up to the preprocessed maximum.
 //->
 template< class... T >
 class union_
@@ -102,8 +105,17 @@ class union_
   : detail_union_adl::adl_base< union_< T... > > //->
 {
   //<-
-  template< std::size_t >
-  friend struct detail_union::union_impl_preprocessed;
+  // TODO(mattcalabrese) Don't do this here. Avoid substituting in nonpure.
+  using union_tree
+    = detail_argot::form_tree< detail_union::union_impl, contained< T >... >;
+
+  using raw_concept_map = access_raw_concept_map< UnionLike< union_ > >;
+
+  static constexpr std::size_t tree_depth_v
+    = detail_argot::tree_depth_from_amount( sizeof...( T ) );
+
+  static constexpr std::size_t amount_per_group_v
+    = detail_argot::amount_per_group_at_depth( tree_depth_v );
 
   // TODO(mattcalabrese) Remove this (go through core access)
   template< class, class >
@@ -121,21 +133,21 @@ class union_
 
   template< std::size_t Index >
   static constexpr bool alternative_is_pure_v
-    = std::is_same_v< contained< alternative_type_t< Index > >
-                    , alternative_type_t< Index >
-                    >;
+    = ARGOT_IS_SAME( contained< alternative_type_t< Index > >
+                   , alternative_type_t< Index >
+                   );
 
   static constexpr bool is_pure_v
-    = std::is_same_v
-      < argot::union_< contained< T >... >
+    = ARGOT_IS_SAME
+      ( argot::union_< contained< T >... >
       , union_
-      >;
+      );
 
   using impl_type
     = typename argot_detail::conditional< is_pure_v >::template meta_apply
-      < detail_union::union_base_picker
-      , union_
-      , contained< T >...
+      < detail_union::form_union_tree
+      , detail_union::form_pure_union
+      , T...
       >;
  public: //->
   using pure_type = argot::union_< argot::contained< T >... >;
@@ -178,9 +190,8 @@ class union_
     )//=;
     //<-
     : alternatives
-      ( in_place_index_with_result< I >
-      , argot::emplace_contained_with_result< alternative_type_t< I > >
-      , ARGOT_FORWARD( Fun )( fun ), ARGOT_FORWARD( P )( args )...
+      ( make_in_place_with_result< I >
+        ( ARGOT_SIMPLE_FORWARD( fun ), ARGOT_SIMPLE_FORWARD( args )... )
       ) {} //->
 
   // Construct the Ith alternative using direct non-list initialization.
@@ -198,10 +209,7 @@ class union_
     )//=;
   //<-
    : alternatives
-      ( in_place_index_with_result< I >
-      , argot::emplace_contained< alternative_type_t< I > >
-      , ARGOT_FORWARD( P )( args )...
-      ) {} //->
+     ( make_in_place< I >( ARGOT_SIMPLE_FORWARD( args )... ) ) {} //->
 
   // Construct the Ith alternative using direct non-list initialization.
   template
@@ -223,10 +231,7 @@ class union_
     )//=;
     //<-
     : alternatives
-      ( in_place_index_with_result< I >
-      , argot::emplace_contained< alternative_type_t< I > >
-      , ilist, ARGOT_FORWARD( P )( args )...
-      ) {} //->
+      ( make_in_place< I >( ilist, ARGOT_SIMPLE_FORWARD( args )... ) ) {} //->
 
   // Emplace the Ith alternative with the result of the invocation of `fun` with
   // `args`.
@@ -249,44 +254,34 @@ class union_
     )//=;
   //<-
   {
-    using alt_t = alternative_type_t< I >;
+    if constexpr( !is_pure_v )
+      ARGOT_LAUNDER_DIRECT( alternatives.alternatives ).~union_tree();
 
-    laundered_alternatives().~impl_type();
+    ARGOT_LAUNDER_DIRECT( alternatives ).~impl_type();
 
     // TODO(mattcalabrese) Do this without try/catch
     try
     {
-      if constexpr( std::is_same_v< alt_t, contained< alt_t > > )
-        ::new( static_cast< void* >( std::addressof( alternatives ) ) )
-        impl_type
-        ( in_place_index_with_result< I >
-        , ARGOT_FORWARD( Fun )( fun )
-        , ARGOT_FORWARD( P )( args )...
-        );
-      else
-        ::new( static_cast< void* >( std::addressof( alternatives ) ) )
-        impl_type
-        ( in_place_index_with_result< I >
-        , emplace_contained_with_result< alt_t >
-        , ARGOT_FORWARD( Fun )( fun )
-        , ARGOT_FORWARD( P )( args )...
-        );
+      ::new( static_cast< void* >( ARGOT_ADDRESSOF( alternatives ) ) )
+      impl_type
+      ( make_in_place_with_result< I >
+        ( ARGOT_SIMPLE_FORWARD( fun ), ARGOT_SIMPLE_FORWARD( args )... )
+      );
 
-      if constexpr
-      ( std::is_same_v< alt_t, contained< alt_t > > )
-        return detail_union::union_impl< sizeof...( T ), I >
-        ::template get< alt_t >( laundered_alternatives() );
+      // TODO(mattcalabrese) Don't use get -- get element via construction
+      auto& element = raw_concept_map::template get< I >( *this );
+
+      using alt_t = alternative_type_t< I >;
+
+      if constexpr( ARGOT_IS_SAME( alt_t, contained< alt_t > ) )
+        return element;
       else
-        return argot::access_contained
-        ( detail_union::union_impl< sizeof...( T ), I >
-          ::template get< contained< alt_t > >( pure().alternatives )
-        );
+        return argot::access_contained( element );
     }
     catch( ... )
     {
-      ::new( static_cast< void* >( std::addressof( alternatives ) ) )
-      impl_type;
-
+      ::new( static_cast< void* >( ARGOT_ADDRESSOF( alternatives ) ) )
+        impl_type;
       throw;
     }
   } //->
@@ -308,42 +303,32 @@ class union_
     )//=;
   //<-
   {
-    using alt_t = alternative_type_t< I >;
+    if constexpr( !is_pure_v )
+      ARGOT_LAUNDER_DIRECT( alternatives.alternatives ).~union_tree();
 
-    laundered_alternatives().~impl_type();
+    ARGOT_LAUNDER_DIRECT( alternatives ).~impl_type();
 
     // TODO(mattcalabrese) Do this without try/catch
     try
     {
-      if constexpr( std::is_same_v< alt_t, contained< alt_t > > )
-        ::new( static_cast< void* >( std::addressof( alternatives ) ) )
-        impl_type
-        ( std::in_place_index< I >
-        , ARGOT_FORWARD( P )( args )...
-        );
-      else
-        ::new( static_cast< void* >( std::addressof( alternatives ) ) )
-        impl_type
-        ( in_place_index_with_result< I >
-        , emplace_contained< alt_t >
-        , ARGOT_FORWARD( P )( args )...
-        );
+      ::new( static_cast< void* >( ARGOT_ADDRESSOF( alternatives ) ) )
+      impl_type
+      ( make_in_place< I >( ARGOT_SIMPLE_FORWARD( args )... ) );
 
-      if constexpr
-      ( std::is_same_v< alt_t, contained< alt_t > > )
-        return detail_union::union_impl< sizeof...( T ), I >
-        ::template get< alt_t >( laundered_alternatives() );
+      // TODO(mattcalabrese) Don't use get -- get element via construction
+      auto& element = raw_concept_map::template get< I >( *this );
+
+      using alt_t = alternative_type_t< I >;
+
+      if constexpr( ARGOT_IS_SAME( alt_t, contained< alt_t > ) )
+        return element;
       else
-        return argot::access_contained
-        ( detail_union::union_impl< sizeof...( T ), I >
-          ::template get< contained< alt_t > >( pure().alternatives )
-        );
+        return argot::access_contained( element );
     }
     catch( ... )
     {
-      ::new( static_cast< void* >( std::addressof( alternatives ) ) )
-      impl_type;
-
+      ::new( static_cast< void* >( ARGOT_ADDRESSOF( alternatives ) ) )
+        impl_type;
       throw;
     }
   } //->
@@ -369,42 +354,32 @@ class union_
     )//=;
   //<-
   {
-    using alt_t = alternative_type_t< I >;
+    if constexpr( !is_pure_v )
+      ARGOT_LAUNDER_DIRECT( alternatives.alternatives ).~union_tree();
 
-    laundered_alternatives().~impl_type();
+    ARGOT_LAUNDER_DIRECT( alternatives ).~impl_type();
 
     // TODO(mattcalabrese) Do this without try/catch
     try
     {
-      if constexpr( std::is_same_v< alt_t, contained< alt_t > > )
-        ::new( static_cast< void* >( std::addressof( alternatives ) ) )
-        impl_type
-        ( std::in_place_index< I >
-        , ilist, ARGOT_FORWARD( P )( args )...
-        );
-      else
-        ::new( static_cast< void* >( std::addressof( alternatives ) ) )
-        impl_type
-        ( in_place_index_with_result< I >
-        , emplace_contained< alt_t >
-        , ilist, ARGOT_FORWARD( P )( args )...
-        );
+      ::new( static_cast< void* >( ARGOT_ADDRESSOF( alternatives ) ) )
+      impl_type
+      ( make_in_place< I >( ilist, ARGOT_SIMPLE_FORWARD( args )... ) );
 
-      if constexpr
-      ( std::is_same_v< alt_t, contained< alt_t > > )
-        return detail_union::union_impl< sizeof...( T ), I >
-        ::template get< alt_t >( laundered_alternatives() );
+      // TODO(mattcalabrese) Don't use get -- get element via construction
+      auto& element = raw_concept_map::template get< I >( *this );
+
+      using alt_t = alternative_type_t< I >;
+
+      if constexpr( ARGOT_IS_SAME( alt_t, contained< alt_t > ) )
+        return element;
       else
-        return argot::access_contained
-        ( detail_union::union_impl< sizeof...( T ), I >
-          ::template get< contained< alt_t > >( pure().alternatives )
-        );
+        return argot::access_contained( element );
     }
     catch( ... )
     {
-      ::new( static_cast< void* >( std::addressof( alternatives ) ) )
-      impl_type;
-
+      ::new( static_cast< void* >( ARGOT_ADDRESSOF( alternatives ) ) )
+        impl_type;
       throw;
     }
   } //->
@@ -427,11 +402,18 @@ class union_
   {
     using alt_t = alternative_type_t< I >;
 
-    return argot::assign_contained< alt_t >
-    ( detail_union::union_impl< sizeof...( T ), I >
-      ::template get< contained< alt_t > >( pure().alternatives )
-    , ARGOT_FORWARD( P )( arg )
-    );
+    if constexpr( ARGOT_IS_SAME( contained< alt_t >, alt_t ) )
+    {
+      auto& element = raw_concept_map::template get< I >( *this );
+      element = ARGOT_SIMPLE_FORWARD( arg );
+      return element;
+    }
+    else
+      return argot::assign_contained< alt_t >
+      ( access_raw_concept_map< UnionLike< impl_type > >
+        ::template get< I >( alternatives )
+      , ARGOT_SIMPLE_FORWARD( arg )
+      );
   } //->
 
   // Assign `ilist` to the Ith alternative.
@@ -456,11 +438,18 @@ class union_
   {
     using alt_t = alternative_type_t< I >;
 
-    return argot::assign_contained< alt_t >
-    ( detail_union::union_impl< sizeof...( T ), I >
-      ::template get< contained< alt_t > >( pure().alternatives )
-    , ilist
-    );
+    if constexpr( ARGOT_IS_SAME( contained< alt_t >, alt_t ) )
+    {
+      auto& element = raw_concept_map::template get< I >( *this );
+      element = ilist;
+      return element;
+    }
+    else
+      return argot::assign_contained< alt_t >
+      ( access_raw_concept_map< UnionLike< impl_type > >
+        ::template get< I >( alternatives )
+      , ilist
+      );
   } //->
 
   // Destroy the Ith alternative.
@@ -479,8 +468,15 @@ class union_
     )//=;
   //<-
   {
-    detail_union::union_impl< sizeof...( T ), I >
-    ::destroy( pure().alternatives );
+    // TODO(mattcalabrese) Do this in a more compile-time efficient way
+    if constexpr( is_pure_v )
+    {
+      auto& elem = raw_concept_map::template get< I >( *this );
+      using alt_t = std::remove_reference_t< decltype( elem ) >;
+      elem.~alt_t();
+    }
+    else
+      alternatives.template destroy< I >();
   } //->
 
   // Retrieve a reference to this object, but as though it were the type
@@ -489,54 +485,97 @@ class union_
   //<-
   {
     if constexpr( is_pure_v )
-      return *std::launder( this );
+      return *ARGOT_LAUNDER( this );
     else
-      return laundered_alternatives();
+      return ARGOT_LAUNDER( this )->alternatives;
   } //->
   constexpr pure_type const& pure() const& noexcept//=;
   //<-
   {
     if constexpr( is_pure_v )
-      return *std::launder( this );
+      return *ARGOT_LAUNDER( this );
     else
-      return laundered_alternatives();
+      return ARGOT_LAUNDER( this )->alternatives;
   } //->
   constexpr pure_type&& pure() && noexcept//=;
   //<-
   {
     if constexpr( is_pure_v )
-      return ARGOT_MOVE( *std::launder( this ) );
+      return ARGOT_MOVE( *ARGOT_LAUNDER( this ) );
     else
-      return ARGOT_MOVE( laundered_alternatives() );
+      return ARGOT_MOVE( ARGOT_LAUNDER( this )->alternatives );
   } //->
   constexpr pure_type const&& pure() const && noexcept//=;
   //<-
   {
     if constexpr( is_pure_v )
-      return ARGOT_MOVE( *std::launder( this ) );
+      return ARGOT_MOVE( *ARGOT_LAUNDER( this ) );
     else
-      return ARGOT_MOVE( laundered_alternatives() );
+      return ARGOT_MOVE( ARGOT_LAUNDER( this )->alternatives );
   } //->
  private:
   //<-
-  constexpr impl_type& laundered_alternatives() & noexcept
+
+  // TODO(calabrese) noexcept
+  template< std::size_t I, class F, class... U >
+  static constexpr auto make_in_place_with_result( F&& f, U&&... args )
   {
-    return *std::launder( std::addressof( alternatives ) );
+    if constexpr( is_pure_v )
+      return union_tree
+      ( in_place_index_with_result< tree_depth_v - 1 >
+      , std::in_place_index< I / amount_per_group_v >
+      , std::in_place_index< I % amount_per_group_v >
+      , ARGOT_SIMPLE_FORWARD( f ), ARGOT_SIMPLE_FORWARD( args )...
+      );
+    else
+      if constexpr( alternative_is_pure_v< I > )
+        return pure_type
+        ( in_place_index_with_result< I >
+        , ARGOT_SIMPLE_FORWARD( f )
+        , ARGOT_SIMPLE_FORWARD( args )...
+        );
+      else
+        return pure_type
+        ( in_place_index_with_result< I >
+        , []( F&& f_fwd, U&&... args_fwd ) -> decltype( auto ) // TODO(calabrese) noexcept
+          {
+            return emplace_contained_with_result< alternative_type_t< I > >
+            ( ARGOT_SIMPLE_FORWARD( f_fwd )
+            , ARGOT_SIMPLE_FORWARD( args_fwd )...
+            );
+          }
+        , ARGOT_SIMPLE_FORWARD( f )
+        , ARGOT_SIMPLE_FORWARD( args )...
+        );
   }
 
-  constexpr impl_type const& laundered_alternatives() const& noexcept
+  // TODO(calabrese) noexcept
+  template< std::size_t I, class... U >
+  static constexpr auto make_in_place( U&&... args )
   {
-    return *std::launder( std::addressof( alternatives ) );
-  }
-
-  constexpr impl_type&& laundered_alternatives() && noexcept
-  {
-    return ARGOT_MOVE( *std::launder( std::addressof( alternatives ) ) );
-  }
-
-  constexpr impl_type const&& laundered_alternatives() const && noexcept
-  {
-    return ARGOT_MOVE( *std::launder( std::addressof( alternatives ) ) );
+    if constexpr( is_pure_v )
+      return union_tree
+      ( std::in_place_index< tree_depth_v - 1 >
+      , std::in_place_index< I / amount_per_group_v >
+      , std::in_place_index< I % amount_per_group_v >
+      , ARGOT_SIMPLE_FORWARD( args )...
+      );
+    else
+      if constexpr( alternative_is_pure_v< I > )
+        return pure_type
+        ( std::in_place_index< I >
+        , ARGOT_SIMPLE_FORWARD( args )...
+        );
+      else
+        return pure_type
+        ( in_place_index_with_result< I >
+        , []( U&&... args_fwd ) -> decltype( auto ) // TODO(calabrese) noexcept
+          {
+            return make_contained< alternative_type_t< I > >
+            ( ARGOT_SIMPLE_FORWARD( args_fwd )... );
+          }
+        , ARGOT_SIMPLE_FORWARD( args )...
+        );
   }
   //->
   //=union { /*...*/ } state; // Exposition only
@@ -551,19 +590,16 @@ class union_
 
 namespace argot {
 
-// TODO(mattcalabrese) Define this. Make a balanced tree of preprocessed unions.
-template
-< BOOST_PP_ENUM_PARAMS( ARGOT_MAX_PREPROCESSED_UNION_ALTERNATIVES, class T )
-, class TN, class... U
->
-class union_
-< BOOST_PP_ENUM_PARAMS( ARGOT_MAX_PREPROCESSED_UNION_ALTERNATIVES, T )
-, TN, U...
->;
-
 template< class... T >
 struct make_concept_map< UnionLike< union_< T... > > >
 {
+ private:
+  using un_t = union_< T... >;
+
+  using depth_indices_t
+    = std::make_index_sequence
+      < detail_argot::tree_depth_from_amount( sizeof...( T ) ) >;
+ public:
   using index_type = std::size_t;  // TODO(mattcalabrese) Calculate minimal type
 
   static index_type constexpr num_alternatives = sizeof...( T );
@@ -578,20 +614,59 @@ struct make_concept_map< UnionLike< union_< T... > > >
   template< index_type Index, class Self >
   static constexpr auto&& get( Self&& self ) noexcept
   {
+    static_assert( Index < sizeof...( T ) );
+
     using alt_t = alternative_type_t< Index >;
 
-    // TODO(mattcalabrese) Use intrinsic
+    auto& raw_un = const_cast< un_t& >( self );
+
+    // Alternative type with const if the union is const
+    using c_alt
+      = typename detail_if_::if_
+        < ARGOT_IS_CONST( std::remove_reference_t< Self > ) >
+        ::then_else::template _< const alt_t, alt_t >;
+
+    // Qualified alternative type with appropriate reference qualifier
+    using qual_alt
+      = typename detail_if_::if_< ARGOT_IS_RVALUE_REFERENCE( Self&& ) >
+        ::then_else::template _< c_alt&&, c_alt& >;
+
+    // TODO(mattcalabrese) Use intrinsics
     if constexpr
-    ( std::is_same_v< alt_t, contained< alt_t > > )
-      return detail_union::union_impl< sizeof...( T ), Index >
-      ::template get< alt_t >
-      ( ARGOT_FORWARD( Self )( self ).laundered_alternatives() );
+    ( ARGOT_IS_SAME( alt_t, contained< alt_t > ) )
+      if constexpr( un_t::is_pure_v )
+        return static_cast< qual_alt >
+        ( detail_union::access_tree< Index >
+          ( ARGOT_LAUNDER_DIRECT( raw_un.alternatives )
+          , depth_indices_t()
+          )
+        );
+      else
+        return static_cast< qual_alt >
+        ( detail_union::access_tree< Index >
+          ( ARGOT_LAUNDER_DIRECT( raw_un.alternatives.alternatives )
+          , depth_indices_t()
+          )
+        );
     else
-      return argot::access_contained
-      ( detail_union::union_impl< sizeof...( T ), Index >
-        ::template get< contained< alt_t > >
-        ( ARGOT_FORWARD( Self )( self ).pure().alternatives )
-      );
+      if constexpr( un_t::is_pure_v )
+        return static_cast< qual_alt >
+        ( argot::access_contained
+          ( detail_union::access_tree< Index >
+            ( ARGOT_LAUNDER_DIRECT( raw_un.alternatives )
+            , depth_indices_t()
+            )
+          )
+        );
+      else
+        return static_cast< qual_alt >
+        ( argot::access_contained
+          ( detail_union::access_tree< Index >
+            ( ARGOT_LAUNDER_DIRECT( raw_un.alternatives.alternatives )
+            , depth_indices_t()
+            )
+          )
+        );
   }
 };
 

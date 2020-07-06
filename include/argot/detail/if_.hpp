@@ -73,6 +73,14 @@ struct if_< true >
     using _ = T;
   };
 
+  struct then_else_apply_values
+  {
+    template< class T, template< auto... > class /*Metafunction*/
+            , auto... /*N*/
+            >
+    using _ = T;
+  };
+
   struct then_apply_else_apply
   {
     template< template< class... > class TMetafunction
@@ -139,6 +147,14 @@ struct if_< false >
   {
     template< class /*T*/, template< class... > class Metafunction, class... P >
     using _ = Metafunction< P... >;
+  };
+
+  struct then_else_apply_values
+  {
+    template< class /*T*/, template< auto... > class Metafunction
+            , auto... V
+            >
+    using _ = Metafunction< V... >;
   };
 
   struct then_apply_else_apply

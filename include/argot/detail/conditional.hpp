@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2020 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -44,6 +44,24 @@ struct conditional
           , std::size_t I, template< class... > class R, class... P
           >
   using continue_with_index = T< I, R, P... >;
+
+  template< template< template< std::size_t, class... > class, class... >
+            class Template
+          , template< std::size_t, class... > class R
+          , class... P
+          >
+  using sized_continue = Template< R, P... >;
+
+  template< template< std::size_t, std::size_t
+                    , template< std::size_t, class... > class
+                    , class...
+                    >
+            class Template
+          , std::size_t D, std::size_t N
+          , template< std::size_t, class... > class R
+          , class... P
+          >
+  using recursive_sized_continue = Template< D, N, R, P... >;
 };
 
 template<>
