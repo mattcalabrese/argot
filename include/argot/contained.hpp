@@ -15,8 +15,8 @@ encapsulate and manipulate instances of types in a way such the associated
 operations behave as though they were of a =Regular= type, even if those
 operations when applied directly would otherwise differ in semantics.
 
-It is a unary template-alias that is an identity operation if the passed-in
-template argument, `T`, is an unqualified object type, otherwise:
+It is a unary template-alias that is a referential identity operation if the
+passed-in template argument, `T`, is an unqualified object type, otherwise:
 
 * If `T` is a reference type, `contained< T >` is a type for which its value is
   considered to be the address of the target object. It is move-only if `T` is
@@ -32,23 +32,23 @@ template argument, `T`, is an unqualified object type, otherwise:
 #include <argot/concepts/assignable.hpp>
 #include <argot/concepts/constructible.hpp>
 #include <argot/concepts/convertible.hpp>
-#include <argot/concepts/object.hpp>
 #include <argot/concepts/invocable_with.hpp>
 #include <argot/concepts/nothrow_assignable.hpp>
+#include <argot/concepts/object.hpp>
 #include <argot/concepts/rvalue_reference.hpp>
 #include <argot/concepts/same_type.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
-#include <argot/detail/give_qualifiers_to.hpp>
-#include <argot/detail/sink.hpp>
 #include <argot/detail/forward.hpp>
+#include <argot/detail/give_qualifiers_to.hpp>
+#include <argot/detail/move.hpp>
+#include <argot/detail/remove_cvref.hpp>
+#include <argot/detail/sink.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/is_modeled.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/identity.hpp>
-#include <argot/detail/move.hpp>
 #include <argot/no_unique_address.hpp>
-#include <argot/detail/remove_cvref.hpp>
+#include <argot/referential_identity.hpp>
 #include <argot/void_.hpp>
 
 #include <functional>
@@ -669,7 +669,7 @@ struct access_contained_fn
 template< bool Condition >
 constexpr typename argot_detail::conditional< Condition >::template apply
 < access_contained_fn
-, identity_t
+, referential_identity_fn
 >
 access_contained_if{};
 
@@ -677,7 +677,7 @@ template< class T >
 constexpr typename argot_detail::conditional< !is_containment_wrapper_v< T > >
 ::template apply
 < access_contained_fn
-, identity_t
+, referential_identity_fn
 > access_contained_if_special{};
 
 namespace detail_contained_adl {

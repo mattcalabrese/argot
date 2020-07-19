@@ -35,8 +35,8 @@ parameters it was given, by value.
 #include <argot/detail/sink.hpp>
 #include <argot/gen/concept_assert.hpp>
 #include <argot/gen/requires.hpp>
-#include <argot/identity.hpp>
 #include <argot/no_unique_address.hpp>
+#include <argot/referential_identity.hpp>
 #include <argot/void_.hpp>
 
 #include <type_traits>
@@ -160,8 +160,11 @@ struct compose_fn
   constexpr auto operator()( Transformations&&... transformations ) const//=;
   //<-
   {
+    // TODO(mattcalabrese) Possibly change to return by value in this case
+    // Make a "referential_compose" for when the terminating case is a
+    // referential identity.
     if constexpr( sizeof...( Transformations ) == 0 )
-      return identity;
+      return referential_identity;
     else
       return make_impl
       ( call_detail::forward_and_decay_sink< Transformations >
