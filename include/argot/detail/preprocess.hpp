@@ -113,47 +113,47 @@ std::size_t tree_depth_from_amount( std::size_t const amount ) noexcept
 ARGOT_DETAIL_EXPAND_N_TIMES_1( macro, data ) macro( 1, data )
 
 #define ARGOT_DETAIL_EXPAND_N_TIMES_3( macro, data )                           \
-ARGOT_DETAIL_EXPAND_N_TIMES_1( macro, data ) macro( 2, data )
+ARGOT_DETAIL_EXPAND_N_TIMES_2( macro, data ) macro( 2, data )
 
 #define ARGOT_DETAIL_EXPAND_N_TIMES_4( macro, data )                           \
-ARGOT_DETAIL_EXPAND_N_TIMES_1( macro, data ) macro( 3, data )
+ARGOT_DETAIL_EXPAND_N_TIMES_3( macro, data ) macro( 3, data )
 
 #define ARGOT_DETAIL_EXPAND_N_TIMES_5( macro, data )                           \
-ARGOT_DETAIL_EXPAND_N_TIMES_1( macro, data ) macro( 4, data )
+ARGOT_DETAIL_EXPAND_N_TIMES_4( macro, data ) macro( 4, data )
 
 #define ARGOT_DETAIL_EXPAND_N_TIMES_6( macro, data )                           \
-ARGOT_DETAIL_EXPAND_N_TIMES_1( macro, data ) macro( 5, data )
+ARGOT_DETAIL_EXPAND_N_TIMES_5( macro, data ) macro( 5, data )
 
 #define ARGOT_DETAIL_EXPAND_N_TIMES_7( macro, data )                           \
-ARGOT_DETAIL_EXPAND_N_TIMES_1( macro, data ) macro( 6, data )
+ARGOT_DETAIL_EXPAND_N_TIMES_6( macro, data ) macro( 6, data )
 
 #define ARGOT_DETAIL_EXPAND_N_TIMES_8( macro, data )                           \
-ARGOT_DETAIL_EXPAND_N_TIMES_1( macro, data ) macro( 7, data )
+ARGOT_DETAIL_EXPAND_N_TIMES_7( macro, data ) macro( 7, data )
 
 #define ARGOT_DETAIL_EXPAND_N_TIMES_9( macro, data )                           \
-ARGOT_DETAIL_EXPAND_N_TIMES_1( macro, data ) macro( 8, data )
+ARGOT_DETAIL_EXPAND_N_TIMES_8( macro, data ) macro( 8, data )
 
 #define ARGOT_DETAIL_EXPAND_N_TIMES_10( macro, data )                          \
-ARGOT_DETAIL_EXPAND_N_TIMES_1( macro, data ) macro( 9, data )
+ARGOT_DETAIL_EXPAND_N_TIMES_9( macro, data ) macro( 9, data )
 
 #define ARGOT_DETAIL_EXPAND_N_TIMES_11( macro, data )                          \
-ARGOT_DETAIL_EXPAND_N_TIMES_1( macro, data ) macro( 10, data )
+ARGOT_DETAIL_EXPAND_N_TIMES_10( macro, data ) macro( 10, data )
 
 #define ARGOT_DETAIL_EXPAND_N_TIMES_12( macro, data )                          \
-ARGOT_DETAIL_EXPAND_N_TIMES_1( macro, data ) macro( 11, data )
+ARGOT_DETAIL_EXPAND_N_TIMES_11( macro, data ) macro( 11, data )
 
 #define ARGOT_DETAIL_EXPAND_N_TIMES_13( macro, data )                          \
-ARGOT_DETAIL_EXPAND_N_TIMES_1( macro, data ) macro( 12, data )
+ARGOT_DETAIL_EXPAND_N_TIMES_12( macro, data ) macro( 12, data )
 
 #define ARGOT_DETAIL_EXPAND_N_TIMES_14( macro, data )                          \
-ARGOT_DETAIL_EXPAND_N_TIMES_1( macro, data ) macro( 13, data )
+ARGOT_DETAIL_EXPAND_N_TIMES_13( macro, data ) macro( 13, data )
 
 #define ARGOT_DETAIL_EXPAND_N_TIMES_15( macro, data )                          \
-ARGOT_DETAIL_EXPAND_N_TIMES_1( macro, data ) macro( 14, data )
+ARGOT_DETAIL_EXPAND_N_TIMES_14( macro, data ) macro( 14, data )
 
 // TODO(calabrese) Possibly remove this one?
 #define ARGOT_DETAIL_EXPAND_N_TIMES_16( macro, data )                          \
-ARGOT_DETAIL_EXPAND_N_TIMES_1( macro, data ) macro( 15, data )
+ARGOT_DETAIL_EXPAND_N_TIMES_15( macro, data ) macro( 15, data )
 
 #define ARGOT_DETAIL_EXPAND_N_TIMES_IMPL( macro, n, data )                     \
 ARGOT_DETAIL_EXPAND_N_TIMES_ ## n( macro, data )

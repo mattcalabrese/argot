@@ -446,7 +446,8 @@ struct variadic_take_impl
   static constexpr decltype( auto ) run( F&& fun, P&&...args )
   {
     return variadic_take_impl< ARGOT_DETAIL_MAX_PREPROCESSED_TAKE >
-    ::template run_recursive< I >( ARGOT_FORWARD( P )( args )... );
+    ::template run_recursive< I >
+    ( ARGOT_FORWARD( F )( fun ), ARGOT_FORWARD( P )( args )... );
   }
 
   template

@@ -52,6 +52,7 @@ This header includes all of the facilities of the `argot` directory.
 #include <argot/identity.hpp>
 #include <argot/impossible.hpp>
 #include <argot/in_place_default_init.hpp>
+#include <argot/in_place_index_with_result.hpp>
 #include <argot/in_place_with_result.hpp>
 #include <argot/invocable_reference.hpp>
 #include <argot/lazy_expand.hpp>
@@ -68,6 +69,7 @@ This header includes all of the facilities of the `argot` directory.
 #include <argot/receiver_traits.hpp>
 #include <argot/reducer.hpp>
 #include <argot/reducer_traits.hpp>
+#include <argot/referential_identity.hpp>
 #include <argot/side_effect.hpp>
 #include <argot/state_traits.hpp>
 #include <argot/struct_.hpp>

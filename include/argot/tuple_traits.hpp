@@ -21,6 +21,7 @@ This header includes all of the facilities of the `tuple_traits` directory.
 //[docs
 //]
 
+#include <argot/tuple_traits/apply.hpp>
 #include <argot/tuple_traits/element_type.hpp>
 #include <argot/tuple_traits/expand_element_types.hpp>
 #include <argot/tuple_traits/get.hpp>

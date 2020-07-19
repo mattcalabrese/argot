@@ -193,6 +193,14 @@
 [def argot::result_of_in_place_default_init_t [link argot.ref.argot.in_place_default_init `argot::result_of_in_place_default_init_t`]]
 [def argot::result_of_in_place_default_init [link argot.ref.argot.in_place_default_init `argot::result_of_in_place_default_init`]]
 
+[def argot_in_place_index_with_result argot::in_place_index_with_result]
+[def argot::in_place_index_with_result_fn [link argot.ref.argot.in_place_index_with_result `argot::in_place_index_with_result_fn`]]
+[def argot::in_place_index_with_result_t [link argot.ref.argot.in_place_index_with_result `argot::in_place_index_with_result_t`]]
+[def argot::in_place_index_with_result_v [link argot.ref.argot.in_place_index_with_result `argot::in_place_index_with_result_v`]]
+[def argot::in_place_index_with_result [link argot.ref.argot.in_place_index_with_result `argot::in_place_index_with_result`]]
+[def argot::result_of_in_place_index_with_result_t [link argot.ref.argot.in_place_index_with_result `argot::result_of_in_place_index_with_result_t`]]
+[def argot::result_of_in_place_index_with_result [link argot.ref.argot.in_place_index_with_result `argot::result_of_in_place_index_with_result`]]
+
 [def argot_in_place_with_result argot::in_place_with_result]
 [def argot::in_place_with_result_fn [link argot.ref.argot.in_place_with_result `argot::in_place_with_result_fn`]]
 [def argot::in_place_with_result_t [link argot.ref.argot.in_place_with_result `argot::in_place_with_result_t`]]
@@ -248,6 +256,14 @@
 [def argot::output [link argot.ref.argot.output `argot::output`]]
 [def argot::result_of_output_t [link argot.ref.argot.output `argot::result_of_output_t`]]
 [def argot::result_of_output [link argot.ref.argot.output `argot::result_of_output`]]
+
+[def argot_referential_identity argot::referential_identity]
+[def argot::referential_identity_fn [link argot.ref.argot.referential_identity `argot::referential_identity_fn`]]
+[def argot::referential_identity_t [link argot.ref.argot.referential_identity `argot::referential_identity_t`]]
+[def argot::referential_identity_v [link argot.ref.argot.referential_identity `argot::referential_identity_v`]]
+[def argot::referential_identity [link argot.ref.argot.referential_identity `argot::referential_identity`]]
+[def argot::result_of_referential_identity_t [link argot.ref.argot.referential_identity `argot::result_of_referential_identity_t`]]
+[def argot::result_of_referential_identity [link argot.ref.argot.referential_identity `argot::result_of_referential_identity`]]
 
 [def argot_side_effect argot::side_effect]
 [def argot::side_effect_fn [link argot.ref.argot.side_effect `argot::side_effect_fn`]]
@@ -1888,6 +1904,14 @@
 [def switch_traits::trailing_argument_list_kinds_of_default_persistent [link argot.ref.switch_traits.trailing_argument_list_kinds_of_default_persistent `switch_traits::trailing_argument_list_kinds_of_default_persistent`]]
 [def switch_traits::result_of_trailing_argument_list_kinds_of_default_persistent_t [link argot.ref.switch_traits.trailing_argument_list_kinds_of_default_persistent `switch_traits::result_of_trailing_argument_list_kinds_of_default_persistent_t`]]
 [def switch_traits::result_of_trailing_argument_list_kinds_of_default_persistent [link argot.ref.switch_traits.trailing_argument_list_kinds_of_default_persistent `switch_traits::result_of_trailing_argument_list_kinds_of_default_persistent`]]
+
+[def tuple_traits_apply tuple_traits::apply]
+[def tuple_traits::apply_fn [link argot.ref.tuple_traits.apply `tuple_traits::apply_fn`]]
+[def tuple_traits::apply_t [link argot.ref.tuple_traits.apply `tuple_traits::apply_t`]]
+[def tuple_traits::apply_v [link argot.ref.tuple_traits.apply `tuple_traits::apply_v`]]
+[def tuple_traits::apply [link argot.ref.tuple_traits.apply `tuple_traits::apply`]]
+[def tuple_traits::result_of_apply_t [link argot.ref.tuple_traits.apply `tuple_traits::result_of_apply_t`]]
+[def tuple_traits::result_of_apply [link argot.ref.tuple_traits.apply `tuple_traits::result_of_apply`]]
 
 [def tuple_traits_element_type tuple_traits::element_type]
 [def tuple_traits::element_type_fn [link argot.ref.tuple_traits.element_type `tuple_traits::element_type_fn`]]
@@ -3681,6 +3705,8 @@
 
 [def argot/in_place_default_init.hpp [link argot.ref.argot.in_place_default_init `argot/in_place_default_init.hpp`]]
 
+[def argot/in_place_index_with_result.hpp [link argot.ref.argot.in_place_index_with_result `argot/in_place_index_with_result.hpp`]]
+
 [def argot/in_place_with_result.hpp [link argot.ref.argot.in_place_with_result `argot/in_place_with_result.hpp`]]
 
 [def argot/invocable_reference.hpp [link argot.ref.argot.invocable_reference `argot/invocable_reference.hpp`]]
@@ -4067,6 +4093,8 @@
 
 [def argot/reducer_traits.hpp [link argot.ref.argot.reducer_traits `argot/reducer_traits.hpp`]]
 
+[def argot/referential_identity.hpp [link argot.ref.argot.referential_identity `argot/referential_identity.hpp`]]
+
 [def argot/side_effect.hpp [link argot.ref.argot.side_effect `argot/side_effect.hpp`]]
 
 [def argot/state_traits/equal_to.hpp [link argot.ref.state_traits.equal_to `argot/state_traits/equal_to.hpp`]]
@@ -4152,6 +4180,8 @@
 [def argot/switch_traits.hpp [link argot.ref.argot.switch_traits `argot/switch_traits.hpp`]]
 
 [def argot/tag.hpp [link argot.ref.argot.tag `argot/tag.hpp`]]
+
+[def argot/tuple_traits/apply.hpp [link argot.ref.tuple_traits.apply `argot/tuple_traits/apply.hpp`]]
 
 [def argot/tuple_traits/element_type.hpp [link argot.ref.tuple_traits.element_type `argot/tuple_traits/element_type.hpp`]]
 

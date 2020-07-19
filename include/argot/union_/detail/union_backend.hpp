@@ -15,6 +15,7 @@
 #include <argot/detail/unreachable.hpp>
 #include <argot/detail/variadic_at.hpp>
 #include <argot/detail/variadic_chunk.hpp>
+#include <argot/in_place_index_with_result.hpp>
 
 #include <cstddef>
 #include <utility>
@@ -24,16 +25,6 @@ namespace argot {
 
 template< class... T >
 class union_;
-
-// TODO(mattcalabrese) Move in_place_index_with_result_t to separate file.
-template< std::size_t I >
-struct in_place_index_with_result_t
-{
-  explicit in_place_index_with_result_t() = default;
-};
-
-template< std::size_t I >
-constexpr in_place_index_with_result_t< I > in_place_index_with_result{};
 
 namespace detail_union {
 
