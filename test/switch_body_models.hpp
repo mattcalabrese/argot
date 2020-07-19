@@ -23,6 +23,7 @@
 #include <argot/concepts/switch_body_default_for_type.hpp>
 #include <argot/concepts/switch_body_for_type.hpp>
 #include <argot/concepts/true.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/gen/not.hpp>
 #include <argot/gen/requires.hpp>
@@ -36,7 +37,6 @@
 
 #include <type_traits>
 #include <utility>
-#include <variant>
 
 namespace {
 
@@ -95,7 +95,7 @@ struct variant_of_argument_references_of_size_impl
 < std::integer_sequence< int, Indices... > >
 {
   using type
-    = std::variant
+    = argot::discriminated_union
       < argot::struct_< std::integral_constant< int, Indices >&& >... >;
 };
 
@@ -112,7 +112,7 @@ struct variant_of_argument_references_of_size_persistent_impl
 < std::integer_sequence< int, Indices... > >
 {
   using type
-    = std::variant
+    = argot::discriminated_union
       < argot::struct_< std::integral_constant< int, Indices > const& >... >;
 };
 

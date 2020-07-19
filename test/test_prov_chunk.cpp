@@ -11,6 +11,7 @@
 #include <argot/concepts/same_type.hpp>
 #include <argot/concepts/same_value.hpp>
 #include <argot/detail/constexpr_test.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/prov/reference_to.hpp>
 #include <argot/prov_traits/argument_list_kinds_of.hpp>
@@ -24,6 +25,7 @@
 #include <argot/tuple_traits/num_elements.hpp>
 #include <argot/variant_traits/alternative_type.hpp>
 #include <argot/variant_traits/get.hpp>
+#include <argot/variant_traits/index_of.hpp>
 #include <argot/variant_traits/num_alternatives.hpp>
 
 #include <variant>
@@ -40,6 +42,7 @@ namespace variant_traits = argot::variant_traits;
 using argot::ArgumentProvider;
 using argot::SameType;
 using argot::SameValue;
+using argot::discriminated_union;
 
 using receiver_traits::argument_list_kinds_t;
 using receiver_traits::argument_types_t;
@@ -112,8 +115,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk1_t > );
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk2_t > );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
-      auto& arg_tup = std::get< 0 >( provision_result );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -128,11 +131,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a& > >
+          , discriminated_union< argot::struct_< a& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
       }
@@ -150,11 +153,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< argot::struct_< b& > >
+          , discriminated_union< argot::struct_< b& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk1_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk1_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &b_ );
       }
@@ -172,11 +175,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk2_provision_result_type
-          , std::variant< argot::struct_< c const& > >
+          , discriminated_union< argot::struct_< c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk2_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk2_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
@@ -218,8 +221,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk1_t > );
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk2_t > );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
-      auto& arg_tup = std::get< 0 >( provision_result );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -234,11 +237,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a& > >
+          , discriminated_union< argot::struct_< a& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
       }
@@ -256,11 +259,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< argot::struct_< b& > >
+          , discriminated_union< argot::struct_< b& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk1_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk1_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &b_ );
       }
@@ -278,11 +281,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk2_provision_result_type
-          , std::variant< argot::struct_< c const& > >
+          , discriminated_union< argot::struct_< c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk2_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk2_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
@@ -327,8 +330,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk1_t > );
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk2_t > );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
-      auto& arg_tup = std::get< 0 >( provision_result );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -343,11 +346,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a& > >
+          , discriminated_union< argot::struct_< a& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
       }
@@ -365,11 +368,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< argot::struct_< b& > >
+          , discriminated_union< argot::struct_< b& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk1_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk1_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &b_ );
       }
@@ -387,11 +390,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk2_provision_result_type
-          , std::variant< argot::struct_< c const& > >
+          , discriminated_union< argot::struct_< c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk2_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk2_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
@@ -433,8 +436,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk1_t > );
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk2_t > );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
-      auto& arg_tup = std::get< 0 >( provision_result );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -449,11 +452,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a& > >
+          , discriminated_union< argot::struct_< a& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
       }
@@ -471,11 +474,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< argot::struct_< b&& > >
+          , discriminated_union< argot::struct_< b&& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk1_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk1_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &b_ );
       }
@@ -493,11 +496,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk2_provision_result_type
-          , std::variant< argot::struct_< c const& > >
+          , discriminated_union< argot::struct_< c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk2_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk2_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
@@ -555,8 +558,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk1_t > );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
-      auto& arg_tup = std::get< 0 >( provision_result );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -571,11 +574,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b& > >
+          , discriminated_union< argot::struct_< a&, b& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -594,11 +597,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< argot::struct_< c const& > >
+          , discriminated_union< argot::struct_< c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk1_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk1_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
@@ -638,8 +641,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk1_t > );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
-      auto& arg_tup = std::get< 0 >( provision_result );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -654,11 +657,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b& > >
+          , discriminated_union< argot::struct_< a&, b& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -677,11 +680,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< argot::struct_< c const& > >
+          , discriminated_union< argot::struct_< c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk1_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk1_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
@@ -724,8 +727,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk1_t > );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
-      auto& arg_tup = std::get< 0 >( provision_result );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -740,11 +743,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b& > >
+          , discriminated_union< argot::struct_< a&, b& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -763,11 +766,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< argot::struct_< c const& > >
+          , discriminated_union< argot::struct_< c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk1_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk1_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
@@ -807,8 +810,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk1_t > );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
-      auto& arg_tup = std::get< 0 >( provision_result );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -823,11 +826,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b&& > >
+          , discriminated_union< argot::struct_< a&, b&& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -846,11 +849,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< argot::struct_< c const& > >
+          , discriminated_union< argot::struct_< c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk1_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk1_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
@@ -906,8 +909,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_3 )
 
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
-      auto& arg_tup = std::get< 0 >( provision_result );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -922,11 +925,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_3 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b&, c const& > >
+          , discriminated_union< argot::struct_< a&, b&, c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -966,8 +969,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_3 )
 
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
-      auto& arg_tup = std::get< 0 >( provision_result );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -982,11 +985,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_3 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b&, c const& > >
+          , discriminated_union< argot::struct_< a&, b&, c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -1029,8 +1032,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_3 )
 
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
-      auto& arg_tup = std::get< 0 >( provision_result );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -1045,11 +1048,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_3 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b&, c const& > >
+          , discriminated_union< argot::struct_< a&, b&, c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -1099,8 +1102,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_3 )
 
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
-      auto& arg_tup = std::get< 0 >( provision_result );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -1115,11 +1118,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_3 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b&&, c const& > >
+          , discriminated_union< argot::struct_< a&, b&&, c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -1177,8 +1180,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_4 )
 
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
-      auto& arg_tup = std::get< 0 >( provision_result );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -1193,11 +1196,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_4 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b&, c const& > >
+          , discriminated_union< argot::struct_< a&, b&, c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -1237,8 +1240,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_4 )
 
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
-      auto& arg_tup = std::get< 0 >( provision_result );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -1253,11 +1256,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_4 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b&, c const& > >
+          , discriminated_union< argot::struct_< a&, b&, c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -1300,8 +1303,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_4 )
 
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
-      auto& arg_tup = std::get< 0 >( provision_result );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -1316,11 +1319,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_4 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b&, c const& > >
+          , discriminated_union< argot::struct_< a&, b&, c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -1370,8 +1373,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_4 )
 
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
-      auto& arg_tup = std::get< 0 >( provision_result );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -1386,11 +1389,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_static_chunk_4 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b&&, c const& > >
+          , discriminated_union< argot::struct_< a&, b&&, c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -1491,7 +1494,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
 
       using chunk0_t = tuple_traits::element_type_t< arg_tup0_t, 0 >;
       using chunk1_t = tuple_traits::element_type_t< arg_tup0_t, 1 >;
@@ -1501,7 +1504,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk1_t > );
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk2_t > );
 
-      auto& arg_tup = std::get< 0 >( provision_result );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -1516,11 +1519,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a& > >
+          , discriminated_union< argot::struct_< a& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
       }
@@ -1538,11 +1541,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< argot::struct_< b& > >
+          , discriminated_union< argot::struct_< b& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk1_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk1_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &b_ );
       }
@@ -1560,11 +1563,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk2_provision_result_type
-          , std::variant< argot::struct_< c const& > >
+          , discriminated_union< argot::struct_< c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk2_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk2_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
@@ -1645,7 +1648,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
 
       using chunk0_t = tuple_traits::element_type_t< arg_tup0_t, 0 >;
       using chunk1_t = tuple_traits::element_type_t< arg_tup0_t, 1 >;
@@ -1655,7 +1658,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk1_t > );
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk2_t > );
 
-      auto& arg_tup = std::get< 0 >( provision_result );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -1670,11 +1673,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a& > >
+          , discriminated_union< argot::struct_< a& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
       }
@@ -1692,11 +1695,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< argot::struct_< b& > >
+          , discriminated_union< argot::struct_< b& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk1_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk1_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &b_ );
       }
@@ -1714,11 +1717,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk2_provision_result_type
-          , std::variant< argot::struct_< c const& > >
+          , discriminated_union< argot::struct_< c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk2_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk2_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
@@ -1802,7 +1805,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
 
       using chunk0_t = tuple_traits::element_type_t< arg_tup0_t, 0 >;
       using chunk1_t = tuple_traits::element_type_t< arg_tup0_t, 1 >;
@@ -1812,7 +1815,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk1_t > );
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk2_t > );
 
-      auto& arg_tup = std::get< 0 >( provision_result );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -1827,11 +1830,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a& > >
+          , discriminated_union< argot::struct_< a& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
       }
@@ -1849,11 +1852,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< argot::struct_< b& > >
+          , discriminated_union< argot::struct_< b& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk1_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk1_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &b_ );
       }
@@ -1871,11 +1874,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk2_provision_result_type
-          , std::variant< argot::struct_< c const& > >
+          , discriminated_union< argot::struct_< c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk2_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk2_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
@@ -1956,7 +1959,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
 
       using chunk0_t = tuple_traits::element_type_t< arg_tup0_t, 0 >;
       using chunk1_t = tuple_traits::element_type_t< arg_tup0_t, 1 >;
@@ -1966,7 +1969,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk1_t > );
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk2_t > );
 
-      auto& arg_tup = std::get< 0 >( provision_result );
+      auto& arg_tup = variant_traits::get< 0 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -1981,11 +1984,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a& > >
+          , discriminated_union< argot::struct_< a& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
       }
@@ -2003,11 +2006,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< argot::struct_< b&& > >
+          , discriminated_union< argot::struct_< b&& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk1_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk1_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &b_ );
       }
@@ -2025,11 +2028,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_1 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk2_provision_result_type
-          , std::variant< argot::struct_< c const& > >
+          , discriminated_union< argot::struct_< c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk2_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk2_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
@@ -2128,7 +2131,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 1 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 1 );
 
       using chunk0_t = tuple_traits::element_type_t< arg_tup1_t, 0 >;
       using chunk1_t = tuple_traits::element_type_t< arg_tup1_t, 1 >;
@@ -2136,7 +2139,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk1_t > );
 
-      auto& arg_tup = std::get< 1 >( provision_result );
+      auto& arg_tup = variant_traits::get< 1 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -2151,11 +2154,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b& > >
+          , discriminated_union< argot::struct_< a&, b& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -2174,11 +2177,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< argot::struct_< c const& > >
+          , discriminated_union< argot::struct_< c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk1_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk1_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
@@ -2259,7 +2262,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 1 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 1 );
 
       using chunk0_t = tuple_traits::element_type_t< arg_tup1_t, 0 >;
       using chunk1_t = tuple_traits::element_type_t< arg_tup1_t, 1 >;
@@ -2267,7 +2270,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk1_t > );
 
-      auto& arg_tup = std::get< 1 >( provision_result );
+      auto& arg_tup = variant_traits::get< 1 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -2282,11 +2285,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b& > >
+          , discriminated_union< argot::struct_< a&, b& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -2305,11 +2308,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< argot::struct_< c const& > >
+          , discriminated_union< argot::struct_< c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk1_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk1_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
@@ -2393,7 +2396,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 1 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 1 );
 
       using chunk0_t = tuple_traits::element_type_t< arg_tup1_t, 0 >;
       using chunk1_t = tuple_traits::element_type_t< arg_tup1_t, 1 >;
@@ -2401,7 +2404,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk1_t > );
 
-      auto& arg_tup = std::get< 1 >( provision_result );
+      auto& arg_tup = variant_traits::get< 1 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -2416,11 +2419,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b& > >
+          , discriminated_union< argot::struct_< a&, b& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -2439,11 +2442,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< argot::struct_< c const& > >
+          , discriminated_union< argot::struct_< c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk1_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk1_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
@@ -2524,7 +2527,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 1 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 1 );
 
       using chunk0_t = tuple_traits::element_type_t< arg_tup0_t, 0 >;
       using chunk1_t = tuple_traits::element_type_t< arg_tup0_t, 1 >;
@@ -2532,7 +2535,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk1_t > );
 
-      auto& arg_tup = std::get< 1 >( provision_result );
+      auto& arg_tup = variant_traits::get< 1 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -2547,11 +2550,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b&& > >
+          , discriminated_union< argot::struct_< a&, b&& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -2570,11 +2573,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_2 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk1_provision_result_type
-          , std::variant< argot::struct_< c const& > >
+          , discriminated_union< argot::struct_< c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk1_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk1_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &c_ );
       }
@@ -2673,13 +2676,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_3 )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 2 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 2 );
 
       using chunk0_t = tuple_traits::element_type_t< arg_tup1_t, 0 >;
 
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
 
-      auto& arg_tup = std::get< 2 >( provision_result );
+      auto& arg_tup = variant_traits::get< 2 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -2694,11 +2697,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_3 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b&, c const& > >
+          , discriminated_union< argot::struct_< a&, b&, c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -2781,13 +2784,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_3 )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 2 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 2 );
 
       using chunk0_t = tuple_traits::element_type_t< arg_tup1_t, 0 >;
 
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
 
-      auto& arg_tup = std::get< 2 >( provision_result );
+      auto& arg_tup = variant_traits::get< 2 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -2802,11 +2805,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_3 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b&, c const& > >
+          , discriminated_union< argot::struct_< a&, b&, c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -2892,13 +2895,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_3 )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 2 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 2 );
 
       using chunk0_t = tuple_traits::element_type_t< arg_tup1_t, 0 >;
 
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
 
-      auto& arg_tup = std::get< 2 >( provision_result );
+      auto& arg_tup = variant_traits::get< 2 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -2913,11 +2916,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_3 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b&, c const& > >
+          , discriminated_union< argot::struct_< a&, b&, c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -3000,13 +3003,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_3 )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 2 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 2 );
 
       using chunk0_t = tuple_traits::element_type_t< arg_tup1_t, 0 >;
 
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
 
-      auto& arg_tup = std::get< 2 >( provision_result );
+      auto& arg_tup = variant_traits::get< 2 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -3021,11 +3024,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_3 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b&&, c const& > >
+          , discriminated_union< argot::struct_< a&, b&&, c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -3126,13 +3129,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_4 )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 2 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 2 );
 
       using chunk0_t = tuple_traits::element_type_t< arg_tup1_t, 0 >;
 
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
 
-      auto& arg_tup = std::get< 2 >( provision_result );
+      auto& arg_tup = variant_traits::get< 2 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -3147,11 +3150,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_4 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b&, c const& > >
+          , discriminated_union< argot::struct_< a&, b&, c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -3234,13 +3237,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_4 )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 2 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 2 );
 
       using chunk0_t = tuple_traits::element_type_t< arg_tup1_t, 0 >;
 
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
 
-      auto& arg_tup = std::get< 2 >( provision_result );
+      auto& arg_tup = variant_traits::get< 2 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -3255,11 +3258,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_4 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b&, c const& > >
+          , discriminated_union< argot::struct_< a&, b&, c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -3345,13 +3348,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_4 )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 2 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 2 );
 
       using chunk0_t = tuple_traits::element_type_t< arg_tup1_t, 0 >;
 
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
 
-      auto& arg_tup = std::get< 2 >( provision_result );
+      auto& arg_tup = variant_traits::get< 2 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -3366,11 +3369,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_4 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b&, c const& > >
+          , discriminated_union< argot::struct_< a&, b&, c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );
@@ -3453,13 +3456,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_4 )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 2 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 2 );
 
       using chunk0_t = tuple_traits::element_type_t< arg_tup1_t, 0 >;
 
       ARGOT_CONCEPT_ENSURE( ArgumentProvider< chunk0_t > );
 
-      auto& arg_tup = std::get< 2 >( provision_result );
+      auto& arg_tup = variant_traits::get< 2 >( provision_result );
 
       {
         decltype( auto ) chunk0_provision_result
@@ -3474,11 +3477,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic_chunk_4 )
         ARGOT_CONCEPT_ENSURE
         ( SameType
           < chunk0_provision_result_type
-          , std::variant< argot::struct_< a&, b&&, c const& > >
+          , discriminated_union< argot::struct_< a&, b&&, c const& > >
           >
         );
 
-        auto& nested_args = std::get< 0 >( chunk0_provision_result );
+        auto& nested_args = variant_traits::get< 0 >( chunk0_provision_result );
 
         ARGOT_TEST_EQ( &tuple_traits::get< 0 >( nested_args ), &a_ );
         ARGOT_TEST_EQ( &tuple_traits::get< 1 >( nested_args ), &b_ );

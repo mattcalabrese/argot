@@ -5,24 +5,28 @@
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
+#include <argot/prov/bool_.hpp>
+
 #include <argot/concepts/same_type.hpp>
 #include <argot/detail/constexpr_test.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/gen/concept_ensure.hpp>
-#include <argot/prov/bool_.hpp>
 #include <argot/prov_traits/provide.hpp>
 #include <argot/receiver/return_single_argument_value.hpp>
+#include <argot/variant_traits/index_of.hpp>
 
-#include <tuple>
 #include <type_traits>
-#include <variant>
 
 namespace {
 
 namespace prov = argot::prov;
 namespace prov_traits = argot::prov_traits;
 namespace receiver = argot::receiver;
+namespace variant_traits = argot::variant_traits;
 
 using argot::SameType;
+
+using argot::discriminated_union;
 
 ARGOT_REGISTER_CONSTEXPR_TEST( test_integral_constant_false )
 {
@@ -58,11 +62,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_integral_constant_false )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < args_type
-      , std::variant< std::integral_constant< bool, false > >
+      , discriminated_union< std::integral_constant< bool, false > >
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
   }
 
   // rvalue
@@ -78,11 +82,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_integral_constant_false )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < args_type
-      , std::variant< std::integral_constant< bool, false > >
+      , discriminated_union< std::integral_constant< bool, false > >
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
   }
 
   return 0;
@@ -122,11 +126,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_integral_constant_true )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < args_type
-      , std::variant< std::integral_constant< bool, true > >
+      , discriminated_union< std::integral_constant< bool, true > >
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
   }
 
   // rvalue
@@ -142,11 +146,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_integral_constant_true )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < args_type
-      , std::variant< std::integral_constant< bool, true > >
+      , discriminated_union< std::integral_constant< bool, true > >
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
   }
 
   return 0;
@@ -185,14 +189,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_false )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < args_type
-      , std::variant
+      , discriminated_union
         < std::integral_constant< bool, false >
         , std::integral_constant< bool, true >
         >
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
   }
 
   // rvalue
@@ -208,14 +212,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_false )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < args_type
-      , std::variant
+      , discriminated_union
         < std::integral_constant< bool, false >
         , std::integral_constant< bool, true >
         >
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
   }
 
   return 0;
@@ -254,14 +258,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_true )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < args_type
-      , std::variant
+      , discriminated_union
         < std::integral_constant< bool, false >
         , std::integral_constant< bool, true >
         >
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 1 );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 1 );
   }
 
   // rvalue
@@ -277,14 +281,14 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_true )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < args_type
-      , std::variant
+      , discriminated_union
         < std::integral_constant< bool, false >
         , std::integral_constant< bool, true >
         >
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 1 );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 1 );
   }
 
   return 0;

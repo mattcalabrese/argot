@@ -8,19 +8,24 @@
 #include <argot/concepts/same_type.hpp>
 #include <argot/detail/constexpr_test.hpp>
 #include <argot/detail/detection.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/receiver/return_single_argument_value.hpp>
+#include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/receiver_traits/receive_branch.hpp>
-#include <argot/receiver_traits/argument_list_kinds.hpp>
+#include <argot/variant_traits/get.hpp>
+#include <argot/variant_traits/index_of.hpp>
 
 #include <stdexcept>
-#include <tuple>
 
 namespace {
 
+namespace variant_traits = argot::variant_traits;
+
 using argot::SameType;
 
+using argot::discriminated_union;
 using argot::receiver::result_of_return_single_argument_value_t;
 using argot::receiver::return_single_argument_value;
 using argot::receiver::return_single_argument_value_t;
@@ -92,7 +97,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < result_type
-      , std::variant< foo >
+      , discriminated_union< foo >
       >
     );
 
@@ -120,8 +125,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching )
       >
     );
 
-    ARGOT_TEST_EQ( result.index(), 0 );
-    foo& v = std::get< 0 >( result );
+    ARGOT_TEST_EQ( variant_traits::index_of( result ), 0 );
+    foo& v = variant_traits::get< 0 >( result );
 
     ARGOT_TEST_EQ( v.value, 1 );
     ARGOT_TEST_FALSE( foo_1.moved );
@@ -143,7 +148,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < result_type
-      , std::variant< foo >
+      , discriminated_union< foo >
       >
     );
 
@@ -171,8 +176,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching )
       >
     );
 
-    ARGOT_TEST_EQ( result.index(), 0 );
-    foo& v = std::get< 0 >( result );
+    ARGOT_TEST_EQ( variant_traits::index_of( result ), 0 );
+    foo& v = variant_traits::get< 0 >( result );
 
     ARGOT_TEST_EQ( v.value, 1 );
     ARGOT_TEST_TRUE( foo_1.moved );
@@ -194,7 +199,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < result_type
-      , std::variant< foo >
+      , discriminated_union< foo >
       >
     );
 
@@ -222,8 +227,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching )
       >
     );
 
-    ARGOT_TEST_EQ( result.index(), 0 );
-    foo& v = std::get< 0 >( result );
+    ARGOT_TEST_EQ( variant_traits::index_of( result ), 0 );
+    foo& v = variant_traits::get< 0 >( result );
 
     ARGOT_TEST_EQ( v.value, 1 );
     ARGOT_TEST_FALSE( foo_1.moved );
@@ -245,7 +250,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < result_type
-      , std::variant< foo >
+      , discriminated_union< foo >
       >
     );
 
@@ -273,8 +278,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching )
       >
     );
 
-    ARGOT_TEST_EQ( result.index(), 0 );
-    foo& v = std::get< 0 >( result );
+    ARGOT_TEST_EQ( variant_traits::index_of( result ), 0 );
+    foo& v = variant_traits::get< 0 >( result );
 
     ARGOT_TEST_EQ( v.value, 1 );
     ARGOT_TEST_FALSE( foo_1.moved );
@@ -309,7 +314,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < result_type
-      , std::variant< foo, foo, bar, bar >
+      , discriminated_union< foo, foo, bar, bar >
       >
     );
 
@@ -345,8 +350,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
       >
     );
 
-    ARGOT_TEST_EQ( result.index(), 0 );
-    foo& v = std::get< 0 >( result );
+    ARGOT_TEST_EQ( variant_traits::index_of( result ), 0 );
+    foo& v = variant_traits::get< 0 >( result );
 
     ARGOT_TEST_EQ( v.value, 1 );
     ARGOT_TEST_TRUE( foo_1.moved );
@@ -369,7 +374,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < result_type
-      , std::variant< foo, foo, bar, bar >
+      , discriminated_union< foo, foo, bar, bar >
       >
     );
 
@@ -401,8 +406,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
       >
     );
 
-    ARGOT_TEST_EQ( result.index(), 1 );
-    foo& v = std::get< 1 >( result );
+    ARGOT_TEST_EQ( variant_traits::index_of( result ), 1 );
+    foo& v = variant_traits::get< 1 >( result );
 
     ARGOT_TEST_EQ( v.value, 2 );
     ARGOT_TEST_FALSE( foo_2.moved );
@@ -424,7 +429,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < result_type
-      , std::variant< foo, foo, bar, bar >
+      , discriminated_union< foo, foo, bar, bar >
       >
     );
 
@@ -456,8 +461,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
       >
     );
 
-    ARGOT_TEST_EQ( result.index(), 2 );
-    bar& v = std::get< 2 >( result );
+    ARGOT_TEST_EQ( variant_traits::index_of( result ), 2 );
+    bar& v = variant_traits::get< 2 >( result );
 
     ARGOT_TEST_EQ( v.value, 1 );
     ARGOT_TEST_TRUE( bar_1.moved );
@@ -481,7 +486,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < result_type
-      , std::variant< foo, foo, bar, bar >
+      , discriminated_union< foo, foo, bar, bar >
       >
     );
 
@@ -517,8 +522,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching )
       >
     );
 
-    ARGOT_TEST_EQ( result.index(), 3 );
-    bar& v = std::get< 3 >( result );
+    ARGOT_TEST_EQ( variant_traits::index_of( result ), 3 );
+    bar& v = variant_traits::get< 3 >( result );
 
     ARGOT_TEST_EQ( v.value, 2 );
     ARGOT_TEST_FALSE( bar_2.moved );

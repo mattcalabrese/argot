@@ -9,6 +9,7 @@
 #include <argot/concepts/same_type.hpp>
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/detail/constexpr_test.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/prov/element_or.hpp>
 #include <argot/prov_traits/destructive_provide.hpp>
 #include <argot/prov_traits/persistent_provide.hpp>
@@ -16,6 +17,8 @@
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/tuple_traits/get.hpp>
+#include <argot/variant_traits/get.hpp>
+#include <argot/variant_traits/index_of.hpp>
 
 #include <optional>
 #include <type_traits>
@@ -29,8 +32,10 @@ namespace prov_traits = argot::prov_traits;
 namespace receiver = argot::receiver;
 namespace receiver_traits = argot::receiver_traits;
 namespace tuple_traits = argot::tuple_traits;
+namespace variant_traits = argot::variant_traits;
 
 using argot::SameType;
+using argot::discriminated_union;
 using prov::element_or;
 using prov::element_or_fn;
 using prov::result_of_element_or;
@@ -82,12 +87,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_engaged_lvalue_opt )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_< char& >, argot::struct_< int& > >
+      , discriminated_union< argot::struct_< char& >, argot::struct_< int& > >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
-    auto& tup = std::get< 0 >( provision_result );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+    auto& tup = variant_traits::get< 0 >( provision_result );
 
     ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 'a' );
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &*opt_value );
@@ -107,12 +112,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_engaged_lvalue_opt )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_< char& >, argot::struct_< int& > >
+      , discriminated_union< argot::struct_< char& >, argot::struct_< int& > >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
-    auto& tup = std::get< 0 >( provision_result );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+    auto& tup = variant_traits::get< 0 >( provision_result );
 
     ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 'a' );
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &*opt_value );
@@ -159,12 +164,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_engaged_rvalue_opt )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_< char&& >, argot::struct_< int&& > >
+      , discriminated_union< argot::struct_< char&& >, argot::struct_< int&& > >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
-    auto& tup = std::get< 0 >( provision_result );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+    auto& tup = variant_traits::get< 0 >( provision_result );
 
     ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 'a' );
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &*opt_value );
@@ -184,12 +189,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_engaged_rvalue_opt )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_< char& >, argot::struct_< int& > >
+      , discriminated_union< argot::struct_< char& >, argot::struct_< int& > >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
-    auto& tup = std::get< 0 >( provision_result );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+    auto& tup = variant_traits::get< 0 >( provision_result );
 
     ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 'a' );
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &*opt_value );
@@ -235,12 +240,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_disengaged_lvalue_opt )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_< char& >, argot::struct_< int& > >
+      , discriminated_union< argot::struct_< char& >, argot::struct_< int& > >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 1 );
-    auto& tup = std::get< 1 >( provision_result );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 1 );
+    auto& tup = variant_traits::get< 1 >( provision_result );
 
     ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 1 );
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
@@ -260,12 +265,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_disengaged_lvalue_opt )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_< char& >, argot::struct_< int& > >
+      , discriminated_union< argot::struct_< char& >, argot::struct_< int& > >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 1 );
-    auto& tup = std::get< 1 >( provision_result );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 1 );
+    auto& tup = variant_traits::get< 1 >( provision_result );
 
     ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 1 );
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
@@ -312,12 +317,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_disengaged_rvalue_opt )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_< char&& >, argot::struct_< int&& > >
+      , discriminated_union< argot::struct_< char&& >, argot::struct_< int&& > >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 1 );
-    auto& tup = std::get< 1 >( provision_result );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 1 );
+    auto& tup = variant_traits::get< 1 >( provision_result );
 
     ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 1 );
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
@@ -337,12 +342,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_disengaged_rvalue_opt )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_< char& >, argot::struct_< int& > >
+      , discriminated_union< argot::struct_< char& >, argot::struct_< int& > >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 1 );
-    auto& tup = std::get< 1 >( provision_result );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 1 );
+    auto& tup = variant_traits::get< 1 >( provision_result );
 
     ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 1 );
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );

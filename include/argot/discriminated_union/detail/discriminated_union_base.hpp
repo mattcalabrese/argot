@@ -141,6 +141,8 @@ struct state_base
       index_value = partially_formed_index_value_v;
   }
 
+  // TODO(mattcalabrese) Don't store an explicit index_value when no alts or
+  // when 1 alt that needs no explicit partially formed state.
   ARGOT_NO_UNIQUE_ADDRESS union_ alternatives;
   ARGOT_NO_UNIQUE_ADDRESS index_type index_value;
 };

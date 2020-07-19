@@ -8,9 +8,11 @@
 #include <argot/concepts/same_type.hpp>
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/detail/constexpr_test.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/prov/union_indices.hpp>
 #include <argot/prov_traits/provide.hpp>
 #include <argot/receiver/return_argument_values.hpp>
+#include <argot/variant_traits/index_of.hpp>
 
 #include <cstddef>
 #include <tuple>
@@ -22,8 +24,10 @@ namespace {
 namespace prov = argot::prov;
 namespace prov_traits = argot::prov_traits;
 namespace receiver = argot::receiver;
+namespace variant_traits = argot::variant_traits;
 
 using argot::SameType;
+using argot::discriminated_union;
 
 using prov::union_indices;
 using prov::union_indices_t;
@@ -37,7 +41,7 @@ using prov::union_indices_t;
 
 ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary_union_indices )
 {
-  using union_type = std::variant<>;
+  using union_type = discriminated_union<>;
 
   {
     using provider_object_type = decltype( union_indices< union_type > );
@@ -70,11 +74,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary_union_indices )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_<> >
+      , discriminated_union< argot::struct_<> >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
   }
 
   // lvalue provision
@@ -90,11 +94,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary_union_indices )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_<> >
+      , discriminated_union< argot::struct_<> >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
   }
 
   return 0;
@@ -103,7 +107,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary_union_indices )
 ARGOT_REGISTER_CONSTEXPR_TEST( test_ternary_union_indices )
 {
 
-  using union_type = std::variant< int, float, double >;
+  using union_type = discriminated_union< int, float, double >;
 
   {
     using provider_object_type = decltype( union_indices< union_type > );
@@ -136,7 +140,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_ternary_union_indices )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant
+      , discriminated_union
         < argot::struct_
           < std::integral_constant< std::size_t, 0 >
           , std::integral_constant< std::size_t, 1 >
@@ -146,7 +150,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_ternary_union_indices )
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
   }
 
   // lvalue provision
@@ -162,7 +166,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_ternary_union_indices )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant
+      , discriminated_union
         < argot::struct_
           < std::integral_constant< std::size_t, 0 >
           , std::integral_constant< std::size_t, 1 >
@@ -172,7 +176,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_ternary_union_indices )
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
   }
 
   return 0;

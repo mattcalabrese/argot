@@ -9,6 +9,7 @@
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/detail/constexpr_test.hpp>
 #include <argot/detail/detection.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/receiver/return_argument_references.hpp>
 #include <argot/receiver/with_leading_arguments.hpp>
@@ -16,6 +17,8 @@
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/receiver_traits/receive_branch.hpp>
 #include <argot/tuple_traits/get.hpp>
+#include <argot/variant_traits/get.hpp>
+#include <argot/variant_traits/index_of.hpp>
 
 #include <stdexcept>
 
@@ -24,6 +27,7 @@ namespace {
 using argot::ArgumentReceiver;
 using argot::SameType;
 
+using argot::discriminated_union;
 using argot::receiver::with_leading_arguments;
 using argot::receiver::with_leading_arguments_t;
 using argot::receiver::result_of_with_leading_arguments;
@@ -42,6 +46,7 @@ using argot::receiver_traits::result_of_receive_branch_t;
 namespace receiver = argot::receiver;
 namespace receiver_traits = argot::receiver_traits;
 namespace tuple_traits = argot::tuple_traits;
+namespace variant_traits = argot::variant_traits;
 
 // TODO(mattcalabrese) Test SFINAE behavior with call_detail::is_detected_v
 // TODO(mattcalabrese) Test with_leading_arguments of with_leading_arguments
@@ -115,7 +120,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching_nonbranching )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < result_type
-      , std::variant
+      , discriminated_union
         < argot::struct_
           < char&&, short&, int&&, long&, long long&&, long double& >
         >
@@ -146,8 +151,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching_nonbranching )
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 0 );
-    auto& tup = std::get< 0 >( args );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+    auto& tup = variant_traits::get< 0 >( args );
 
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
     ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 1 );
@@ -243,7 +248,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching_branching )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < result_type
-      , std::variant
+      , discriminated_union
         < argot::struct_< char&&, short&, int&&, long&, float&&, wchar_t& >
         , argot::struct_< char&&, short&, int&&, long&, long long&&, long double& >
         , argot::struct_< char&&, short&, int&&, long& >
@@ -284,8 +289,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonbranching_branching )
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 1 );
-    auto& tup = std::get< 1 >( args );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 1 );
+    auto& tup = variant_traits::get< 1 >( args );
 
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
     ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 1 );
@@ -386,7 +391,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching_nonbranching )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < result_type
-      , std::variant
+      , discriminated_union
         < argot::struct_< float&&, wchar_t&, char&&, short&, int&&, long& >
         , argot::struct_< long long&&, long double&, char&&, short&, int&&, long& >
         , argot::struct_< char&&, short&, int&&, long& >
@@ -419,8 +424,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching_nonbranching )
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 1 );
-    auto& tup = std::get< 1 >( args );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 1 );
+    auto& tup = variant_traits::get< 1 >( args );
 
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &five );
     ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 5 );
@@ -528,7 +533,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching_branching )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < result_type
-      , std::variant
+      , discriminated_union
         < argot::struct_< float&&, wchar_t&, unsigned char&& >
         , argot::struct_< float&&, wchar_t& >
         , argot::struct_< float&&, wchar_t&, unsigned short&, unsigned int&& >
@@ -597,8 +602,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_branching_branching )
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 9 );
-    auto& tup = std::get< 9 >( args );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 9 );
+    auto& tup = variant_traits::get< 9 >( args );
 
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &five );
     ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 5 );

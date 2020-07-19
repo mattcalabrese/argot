@@ -7,6 +7,7 @@
 
 #include <argot/concepts/same_type.hpp>
 #include <argot/detail/constexpr_test.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/prov/unpack_integer_sequence.hpp>
 #include <argot/prov_traits/provide.hpp>
@@ -21,7 +22,10 @@
 
 namespace {
 
+namespace variant_traits = argot::variant_traits;
+
 using argot::SameType;
+using argot::discriminated_union;
 
 // TODO(mattcalabrese) Test more cases
 ARGOT_REGISTER_CONSTEXPR_TEST( test_provision )
@@ -78,7 +82,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_provision )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant
+      , discriminated_union
         < argot::struct_
           < std::integral_constant< std::size_t, 0 >
           , std::integral_constant< std::size_t, 1 >
@@ -88,7 +92,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_provision )
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
   }
 
   // lvalue provision
@@ -104,7 +108,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_provision )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant
+      , discriminated_union
         < argot::struct_
           < std::integral_constant< std::size_t, 0 >
           , std::integral_constant< std::size_t, 1 >
@@ -114,7 +118,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_provision )
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
   }
 
   return 0;

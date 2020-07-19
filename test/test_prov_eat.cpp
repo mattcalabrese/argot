@@ -7,11 +7,13 @@
 
 #include <argot/concepts/same_type.hpp>
 #include <argot/detail/constexpr_test.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/prov/eat.hpp>
 #include <argot/prov/nothing.hpp>
 #include <argot/prov_traits/provide.hpp>
 #include <argot/receiver/return_argument_values.hpp>
+#include <argot/variant_traits/index_of.hpp>
 
 #include <tuple>
 #include <type_traits>
@@ -20,6 +22,9 @@
 namespace {
 
 using argot::SameType;
+using argot::discriminated_union;
+
+namespace variant_traits = argot::variant_traits;
 
 ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary )
 {
@@ -77,11 +82,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_<> >
+      , discriminated_union< argot::struct_<> >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
   }
 
   // lvalue provision
@@ -97,11 +102,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_<> >
+      , discriminated_union< argot::struct_<> >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
   }
 
   return 0;
@@ -152,11 +157,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_<> >
+      , discriminated_union< argot::struct_<> >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
   }
 
   // lvalue provision
@@ -172,11 +177,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_<> >
+      , discriminated_union< argot::struct_<> >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
   }
 
   return 0;

@@ -8,13 +8,11 @@
 #include <argot/concepts/same_type.hpp>
 #include <argot/detail/constexpr_test.hpp>
 #include <argot/gen/concept_ensure.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/prov/integer_sequence.hpp>
 #include <argot/prov_traits/provide.hpp>
 #include <argot/receiver/return_argument_values.hpp>
-
-#include <tuple>
-#include <type_traits>
-#include <variant>
+#include <argot/variant_traits/index_of.hpp>
 
 #include <cstddef>
 #include <type_traits>
@@ -24,8 +22,10 @@ namespace {
 namespace prov = argot::prov;
 namespace prov_traits = argot::prov_traits;
 namespace receiver = argot::receiver;
+namespace variant_traits = argot::variant_traits;
 
 using argot::SameType;
+using argot::discriminated_union;
 
 using prov::integer_sequence;
 using prov::integer_sequence_t;
@@ -68,11 +68,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary_integer_sequence )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_<> >
+      , discriminated_union< argot::struct_<> >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
   }
 
   // lvalue provision
@@ -88,11 +88,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary_integer_sequence )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_<> >
+      , discriminated_union< argot::struct_<> >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
   }
 
   return 0;
@@ -133,7 +133,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonzero_integer_sequence )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant
+      , discriminated_union
         < argot::struct_
           < std::integral_constant< short, 0 >
           , std::integral_constant< short, 1 >
@@ -147,7 +147,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonzero_integer_sequence )
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
   }
 
   // lvalue provision
@@ -163,7 +163,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonzero_integer_sequence )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant
+      , discriminated_union
         < argot::struct_
           < std::integral_constant< short, 0 >
           , std::integral_constant< short, 1 >
@@ -177,7 +177,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonzero_integer_sequence )
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
   }
 
   return 0;

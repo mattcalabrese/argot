@@ -7,7 +7,6 @@
 
 #include <argot/case/detail/as_is.hpp>
 
-#include <argot/impossible.hpp>
 #include <argot/concepts/case_labels.hpp>
 #include <argot/concepts/persistent_switch_body_case.hpp>
 #include <argot/concepts/persistent_switch_body_for_type.hpp>
@@ -17,9 +16,11 @@
 #include <argot/concepts/switch_body_case.hpp>
 #include <argot/concepts/switch_body_for_type.hpp>
 #include <argot/detail/constexpr_test.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/gen/not.hpp>
+#include <argot/impossible.hpp>
 #include <argot/prov/value_of.hpp>
 #include <argot/receiver/return_single_argument_value.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
@@ -38,6 +39,7 @@
 #include <argot/switch_traits/trailing_argument_list_kinds_of_case_destructive.hpp>
 #include <argot/switch_traits/trailing_argument_list_kinds_of_case_persistent.hpp>
 #include <argot/value_list.hpp>
+#include <argot/variant_traits/get.hpp>
 
 #include <type_traits>
 #include <utility>
@@ -77,8 +79,10 @@ namespace prov = argot::prov;
 namespace receiver = argot::receiver;
 namespace receiver_traits = argot::receiver_traits;
 namespace switch_traits = argot::switch_traits;
+namespace variant_traits = argot::variant_traits;
 
 using argot::access_raw_concept_map;
+using argot::discriminated_union;
 using argot::impossible;
 using argot::case_detail::as_is_t;
 using argot::CaseLabels;
@@ -346,11 +350,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_as_is_basic )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< int >
+      , discriminated_union< int >
       >
     );
 
-    ARGOT_TEST_EQ( std::get< 0 >( result ), 0 );
+    ARGOT_TEST_EQ( variant_traits::get< 0 >( result ), 0 );
   }
 
   {
@@ -361,11 +365,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_as_is_basic )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< int >
+      , discriminated_union< int >
       >
     );
 
-    ARGOT_TEST_EQ( std::get< 0 >( result ), -1 );
+    ARGOT_TEST_EQ( variant_traits::get< 0 >( result ), -1 );
   }
 
   {
@@ -376,11 +380,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_as_is_basic )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< int >
+      , discriminated_union< int >
       >
     );
 
-    ARGOT_TEST_EQ( std::get< 0 >( result ), 42 );
+    ARGOT_TEST_EQ( variant_traits::get< 0 >( result ), 42 );
   }
 
   {
@@ -391,11 +395,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_as_is_basic )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< int >
+      , discriminated_union< int >
       >
     );
 
-    ARGOT_TEST_EQ( std::get< 0 >( result ), 0 );
+    ARGOT_TEST_EQ( variant_traits::get< 0 >( result ), 0 );
   }
 
   {
@@ -406,11 +410,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_as_is_basic )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< int >
+      , discriminated_union< int >
       >
     );
 
-    ARGOT_TEST_EQ( std::get< 0 >( result ), -1 );
+    ARGOT_TEST_EQ( variant_traits::get< 0 >( result ), -1 );
   }
 
   {
@@ -421,11 +425,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_as_is_basic )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< int >
+      , discriminated_union< int >
       >
     );
 
-    ARGOT_TEST_EQ( std::get< 0 >( result ), 42 );
+    ARGOT_TEST_EQ( variant_traits::get< 0 >( result ), 42 );
   }
 
   ARGOT_CONCEPT_ENSURE

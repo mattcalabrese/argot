@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018 Matt Calabrese
+  Copyright (c) 2017, 2018, 2020 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -10,13 +10,13 @@
 
 #include <argot/concepts/argument_receiver.hpp>
 #include <argot/detail/forward.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/struct_.hpp>
 
 #include <utility>
-#include <variant>
 
 namespace argot {
 namespace receiver {
@@ -59,7 +59,7 @@ struct make_concept_map
 < ArgumentReceiver< receiver::return_argument_references_t::impl > >
 {
   template< class... LeadingPs, class... TrailingPs, class... P >
-  static constexpr std::variant
+  static constexpr discriminated_union
   < receiver::return_argument_references_detail::argument_types_to_tuple_t
     < LeadingPs >...
   , struct_< P&&... >
@@ -73,7 +73,7 @@ struct make_concept_map
   , P&&... args
   )
   {
-    return std::variant
+    return discriminated_union
     < receiver::return_argument_references_detail::argument_types_to_tuple_t
       < LeadingPs >...
     , struct_< P&&... >

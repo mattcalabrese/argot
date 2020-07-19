@@ -8,6 +8,7 @@
 #include <argot/concepts/same_type.hpp>
 #include <argot/detail/constexpr_test.hpp>
 #include <argot/detail/detection.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/receiver/return_argument_references.hpp>
 #include <argot/receiver/nested_receiver.hpp>
@@ -15,12 +16,15 @@
 #include <argot/receiver_traits/receive_branch.hpp>
 #include <argot/receiver_traits/argument_list_kinds.hpp>
 #include <argot/tuple_traits/get.hpp>
+#include <argot/variant_traits/get.hpp>
+#include <argot/variant_traits/index_of.hpp>
 
 #include <stdexcept>
 
 namespace {
 
 using argot::SameType;
+using argot::discriminated_union;
 
 using argot::receiver::result_of_return_argument_references_t;
 using argot::receiver::return_argument_references;
@@ -39,6 +43,7 @@ enum class bar { zero, a, b, c };
 namespace receiver = argot::receiver;
 namespace receiver_traits = argot::receiver_traits;
 namespace tuple_traits = argot::tuple_traits;
+namespace variant_traits = argot::variant_traits;
 
 // TODO(mattcalabrese) Test SFINAE behavior with call_detail::is_detected_v
 // TODO(mattcalabrese) Test nested_receiver of nested_receiver
@@ -107,7 +112,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonmodifying_nonbranching )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < result_type
-      , std::variant< argot::struct_< int&&, long& > >
+      , discriminated_union< argot::struct_< int&&, long& > >
       >
     );
 
@@ -135,8 +140,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonmodifying_nonbranching )
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 0 );
-    auto& tup = std::get< 0 >( args );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+    auto& tup = variant_traits::get< 0 >( args );
 
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
     ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 1 );
@@ -215,7 +220,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonmodifying_branching )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < result_type
-      , std::variant
+      , discriminated_union
         < argot::struct_< float&&, char& >
         , argot::struct_< int&&, long& >
         , argot::struct_<>
@@ -256,8 +261,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nonmodifying_branching )
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 1 );
-    auto& tup = std::get< 1 >( args );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 1 );
+    auto& tup = variant_traits::get< 1 >( args );
 
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
     ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 1 );
@@ -342,7 +347,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_modifying_nonbranching )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < result_type
-      , std::variant
+      , discriminated_union
         < argot::struct_< wchar_t&, long long&& >
         , argot::struct_< bool& >
         , argot::struct_< int&&, long& >
@@ -376,8 +381,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_modifying_nonbranching )
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 2 );
-    auto& tup = std::get< 2 >( args );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 2 );
+    auto& tup = variant_traits::get< 2 >( args );
 
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
     ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 1 );
@@ -465,7 +470,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_modifying_branching )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < result_type
-      , std::variant
+      , discriminated_union
         < argot::struct_< wchar_t&, long long&& >
         , argot::struct_< bool& >
         , argot::struct_< float&&, char& >
@@ -510,8 +515,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_modifying_branching )
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 3 );
-    auto& tup = std::get< 3 >( args );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 3 );
+    auto& tup = variant_traits::get< 3 >( args );
 
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
     ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 1 );

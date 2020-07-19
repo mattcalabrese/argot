@@ -1,5 +1,5 @@
 /*==============================================================================
-  Copyright (c) 2017, 2018, 2019 Matt Calabrese
+  Copyright (c) 2017, 2018, 2019, 2020 Matt Calabrese
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -12,6 +12,7 @@
 #include <argot/concepts/sinkable.hpp>
 #include <argot/detail/remove_cvref.hpp>
 #include <argot/detail/sink.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/gen/requires.hpp>
 #include <argot/gen/transparent_requirement.hpp>
@@ -21,7 +22,6 @@
 #include <argot/struct_.hpp>
 
 #include <utility>
-#include <variant>
 
 namespace argot {
 namespace receiver {
@@ -95,7 +95,7 @@ struct make_concept_map
   , P&&... args
   )
   {
-    return std::variant
+    return discriminated_union
     < receiver::return_argument_values_detail::argument_types_to_struct_t
       < LeadingPs >...
     , struct_< detail_argot::remove_cvref_t< P >... >

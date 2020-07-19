@@ -7,11 +7,14 @@
 
 #include <argot/concepts/same_type.hpp>
 #include <argot/detail/constexpr_test.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/prov/variant_index.hpp>
 #include <argot/prov_traits/provide.hpp>
 #include <argot/receiver/return_single_argument_value.hpp>
+#include <argot/variant_traits/get.hpp>
 #include <argot/variant_traits/index_type.hpp>
+#include <argot/variant_traits/index_of.hpp>
 
 #include <cstddef>
 #include <type_traits>
@@ -19,20 +22,21 @@
 
 namespace {
 
-using argot::SameType;
-
 namespace prov = argot::prov;
 namespace prov_traits = argot::prov_traits;
 namespace receiver = argot::receiver;
 namespace variant_traits = argot::variant_traits;
 
+using argot::SameType;
+
+using argot::discriminated_union;
 using prov::variant_index;
 using prov::variant_index_fn;
 
 // TODO(mattcalabrese) Test non-dynamic and test defaults
 ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
 {
-  using variant_type = std::variant<char, short, int, long, long long>;
+  using variant_type = std::variant< char, short, int, long, long long >;
   using index_type = variant_traits::index_type_t< variant_type >;
 
   using object_type
@@ -69,7 +73,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant
+        , discriminated_union
           < std::integral_constant< std::size_t, 0 >
           , std::integral_constant< std::size_t, 1 >
           , std::integral_constant< std::size_t, 2 >
@@ -79,7 +83,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
     }
 
     // lvalue provision
@@ -96,7 +100,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant
+        , discriminated_union
           < std::integral_constant< std::size_t, 0 >
           , std::integral_constant< std::size_t, 1 >
           , std::integral_constant< std::size_t, 2 >
@@ -106,7 +110,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 0 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
     }
   }
 
@@ -126,7 +130,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant
+        , discriminated_union
           < std::integral_constant< std::size_t, 0 >
           , std::integral_constant< std::size_t, 1 >
           , std::integral_constant< std::size_t, 2 >
@@ -136,7 +140,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 1 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 1 );
     }
 
     // lvalue provision
@@ -153,7 +157,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant
+        , discriminated_union
           < std::integral_constant< std::size_t, 0 >
           , std::integral_constant< std::size_t, 1 >
           , std::integral_constant< std::size_t, 2 >
@@ -163,7 +167,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 1 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 1 );
     }
   }
 
@@ -183,7 +187,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant
+        , discriminated_union
           < std::integral_constant< std::size_t, 0 >
           , std::integral_constant< std::size_t, 1 >
           , std::integral_constant< std::size_t, 2 >
@@ -193,7 +197,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 2 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 2 );
     }
 
     // lvalue provision
@@ -210,7 +214,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant
+        , discriminated_union
           < std::integral_constant< std::size_t, 0 >
           , std::integral_constant< std::size_t, 1 >
           , std::integral_constant< std::size_t, 2 >
@@ -220,7 +224,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 2 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 2 );
     }
   }
 
@@ -240,7 +244,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant
+        , discriminated_union
           < std::integral_constant< std::size_t, 0 >
           , std::integral_constant< std::size_t, 1 >
           , std::integral_constant< std::size_t, 2 >
@@ -250,7 +254,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 3 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 3 );
     }
 
     // lvalue provision
@@ -267,7 +271,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant
+        , discriminated_union
           < std::integral_constant< std::size_t, 0 >
           , std::integral_constant< std::size_t, 1 >
           , std::integral_constant< std::size_t, 2 >
@@ -277,7 +281,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 3 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 3 );
     }
   }
 
@@ -297,7 +301,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant
+        , discriminated_union
           < std::integral_constant< std::size_t, 0 >
           , std::integral_constant< std::size_t, 1 >
           , std::integral_constant< std::size_t, 2 >
@@ -307,7 +311,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 4 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 4 );
     }
 
     // lvalue provision
@@ -324,7 +328,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < provision_result_type
-        , std::variant
+        , discriminated_union
           < std::integral_constant< std::size_t, 0 >
           , std::integral_constant< std::size_t, 1 >
           , std::integral_constant< std::size_t, 2 >
@@ -334,7 +338,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( provision_result.index(), 4 );
+      ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 4 );
     }
   }
 

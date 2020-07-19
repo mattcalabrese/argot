@@ -15,17 +15,19 @@
 #include <argot/concepts/switch_body.hpp>
 #include <argot/default_.hpp>
 #include <argot/detail/constexpr_test.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/prov/unreachable.hpp>
 #include <argot/prov/value_of.hpp>
 #include <argot/prov_traits/destructive_provide.hpp>
 #include <argot/receiver/return_argument_references.hpp>
 #include <argot/tuple_traits/get.hpp>
+#include <argot/variant_traits/get.hpp>
+#include <argot/variant_traits/index_of.hpp>
 #include <argot/value_list.hpp>
 
 #include <tuple>
 #include <type_traits>
-#include <variant>
 
 #include "switch_body_models.hpp"
 
@@ -36,11 +38,14 @@ namespace prov_traits = argot::prov_traits;
 namespace receiver = argot::receiver;
 namespace receiver_traits = argot::receiver_traits;
 namespace tuple_traits = argot::tuple_traits;
+namespace variant_traits = argot::variant_traits;
 
 using argot::ArgumentProvider;
 using argot::SameType;
 using argot::UnhandledSwitchableValue;
+
 using argot::value_list_t;
+using argot::discriminated_union;
 using prov::result_of_switch;
 using prov::result_of_switch_t;
 using prov::result_of_value_of_t;
@@ -284,7 +289,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_< std::integral_constant< int, 0 >&& >
           , argot::struct_< std::integral_constant< int, 1 >&& >
           , argot::struct_< std::integral_constant< int, 2 >&& >
@@ -292,8 +297,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -312,7 +317,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_< std::integral_constant< int, 0 >&& >
           , argot::struct_< std::integral_constant< int, 1 >&& >
           , argot::struct_< std::integral_constant< int, 2 >&& >
@@ -320,8 +325,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 1 );
-      auto& tup = std::get< 1 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 1 );
+      auto& tup = variant_traits::get< 1 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 1 > );
@@ -340,7 +345,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_< std::integral_constant< int, 0 >&& >
           , argot::struct_< std::integral_constant< int, 1 >&& >
           , argot::struct_< std::integral_constant< int, 2 >&& >
@@ -348,8 +353,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 2 );
-      auto& tup = std::get< 2 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 2 );
+      auto& tup = variant_traits::get< 2 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 2 > );
@@ -371,7 +376,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_< std::integral_constant< int, 0 > const& >
           , argot::struct_< std::integral_constant< int, 1 > const& >
           , argot::struct_< std::integral_constant< int, 2 > const& >
@@ -379,8 +384,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -399,7 +404,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_< std::integral_constant< int, 0 > const& >
           , argot::struct_< std::integral_constant< int, 1 > const& >
           , argot::struct_< std::integral_constant< int, 2 > const& >
@@ -407,8 +412,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 1 );
-      auto& tup = std::get< 1 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 1 );
+      auto& tup = variant_traits::get< 1 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 1 > );
@@ -427,7 +432,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_< std::integral_constant< int, 0 > const& >
           , argot::struct_< std::integral_constant< int, 1 > const& >
           , argot::struct_< std::integral_constant< int, 2 > const& >
@@ -435,8 +440,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 2 );
-      auto& tup = std::get< 2 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 2 );
+      auto& tup = variant_traits::get< 2 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 2 > );
@@ -540,13 +545,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_< std::integral_constant< int, 0 >&& > >
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -565,13 +570,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_< std::integral_constant< int, 1 >&& > >
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 1 > );
@@ -590,13 +595,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_< std::integral_constant< int, 2 >&& > >
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 2 > );
@@ -618,13 +623,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_< std::integral_constant< int, 0 > const& > >
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -643,13 +648,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_< std::integral_constant< int, 1 > const& > >
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 1 > );
@@ -668,13 +673,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_3_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_< std::integral_constant< int, 2 > const& > >
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 2 > );
@@ -743,7 +748,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unreachable_case_dynamic )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_< std::integral_constant< int, 0 >&& >
           , argot::struct_< std::integral_constant< int, 1 >&& >
           , argot::struct_< std::integral_constant< int, 2 >&& >
@@ -751,8 +756,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unreachable_case_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -774,7 +779,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unreachable_case_dynamic )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_< std::integral_constant< int, 0 > const& >
           , argot::struct_< std::integral_constant< int, 1 > const& >
           , argot::struct_< std::integral_constant< int, 2 > const& >
@@ -782,8 +787,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unreachable_case_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -876,12 +881,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unreachable_case_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< argot::struct_< std::integral_constant< int, 0 >&& > >
+        , discriminated_union< argot::struct_< std::integral_constant< int, 0 >&& > >
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -903,12 +908,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unreachable_case_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< argot::struct_< std::integral_constant< int, 0 > const& > >
+        , discriminated_union< argot::struct_< std::integral_constant< int, 0 > const& > >
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -968,8 +973,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -994,8 +999,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_dynamic )
       );
 
       ARGOT_TEST_EQ
-      ( args.index(), ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 );
-      auto& tup = std::get< ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >( args );
+      ( variant_traits::index_of( args ), ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 );
+      auto& tup = variant_traits::get< ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup )
@@ -1024,8 +1029,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -1050,8 +1055,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_dynamic )
       );
 
       ARGOT_TEST_EQ
-      ( args.index(), ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 );
-      auto& tup = std::get< ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >( args );
+      ( variant_traits::index_of( args ), ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 );
+      auto& tup = variant_traits::get< ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup )
@@ -1138,12 +1143,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< argot::struct_< std::integral_constant< int, 0 >&& > >
+        , discriminated_union< argot::struct_< std::integral_constant< int, 0 >&& > >
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -1162,7 +1167,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_
             < std::integral_constant
               < int, ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >&&
@@ -1171,8 +1176,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_static )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup )
@@ -1196,12 +1201,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< argot::struct_< std::integral_constant< int, 0 > const& > >
+        , discriminated_union< argot::struct_< std::integral_constant< int, 0 > const& > >
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -1220,7 +1225,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_
             < std::integral_constant
               < int, ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 > const&
@@ -1229,8 +1234,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_max_static )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup )
@@ -1292,8 +1297,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -1318,8 +1323,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_dynamic )
       );
 
       ARGOT_TEST_EQ
-      ( args.index(), ARGOT_MAX_PREPROCESSED_SWITCH_CASES );
-      auto& tup = std::get< ARGOT_MAX_PREPROCESSED_SWITCH_CASES >( args );
+      ( variant_traits::index_of( args ), ARGOT_MAX_PREPROCESSED_SWITCH_CASES );
+      auto& tup = variant_traits::get< ARGOT_MAX_PREPROCESSED_SWITCH_CASES >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup )
@@ -1348,8 +1353,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -1374,8 +1379,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_dynamic )
       );
 
       ARGOT_TEST_EQ
-      ( args.index(), ARGOT_MAX_PREPROCESSED_SWITCH_CASES );
-      auto& tup = std::get< ARGOT_MAX_PREPROCESSED_SWITCH_CASES >( args );
+      ( variant_traits::index_of( args ), ARGOT_MAX_PREPROCESSED_SWITCH_CASES );
+      auto& tup = variant_traits::get< ARGOT_MAX_PREPROCESSED_SWITCH_CASES >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup )
@@ -1462,12 +1467,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< argot::struct_< std::integral_constant< int, 0 >&& > >
+        , discriminated_union< argot::struct_< std::integral_constant< int, 0 >&& > >
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -1486,7 +1491,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_
             < std::integral_constant
               < int, ARGOT_MAX_PREPROCESSED_SWITCH_CASES >&&
@@ -1495,8 +1500,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_static )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup )
@@ -1520,12 +1525,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< argot::struct_< std::integral_constant< int, 0 > const& > >
+        , discriminated_union< argot::struct_< std::integral_constant< int, 0 > const& > >
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -1544,7 +1549,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_
             < std::integral_constant
               < int, ARGOT_MAX_PREPROCESSED_SWITCH_CASES > const&
@@ -1553,8 +1558,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_supmax_static )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup )
@@ -1616,8 +1621,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -1642,9 +1647,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_dynamic )
       );
 
       ARGOT_TEST_EQ
-      ( args.index(), 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 );
+      ( variant_traits::index_of( args ), 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 );
       auto& tup
-        = std::get< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >( args );
+        = variant_traits::get< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup )
@@ -1673,8 +1678,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -1699,9 +1704,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_dynamic )
       );
 
       ARGOT_TEST_EQ
-      ( args.index(), 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 );
+      ( variant_traits::index_of( args ), 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 );
       auto& tup
-        = std::get< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >( args );
+        = variant_traits::get< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup )
@@ -1791,12 +1796,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< argot::struct_< std::integral_constant< int, 0 >&& > >
+        , discriminated_union< argot::struct_< std::integral_constant< int, 0 >&& > >
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -1815,7 +1820,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_
             < std::integral_constant
               < int, 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 >&&
@@ -1824,8 +1829,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_static )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup )
@@ -1849,12 +1854,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< argot::struct_< std::integral_constant< int, 0 > const& > >
+        , discriminated_union< argot::struct_< std::integral_constant< int, 0 > const& > >
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -1873,7 +1878,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_
             < std::integral_constant
               < int, 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES - 1 > const&
@@ -1882,8 +1887,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_2max_static )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup )
@@ -1945,8 +1950,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -1971,8 +1976,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_dynamic )
       );
 
       ARGOT_TEST_EQ
-      ( args.index(), 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES );
-      auto& tup = std::get< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES >( args );
+      ( variant_traits::index_of( args ), 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES );
+      auto& tup = variant_traits::get< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup )
@@ -2001,8 +2006,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_dynamic )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -2027,8 +2032,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_dynamic )
       );
 
       ARGOT_TEST_EQ
-      ( args.index(), 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES );
-      auto& tup = std::get< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES >( args );
+      ( variant_traits::index_of( args ), 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES );
+      auto& tup = variant_traits::get< 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup )
@@ -2116,12 +2121,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< argot::struct_< std::integral_constant< int, 0 >&& > >
+        , discriminated_union< argot::struct_< std::integral_constant< int, 0 >&& > >
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -2140,7 +2145,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_
             < std::integral_constant
               < int, 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES >&&
@@ -2149,8 +2154,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_static )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup )
@@ -2174,12 +2179,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant< argot::struct_< std::integral_constant< int, 0 > const& > >
+        , discriminated_union< argot::struct_< std::integral_constant< int, 0 > const& > >
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup ), &integral_constant_v< 0 > );
@@ -2198,7 +2203,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_static )
       ARGOT_CONCEPT_ENSURE
       ( SameType
         < args_type
-        , std::variant
+        , discriminated_union
           < argot::struct_
             < std::integral_constant
               < int, 2 * ARGOT_MAX_PREPROCESSED_SWITCH_CASES > const&
@@ -2207,8 +2212,8 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_0_to_sup2max_static )
         >
       );
 
-      ARGOT_TEST_EQ( args.index(), 0 );
-      auto& tup = std::get< 0 >( args );
+      ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+      auto& tup = variant_traits::get< 0 >( args );
 
       ARGOT_TEST_EQ
       ( &tuple_traits::get< 0 >( tup )

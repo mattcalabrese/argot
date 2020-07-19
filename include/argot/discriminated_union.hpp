@@ -567,7 +567,7 @@ struct hash_base
 template< class... T >
 struct make_concept_map< UnionLike< discriminated_union< T... > > >
 {
-  using index_type = typename discriminated_union< T... >::index_type;
+  using index_type = std::size_t;  // TODO(mattcalabrese) Make dependent
 
   static index_type constexpr num_alternatives = sizeof...( T );
 

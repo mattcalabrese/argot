@@ -9,16 +9,16 @@
 #include <argot/concepts/persistent_argument_provider.hpp>
 #include <argot/concepts/same_type.hpp>
 #include <argot/detail/constexpr_test.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/prov/unpack.hpp>
 #include <argot/prov_traits/provide.hpp>
 #include <argot/receiver/return_argument_references.hpp>
 #include <argot/tuple_traits/get.hpp>
+#include <argot/variant_traits/get.hpp>
+#include <argot/variant_traits/index_of.hpp>
 
 #include <tuple>
-#include <type_traits>
-#include <variant>
-
 #include <type_traits>
 
 namespace {
@@ -27,7 +27,9 @@ namespace prov = argot::prov;
 namespace prov_traits = argot::prov_traits;
 namespace receiver = argot::receiver;
 namespace tuple_traits = argot::tuple_traits;
+namespace variant_traits = argot::variant_traits;
 
+using argot::discriminated_union;
 using prov::unpack;
 using prov::unpack_fn;
 using prov::result_of_unpack;
@@ -72,9 +74,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unpack_nullary )
     using provision_result_type = decltype( provision_result );
 
     ARGOT_CONCEPT_ENSURE
-    ( SameType< provision_result_type, std::variant< argot::struct_<> > > );
+    ( SameType< provision_result_type, discriminated_union< argot::struct_<> > > );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
   }
 
   // lvalue provision
@@ -88,9 +90,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unpack_nullary )
     using provision_result_type = decltype( provision_result );
 
     ARGOT_CONCEPT_ENSURE
-    ( SameType< provision_result_type, std::variant< argot::struct_<> > > );
+    ( SameType< provision_result_type, discriminated_union< argot::struct_<> > > );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
   }
 
   return 0;
@@ -125,9 +127,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unpack_nullary_moved )
     using provision_result_type = decltype( provision_result );
 
     ARGOT_CONCEPT_ENSURE
-    ( SameType< provision_result_type, std::variant< argot::struct_<> > > );
+    ( SameType< provision_result_type, discriminated_union< argot::struct_<> > > );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
   }
 
   // lvalue provision
@@ -141,9 +143,9 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unpack_nullary_moved )
     using provision_result_type = decltype( provision_result );
 
     ARGOT_CONCEPT_ENSURE
-    ( SameType< provision_result_type, std::variant< argot::struct_<> > > );
+    ( SameType< provision_result_type, discriminated_union< argot::struct_<> > > );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
   }
 
   return 0;
@@ -180,12 +182,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unpack_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_< int&, float&, char& > >
+      , discriminated_union< argot::struct_< int&, float&, char& > >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
-    auto& tup = std::get< 0 >( provision_result );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+    auto& tup = variant_traits::get< 0 >( provision_result );
 
     ARGOT_TEST_EQ
     ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( tup_to_unpack ) );
@@ -210,12 +212,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unpack_ternary )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_< int&, float&, char& > >
+      , discriminated_union< argot::struct_< int&, float&, char& > >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
-    auto& tup = std::get< 0 >( provision_result );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+    auto& tup = variant_traits::get< 0 >( provision_result );
 
     ARGOT_TEST_EQ
     ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( tup_to_unpack ) );
@@ -261,12 +263,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unpack_ternary_moved )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_< int&&, float&&, char&& > >
+      , discriminated_union< argot::struct_< int&&, float&&, char&& > >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
-    auto& tup = std::get< 0 >( provision_result );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+    auto& tup = variant_traits::get< 0 >( provision_result );
 
     ARGOT_TEST_EQ
     ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( tup_to_unpack ) );
@@ -291,12 +293,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unpack_ternary_moved )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_< int&, float&, char& > >
+      , discriminated_union< argot::struct_< int&, float&, char& > >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
-    auto& tup = std::get< 0 >( provision_result );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
+    auto& tup = variant_traits::get< 0 >( provision_result );
 
     ARGOT_TEST_EQ
     ( &tuple_traits::get< 0 >( tup ), &std::get< 0 >( tup_to_unpack ) );

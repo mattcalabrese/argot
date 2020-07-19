@@ -10,6 +10,7 @@
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/gen/make_concept_map.hpp>
 #include <argot/detail/constexpr_test.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/prov/conditional.hpp>
 #include <argot/prov/expand/expand.hpp>
 #include <argot/prov/nothing.hpp>
@@ -17,6 +18,7 @@
 #include <argot/receiver/return_argument_references.hpp>
 #include <argot/tuple_traits/get.hpp>
 #include <argot/variant_traits/get.hpp>
+#include <argot/variant_traits/index_of.hpp>
 
 #include <type_traits>
 #include <tuple>
@@ -31,8 +33,9 @@ namespace tuple_traits = argot::tuple_traits;
 namespace variant_traits = argot::variant_traits;
 
 using argot::SameType;
-using argot::make_referential_struct;
 
+using argot::make_referential_struct;
+using argot::discriminated_union;
 using prov::conditional;
 using prov::nothing;
 using prov::nothing_t;
@@ -108,11 +111,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unary_nonbranch_expand )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_< int&& > >
+      , discriminated_union< argot::struct_< int&& > >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
     auto& tup = variant_traits::get< 0 >( provision_result );
 
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
@@ -131,11 +134,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unary_nonbranch_expand )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_< int& > >
+      , discriminated_union< argot::struct_< int& > >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
     auto& tup = variant_traits::get< 0 >( provision_result );
 
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
@@ -198,11 +201,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_binary_nonbranch_expand )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_< int&&, long&, char&, short&& > >
+      , discriminated_union< argot::struct_< int&&, long&, char&, short&& > >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
     auto& tup = variant_traits::get< 0 >( provision_result );
 
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
@@ -224,11 +227,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_binary_nonbranch_expand )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant< argot::struct_< int&, long&, char&, short& > >
+      , discriminated_union< argot::struct_< int&, long&, char&, short& > >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
     auto& tup = variant_traits::get< 0 >( provision_result );
 
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
@@ -299,12 +302,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_ternary_nonbranch_expand )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant
+      , discriminated_union
         < argot::struct_< int&&, long&, char&, short&&, long long&&, double& > >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
     auto& tup = variant_traits::get< 0 >( provision_result );
 
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );
@@ -328,12 +331,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_ternary_nonbranch_expand )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < provision_result_type
-      , std::variant
+      , discriminated_union
         < argot::struct_< int&, long&, char&, short&, long long&, double& > >
       >
     );
 
-    ARGOT_TEST_EQ( provision_result.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( provision_result ), 0 );
     auto& tup = variant_traits::get< 0 >( provision_result );
 
     ARGOT_TEST_EQ( &tuple_traits::get< 0 >( tup ), &one );

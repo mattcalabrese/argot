@@ -7,6 +7,7 @@
 
 #include <argot/concepts/same_type.hpp>
 #include <argot/detail/constexpr_test.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/prov/nothing.hpp>
 #include <argot/prov/value_of.hpp>
@@ -18,6 +19,8 @@
 #include <argot/receiver_traits/argument_types.hpp>
 #include <argot/receiver/return_argument_references.hpp>
 #include <argot/tuple_traits/get.hpp>
+#include <argot/variant_traits/get.hpp>
+#include <argot/variant_traits/index_of.hpp>
 
 #include <type_traits>
 #include <utility>
@@ -29,8 +32,10 @@ namespace prov_traits = argot::prov_traits;
 namespace receiver = argot::receiver;
 namespace receiver_traits = argot::receiver_traits;
 namespace tuple_traits = argot::tuple_traits;
+namespace variant_traits = argot::variant_traits;
 
 using argot::SameType;
+using argot::discriminated_union;
 using receiver_traits::argument_list_kinds_t;
 using receiver_traits::argument_types_t;
 using prov_traits::argument_list_kinds_of_destructive_t;
@@ -84,11 +89,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary_value_of )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < args_type
-      , std::variant< argot::struct_<> >
+      , discriminated_union< argot::struct_<> >
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
   }
 
   // rvalue
@@ -111,11 +116,11 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nullary_value_of )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < args_type
-      , std::variant< argot::struct_<> >
+      , discriminated_union< argot::struct_<> >
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 0 );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
   }
 
   return 0;
@@ -164,12 +169,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unary_value_of )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < args_type
-      , std::variant< argot::struct_< bool const& > >
+      , discriminated_union< argot::struct_< bool const& > >
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 0 );
-    auto& tup = std::get< 0 >( args );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+    auto& tup = variant_traits::get< 0 >( args );
 
     ARGOT_TEST_NE( &tuple_traits::get< 0 >( tup ), &bool_true );
     ARGOT_TEST_TRUE( tuple_traits::get< 0 >( tup ) );
@@ -195,12 +200,12 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_unary_value_of )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < args_type
-      , std::variant< argot::struct_< bool&& > >
+      , discriminated_union< argot::struct_< bool&& > >
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 0 );
-    auto& tup = std::get< 0 >( args );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+    auto& tup = variant_traits::get< 0 >( args );
 
     ARGOT_TEST_NE( &tuple_traits::get< 0 >( tup ), &bool_true );
     ARGOT_TEST_TRUE( tuple_traits::get< 0 >( tup ) );
@@ -261,13 +266,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nary_value_of )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < args_type
-      , std::variant
+      , discriminated_union
         < argot::struct_< int const&, char const&, bool const& > >
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 0 );
-    auto& tup = std::get< 0 >( args );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+    auto& tup = variant_traits::get< 0 >( args );
 
     ARGOT_TEST_NE( &tuple_traits::get< 0 >( tup ), &int_1 );
     ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 1 );
@@ -299,13 +304,13 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_nary_value_of )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < args_type
-      , std::variant
+      , discriminated_union
         < argot::struct_< int&&, char&&, bool&& > >
       >
     );
 
-    ARGOT_TEST_EQ( args.index(), 0 );
-    auto& tup = std::get< 0 >( args );
+    ARGOT_TEST_EQ( variant_traits::index_of( args ), 0 );
+    auto& tup = variant_traits::get< 0 >( args );
 
     ARGOT_TEST_NE( &tuple_traits::get< 0 >( tup ), &int_1 );
     ARGOT_TEST_EQ( tuple_traits::get< 0 >( tup ), 1 );

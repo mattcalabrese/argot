@@ -17,6 +17,7 @@
 #include <argot/concepts/switch_body_case.hpp>
 #include <argot/concepts/switch_body_for_type.hpp>
 #include <argot/detail/constexpr_test.hpp>
+#include <argot/discriminated_union.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/concept_ensure.hpp>
 #include <argot/gen/not.hpp>
@@ -85,10 +86,12 @@ using argot::SameValue;
 using argot::SwitchBody;
 using argot::SwitchBodyCase;
 using argot::SwitchBodyForType;
+
 using argot::access_raw_concept_map;
+using argot::discriminated_union;
 using argot::impossible;
-using argot::case_detail::as_constant_t;
 using argot::value_list_t;
+using argot::case_detail::as_constant_t;
 using receiver::return_single_argument_value;
 using receiver_traits::argument_list_kinds_t;
 using receiver_traits::argument_types_t;
@@ -364,7 +367,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_as_constant_basic )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::integral_constant< int, 0 > >
+      , discriminated_union< std::integral_constant< int, 0 > >
       >
     );
   }
@@ -378,7 +381,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_as_constant_basic )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::integral_constant< int, -1 > >
+      , discriminated_union< std::integral_constant< int, -1 > >
       >
     );
   }
@@ -392,7 +395,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_as_constant_basic )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::integral_constant< int, 42 > >
+      , discriminated_union< std::integral_constant< int, 42 > >
       >
     );
   }
@@ -406,7 +409,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_as_constant_basic )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::integral_constant< int, 0 > >
+      , discriminated_union< std::integral_constant< int, 0 > >
       >
     );
   }
@@ -420,7 +423,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_as_constant_basic )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::integral_constant< int, -1 > >
+      , discriminated_union< std::integral_constant< int, -1 > >
       >
     );
   }
@@ -434,7 +437,7 @@ ARGOT_REGISTER_CONSTEXPR_TEST( test_as_constant_basic )
     ARGOT_CONCEPT_ENSURE
     ( SameType
       < decltype( result )
-      , std::variant< std::integral_constant< int, 42 > >
+      , discriminated_union< std::integral_constant< int, 42 > >
       >
     );
   }
