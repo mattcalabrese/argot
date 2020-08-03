@@ -305,7 +305,12 @@ constexpr std::size_t num_groups_from_depth_and_amount
 template< template< class... > class Template >
 struct form_tree_impl
 {
-  template< std::size_t NumGroups >
+  template
+  < std::size_t NumGroups
+#ifndef __clang__
+  , std::nullptr_t = nullptr
+#endif
+  >
   struct of_n_groups;
 
   template< std::size_t Depth, std::size_t NumParams >
@@ -340,9 +345,20 @@ struct form_tree_impl
 #define ARGOT_DETAIL_FORM_TREE_OF_N_GROUPS_SPEC_IMPL( n, data )                \
   , drop_tress_at_depth< Depth - 1, n + 1, of_depth, P... >
 
+#ifdef __clang__
+#define ARGOT_DETAIL_OF_N_GROUPS_PARAMS()
+#define ARGOT_DETAIL_OF_N_GROUPS_TRAILING_ARGS()
+#else
+#define ARGOT_DETAIL_OF_N_GROUPS_PARAMS() std::nullptr_t NullPtrP
+#define ARGOT_DETAIL_OF_N_GROUPS_TRAILING_ARGS() , NullPtrP
+#endif
+
 #define ARGOT_DETAIL_FORM_TREE_OF_N_GROUPS_SPEC( n, data )                     \
-  template<>                                                                   \
-  struct of_n_groups< /*NumGroups =*/ n + 1 >                                  \
+  template< ARGOT_DETAIL_OF_N_GROUPS_PARAMS() >                                \
+  struct of_n_groups                                                           \
+  < /*NumGroups =*/ n + 1                                                      \
+    ARGOT_DETAIL_OF_N_GROUPS_TRAILING_ARGS()                                   \
+  >                                                                            \
   {                                                                            \
     template< std::size_t Depth, class... P >                                  \
     using apply                                                                \
@@ -358,6 +374,8 @@ struct form_tree_impl
 
 #undef ARGOT_DETAIL_FORM_TREE_OF_N_GROUPS_SPEC
 #undef ARGOT_DETAIL_FORM_TREE_OF_N_GROUPS_SPEC_IMPL
+#undef ARGOT_DETAIL_OF_N_GROUPS_TRAILING_ARGS
+#undef ARGOT_DETAIL_OF_N_GROUPS_PARAMS
 
 };
 

@@ -113,12 +113,28 @@ struct member_type_or_empty_impl_empty
 
 struct member_type_or_empty_impl_nonempty
 {
-  template< std::size_t I >
+  template
+  < std::size_t I
+#ifndef __clang__
+  , std::nullptr_t = nullptr
+#endif
+  >
   struct applier;
 
+#ifdef __clang__
+#define ARGOT_DETAIL_MEMBER_APPLIER_SPEC_PARAM()
+#define ARGOT_DETAIL_MEMBER_APPLIER_SPEC_TRAILING_ARG()
+#else
+#define ARGOT_DETAIL_MEMBER_APPLIER_SPEC_PARAM() std::nullptr_t NullPtrP
+#define ARGOT_DETAIL_MEMBER_APPLIER_SPEC_TRAILING_ARG() , NullPtrP
+#endif
+
 #define ARGOT_DETAIL_MEMBER_TYPE_OR_EMPTY_APPLIER_SPEC( n, data )              \
-  template<>                                                                   \
-  struct applier< n >                                                          \
+  template< ARGOT_DETAIL_MEMBER_APPLIER_SPEC_PARAM() >                         \
+  struct applier                                                               \
+  < n                                                                          \
+    ARGOT_DETAIL_MEMBER_APPLIER_SPEC_TRAILING_ARG()                            \
+  >                                                                            \
   {                                                                            \
     template< ARGOT_DETAIL_EXPAND_N_TIMES( ARGOT_DETAIL_TEMPLATE_PARAM, n, ~ ) \
               class MemberType, class... /*Tail*/                              \
@@ -128,6 +144,9 @@ struct member_type_or_empty_impl_nonempty
 
   ARGOT_DETAIL_EXPAND_MAX_UNROLL_DEPTH
   ( ARGOT_DETAIL_MEMBER_TYPE_OR_EMPTY_APPLIER_SPEC, ~ )
+
+#undef ARGOT_DETAIL_MEMBER_APPLIER_SPEC_TRAILING_ARG
+#undef ARGOT_DETAIL_MEMBER_APPLIER_SPEC_PARAM
 
   template< std::size_t I, class... T >
   using apply = detail_argot::expand< applier< I >::template apply, T... >;
