@@ -88,6 +88,14 @@ struct if_< true >
             >
     using _ = TMetafunction< P... >;
   };
+
+  struct then_apply_else_apply_values
+  {
+    template< template< auto... > class TMetafunction
+            , template< auto... > class /*FMetafunction*/, auto... P
+            >
+    using _ = TMetafunction< P... >;
+  };
 };
 
 template<>
@@ -161,6 +169,14 @@ struct if_< false >
   {
     template< template< class... > class /*TMetafunction*/
             , template< class... > class FMetafunction, class... P
+            >
+    using _ = FMetafunction< P... >;
+  };
+
+  struct then_apply_else_apply_values
+  {
+    template< template< auto... > class /*TMetafunction*/
+            , template< auto... > class FMetafunction, auto... P
             >
     using _ = FMetafunction< P... >;
   };

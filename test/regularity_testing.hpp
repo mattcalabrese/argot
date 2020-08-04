@@ -621,8 +621,15 @@ constexpr ::argot::call_detail::constexpr_block_result_t test_operations()
   return 0;
 }
 
+template< class T >
+constexpr bool is_tuple_v = false;
+
+template< class... T >
+constexpr bool is_tuple_v< std::tuple< T... > > = true;
+
 template< class T, class RegularityProfile
         , class FirstGenerator, class... TailGenerators
+        , std::enable_if_t< !is_tuple_v< FirstGenerator > >** = nullptr
         >
 [[nodiscard]]
 constexpr ::argot::call_detail::constexpr_block_result_t test_operations
@@ -688,6 +695,7 @@ constexpr ::argot::call_detail::constexpr_block_result_t test_operations
 
 template< class T, class RegularityProfile
         , class FirstGenerator, class... TailGenerators
+        , std::enable_if_t< !is_tuple_v< FirstGenerator > >**
         >
 [[nodiscard]]
 constexpr ::argot::call_detail::constexpr_block_result_t test_operations

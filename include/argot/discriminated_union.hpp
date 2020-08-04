@@ -454,8 +454,8 @@ struct discriminated_union_core_access
           if( index.value == rhs.index_value )
           {
             detail_argot_swap::constexpr_swap
-            ( union_traits::get< index.value >( lhs.alternatives )
-            , union_traits::get< index.value >( rhs.alternatives )
+            ( union_traits::get< decltype( index )::value >( lhs.alternatives ) // GCC requires type
+            , union_traits::get< decltype( index )::value >( rhs.alternatives ) // GCC requires type
             );
           }
           else // Otherwise, a different index is active for each operand...
@@ -467,51 +467,54 @@ struct discriminated_union_core_access
             // Temporary backup of the current state.
             auto old_left
               = ARGOT_MOVE
-                ( union_traits::get< index.value >( lhs.alternatives ) );
+                ( union_traits::get< decltype( index )::value >( lhs.alternatives ) ); // GCC requires type
 
             // If destroy fails, it's okay since the indices haven't changed.
-            lhs.alternatives.template destroy< index >();
+            lhs.alternatives.template destroy< decltype( index )::value >(); // GCC requires type
 
             // Perform the part of the swap dependent on the rhs index value.
             argot::call
-            ( [ &lhs, &rhs, index ]( auto const rhs_index )
+            ( [ &lhs, &rhs ]( auto const rhs_index )
               {
                 // Flag the index as partially formed only if move can fail.
                 // Note: This operand's state was already destroyed.
                 if constexpr
                 ( !std::is_nothrow_move_constructible_v
                    < typename pure_type::template alternative_type_t
-                     < rhs_index.value >
+                     < decltype( rhs_index )::value > // GCC requires type
                    >
                 )
                   lhs.index_value = partially_formed_index_value_v;
 
                 // Update the lhs to hold the old rhs state.
                 // If failure here, lhs is safely in a partially-formed state.
-                lhs.alternatives.template emplace< rhs_index.value >
+                lhs.alternatives.template emplace< decltype( rhs_index )::value > // GCC requires type
                 ( ARGOT_MOVE
-                  ( union_traits::get< index.value >( rhs.alternatives ) )
+                  ( union_traits::get< decltype( index )::value > // GCC requires type
+                    ( rhs.alternatives )
+                  )
                 );
 
                 // Since updating the lhs succeeded, update the index.
                 lhs.index_value = rhs_index.value;
 
                 // If failure here, that's okay because both indices are proper.
-                rhs.alternatives.template destroy< rhs_index.value >();
+                rhs.alternatives
+                .template destroy< decltype( rhs_index )::value >(); // GCC requires type
               }
             , prov::index_of( rhs )
             );
 
+            using alt_t
+              = typename pure_type::template alternative_type_t< index >;
+
             // Flag the index value as partially-formed only if move can fail.
             // Note: This operand's state was already destroyed.
-            if constexpr
-            ( !std::is_nothrow_move_constructible_v
-               < typename pure_type::template alternative_type_t< index > >
-            )
+            if constexpr( !std::is_nothrow_move_constructible_v< alt_t > )
               rhs.index_value = partially_formed_index_value_v;
 
             // Update the rhs to hold the old lhs state.
-            rhs.alternatives.template emplace< index >
+            rhs.alternatives.template emplace< decltype( index )::value >
             ( ARGOT_MOVE( old_left ) );
 
             // Now that the rhs was successfully updated, update its index.

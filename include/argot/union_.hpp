@@ -44,6 +44,7 @@ Each valid instantiation of argot::union_ is a UnionLike type.
 #include <argot/detail/is_rvalue_reference.hpp>
 #include <argot/detail/is_same.hpp>
 #include <argot/detail/launder.hpp>
+#include <argot/detail/rethrow.hpp>
 #include <argot/detail/variadic_at.hpp>
 #include <argot/gen/access_raw_concept_map.hpp>
 #include <argot/gen/is_modeled.hpp>
@@ -52,6 +53,7 @@ Each valid instantiation of argot::union_ is a UnionLike type.
 #include <argot/union_/detail/config.hpp>
 #include <argot/union_/detail/union_backend.hpp>
 
+#include <boost/predef.h>
 #include <boost/preprocessor/arithmetic/dec.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/iteration/iterate.hpp>
@@ -65,6 +67,17 @@ Each valid instantiation of argot::union_ is a UnionLike type.
 #include <new>
 #include <type_traits>
 #include <utility>
+
+//<-
+
+// GCC doesn't do "guaranteed elision" here...
+#if BOOST_COMP_GNUC
+#define ARGOT_DETAIL_NO_DATAMEMBER_GUARANTEED_ELISION 1
+#else
+#define ARGOT_DETAIL_NO_DATAMEMBER_GUARANTEED_ELISION 0
+#endif
+
+//->
 
 //[docs
 /*`
@@ -189,10 +202,18 @@ class union_
       )
     )//=;
     //<-
+// GCC doesn't do "guaranteed elision" here.
+#if ARGOT_DETAIL_NO_DATAMEMBER_GUARANTEED_ELISION
+    : union_
+      ( make_in_place_with_result_tag< I >()
+      , ARGOT_SIMPLE_FORWARD( fun ), ARGOT_SIMPLE_FORWARD( args )...
+      ) {} //->
+#else
     : alternatives
       ( make_in_place_with_result< I >
         ( ARGOT_SIMPLE_FORWARD( fun ), ARGOT_SIMPLE_FORWARD( args )... )
-      ) {} //->
+      ) {}
+#endif //->
 
   // Construct the Ith alternative using direct non-list initialization.
   template
@@ -208,8 +229,16 @@ class union_
       ( NothrowEmplaceableWhenContained< alternative_type_t< I >, P&&... > )
     )//=;
   //<-
+// GCC doesn't do "guaranteed elision" here.
+#if ARGOT_DETAIL_NO_DATAMEMBER_GUARANTEED_ELISION
+   : union_
+     ( make_in_place_tag< I >()
+     , ARGOT_SIMPLE_FORWARD( args )...
+     ) {}
+#else
    : alternatives
-     ( make_in_place< I >( ARGOT_SIMPLE_FORWARD( args )... ) ) {} //->
+     ( make_in_place< I >( ARGOT_SIMPLE_FORWARD( args )... ) ) {}
+#endif //->
 
   // Construct the Ith alternative using direct non-list initialization.
   template
@@ -230,8 +259,16 @@ class union_
       )
     )//=;
     //<-
-    : alternatives
-      ( make_in_place< I >( ilist, ARGOT_SIMPLE_FORWARD( args )... ) ) {} //->
+// GCC doesn't do "guaranteed elision" here.
+#if ARGOT_DETAIL_NO_DATAMEMBER_GUARANTEED_ELISION
+   : union_
+     ( make_in_place_tag< I >()
+     , ilist, ARGOT_SIMPLE_FORWARD( args )...
+     ) {}
+#else
+   : alternatives
+     ( make_in_place< I >( ilist, ARGOT_SIMPLE_FORWARD( args )... ) ) {}
+#endif // ->
 
   // Emplace the Ith alternative with the result of the invocation of `fun` with
   // `args`.
@@ -282,7 +319,7 @@ class union_
     {
       ::new( static_cast< void* >( ARGOT_ADDRESSOF( alternatives ) ) )
         impl_type;
-      throw;
+      detail_argot::rethrow();
     }
   } //->
 
@@ -329,7 +366,7 @@ class union_
     {
       ::new( static_cast< void* >( ARGOT_ADDRESSOF( alternatives ) ) )
         impl_type;
-      throw;
+      detail_argot::rethrow();
     }
   } //->
 
@@ -380,7 +417,7 @@ class union_
     {
       ::new( static_cast< void* >( ARGOT_ADDRESSOF( alternatives ) ) )
         impl_type;
-      throw;
+      detail_argot::rethrow();
     }
   } //->
 
@@ -515,7 +552,6 @@ class union_
   } //->
  private:
   //<-
-
   // TODO(calabrese) noexcept
   template< std::size_t I, class F, class... U >
   static constexpr auto make_in_place_with_result( F&& f, U&&... args )
@@ -577,6 +613,149 @@ class union_
         , ARGOT_SIMPLE_FORWARD( args )...
         );
   }
+
+#if ARGOT_DETAIL_NO_DATAMEMBER_GUARANTEED_ELISION
+  template< std::size_t I >
+  struct fully_pure_make_in_place_with_result_tag {};
+
+  template< std::size_t I >
+  struct impure_make_in_place_with_result_tag {};
+
+  template< std::size_t I >
+  struct partially_pure_make_in_place_with_result_tag {};
+
+  template< std::size_t I >
+  using make_impure_in_place_with_result_tag
+    = typename detail_if_::if_< alternative_is_pure_v< I > >
+      ::then_apply_else_apply_values::template _
+      < partially_pure_make_in_place_with_result_tag
+      , impure_make_in_place_with_result_tag
+      , I
+      >;
+
+  template< std::size_t I >
+  using make_in_place_with_result_tag
+    = typename detail_if_::if_< is_pure_v >
+      ::then_apply_else_apply_values::template _
+      < fully_pure_make_in_place_with_result_tag
+      , make_impure_in_place_with_result_tag
+      , I
+      >;
+
+  template< std::size_t I >
+  struct fully_pure_make_in_place_tag {};
+
+  template< std::size_t I >
+  struct impure_make_in_place_tag {};
+
+  template< std::size_t I >
+  struct partially_pure_make_in_place_tag {};
+
+  template< std::size_t I >
+  using make_impure_in_place_tag
+    = typename detail_if_::if_< alternative_is_pure_v< I > >
+      ::then_apply_else_apply_values::template _
+      < partially_pure_make_in_place_tag
+      , impure_make_in_place_tag
+      , I
+      >;
+
+  template< std::size_t I >
+  using make_in_place_tag
+    = typename detail_if_::if_< is_pure_v >
+      ::then_apply_else_apply_values::template _
+      < fully_pure_make_in_place_tag
+      , make_impure_in_place_tag
+      , I
+      >;
+
+  template< std::size_t I, class Fun, class... P >
+  explicit constexpr union_
+  ( fully_pure_make_in_place_with_result_tag< I >, Fun&& fun, P&&... args )
+  noexcept
+  ( ARGOT_IS_MODELED
+    ( NothrowEmplaceableWithResultWhenContained
+      < alternative_type_t< I >, Fun&&, P&&... >
+    )
+  ) : alternatives
+      ( in_place_index_with_result< tree_depth_v - 1 >
+      , std::in_place_index< I / amount_per_group_v >
+      , std::in_place_index< I % amount_per_group_v >
+      , ARGOT_SIMPLE_FORWARD( fun ), ARGOT_SIMPLE_FORWARD( args )...
+      ) {}
+
+  template< std::size_t I, class Fun, class... P >
+  explicit constexpr union_
+  ( partially_pure_make_in_place_with_result_tag< I >, Fun&& fun, P&&... args )
+  noexcept
+  ( ARGOT_IS_MODELED
+    ( NothrowEmplaceableWithResultWhenContained
+      < alternative_type_t< I >, Fun&&, P&&... >
+    )
+  ) : alternatives
+      ( in_place_index_with_result< I >
+      , ARGOT_SIMPLE_FORWARD( fun )
+      , ARGOT_SIMPLE_FORWARD( args )...
+      ) {}
+
+  template< std::size_t I, class F, class... P >
+  explicit constexpr union_
+  ( impure_make_in_place_with_result_tag< I >, F&& fun, P&&... args )
+  noexcept
+  ( ARGOT_IS_MODELED
+    ( NothrowEmplaceableWithResultWhenContained
+      < alternative_type_t< I >, F&&, P&&... >
+    )
+  ) : alternatives
+      ( in_place_index_with_result< I >
+      , []( F&& f_fwd, P&&... args_fwd ) -> decltype( auto ) // TODO(calabrese) noexcept
+        {
+          return emplace_contained_with_result< alternative_type_t< I > >
+          ( ARGOT_SIMPLE_FORWARD( f_fwd )
+          , ARGOT_SIMPLE_FORWARD( args_fwd )...
+          );
+        }
+      , ARGOT_SIMPLE_FORWARD( fun )
+      , ARGOT_SIMPLE_FORWARD( args )...
+      ) {}
+
+  template< std::size_t I, class... P >
+  explicit constexpr union_( fully_pure_make_in_place_tag< I >, P&&... args )
+  noexcept
+  ( ARGOT_IS_MODELED
+    ( NothrowEmplaceableWhenContained< alternative_type_t< I >, P&&... > )
+  ) : alternatives
+      ( std::in_place_index< tree_depth_v - 1 >
+      , std::in_place_index< I / amount_per_group_v >
+      , std::in_place_index< I % amount_per_group_v >
+      , ARGOT_SIMPLE_FORWARD( args )...
+      ) {}
+
+  template< std::size_t I, class... P >
+  explicit constexpr union_( partially_pure_make_in_place_tag< I >, P&&... args )
+  noexcept
+  ( ARGOT_IS_MODELED
+    ( NothrowEmplaceableWhenContained< alternative_type_t< I >, P&&... > )
+  ) : alternatives
+      ( std::in_place_index< I >
+      , ARGOT_SIMPLE_FORWARD( args )...
+      ) {}
+
+  template< std::size_t I, class... P >
+  explicit constexpr union_( impure_make_in_place_tag< I >, P&&... args )
+  noexcept
+  ( ARGOT_IS_MODELED
+    ( NothrowEmplaceableWhenContained< alternative_type_t< I >, P&&... > )
+  ) : alternatives
+      ( in_place_index_with_result< I >
+      , []( P&&... args_fwd ) -> decltype( auto ) // TODO(calabrese) noexcept
+        {
+          return make_contained< alternative_type_t< I > >
+          ( ARGOT_SIMPLE_FORWARD( args_fwd )... );
+        }
+      , ARGOT_SIMPLE_FORWARD( args )...
+      ) {}
+#endif
   //->
   //=union { /*...*/ } state; // Exposition only
   //<-

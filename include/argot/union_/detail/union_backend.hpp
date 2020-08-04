@@ -8,14 +8,17 @@
 #ifndef ARGOT_UNION_DETAIL_UNION_BACKEND_HPP_
 #define ARGOT_UNION_DETAIL_UNION_BACKEND_HPP_
 
+#include <argot/detail/addressof.hpp>
 #include <argot/detail/conditional.hpp>
 #include <argot/detail/constexpr_invoke.hpp>
-#include <argot/detail/addressof.hpp>
 #include <argot/detail/preprocess.hpp>
 #include <argot/detail/unreachable.hpp>
 #include <argot/detail/variadic_at.hpp>
 #include <argot/detail/variadic_chunk.hpp>
 #include <argot/in_place_index_with_result.hpp>
+#include <argot/no_unique_address.hpp>
+
+#include <boost/preprocessor/repetition/repeat.hpp>
 
 #include <cstddef>
 #include <utility>
@@ -213,7 +216,7 @@ using member_type_or_empty
      ) {}                                                                      \
                                                                                \
   using member ## i ## _t = member_type_or_empty< i, T... >;                   \
-  ARGOT_NO_UNIQUE_ADDRESS member ## i ## _t member ## i;
+  ARGOT_DETAIL_NO_UNIQUE_ADDRESS_FOR_UNION member ## i ## _t member ## i;
 
 #define ARGOT_DETAIL_UNION_IMPL_BODY( ClassName )                              \
   static constexpr std::size_t num_members_v = sizeof...( T );                 \
@@ -322,27 +325,42 @@ struct identity_holder
   using apply = Tree;
 };
 
+#define ARGOT_DETAIL_UNROLLED_UNION_ACCESS( z, n, data )                       \
+  if constexpr( I == n )                                                       \
+    return ARGOT_LAUNDER( ARGOT_ADDRESSOF( tree ) )->member ## n;            \
+  else
+
 template< std::size_t I, class Tree, std::size_t... Depths >
 constexpr auto&
 access_tree( Tree& tree, std::index_sequence< Depths... > ) noexcept
 {
-  return
-    ( ( *ARGOT_LAUNDER( ARGOT_ADDRESSOF( tree ) ) )
-      .* ...
-      .*member
-        <   (   I
-              / detail_argot::amount_per_group_at_depth
-                ( sizeof...( Depths ) - Depths )
-            )
-          % ARGOT_DETAIL_PRIMARY_UNROLL_DEPTH()
-        >::template pointer_v
-        < typename detail_if_::if_< Depths == 0 >::then_else::template _
-          < identity_holder, member_type_of_tree_holder >::template apply
-          < Depths, Tree
-          , I / detail_argot::amount_at_depth( sizeof...( Depths ) - Depths )
+  if constexpr( sizeof...( Depths ) == 1 )
+  {
+    BOOST_PP_REPEAT
+    ( ARGOT_DETAIL_PRIMARY_UNROLL_DEPTH()
+    , ARGOT_DETAIL_UNROLLED_UNION_ACCESS
+    , ~
+    )
+    static_assert( I < ARGOT_DETAIL_PRIMARY_UNROLL_DEPTH() );
+  }
+  else
+    return
+      ( ( *ARGOT_LAUNDER( ARGOT_ADDRESSOF( tree ) ) )
+        .* ...
+        .*member
+          <   (   I
+                / detail_argot::amount_per_group_at_depth
+                  ( sizeof...( Depths ) - Depths )
+              )
+            % ARGOT_DETAIL_PRIMARY_UNROLL_DEPTH()
+          >::template pointer_v
+          < typename detail_if_::if_< Depths == 0 >::then_else::template _
+            < identity_holder, member_type_of_tree_holder >::template apply
+            < Depths, Tree
+            , I / detail_argot::amount_at_depth( sizeof...( Depths ) - Depths )
+            >
           >
-        >
-    );
+      );
 }
 
 #define ARGOT_DETAIL_VISIT_UNION_TREE_CASE( n, data )                          \
